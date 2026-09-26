@@ -1232,6 +1232,41 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
         assertEquals(0, symLayout().currentSymPage())
     }
 
+    @Test
+    fun tappedSymOrEmojiKey_backCancelsItsOneKey() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setSymStickyTap(context, true)
+        SettingsManager.setEmojiStickyTap(context, true)
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_SHIFT_RIGHT)
+
+        tapSym(30_000L)
+        assertTrue(getField<Boolean>(service, "symSticky"))
+        assertTrue(pressKey(KeyEvent.KEYCODE_BACK, 30_100L).first)
+        assertFalse(getField<Boolean>(service, "symSticky"))
+        pressKey(KeyEvent.KEYCODE_A, 30_200L)
+        assertEquals(listOf("a"), recorder.committedTexts)
+
+        pressKey(KeyEvent.KEYCODE_SHIFT_RIGHT, 31_000L)
+        assertTrue(getField<Boolean>(service, "emojiSticky"))
+        pressKey(KeyEvent.KEYCODE_BACK, 31_100L)
+        assertFalse(getField<Boolean>(service, "emojiSticky"))
+        assertEquals(0, symLayout().currentSymPage())
+    }
+
+    @Test
+    fun tappedSymKey_typesOneSymbolThenLetters() {
+        SettingsManager.setSymStickyTap(RuntimeEnvironment.getApplication(), true)
+
+        tapSym(32_000L)
+        pressKey(KeyEvent.KEYCODE_A, 32_100L)
+        pressKey(KeyEvent.KEYCODE_A, 32_200L)
+
+        assertEquals(2, recorder.committedTexts.size)
+        assertTrue(recorder.committedTexts[0] != "a")
+        assertEquals("a", recorder.committedTexts[1])
+        assertEquals(0, symLayout().currentSymPage())
+    }
+
     private fun pressKey(keyCode: Int, start: Long): Pair<Boolean, Boolean> {
         val down = service.onKeyDown(keyCode, keyEvent(KeyEvent.ACTION_DOWN, keyCode, start, start))
         val up = service.onKeyUp(keyCode, keyEvent(KeyEvent.ACTION_UP, keyCode, start, start + 30L))

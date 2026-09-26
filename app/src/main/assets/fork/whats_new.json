@@ -133,6 +133,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Back cancels a tapped SYM or emoji key that's waiting for its one key, as it closes the symbols.",
+      "after": "202609262118"
+    },
+    {
       "text": "GIF search no longer keeps every search's results forever: those unused for a week go.",
       "after": "202609262118"
     },

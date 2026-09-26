@@ -5643,6 +5643,13 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                     return true
                 }
             }
+            // A tapped SYM or emoji key waiting for its one key: Back cancels it, as it closes a page
+            if (symSticky || emojiSticky) {
+                symSticky = false
+                emojiSticky = false
+                updateStatusBarText()
+                return true
+            }
             // A user dismissal wins over an in-flight backend switch or queued recovery.
             pendingKeyboardSurfaceTransition?.let(uiHandler::removeCallbacks)
             pendingKeyboardSurfaceTransition = null
