@@ -151,21 +151,23 @@ jobs:
           VERSION: ${{ needs.version.outputs.name }}
         run: |
           # Dev builds (0.93-flux.<yyyyMMddHHmm>) carry their build time; releases (0.91) don't.
-          # Every build is marked latest, so the newest build is on top whichever kind it is;
-          # the app's Stable channel finds full releases by their tags, not by "latest".
+          # Dev builds are pre-releases, so GitHub's "Latest" is always the latest full release;
+          # the app finds both kinds by their tags, not by "Latest".
           case "$VERSION" in
             *-flux.*)
               stamp="${VERSION##*.}"
               when=$(date -u -d "${stamp:0:8} ${stamp:8:2}:${stamp:10:2}" "+%-d %b %Y, %H:%M" 2>/dev/null || echo "$stamp")
-              title="Flux Keyboard ${VERSION%%-*} dev · $when" ;;
-            *) title="Flux Keyboard $VERSION" ;;
+              title="Flux Keyboard ${VERSION%%-*} dev · $when"
+              kind="--prerelease" ;;
+            *) title="Flux Keyboard $VERSION"
+              kind="--latest" ;;
           esac
           gh release create "flux/v$VERSION" out/*.apk \
             --repo "$GITHUB_REPOSITORY" \
             --target "$GITHUB_SHA" \
             --title "$title" \
             --notes-file out/RELEASE_NOTES.md \
-            --latest
+            $kind
 
   tests:
     name: tests

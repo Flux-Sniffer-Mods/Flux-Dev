@@ -115,7 +115,7 @@ Everything else, including per-app exact typing and languages, automatic Shift b
 - Android autobackup function 
 
 ## Installation
-1. Download the APK from the [Flux Keyboard releases](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases): full releases, or the newest build with "dev" in its title. Or build it yourself.
+1. Download the APK from the [latest Flux Keyboard release](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases/latest), or a dev build (marked Pre-release) from [all releases](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases). Or build it yourself.
 2. Android Settings → System → Languages & input → Virtual keyboard → Manage keyboards.
 3. Enable “Flux Keyboard” and select it from the input selector when typing.
 
@@ -152,10 +152,10 @@ Keyboard), then uninstall Pastiera Flux.
 ## Flux Keyboard builds
 - There are two kinds of build, picked by the branch `.github/workflows/fork-build.yml` is run on:
   - **`flux-release` (the default branch): full releases** such as `0.92`, tagged `flux/v0.92`. The version is the newest one in the `"releases"` list of `app/src/main/assets/fork/whats_new.json`, which also records when it was built.
-  - **`flux-dev`: dev builds** such as `0.93-flux.202609262100`, the next version after the latest release plus the build time, with "dev" in the title.
+  - **`flux-dev`: dev builds** such as `0.93-flux.202609262100`, the next version after the latest release plus the build time, published as pre-releases with "dev" in the title.
 - The version and version code are worked out from the branch; a version given by hand has to be of the branch's kind.
 - Each release lists only what changed since the build before it: a full release since the previous full release, a dev build since the previous build of either kind. The list comes from the What's new entries (`"after"` is the build each entry is new since), followed by the whole [changelog](FORK_CHANGES.md).
-- The newest build of either kind is marked as the repository's latest release, so a dev build shows as newer than the full release before it.
+- The repository's "Latest" release is always the latest full release; dev builds are marked Pre-release.
 - The app's update check reads these releases: Stable offers full releases only, Dev offers both; both read the release tags, so no release is missed however many there are.
 - Dev work goes on `flux-dev` as individual commits, one per change.
 - To make a full release: add it to `"releases"` on `flux-dev`, fold the commits since the last full release into category commits, move `flux-release` up to the result, and run the workflow on `flux-release`. Commits at or below `flux-release` are never rewritten.
