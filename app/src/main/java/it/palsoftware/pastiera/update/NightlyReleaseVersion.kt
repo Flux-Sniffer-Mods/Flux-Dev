@@ -42,27 +42,27 @@ internal fun forkReleaseIsNewer(tag: String, current: String): Boolean =
 internal fun isForkDevRelease(tagName: String): Boolean = tagName.contains("-flux.")
 
 /**
- * What the update check reads. On Dev, the newest releases of either kind. On Stable, the
- * fork's release tags: GitHub marks the newest build as its latest release, dev builds too, and
- * with enough dev builds after it the latest full release drops out of any page of releases.
+ * What the update check reads: the fork's release tags, all of them. A list of releases comes
+ * ordered by commit date and a page at a time, so a full release whose folded commits keep
+ * their old dates could sit below a page of dev builds; the tags don't depend on either.
  */
-internal fun forkReleasesApiUrl(includeDev: Boolean): String =
-    "https://api.github.com/repos/${BuildConfig.FORK_GITHUB_REPOSITORY}/" +
-        if (includeDev) "releases?per_page=20" else "git/matching-refs/tags/flux/v"
+internal fun forkReleasesApiUrl(): String =
+    "https://api.github.com/repos/${BuildConfig.FORK_GITHUB_REPOSITORY}/git/matching-refs/tags/flux/v"
 
 /**
- * The full releases among the fork's tags ("refs/tags/flux/v0.92"): the build publishes each
- * one's APK as flux-keyboard-<version>.apk, so its page and download follow from the tag.
+ * The releases among the fork's tags ("refs/tags/flux/v0.92"), dev builds' too: the build
+ * publishes each one's APK as flux-keyboard-<version>.apk, so its page and download follow
+ * from the tag.
  */
-internal fun forkFullReleasesFromTags(refs: List<String>): List<GitHubRelease> =
+internal fun forkReleasesFromTags(refs: List<String>): List<GitHubRelease> =
     refs.map { it.removePrefix("refs/tags/") }
-        .filter { it.startsWith("flux/v") && !isForkDevRelease(it) }
+        .filter { it.startsWith("flux/v") }
         .map { tag ->
             val version = tag.removePrefix("flux/v")
             val base = "https://github.com/${BuildConfig.FORK_GITHUB_REPOSITORY}/releases"
             GitHubRelease(
                 tagName = tag,
-                name = "Flux Keyboard $version",
+                name = if (isForkDevRelease(tag)) "Flux Keyboard ${version.substringBefore('-')} dev" else "Flux Keyboard $version",
                 prerelease = false,
                 draft = false,
                 htmlUrl = "$base/tag/$tag",

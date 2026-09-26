@@ -133,6 +133,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Updates never miss a release, however many dev builds there are: they read the list of releases in full.",
+      "after": "202609262101"
+    },
+    {
       "text": "When a message has several numbers, the one next to \"code\" is offered as the one-time code, not an order or account number.",
       "after": "202609262101"
     },

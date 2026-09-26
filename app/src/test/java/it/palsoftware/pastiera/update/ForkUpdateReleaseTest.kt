@@ -72,16 +72,19 @@ class ForkUpdateReleaseTest {
     }
 
     @Test
-    fun stableReadsTheReleaseTagsSoDevBuildsNeverHideAFullRelease() {
-        assertTrue(forkReleasesApiUrl(includeDev = false).endsWith("/git/matching-refs/tags/flux/v"))
-        assertTrue(forkReleasesApiUrl(includeDev = true).endsWith("/releases?per_page=20"))
-        val releases = forkFullReleasesFromTags(
+    fun updatesReadTheReleaseTagsSoNoReleaseIsHiddenBehindOthers() {
+        assertTrue(forkReleasesApiUrl().endsWith("/git/matching-refs/tags/flux/v"))
+        val releases = forkReleasesFromTags(
             listOf("refs/tags/flux/v0.91", "refs/tags/flux/v0.92", "refs/tags/flux/v0.93-flux.202609262047", "refs/tags/v0.90")
         )
-        assertEquals(listOf("flux/v0.91", "flux/v0.92"), releases.map { it.tagName })
-        val found = requireNotNull(findNewerForkRelease(releases, "0.91", includeDev = false))
-        assertEquals("flux/v0.92", found.tagName)
-        assertTrue(found.downloadUrl!!.endsWith("/releases/download/flux/v0.92/flux-keyboard-0.92.apk"))
-        assertTrue(ForkUpdateInstaller.isTrustedApkUrl(found.downloadUrl!!))
+        assertEquals(listOf("flux/v0.91", "flux/v0.92", "flux/v0.93-flux.202609262047"), releases.map { it.tagName })
+        val stable = requireNotNull(findNewerForkRelease(releases, "0.91", includeDev = false))
+        assertEquals("flux/v0.92", stable.tagName)
+        assertTrue(stable.downloadUrl!!.endsWith("/releases/download/flux/v0.92/flux-keyboard-0.92.apk"))
+        assertTrue(ForkUpdateInstaller.isTrustedApkUrl(stable.downloadUrl!!))
+        val dev = requireNotNull(findNewerForkRelease(releases, "0.92", includeDev = true))
+        assertEquals("flux/v0.93-flux.202609262047", dev.tagName)
+        assertEquals("Flux Keyboard 0.93 dev", dev.displayName)
+        assertTrue(dev.downloadUrl!!.endsWith("/flux-keyboard-0.93-flux.202609262047.apk"))
     }
 }
