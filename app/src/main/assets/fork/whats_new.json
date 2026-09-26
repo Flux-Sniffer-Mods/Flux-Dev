@@ -133,6 +133,10 @@
   ],
   "bugFixes": [
     {
+      "text": "A one-time code you've typed isn't offered again when its message's notification updates.",
+      "after": "202609262030"
+    },
+    {
       "text": "Automatic Shift, auto-correct and replacements work in every text box again with exact typing for no-suggestion fields on.",
       "after": "202609261943"
     },

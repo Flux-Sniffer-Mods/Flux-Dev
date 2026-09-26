@@ -13,6 +13,9 @@ object OneTimeCodes {
     private data class Code(val value: String, val at: Long)
 
     @Volatile private var latest: Code? = null
+    // The code last typed: apps re-post the same notification (marked read, a
+    // reply, a new message in the thread), and a code that's been used isn't offered again
+    @Volatile private var used: Code? = null
 
     /** Told when a new code arrives, on the main thread (the keyboard offers it straight away). */
     @Volatile var onNewCode: ((String) -> Unit)? = null
@@ -45,6 +48,9 @@ object OneTimeCodes {
     }
 
     fun offer(code: String, now: Long = System.currentTimeMillis()) {
+        if (used?.let { it.value == code && now - it.at <= LIFETIME_MS } == true) return
+        // The same code again is the same notification updated: keep its first arrival time
+        if (latest?.value == code && current(now) != null) return
         latest = Code(code, now)
         main.post { onNewCode?.invoke(code) }
     }
@@ -53,7 +59,8 @@ object OneTimeCodes {
     fun current(now: Long = System.currentTimeMillis()): String? =
         latest?.takeIf { now - it.at <= LIFETIME_MS }?.value
 
-    fun consume() {
+    fun consume(now: Long = System.currentTimeMillis()) {
+        latest?.let { used = Code(it.value, now) }
         latest = null
     }
 }
