@@ -116,6 +116,18 @@ Input method for physical keyboards android devices (e.g. Unihertz Titan 2), des
 - Android 10 (API 29) or higher.
 - Device with a physical keyboard (profiled on Unihertz Titan 2, adaptable via JSON).
 
+## Contributing
+
+Pastiera now accepts security, compatibility, and maintenance changes. Active feature development continues in [Plektra](https://github.com/pkb-rocks/plektra).
+
+### Forking policy
+
+Pastiera is free software under the GPLv3. You can fork, modify, and redistribute the code under the terms of that licence.
+
+A distributed fork must use its own distinct identity. Its project, repository, application, and release names must not contain “Pastiera” as a standalone word, prefix, suffix, or other name component.
+
+Forks must retain the required copyright and licence notices. They must not present themselves as an official Pastiera release. Before distribution, a fork must use its own application ID, update endpoints, and branding.
+
 ## Development / Tests
 - Run core + routing + service modifier regression tests:
   - `./gradlew :app:testStableDebugUnitTest --tests it.palsoftware.pastiera.core.ModifierStateControllerTest --tests it.palsoftware.pastiera.inputmethod.InputEventRouterModifierE2ETest --tests it.palsoftware.pastiera.inputmethod.PhysicalKeyboardInputMethodServiceDeviceBehaviorTest`
