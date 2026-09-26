@@ -30,6 +30,12 @@ on:
         type: choice
         options: [quick, full, none]
 
+# One build at a time: each works out its version and "the build before" once the previous one
+# has published (two dev builds started in the same minute would otherwise share a version)
+concurrency:
+  group: flux-keyboard-build
+  cancel-in-progress: false
+
 jobs:
   version:
     name: version
