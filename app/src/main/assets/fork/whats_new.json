@@ -133,6 +133,10 @@
   ],
   "bugFixes": [
     {
+      "text": "GIF search no longer keeps every search's results forever: those unused for a week go.",
+      "after": "202609262118"
+    },
+    {
       "text": "A notification that only mentions \"security\" (a security briefing, an update) is no longer taken for a one-time code.",
       "after": "202609262118"
     },

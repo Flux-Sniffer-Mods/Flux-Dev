@@ -189,6 +189,22 @@ class KlipyGifsTest {
     }
 
     @Test
+    fun oldAndSurplusSearchResultsAreDropped() {
+        val folder = kotlin.io.path.createTempDirectory("results").toFile()
+        val now = 100L * 24 * 60 * 60 * 1000
+        val day = 24L * 60 * 60 * 1000
+        val stale = File(folder, "stale.json").apply { writeText("[]"); setLastModified(now - 8 * day) }
+        val recent = (1..3).map { i -> File(folder, "recent$i.json").apply { writeText("[]"); setLastModified(now - i * 1000L) } }
+
+        KlipyGifs.trimResults(folder, maxAgeMs = 7 * day, maxFiles = 2, now = now)
+
+        assertFalse(stale.exists())
+        assertTrue(recent[0].exists())
+        assertTrue(recent[1].exists())
+        assertFalse(recent[2].exists())
+    }
+
+    @Test
     fun cachedResultsShowAtOnceAndSayWhetherTheyAreFresh() {
         val context = RuntimeEnvironment.getApplication()
         val gifs = listOf(GifResult("1", "Happy cat", "https://p/1.webp", "https://g/1.gif", 200, 150))
