@@ -1,6 +1,7 @@
-## What’s new
+## What’s new in 0.86
 
-- Search settings; share direct links: [trackpad setup](pastiera://setting/advanced.trackpad_gestures), [input device](pastiera://setting/trackpad.shizuku_device), and [diagnostics](pastiera://setting/trackpad.debug).
-- Better Titan 2 Elite geometry and trackpad coordinates.
-- Candidate and emoji surfaces are more reliable; empty searches keep controls.
-- Fixes for Telegram, Clicks Power Shift, autocorrect, repeated spaces, TalkBack, and configurable IME haptics.
+- Searchable Settings with direct links and clearer device sections.
+- A cleaner fit for the Titan 2 Elite display and dedicated Clicks controls.
+- On-screen keyboard themes, presets, software modifiers, and a number row.
+- Snippets, emoji and symbol shortcodes, refined punctuation, and multiple dictionaries.
+- Greek input, updated Unicode and emoji data, and more reliable candidate and emoji views.

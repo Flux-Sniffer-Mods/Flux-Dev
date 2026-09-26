@@ -1,4 +1,28 @@
-Support this project on [OpenCollective](https://opencollective.com/pastiera)
+# Pastiera
+
+<p align="center">
+  <img src="docs/branding/pastiera-logo.png" alt="Pastiera" width="152">
+  <img src="docs/branding/transition-arrow.svg" alt="continues as" width="48">
+  <img src="docs/branding/plektra-logo.svg" alt="Plektra" width="152">
+</p>
+
+## Pastiera continues as Plektra
+
+Pastiera 0.86 is the final planned Pastiera release with new features. Security-relevant issues will continue to be fixed and released as updates. Active development continues as [Plektra](https://github.com/pkb-rocks/plektra).
+
+**[Continue with Plektra →](https://github.com/pkb-rocks/plektra)**
+
+## What’s new in 0.86
+
+- Redesigned, searchable Settings with direct links, reliable navigation, and clearer device-specific sections.
+- A cleaner fit for the Titan 2 Elite’s rounded display and dedicated controls for Clicks keyboards.
+- A more capable on-screen keyboard with custom themes, presets, software modifiers, a number row, and better accessibility.
+- Faster input through snippets, emoji and symbol shortcodes, additional layout-switch shortcuts, and refined smart punctuation.
+- Better suggestions using multiple dictionaries and locally learned next-word sequences.
+- More reliable candidate and emoji surfaces, stricter validation for imports and backup archives, and support for custom typing sounds.
+- New language resources, including Greek, plus updated Unicode and emoji data.
+
+Support the project on [OpenCollective](https://pastiera.eu/donate)
 
 <details>
 <summary>Alternative direct support options</summary>
@@ -22,8 +46,6 @@ For everyone who sees an IBAN and quietly gives up:
 
 </details>
 
-# Pastiera
-
 Input method for physical keyboards android devices (e.g. Unihertz Titan 2), designed to make typing faster through shortcuts, gestures, and customization.
 
 ## Quick overview
@@ -37,7 +59,7 @@ Input method for physical keyboards android devices (e.g. Unihertz Titan 2), des
 ## Typing and modifiers
 - Long press on a key can input Alt+key or Shift+Key (uppercase) timing configurable.
 - Shift/Ctrl/Alt in one-shot or lock mode (double tap), option to clear Alt on space.
-- Current behavior note: `Ctrl` used as a physically held shortcut modifier (e.g. hold `Ctrl` + `A`) intentionally follows the app shortcut path and is not the same flow as Nav Mode (`Ctrl` double-tap latch outside text fields). Nav Mode remains a separate implementation/state.
+- Current behaviour note: `Ctrl` used as a physically held shortcut modifier (e.g. hold `Ctrl` + `A`) intentionally follows the app shortcut path and is not the same flow as Nav Mode (`Ctrl` double-tap latch outside text fields). Nav Mode remains a separate implementation/state.
 - Multi-tap support for keys with layout-defined variants (e.g. Cyrillic)
 - Standard shortcuts: Ctrl+C/X/V, Ctrl+A, Ctrl+Backspace, Ctrl+E/D/S/F or I/J/K/L for arrows, Ctrl+W/R for selection, Ctrl+T for Tab, Ctrl+Y/H for Page Up/Down, Ctrl+Q for Esc (all customizable in the Customize Nav screen).
 
@@ -54,7 +76,7 @@ Input method for physical keyboards android devices (e.g. Unihertz Titan 2), des
 - Multi-tap support and mapping for complex characters.
 - JSON import/export directly from the app, with visual preview and list management (enable/disable, delete).
 - Layout maps are stored in `files/keyboard_layouts` and can also be edited manually. A web frontend for editing layouts is available at https://pastierakeyedit.vercel.app/
-- Device/firmware behavior snapshots for physical keyboards are archived under [docs/device-archives](docs/device-archives/).
+- Device/firmware behaviour snapshots for physical keyboards are archived under [docs/device-archives](docs/device-archives/).
 
 ## Symbols, emoji, and variations
 - Two touch-based SYM pages (emoji + symbols): reorderable/enableable, auto-close after input, customizable keycaps.
@@ -102,7 +124,7 @@ Input method for physical keyboards android devices (e.g. Unihertz Titan 2), des
   - `./gradlew :app:testNightlyDebugUnitTest --tests it.palsoftware.pastiera.FlavorBuildConfigTest --tests it.palsoftware.pastiera.update.UpdateCheckerFlavorLogicTest`
 - Run the stable F-Droid-path tests:
   - `./gradlew :app:testStableDebugUnitTest -PPASTIERA_FDROID_BUILD=true`
-- Service-level (device-near) modifier behavior regressions:
+- Service-level (device-near) modifier behaviour regressions:
   - `./gradlew :app:testStableDebugUnitTest --tests it.palsoftware.pastiera.inputmethod.PhysicalKeyboardInputMethodServiceDeviceBehaviorTest`
 - Router-level input pipeline modifier/SYM tests:
   - `./gradlew :app:testStableDebugUnitTest --tests it.palsoftware.pastiera.inputmethod.InputEventRouterModifierE2ETest`
@@ -214,15 +236,18 @@ Input method for physical keyboards android devices (e.g. Unihertz Titan 2), des
   - by default commits and pushes only `apps/docs/public/fdroid/nightly/repo` in `palsoftware-web`, which triggers the GitHub Pages deployment
 
 ## Signing Attestations
-These attestations document the public signing certificates used for Nightly and official Release builds.
-They are intended to strengthen the project's chain of trust: the markdown files are the browser-friendly reference version rendered directly on GitHub, and the signed PDFs are the archival verification artifacts.
-The `_signed.pdf` variants do not turn the APK signing certificates themselves into identity certificates. They are private attestations: the signer states that the published public key is the one they currently trust for the respective build channel.
-Where a qualified electronic signature is present, that attestation can be validated against the EU DSS validator and interpreted in the context of the eIDAS trust-services framework.
+These attestations document the public signing certificates and Android proof-of-rotation lineages used for stable and Nightly builds.
+The current PKB.rocks attestations include complete YubiKey hardware attestations and manufacturer certificates on additional pages, with QR codes and PEM text. Android lineages are provided under signing/lineages and referenced by hash.
+The Markdown files are the browser-friendly references. The PDFs are the archival artifacts prepared for qualified electronic signatures.
+The legacy signed PDFs remain available under explicit legacy names.
 
-| Channel | Source | Signed PDF | Purpose |
-| --- | --- | --- | --- |
-| Nightly | [docs/nightly-signing-certificate-attestation.md](docs/nightly-signing-certificate-attestation.md) | [docs/nightly-signing-certificate-attestation_signed.pdf](docs/nightly-signing-certificate-attestation_signed.pdf) | Documents the shared Nightly signing certificate used by local and CI Nightly builds. |
-| Release | [docs/release-signing-certificate-attestation.md](docs/release-signing-certificate-attestation.md) | [docs/release-signing-certificate-attestation_signed.pdf](docs/release-signing-certificate-attestation_signed.pdf) | Documents the official Release signing certificate used for stable public releases. |
+| Channel | Current source | Prepared PDF | Signed PDF | Legacy signed PDF |
+| --- | --- | --- | --- | --- |
+| Stable | [docs/stable-signing-key-attestation.md](docs/stable-signing-key-attestation.md) | [docs/stable-signing-key-attestation.pdf](docs/stable-signing-key-attestation.pdf) | [docs/stable-signing-key-attestation_signed_signed.pdf](docs/stable-signing-key-attestation_signed_signed.pdf) | [docs/pastiera-legacy-release-signing-certificate-attestation_signed.pdf](docs/pastiera-legacy-release-signing-certificate-attestation_signed.pdf) |
+| Nightly | [docs/nightly-signing-key-attestation.md](docs/nightly-signing-key-attestation.md) | [docs/nightly-signing-key-attestation.pdf](docs/nightly-signing-key-attestation.pdf) | [docs/nightly-signing-key-attestation_signed_signed.pdf](docs/nightly-signing-key-attestation_signed_signed.pdf) | [docs/pastiera-legacy-nightly-signing-certificate-attestation_signed.pdf](docs/pastiera-legacy-nightly-signing-certificate-attestation_signed.pdf) |
+
+The signed PDF variants do not turn APK signing certificates into identity certificates. They authenticate the signer's statement about the documented Android signing keys and evidence.
+Where a qualified electronic signature is present, validate it with the EU DSS validator and interpret it in the context of the eIDAS trust-services framework.
 
 External verification references:
 
