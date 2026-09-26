@@ -121,9 +121,10 @@ jobs:
           mkdir -p out
           cp app/build/outputs/apk/stable/release/app-stable-release.apk "out/flux-keyboard-${{ needs.version.outputs.name }}.apk"
           # Release notes list what changed since the build before: for a full release the
-          # previous full release, for a dev build the previous build of either kind
-          previous=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --json tagName,createdAt,isDraft \
-            --jq "[.[] | select(.isDraft | not) | select(.tagName | startswith(\"flux/v\")) | select(.tagName != \"flux/v$VERSION\")] | sort_by(.createdAt) | last | .tagName // \"\"")
+          # previous full release, for a dev build the previous build of either kind (by when it
+          # was published: a release's createdAt is its commit's date, which a fold can keep old)
+          previous=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --json tagName,publishedAt,isDraft \
+            --jq "[.[] | select(.isDraft | not) | select(.tagName | startswith(\"flux/v\")) | select(.tagName != \"flux/v$VERSION\")] | sort_by(.publishedAt) | last | .tagName // \"\"")
           python3 .github/scripts/flux_release.py notes "$VERSION" "$previous" "$GITHUB_SHA" > out/RELEASE_NOTES.md
           cat out/RELEASE_NOTES.md
 
