@@ -1,10 +1,13 @@
 package it.palsoftware.pastiera
 
+import it.palsoftware.pastiera.update.bundledNotesHaveNewSince
 import it.palsoftware.pastiera.update.bundledReleaseNotes
 import it.palsoftware.pastiera.update.parseBundledReleaseNotes
 import it.palsoftware.pastiera.update.friendlyVersion
 import it.palsoftware.pastiera.update.shortVersion
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -17,6 +20,17 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])
 class BundledReleaseNotesTest {
+    @Test
+    fun anUpdateWithNothingNewSinceTheVersionLastSeenHasNothingToShow() {
+        val body = """{"releases": {"0.92": "202609262030"},
+            "highlights": ["Old"], "bugFixes": [{"text": "Fix", "after": "202609262058"}]}"""
+        assertEquals(true, bundledNotesHaveNewSince(body, "0.92"))
+        assertEquals(true, bundledNotesHaveNewSince(body, "0.93-flux.202609262058"))
+        assertFalse(bundledNotesHaveNewSince(body, "0.93-flux.202609262101")!!)
+        // A version whose build time isn't known (Pastiera's own): not for this to decide
+        assertNull(bundledNotesHaveNewSince(body, "0.85"))
+    }
+
     @Test
     fun forkNotesAreBundled() {
         val notes = assertNotNullAndGet(bundledReleaseNotes(RuntimeEnvironment.getApplication(), "0.86-flux.1"))

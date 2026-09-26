@@ -133,6 +133,10 @@
   ],
   "bugFixes": [
     {
+      "text": "After an update with nothing new to tell, What's new no longer opens with every change since Pastiera 0.85.",
+      "after": "202609262101"
+    },
+    {
       "text": "Updates never miss a release, however many dev builds there are: they read the list of releases in full.",
       "after": "202609262101"
     },
