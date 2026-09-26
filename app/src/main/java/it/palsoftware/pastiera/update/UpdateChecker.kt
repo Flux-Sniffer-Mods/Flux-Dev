@@ -15,6 +15,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONArray
+import org.json.JSONObject
 import java.io.IOException
 
 internal fun successorReleasesApiUrl(): String =
@@ -113,10 +114,11 @@ private fun checkRelease(
     }
 
     val fork = !nightly && forkUpdatesEnabled()
+    val includeDev = fork && SettingsManager.getForkUpdateChannel(context) == SettingsManager.FORK_UPDATE_CHANNEL_DEV
     val request = Request.Builder()
         .url(when {
             nightly -> "https://api.github.com/repos/palsoftware/pastiera/releases?per_page=20"
-            fork -> "https://api.github.com/repos/${BuildConfig.FORK_GITHUB_REPOSITORY}/releases?per_page=20"
+            fork -> forkReleasesApiUrl(includeDev)
             else -> successorReleasesApiUrl()
         })
         .header("Accept", "application/vnd.github+json")
@@ -130,7 +132,8 @@ private fun checkRelease(
         override fun onResponse(call: Call, response: Response) {
             response.use { res ->
                 if (!res.isSuccessful) {
-                    postResult(callback, UpdateCheckResult(successful = false))
+                    // No full release yet is no update rather than a failed check
+                    postResult(callback, UpdateCheckResult(successful = fork && !includeDev && res.code == 404))
                     return
                 }
 
@@ -141,13 +144,11 @@ private fun checkRelease(
                 }
 
                 val latestRelease = try {
-                    val releases = parseGitHubReleases(JSONArray(body))
+                    // The latest full release is a single release rather than a list
+                    val releases = parseGitHubReleases(if (body.trimStart().startsWith("{")) JSONArray().put(JSONObject(body)) else JSONArray(body))
                     when {
                         nightly -> findNewerNightlyRelease(releases, BuildConfig.VERSION_NAME)
-                        fork -> findNewerForkRelease(
-                            releases, BuildConfig.VERSION_NAME,
-                            includeDev = SettingsManager.getForkUpdateChannel(context) == SettingsManager.FORK_UPDATE_CHANNEL_DEV
-                        )
+                        fork -> findNewerForkRelease(releases, BuildConfig.VERSION_NAME, includeDev)
                         else -> findLatestRelease(releases, releaseChannel)
                     }
                 } catch (_: Exception) {

@@ -72,7 +72,7 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 
 - **Flux Keyboard**: its own name, app ID, icon (a keyboard, in Niagara's icon packs too) and home screen fitted to the Titan 2 Elite, crediting and linking the original Pastiera. The compact mode is called **Solderina**.
 - **A tutorial of its own**: one-step setup, every new feature, a page for making it yours, and the extras that need a permission, on pages that scroll. After an update, **What's new** shows alone, lists only what's new since the version you had, and closes with ✕ or Done.
-- **Updates from this fork**: Flux Keyboard checks this repository's latest release, not upstream's, compares versions properly, and downloads and installs the update itself (Android asks before installing). Choose full releases only, or dev builds too; a dev build starts on dev updates and a full release on releases.
+- **Updates from this fork**: Flux Keyboard checks this repository's latest release, not upstream's, compares versions properly, and downloads and installs the update itself (Android asks before installing). Choose full releases only (always the latest, however many dev builds follow it), or dev builds too; a dev build starts on dev updates and a full release on releases.
 - **Restricted settings**: features that need the accessibility service or notification access say when Android blocks them for apps installed from a file, and open App info to lift the block.
 - Settings grouped by task, ordered by usefulness, searchable, with rows sized to their text. Search keeps your query and your place when you open a result and come back, and nothing is focused on its own.
 - Input Languages laid out like every other page.

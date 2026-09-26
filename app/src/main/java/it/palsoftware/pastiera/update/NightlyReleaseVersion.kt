@@ -1,5 +1,7 @@
 package it.palsoftware.pastiera.update
 
+import it.palsoftware.pastiera.BuildConfig
+
 /** Compare numeric versions and SemVer prereleases; unknown formats never suggest an update. */
 internal fun compareReleaseVersions(first: String, second: String): Int? {
     val pattern = Regex("^(\\d+(?:\\.\\d+)*)(?:-([0-9A-Za-z.-]+))?(?:\\+[0-9A-Za-z.-]+)?$")
@@ -41,6 +43,14 @@ internal fun forkReleaseIsNewer(tag: String, current: String): Boolean =
 internal fun isForkDevRelease(tagName: String): Boolean = tagName.contains("-flux.")
 
 /** The newest release newer than [current]; dev builds only when [includeDev] (the Dev channel). */
+/**
+ * The fork's releases to check: on Dev, the newest few of either kind (a newer full release is
+ * among them); on Stable, GitHub's latest release, which is always the latest full release as
+ * dev builds are pre-releases, however many dev builds came after it.
+ */
+internal fun forkReleasesApiUrl(includeDev: Boolean): String =
+    "https://api.github.com/repos/${BuildConfig.FORK_GITHUB_REPOSITORY}/releases" + if (includeDev) "?per_page=20" else "/latest"
+
 internal fun findNewerForkRelease(releases: List<GitHubRelease>, current: String, includeDev: Boolean = true): ReleaseInfo? =
     releases.filter { !it.draft && (includeDev || !isForkDevRelease(it.tagName)) && forkReleaseIsNewer(it.tagName, current) }
         .maxWithOrNull { a, b -> compareReleaseVersions(a.tagName.removePrefix("flux/"), b.tagName.removePrefix("flux/")) ?: 0 }

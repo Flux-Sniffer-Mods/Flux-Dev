@@ -70,4 +70,10 @@ class ForkUpdateReleaseTest {
         val found = findNewerForkRelease(listOf(release("flux/v0.87-flux.202610010000")), "0.86-flux.202609260938")
         assertEquals("flux/v0.87-flux.202610010000", found?.tagName)
     }
+
+    @Test
+    fun stableAsksForTheLatestFullReleaseHoweverManyDevBuildsFollowIt() {
+        assertTrue(forkReleasesApiUrl(includeDev = false).endsWith("/releases/latest"))
+        assertTrue(forkReleasesApiUrl(includeDev = true).endsWith("/releases?per_page=20"))
+    }
 }
