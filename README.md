@@ -154,7 +154,7 @@ Keyboard), then uninstall Pastiera Flux.
   - **`flux-release` (the default branch): full releases** such as `0.92`, tagged `flux/v0.92`. The version is the newest one in the `"releases"` list of `app/src/main/assets/fork/whats_new.json`, which also records when it was built.
   - **`flux-dev`: dev builds** such as `0.93-flux.202609262100`, the next version after the latest release plus the build time, published as pre-releases with "dev" in the title.
 - The version and version code are worked out from the branch; a version given by hand has to be of the branch's kind.
-- Each release lists only what changed since the build before it: a full release since the previous full release, a dev build since the previous build of either kind. The list comes from the What's new entries (`"after"` is the build each entry is new since), followed by the whole [changelog](FORK_CHANGES.md).
+- Each release lists only what changed since the build before it: a full release since the previous full release, a dev build since the previous build of either kind. The list comes from the What's new entries (`"after"` is the build each entry is new since).
 - The repository's "Latest" release is always the latest full release; dev builds are marked Pre-release.
 - The app's update check reads these releases: Stable offers full releases only, Dev offers both; both read the release tags, so no release is missed however many there are.
 - Dev work goes on `flux-dev` as individual commits, one per change.

@@ -127,13 +127,6 @@ def notes_cmd(version, previous_tag, commit):
     if not any_entry:
         out.append("")
         out.append("Behind-the-scenes changes only.")
-    out.append("")
-    out.append("<details><summary>Everything Flux Keyboard adds over Pastiera</summary>")
-    out.append("")
-    with open("FORK_CHANGES.md", encoding="utf-8") as f:
-        out.extend(line.rstrip("\n") for line in f.readlines()[1:])
-    out.append("")
-    out.append("</details>")
     print("\n".join(out))
 
 
