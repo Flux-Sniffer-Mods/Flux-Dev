@@ -112,4 +112,4 @@ palsoftware/pastiera #108, #217, #267, #278, #282, #292, #302, #310, #316, #317.
 
 ## Builds
 
-Signed APKs come from the fork build workflow on GitHub Actions. Each successful build is published as a GitHub release (tag `flux/v<version>`) with these notes, replaces the previous release, and also ships the notes as `RELEASE_NOTES.md` in the build artifact. Flux Keyboard builds are signed with the fork's own key and don't update, or get updated by, official Pastiera.
+Signed APKs come from the fork build workflow on GitHub Actions, in two kinds: **full releases** (such as `0.92`, tag `flux/v0.92`) from the `flux-release` branch, and **dev releases** (such as `0.93-flux.202609262047`, published as pre-releases) from the `flux-dev` branch. Every build is kept, and each one's notes list what changed since the build before it; the notes also ship as `RELEASE_NOTES.md` in the build artifact. Flux Keyboard builds are signed with the fork's own key and don't update, or get updated by, official Pastiera.
