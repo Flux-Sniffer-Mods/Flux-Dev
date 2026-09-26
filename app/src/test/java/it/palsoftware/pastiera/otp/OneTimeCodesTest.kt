@@ -27,6 +27,13 @@ class OneTimeCodesTest {
     }
 
     @Test
+    fun theNumberNearestTheKeywordIsTheCode() {
+        assertEquals("4417", OneTimeCodes.extract("Order 845921: your verification code is 4417"))
+        assertEquals("4417", OneTimeCodes.extract("Your code is 4417. Reference 845921"))
+        assertEquals("123456", OneTimeCodes.extract("G-123456 is your Google verification code. Account 99887766"))
+    }
+
+    @Test
     fun keywordsInsideOtherWordsDontCount() {
         assertNull(OneTimeCodes.extract("Your order 845921 is shipping today"))
         assertNull(OneTimeCodes.extract("New Pinterest pins: 25 ideas for 2026"))

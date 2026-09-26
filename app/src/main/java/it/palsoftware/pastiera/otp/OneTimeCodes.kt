@@ -35,18 +35,32 @@ object OneTimeCodes {
     private val candidate = Regex("(?<!\\d|\\d[.,/:])(?:[A-Z]{1,3}-)?(\\d{3,4}[- ]\\d{3,4}|\\d{4,8})(?![\\d%]|[.,/:]\\d)")
     private val currencyBefore = Regex("[$€£¥₹]\\s*$")
 
-    /** The one-time code in a notification's text, if it looks like it carries one. */
+    private class Candidate(val code: String, val range: IntRange, val prefixed: Boolean)
+
+    /**
+     * The one-time code in a notification's text, if it looks like it carries one: one with a
+     * sender's prefix ("G-123456"), else the number nearest a word like "code" ("Order 845921:
+     * your code is 4417" gives 4417), six digits first when two are as near.
+     */
     fun extract(text: String): String? {
-        if (!keyword.containsMatchIn(text)) return null
+        val keywords = keyword.findAll(text).map { it.range }.toList()
+        if (keywords.isEmpty()) return null
         val codes = candidate.findAll(text)
             .filterNot { currencyBefore.containsMatchIn(text.substring(0, it.range.first)) }
-            .map { it.groupValues[1].replace("-", "").replace(" ", "") }
-            .filter { it.length in 4..8 }
-            // A bare year is rarely the code when there's anything else
+            .map { Candidate(it.groupValues[1].replace("-", "").replace(" ", ""), it.range, it.value.first().isLetter()) }
+            .filter { it.code.length in 4..8 }
             .toList()
-        val nonYears = codes.filterNot { it.length == 4 && (it.startsWith("19") || it.startsWith("20")) }
+        // A bare year is rarely the code when there's anything else
+        val nonYears = codes.filterNot { it.code.length == 4 && (it.code.startsWith("19") || it.code.startsWith("20")) }
         val pool = nonYears.ifEmpty { codes }
-        return pool.firstOrNull { it.length == 6 } ?: pool.firstOrNull()
+        fun distance(range: IntRange) = keywords.minOf { word ->
+            if (range.first > word.last) range.first - word.last else maxOf(0, word.first - range.last)
+        }
+        return pool.minWithOrNull(
+            compareBy<Candidate> { if (it.prefixed) 0 else 1 }
+                .thenBy { distance(it.range) }
+                .thenBy { if (it.code.length == 6) 0 else 1 }
+        )?.code
     }
 
     fun offer(code: String, now: Long = System.currentTimeMillis()) {

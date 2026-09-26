@@ -133,6 +133,10 @@
   ],
   "bugFixes": [
     {
+      "text": "When a message has several numbers, the one next to \"code\" is offered as the one-time code, not an order or account number.",
+      "after": "202609262101"
+    },
+    {
       "text": "Delivery and other notifications that only contain \"pin\" inside a word (\"shipping\", \"Pinterest\") are no longer mistaken for one-time codes.",
       "after": "202609262058"
     },
