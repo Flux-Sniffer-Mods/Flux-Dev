@@ -565,12 +565,12 @@ Ogni tasto può essere configurato come Keycode, Azione, Native Ctrl o Nessuno. 
     <string name="app_picker_search_placeholder">Cerca app...</string>
     
     <!-- Settings Screen -->
-    <string name="settings_support_ko_fi">Supporta su Ko-fi</string>
+    <string name="settings_support_open_collective">Open Collective</string>
     <string name="settings_nav_mode_configure">Configura le mappature dei tasti della modalità navigazione</string>
     <string name="settings_update_section_title">Plektra</string>
-    <string name="settings_update_section_description">Cerca una nuova release del successore Plektra.</string>
-    <string name="settings_update_checking">Controllo delle release di Plektra…</string>
-    <string name="settings_update_up_to_date">Nessuna release di Plektra trovata.</string>
+    <string name="settings_update_section_description">Cerca aggiornamenti di sicurezza di Pastiera e versioni Nightly di Plektra.</string>
+    <string name="settings_update_checking">Controllo degli aggiornamenti di sicurezza di Pastiera e delle versioni Nightly di Plektra…</string>
+    <string name="settings_update_up_to_date">Nessun aggiornamento di sicurezza di Pastiera o versione Nightly di Plektra trovato.</string>
     <string name="settings_update_check_failed">Impossibile raggiungere GitHub.</string>
     
     <!-- Auto Correct Settings -->
@@ -699,8 +699,8 @@ Ogni tasto può essere configurato come Keycode, Azione, Native Ctrl o Nessuno. 
     <string name="tutorial_previous">Precedente</string>
     <string name="tutorial_next">Successivo</string>
     <string name="tutorial_finish">Fine</string>
-    <string name="tutorial_page_welcome_title">Benvenuto in Pastiera</string>
-    <string name="tutorial_page_welcome_description">Pastiera è un metodo di input avanzato per dispositivi Android con tastiera fisica, con supporto per Nav Mode, scorciatoie, mappature personalizzate e altro ancora.</string>
+    <string name="tutorial_page_welcome_title">Pastiera continua come Plektra</string>
+    <string name="tutorial_page_welcome_description">Pastiera 0.86 è l’ultima versione pianificata con nuove funzioni. Puoi continuare a usare Pastiera; i problemi rilevanti per la sicurezza continueranno a ricevere aggiornamenti. Plektra porta avanti il progetto con gli stessi principi e rimane software libero e open source con licenza copyleft GPLv3. Quando Plektra sarà pronto, Pastiera ti avviserà e ti guiderà nel trasferimento una tantum delle impostazioni.</string>
     <string name="tutorial_devs_choice_button">Scelta dello sviluppatore</string>
     <string name="tutorial_devs_choice_applied">Impostazioni Scelta dello sviluppatore applicate.</string>
     <string name="tutorial_page_enable_title">Abilita Pastiera</string>

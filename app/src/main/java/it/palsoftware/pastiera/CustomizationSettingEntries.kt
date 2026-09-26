@@ -387,6 +387,17 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
         )
     ),
     SettingEntry(
+        id = "status_bar.fill_bottom_corners",
+        titleRes = R.string.titan2_elite_fill_bottom_corners_title,
+        summaryRes = R.string.titan2_elite_fill_bottom_corners_description,
+        route = SettingRoute(
+            destination = SettingsDestination.Customization,
+            customizationDestination = "status_bar_buttons"
+        ),
+        availabilityCheck = { SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(it) },
+        unavailableFallbackId = "status_bar.rounded_corners"
+    ),
+    SettingEntry(
         id = "status_bar.variations_visible",
         titleRes = R.string.status_bar_variations_visible_title,
         summaryRes = R.string.status_bar_variations_visible_description,

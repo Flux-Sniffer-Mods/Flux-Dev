@@ -1044,12 +1044,12 @@ QWERTZ σε φυσικό QWERTY
     <string name="app_picker_search_placeholder">Αναζήτηση εφαρμογών...</string>
 
     <!-- Settings Screen -->
-    <string name="settings_support_ko_fi">Υποστήριξη στο Ko-fi</string>
+    <string name="settings_support_open_collective">Open Collective</string>
     <string name="settings_nav_mode_configure">Ρύθμιση αντιστοιχίσεων πλήκτρων λειτουργίας πλοήγησης</string>
     <string name="settings_update_section_title">Plektra</string>
-    <string name="settings_update_section_description">Ελέγξτε για νέα έκδοση του διαδόχου Plektra.</string>
-    <string name="settings_update_checking">Έλεγχος εκδόσεων του Plektra…</string>
-    <string name="settings_update_up_to_date">Δεν βρέθηκε έκδοση του Plektra.</string>
+    <string name="settings_update_section_description">Έλεγχος για ενημερώσεις ασφαλείας του Pastiera και νυχτερινές εκδόσεις του Plektra.</string>
+    <string name="settings_update_checking">Έλεγχος ενημερώσεων ασφαλείας του Pastiera και νυχτερινών εκδόσεων του Plektra…</string>
+    <string name="settings_update_up_to_date">Δεν βρέθηκε ενημέρωση ασφαλείας του Pastiera ή νυχτερινή έκδοση του Plektra.</string>
     <string name="settings_update_check_failed">Δεν είναι δυνατή η σύνδεση με το GitHub.</string>
     <string name="successor_dialog_title">Το Pastiera έχει διάδοχο</string>
     <string name="successor_dialog_message">Το Plektra διαδέχεται το Pastiera. Το %1$s είναι διαθέσιμο στο GitHub.</string>
@@ -1227,8 +1227,8 @@ QWERTZ σε φυσικό QWERTY
     <string name="tutorial_whats_new_bug_fixes_title">Διορθώσεις σφαλμάτων</string>
     <string name="tutorial_whats_new_docs_button">Άνοιγμα τεκμηρίωσης Pastiera</string>
     <string name="tutorial_whats_new_continue_hint">Συνεχίστε το tutorial για να δείτε τις πιο χρήσιμες ρυθμίσεις αυτής της έκδοσης.</string>
-    <string name="tutorial_page_welcome_title">Καλώς ήρθατε στο Pastiera</string>
-    <string name="tutorial_page_welcome_description">Το Pastiera είναι μια προηγμένη μέθοδος εισαγωγής για συσκευές Android με PKB, με υποστήριξη για Nav Mode, συντομεύσεις, προσαρμοσμένες αντιστοιχίσεις πληκτρολογίου και άλλα.</string>
+    <string name="tutorial_page_welcome_title">Το Pastiera συνεχίζεται ως Plektra</string>
+    <string name="tutorial_page_welcome_description">Το Pastiera 0.86 είναι η τελευταία προγραμματισμένη έκδοση με νέες λειτουργίες. Μπορείτε να συνεχίσετε να χρησιμοποιείτε το Pastiera· τα ζητήματα ασφαλείας θα συνεχίσουν να λαμβάνουν ενημερώσεις. Το Plektra συνεχίζει το έργο με τις ίδιες αρχές και παραμένει ελεύθερο λογισμικό ανοικτού κώδικα με την άδεια copyleft GPLv3. Όταν το Plektra είναι έτοιμο, το Pastiera θα σας ενημερώσει και θα σας καθοδηγήσει στην εφάπαξ μεταφορά των ρυθμίσεών σας.</string>
     <string name="tutorial_devs_choice_button">Επιλογή προγραμματιστή</string>
     <string name="tutorial_devs_choice_applied">Οι ρυθμίσεις Επιλογής προγραμματιστή εφαρμόστηκαν.</string>
     <string name="tutorial_page_enable_title">Ενεργοποίηση Pastiera</string>

@@ -236,7 +236,7 @@
     <string name="app_picker_title">Sélectionner une application</string>
     <string name="app_picker_cancel">Annuler</string>
     <string name="app_picker_search_placeholder">Rechercher des applications…</string>
-    <string name="settings_support_ko_fi">Soutenir sur Ko-fi</string>
+    <string name="settings_support_open_collective">Open Collective</string>
     <string name="settings_nav_mode_configure">Configurer les mappages des touches du mode navigation</string>
     <string name="auto_correct_ricette_pastiera_name">Ricette Pastiera</string>
     <string name="settings_category_text_input">Saisie de Texte</string>
@@ -301,8 +301,8 @@
     <string name="tutorial_previous">Précédent</string>
     <string name="tutorial_next">Suivant</string>
     <string name="tutorial_finish">Terminer</string>
-    <string name="tutorial_page_welcome_title">Bienvenue dans Pastiera</string>
-    <string name="tutorial_page_welcome_description">Pastiera est une méthode de saisie avancée pour les appareils Android à clavier physique, avec support du mode Nav, des raccourcis, des mappings clavier personnalisés et bien plus.</string>
+    <string name="tutorial_page_welcome_title">Pastiera continue sous le nom de Plektra</string>
+    <string name="tutorial_page_welcome_description">Pastiera 0.86 est la dernière version prévue avec de nouvelles fonctions. Vous pouvez continuer à utiliser Pastiera ; les problèmes liés à la sécurité continueront à recevoir des mises à jour. Plektra poursuit le projet selon les mêmes principes et reste un logiciel libre et open source sous licence copyleft GPLv3. Lorsque Plektra sera prêt, Pastiera vous préviendra et vous guidera dans le transfert unique de vos réglages.</string>
     <string name="tutorial_page_enable_title">Activer Pastiera</string>
     <string name="tutorial_page_enable_description">Pour commencer, vous devez activer Pastiera comme méthode de saisie dans les Paramètres Android. Appuyez sur le bouton ci-dessous pour ouvrir les paramètres.</string>
     <string name="tutorial_page_select_title">Sélectionner Pastiera</string>
@@ -471,9 +471,9 @@
     <string name="languages_description">Ajoutez des langues au sélecteur de méthode de saisie Android. Seules les langues avec dictionnaire qui ne sont pas des langues système sont affichées.</string>
     <string name="languages_no_available">Toutes les langues disponibles sont déjà ajoutées ou sont des langues système.</string>
     <string name="settings_update_section_title">Plektra</string>
-    <string name="settings_update_section_description">Rechercher une nouvelle version du successeur Plektra.</string>
-    <string name="settings_update_checking">Recherche des versions de Plektra…</string>
-    <string name="settings_update_up_to_date">Aucune version de Plektra trouvée.</string>
+    <string name="settings_update_section_description">Rechercher les mises à jour de sécurité de Pastiera et les versions Nightly de Plektra.</string>
+    <string name="settings_update_checking">Recherche des mises à jour de sécurité de Pastiera et des versions Nightly de Plektra…</string>
+    <string name="settings_update_up_to_date">Aucune mise à jour de sécurité de Pastiera ni version Nightly de Plektra trouvée.</string>
     <string name="settings_update_check_failed">Impossible de joindre GitHub.</string>
     <string name="notification_update_channel_name">Mises à jour Pastiera</string>
     <string name="notification_update_channel_description">Notifications des nouvelles versions de Pastiera</string>

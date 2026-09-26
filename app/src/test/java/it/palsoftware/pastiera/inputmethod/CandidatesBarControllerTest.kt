@@ -1,6 +1,7 @@
 package it.palsoftware.pastiera.inputmethod
 
 import android.app.Activity
+import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -16,7 +17,9 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
+import org.robolectric.util.ReflectionHelpers
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])
@@ -53,16 +56,21 @@ class CandidatesBarControllerTest {
 
     @Test
     fun attachedAndLaidOutInputViewIsReportedAsRendered() {
-        val activity = Robolectric.buildActivity(Activity::class.java).setup().visible().get()
+        val activityController = Robolectric.buildActivity(Activity::class.java).setup()
+        val activity = activityController.get()
         val controller = CandidatesBarController(activity)
         val inputView = controller.getInputView()
         activity.setContentView(inputView)
+        activityController.visible()
         val decorView = activity.window.decorView
         decorView.measure(
             View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
             View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY)
         )
         decorView.layout(0, 0, 1080, 2400)
+        shadowOf(Looper.getMainLooper()).idle()
+        val attachInfo = ReflectionHelpers.getField<Any>(inputView, "mAttachInfo")
+        ReflectionHelpers.setField(attachInfo, "mWindowVisibility", View.VISIBLE)
 
         assertTrue(controller.isInputViewActuallyRendered())
     }

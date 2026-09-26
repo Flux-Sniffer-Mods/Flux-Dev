@@ -1,5 +1,8 @@
 package it.palsoftware.pastiera.inputmethod
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -10,6 +13,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import org.robolectric.annotation.GraphicsMode
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])
@@ -55,7 +59,7 @@ class NestedStatusBarGeometryTest {
         assertEquals(row.height, button.height)
         assertTrue(row.bottom > surface.top)
         assertEquals("No unused band may remain below the indicators", chrome.height, surface.bottom)
-        assertEquals((3.1f * context.resources.displayMetrics.density).toInt(), surface.bottom - row.bottom)
+        assertEquals((6.5f * context.resources.displayMetrics.density).toInt(), surface.bottom - row.bottom)
         val nestedHeight = chrome.measuredHeight
         measure()
         assertEquals(nestedHeight, chrome.measuredHeight)
@@ -102,8 +106,67 @@ class NestedStatusBarGeometryTest {
         )
         chrome.layout(0, 0, chrome.measuredWidth, chrome.measuredHeight)
         assertTrue(content.clipToOutline)
-        assertEquals((3.1f * context.resources.displayMetrics.density).toInt(), surface.height - content.height)
+        assertEquals((6.5f * context.resources.displayMetrics.density).toInt(), surface.height - content.height)
         assertTrue(lights.top < content.bottom)
         assertEquals(surface.height, lights.bottom)
+    }
+
+    @Test
+    fun contourIntegratedIndicatorsLetTheRegularRowUseTheFullCenterHeight() {
+        val context = RuntimeEnvironment.getApplication()
+        val chrome = StatusBarController.ImeChromeLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            bottomCornerRadiiPx = 100 to 100
+            contourIntegratedIndicators = true
+        }
+        val row = FrameLayout(context)
+        val indicators = View(context)
+        val expanded = View(context).apply { visibility = View.GONE }
+        chrome.addView(row, LinearLayout.LayoutParams(-1, 74))
+        chrome.addView(indicators, LinearLayout.LayoutParams(-1, 101))
+        chrome.surfaceView = indicators
+        chrome.indicatorView = indicators
+        chrome.expandedSurfaceView = expanded
+
+        chrome.measure(
+            View.MeasureSpec.makeMeasureSpec(1_080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        )
+        chrome.layout(0, 0, chrome.measuredWidth, chrome.measuredHeight)
+
+        assertEquals(indicators.bottom, row.bottom)
+    }
+
+    @Test
+    @GraphicsMode(GraphicsMode.Mode.NATIVE)
+    fun statusRowSideFillRemainsOutsideContourWhenLowerCornerFillIsDisabled() {
+        val context = RuntimeEnvironment.getApplication()
+        val chrome = StatusBarController.ImeChromeLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            bottomCornerRadiiPx = 100 to 100
+            fillDisplayCorners = false
+            regularCornerColors = Color.WHITE to Color.WHITE
+            bottomFillColors = Color.WHITE to Color.WHITE
+        }
+        val row = FrameLayout(context).apply { setBackgroundColor(Color.WHITE) }
+        val indicators = View(context).apply { setBackgroundColor(Color.WHITE) }
+        val expanded = View(context).apply { visibility = View.GONE }
+        chrome.addView(row, LinearLayout.LayoutParams(-1, 74))
+        chrome.addView(indicators, LinearLayout.LayoutParams(-1, 101))
+        chrome.surfaceView = indicators
+        chrome.indicatorView = indicators
+        chrome.expandedSurfaceView = expanded
+        chrome.measure(
+            View.MeasureSpec.makeMeasureSpec(1_080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        )
+        chrome.layout(0, 0, chrome.measuredWidth, chrome.measuredHeight)
+
+        val bitmap = Bitmap.createBitmap(chrome.width, chrome.height, Bitmap.Config.ARGB_8888)
+        chrome.draw(Canvas(bitmap))
+
+        assertEquals(Color.WHITE, bitmap.getPixel(1, row.height / 2))
+        assertEquals(0, Color.alpha(bitmap.getPixel(1, chrome.height - 1)))
+        assertEquals(Color.WHITE, bitmap.getPixel(chrome.width / 2, chrome.height - 1))
     }
 }

@@ -8,6 +8,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.VolunteerActivism
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -34,6 +36,8 @@ import java.io.IOException
 import android.content.Intent
 import android.net.Uri
 import android.graphics.BitmapFactory
+import androidx.core.content.FileProvider
+import java.io.File
 import it.palsoftware.pastiera.inputmethod.DeviceSpecific
 
 /**
@@ -93,6 +97,123 @@ fun AboutScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
+            val finalReleaseNotice = when {
+                BuildConfig.RELEASE_CHANNEL == "stable" && !BuildConfig.DEBUG ->
+                    R.string.about_final_stable_notice
+                BuildConfig.RELEASE_CHANNEL == "nightly" ->
+                    R.string.about_final_nightly_notice
+                else -> null
+            }
+            finalReleaseNotice?.let { notice ->
+                Text(
+                    text = stringResource(notice),
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+            }
+
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = stringResource(R.string.about_imprint_title),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Medium
+                    )
+                    TextButton(onClick = {
+                        openUrl(context, "https://pzauner.de/Notes/.hidden/Impressum.pdf")
+                    }) {
+                        Text(stringResource(R.string.about_imprint_current_pdf))
+                    }
+                    Text(
+                        text = stringResource(R.string.about_imprint_details),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    TextButton(onClick = {
+                        openUrl(context, "mailto:pzauner@pastiera.eu")
+                    }) {
+                        Text("pzauner@pastiera.eu")
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .settingRow(SettingLinkIds.ABOUT_SUPPORT_OPEN_COLLECTIVE) {
+                        openUrl(context, "https://pastiera.eu/donate")
+                    },
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.VolunteerActivism,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Column {
+                        Text(
+                            text = stringResource(R.string.settings_support_open_collective),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = stringResource(R.string.settings_support_open_collective_description),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .settingRow(SettingLinkIds.ABOUT_PLEKTRA_GITHUB) {
+                        openUrl(context, "https://github.com/pkb-rocks/plektra")
+                    },
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Star,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Column {
+                        Text(
+                            text = stringResource(R.string.about_plektra_github_title),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = stringResource(R.string.about_plektra_github_description),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 color = MaterialTheme.colorScheme.surfaceVariant,
@@ -121,18 +242,35 @@ fun AboutScreen(
                 }
             }
 
-            Image(
-                painter = painterResource(id = R.drawable.kofi5),
-                contentDescription = stringResource(R.string.settings_support_ko_fi),
-                modifier = Modifier
-                    .fillMaxWidth(0.35f)
-                    .align(Alignment.CenterHorizontally)
-                    .settingRow(SettingLinkIds.ABOUT_SUPPORT_KO_FI) {
-                        context.startActivity(
-                            Intent(Intent.ACTION_VIEW, Uri.parse("https://ko-fi.com/palsoftware"))
-                        )
-                    }
-            )
+            if (remember(context) {
+                    runCatching { context.assets.open("pastiera-sbom.cdx.json").close() }.isSuccess
+                }) {
+                TextButton(
+                    onClick = {
+                        runCatching {
+                            val file = File(context.cacheDir, "sbom/pastiera-sbom.cdx.json")
+                            file.parentFile?.mkdirs()
+                            context.assets.open("pastiera-sbom.cdx.json").use { input ->
+                                file.outputStream().use { output -> input.copyTo(output) }
+                            }
+                            val uri = FileProvider.getUriForFile(
+                                context, "${context.packageName}.fileprovider", file
+                            )
+                            val intent = Intent(Intent.ACTION_SEND).apply {
+                                type = "application/json"
+                                putExtra(Intent.EXTRA_STREAM, uri)
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            }
+                            context.startActivity(Intent.createChooser(intent, null))
+                        }.onFailure { error ->
+                            android.util.Log.e("AboutScreen", "Unable to share SBOM", error)
+                        }
+                    },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                ) {
+                    Text(stringResource(R.string.about_sbom_export))
+                }
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -342,10 +480,18 @@ private fun MarkdownContent(
                 }
                 is MarkdownElement.Paragraph -> {
                     val (text, urlMap) = parseInlineFormatting(element.text, context)
+                    val creatorSupportModifier = if (element.text.startsWith("Andrea Palumbo (PalSoftware)")) {
+                        Modifier.settingRow(SettingLinkIds.ABOUT_SUPPORT_KO_FI) {
+                            openUrl(context, "https://ko-fi.com/palsoftware")
+                        }
+                    } else {
+                        Modifier
+                    }
                     MarkdownParagraph(
                         text = text,
                         urlMap = urlMap,
-                        context = context
+                        context = context,
+                        modifier = creatorSupportModifier
                     )
                     if (index < elements.size - 1) {
                         Spacer(modifier = Modifier.height(12.dp))
@@ -460,7 +606,8 @@ private fun MarkdownHeading4(
 private fun MarkdownParagraph(
     text: AnnotatedString,
     urlMap: Map<Int, String>,
-    context: android.content.Context
+    context: android.content.Context,
+    modifier: Modifier = Modifier
 ) {
     val colorScheme = MaterialTheme.colorScheme
     MarkdownClickableText(
@@ -469,7 +616,8 @@ private fun MarkdownParagraph(
             color = colorScheme.onSurface
         ),
         urlMap = urlMap,
-        context = context
+        context = context,
+        modifier = modifier
     )
 }
 

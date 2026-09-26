@@ -69,6 +69,8 @@ import java.util.Locale
 private const val ACTION_UNIHERTZ_GESTURE_NAVIGATION_SETTINGS = "com.android.settings.GESTURE_NAVIGATION_SETTINGS"
 private const val SETTINGS_FRAGMENT_ARGS_KEY = ":settings:fragment_args_key"
 private const val UNIHERTZ_HIDE_IME_CAPTION_BAR_KEY = "agui_hide_ime_caption_bar"
+private const val T2E_ROUNDED_CORNERS_SETTINGS_URL =
+    "pastiera://setting/status_bar.rounded_corners"
 
 class TutorialActivity : LocalizedComponentActivity() {
     companion object {
@@ -113,8 +115,11 @@ sealed class TutorialPageType {
     data class Welcome(
         val title: String,
         val description: String,
-        @DrawableRes val imageRes: Int
+        @DrawableRes val pastieraImageRes: Int,
+        @DrawableRes val plektraImageRes: Int
     ) : TutorialPageType()
+
+    object Titan2EliteRecommendations : TutorialPageType()
     
     data class Standard(
         val title: String,
@@ -237,9 +242,13 @@ fun TutorialScreen(
             TutorialPageType.Welcome(
                 title = stringResource(R.string.tutorial_page_welcome_title),
                 description = stringResource(R.string.tutorial_page_welcome_description),
-                imageRes = R.drawable.tutorial_welcome
+                pastieraImageRes = R.drawable.tutorial_pastiera_logo,
+                plektraImageRes = R.drawable.tutorial_plektra_logo
             )
         )
+        if (DeviceSpecific.isTitan2EliteDevice()) {
+            add(TutorialPageType.Titan2EliteRecommendations)
+        }
         if (!isPastieraEnabled) {
             add(
                 TutorialPageType.EnablePastiera(
@@ -361,6 +370,11 @@ fun TutorialScreen(
                         is TutorialPageType.Welcome -> {
                             TutorialWelcomePageContent(
                                 page = pageType,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                        TutorialPageType.Titan2EliteRecommendations -> {
+                            TutorialTitan2EliteRecommendationsPageContent(
                                 modifier = Modifier.fillMaxSize()
                             )
                         }
@@ -1041,7 +1055,7 @@ private fun buildImeCaptionBarSettingsIntent(): Intent {
 
 private val TutorialIconSurfaceSize = 82.dp
 private val TutorialIconSize = 38.dp
-private val TutorialWelcomeImageSize = 240.dp
+private val TutorialWelcomeLogoSize = 112.dp
 
 @Composable
 private fun TutorialPageLayout(
@@ -1323,9 +1337,13 @@ private fun ReleaseNoteRow(
 }
 
 private fun buildReleaseRangeLabel(previousVersion: String?, currentVersion: String): String {
-    val normalizedCurrent = currentVersion.trim().ifBlank { "current" }
+    val normalizedCurrent = currentVersion
+        .trim()
+        .substringBefore("-nightly.")
+        .ifBlank { "current" }
     val normalizedPrevious = previousVersion
         ?.trim()
+        ?.substringBefore("-nightly.")
         ?.takeIf { it.isNotBlank() && it != normalizedCurrent }
     return if (normalizedPrevious != null) {
         "$normalizedPrevious → $normalizedCurrent"
@@ -1348,19 +1366,34 @@ fun TutorialWelcomePageContent(
             .padding(horizontal = 20.dp, vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(260.dp),
-            contentAlignment = Alignment.Center
+                .height(148.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = page.imageRes),
+                painter = painterResource(id = page.pastieraImageRes),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(TutorialWelcomeImageSize)
-                    .clip(RoundedCornerShape(28.dp)),
-                contentScale = ContentScale.Crop
+                    .size(TutorialWelcomeLogoSize)
+                    .clip(RoundedCornerShape(24.dp)),
+                contentScale = ContentScale.Fit
+            )
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .size(28.dp)
+            )
+            Image(
+                painter = painterResource(id = page.plektraImageRes),
+                contentDescription = null,
+                modifier = Modifier.size(TutorialWelcomeLogoSize),
+                contentScale = ContentScale.Fit
             )
         }
         
@@ -1383,7 +1416,45 @@ fun TutorialWelcomePageContent(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             lineHeight = MaterialTheme.typography.bodyMedium.lineHeight * 1.15f
         )
+
     }
+}
+
+@Composable
+fun TutorialTitan2EliteRecommendationsPageContent(
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+    TutorialFeaturePageContent(
+        title = stringResource(R.string.tutorial_t2e_title),
+        description = stringResource(R.string.tutorial_t2e_description),
+        icon = Icons.Filled.PhoneAndroid,
+        tint = MaterialTheme.colorScheme.primary,
+        bullets = listOf(
+            stringResource(R.string.tutorial_t2e_bullet_rounded_corners),
+            stringResource(R.string.tutorial_t2e_bullet_fill_corners)
+        ),
+        modifier = modifier.padding(top = 36.dp),
+        buttonText = stringResource(R.string.tutorial_t2e_open_settings),
+        onButtonClick = {
+            context.startActivity(
+                Intent(context, SettingsActivity::class.java).apply {
+                    action = Intent.ACTION_VIEW
+                    data = Uri.parse(T2E_ROUNDED_CORNERS_SETTINGS_URL)
+                }
+            )
+        },
+        extraContent = {
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = stringResource(R.string.tutorial_t2e_trackpad_note),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    )
 }
 
 @Composable

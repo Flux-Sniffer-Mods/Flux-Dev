@@ -2,16 +2,16 @@
 # Pastiera - La Tastiera per la tua Tastiera
 ---
 #### Creator
-Andrea Palumbo (PalSoftware)
+Andrea Palumbo (PalSoftware) · [Support the creator on Ko-fi](https://ko-fi.com/palsoftware)
 
 #### Main Developers
-Andrea Palumbo, Patrick Zauner
+Patrick Zauner, Andrea Palumbo
 
 #### Additional Contributors
-Justin Mitchell, NeoTheFox, Oleksii Ilienko, Nikola Vukobrat, Mircea Horea IONICĂ, Nikita Tseykovets, Ivan Bulanov, Ratmir Karabut, Troidem, Vasu Bhatia, Zsolt Sz. Sz. Raven, Burekmaster (SVG logo assets), glebkuchay, drpepper240
+Justin Mitchell, NeoTheFox, Oleksii Ilienko, Nikola Vukobrat, Mircea Horea IONICĂ, Nikita Tseykovets, Ivan Bulanov, Ratmir Karabut, Troidem, Vasu Bhatia, Zsolt Sz. Sz. Raven, Burekmaster (SVG logo assets), glebkuchay, drpepper240, Matej Drobnič, astroboii47
 ---
 #### Pastiera Beta Testing Team
-Laggy Luke, Vittorio, Emmanuel, Sadako, NotTeganQuinn, DrumSyBeat, [Shane Craig (ShaneCraig.Tech)](https://shanecraig.tech/)
+Laggy Luke, Vittorio, Emmanuel, Sadako, NotTeganQuinn, DrumSyBeat, [Shane Craig (ShaneCraig.Tech)](https://shanecraig.tech/), [Returning Retro (Retro Jake)](https://www.returningretro.com/)
 
 #### Special Thanks
 Unihertz Titan 2 Discord, Unihertz Titan 2 FB page and all the people for the outstanding support! 
@@ -22,7 +22,7 @@ Unihertz Titan 2 Discord, Unihertz Titan 2 FB page and all the people for the ou
 #### [Issue tracker](https://github.com/palsoftware/pastiera/issues/)
 #### [Nightly GitHub releases](https://github.com/palsoftware/pastiera/releases?q=nightly%2F)
 #### [Nightly F-Droid repo](https://pastiera.eu/fdroid/nightly/repo)
-#### [Buy me a Coffee](https://ko-fi.com/palsoftware/)
+#### [Support the project on Open Collective](https://pastiera.eu/donate)
 ---
 **Grazie for using Pastiera! <3**
 

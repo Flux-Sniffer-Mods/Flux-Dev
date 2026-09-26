@@ -35,33 +35,42 @@ data class ReleaseNotesSummary(
                 },
                 highlights = when (language) {
                     "de" -> listOf(
-                        "QuickLauncher öffnet Apps direkt per Tastatur und funktioniert auch aus Textfeldern mit SYM + Leertaste.",
-                        "Statusleiste und Variationen sind flexibler steuerbar und können besser an deinen Workflow angepasst werden.",
-                        "App-spezifische Messenger-Presets unterstützen optional SYM + Enter zum Senden.",
-                        "Nav Mode wurde um Wortnavigation, Mediensteuerung und neue Ctrl-Optionen erweitert."
+                        "Die neu gestalteten Einstellungen sind durchsuchbar, direkt verlinkbar und zuverlässiger navigierbar.",
+                        "Pastiera passt sich sauberer an das gerundete Display des Titan 2 Elite an. Clicks-Tastaturen erhalten eigene Steuerungen und zuverlässigere Eingabe.",
+                        "Die Bildschirmtastatur bietet eigene Themes, Presets, Software-Modifier, Zahlenreihe und bessere Barrierefreiheit."
                     )
                     "it" -> listOf(
-                        "QuickLauncher apre app direttamente dalla tastiera e funziona anche dai campi di testo con SYM + Spazio.",
-                        "Barra di stato e variazioni sono più flessibili e adattabili al tuo flusso.",
-                        "I preset messenger per app supportano una scorciatoia opzionale SYM + Invio per inviare.",
-                        "Nav Mode aggiunge navigazione per parole, controlli multimediali e nuove opzioni Ctrl."
+                        "Le impostazioni ridisegnate sono ricercabili, collegabili direttamente e più affidabili da navigare.",
+                        "Pastiera si adatta meglio al display arrotondato del Titan 2 Elite. Le tastiere Clicks ricevono controlli dedicati e un input più affidabile.",
+                        "La tastiera su schermo offre temi, preset, modificatori software, riga numerica e accessibilità migliorata."
                     )
                     else -> listOf(
-                        "QuickLauncher opens apps directly from the keyboard and also works from text fields with SYM + Space.",
-                        "Status bar and variation controls are more flexible and easier to adapt to your workflow.",
-                        "App-specific messenger presets support an optional SYM + Enter send shortcut.",
-                        "Nav Mode adds word navigation, media controls, and new Ctrl options."
+                        "Redesigned Settings are searchable, directly linkable, and more reliable to navigate.",
+                        "Pastiera fits the Titan 2 Elite’s rounded display more cleanly. Clicks keyboards gain dedicated controls and more reliable input.",
+                        "The on-screen keyboard adds custom themes, presets, software modifiers, a number row, and better accessibility."
                     )
                 },
                 improvements = when (language) {
-                    "de" -> listOf("Viele kleinere Verbesserungen betreffen Symbole, Vorschläge, Backups, Shortcuts und Release-Stabilität.")
-                    "it" -> listOf("Molti miglioramenti minori riguardano simboli, suggerimenti, backup, scorciatoie e stabilità del rilascio.")
-                    else -> listOf("Many smaller improvements cover symbols, suggestions, backups, shortcuts, and release stability.")
+                    "de" -> listOf(
+                        "Snippets, Emoji- und Symbol-Shortcodes sowie feinere Satzzeichenregeln beschleunigen wiederkehrende Eingaben.",
+                        "Vorschläge können mehrere Wörterbücher und lokal gelernte nächste Wörter verwenden.",
+                        "Neue Sprachressourcen, darunter Griechisch, ergänzen aktualisierte Unicode- und Emoji-Daten."
+                    )
+                    "it" -> listOf(
+                        "Snippet, shortcode per emoji e simboli e regole di punteggiatura più precise velocizzano l'inserimento ricorrente.",
+                        "I suggerimenti possono usare più dizionari e sequenze di parole successive apprese localmente.",
+                        "Nuove risorse linguistiche, incluso il greco, accompagnano dati Unicode ed emoji aggiornati."
+                    )
+                    else -> listOf(
+                        "Snippets, emoji and symbol shortcodes, and refined punctuation rules speed up recurring input.",
+                        "Suggestions can use multiple dictionaries and locally learned next-word sequences.",
+                        "New language resources, including Greek, accompany updated Unicode and emoji data."
+                    )
                 },
                 bugFixes = when (language) {
-                    "de" -> listOf("Keyboard-Layouts und Subtype-Auswahl respektieren die aktive Sprache zuverlässiger.", "Mehrere Hardware-Mappings und Eingabekantenfälle wurden korrigiert.")
-                    "it" -> listOf("Layout tastiera e selezione subtype rispettano meglio la lingua attiva.", "Sono stati corretti diversi mapping hardware e casi limite di input.")
-                    else -> listOf("Keyboard layouts and subtype selection more reliably respect the active language.", "Several hardware mapping and input edge cases were fixed.")
+                    "de" -> listOf("Candidate- und Emoji-Oberflächen reagieren zuverlässiger; Importe, Backup-Archive und eigene Tippgeräusche werden strenger geprüft.")
+                    "it" -> listOf("Le superfici dei candidati e delle emoji sono più affidabili; importazioni, archivi di backup e suoni personalizzati vengono convalidati con maggiore rigore.")
+                    else -> listOf("Candidate and emoji surfaces are more reliable; imports, backup archives, and custom typing sounds receive stricter validation.")
                 },
                 docsUrl = when (language) {
                     "de" -> "https://pastiera.eu/de/"
@@ -78,7 +87,7 @@ fun fetchReleaseNotesForVersion(
     languageTag: String,
     callback: (ReleaseNotesSummary?) -> Unit
 ) {
-    val normalizedVersion = normalizeReleaseVersion(version)
+    val normalizedVersion = normalizeReleaseNotesVersion(version)
     if (normalizedVersion.isBlank()) {
         postReleaseNotes(callback, null)
         return

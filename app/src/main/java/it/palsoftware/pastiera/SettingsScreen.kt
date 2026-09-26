@@ -36,6 +36,7 @@ import androidx.compose.material.icons.filled.TouchApp
 import androidx.compose.material.icons.filled.Spellcheck
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.Engineering
+import androidx.compose.material.icons.filled.VolunteerActivism
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
@@ -51,8 +52,8 @@ import it.palsoftware.pastiera.R
 import android.widget.Toast
 import it.palsoftware.pastiera.BuildConfig
 import it.palsoftware.pastiera.inputmethod.DeviceSpecific
-import it.palsoftware.pastiera.update.checkForUpdate
-import it.palsoftware.pastiera.update.showUpdateDialog
+import it.palsoftware.pastiera.update.checkForUpdateNotices
+import it.palsoftware.pastiera.update.showReleaseNotice
 import it.palsoftware.pastiera.update.shouldUseGithubUpdateChecks
 import kotlinx.coroutines.delay
 
@@ -365,8 +366,6 @@ private fun SettingsMainScreen(
     onAppLanguageClick: () -> Unit,
     onOpenSettingEntry: (SettingEntry) -> Unit
 ) {
-    var checkingNightly by remember { mutableStateOf(false) }
-
     var searchQuery by rememberSaveable { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
     val searchResults = remember(searchQuery, context) {
@@ -392,11 +391,12 @@ private fun SettingsMainScreen(
                             contentDescription = stringResource(R.string.settings_back_content_description)
                         )
                     }
-                    Text(
-                        text = stringResource(R.string.settings_title),
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.padding(start = 8.dp)
+                    SettingsSearchField(
+                        value = searchQuery,
+                        onValueChange = { searchQuery = it },
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 8.dp)
                     )
                 }
             }
@@ -409,13 +409,6 @@ private fun SettingsMainScreen(
                 .consumeWindowInsets(paddingValues)
                 .imePadding()
         ) {
-            SettingsSearchField(
-                value = searchQuery,
-                onValueChange = { searchQuery = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-            )
             if (searchQuery.isNotBlank()) {
                 Column(
                     modifier = Modifier
@@ -568,61 +561,78 @@ private fun SettingsMainScreen(
                 linkId = SettingLinkIds.MAIN_ABOUT,
                 onClick = onAboutClick
             )
-
-            if (BuildConfig.RELEASE_CHANNEL == "nightly" && shouldUseGithubUpdateChecks(context)) {
-                SettingsCategoryRow(
-                    icon = Icons.Filled.Code,
-                    title = stringResource(if (checkingNightly) R.string.nightly_update_checking else R.string.nightly_update_settings_title),
-                    description = stringResource(R.string.nightly_update_settings_description),
-                    enabled = !checkingNightly,
-                    onClick = {
-                        checkingNightly = true
-                        it.palsoftware.pastiera.update.checkForNightlyUpdate(context, ignoreDismissedReleases = false) { result ->
-                            checkingNightly = false
-                            if (result.hasAnnouncement) it.palsoftware.pastiera.update.showReleaseNotice(context, result)
-                            else Toast.makeText(context, if (result.successful) R.string.nightly_update_current else R.string.settings_update_check_failed, Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                )
-            }
+            SettingsCategoryRow(
+                icon = Icons.Filled.VolunteerActivism,
+                title = stringResource(R.string.settings_support_open_collective),
+                description = stringResource(R.string.settings_support_open_collective_description),
+                onClick = {
+                    context.startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://pastiera.eu/donate")
+                        )
+                    )
+                }
+            )
 
             if (shouldUseGithubUpdateChecks(context)) {
                 SettingsCategoryRow(
                     icon = ImageVector.vectorResource(R.drawable.plektra_open_monochrome_24),
                     title = if (checkingForUpdates) {
-                        stringResource(R.string.settings_update_checking)
+                        stringResource(
+                            if (BuildConfig.RELEASE_CHANNEL == "stable") {
+                                R.string.settings_stable_update_checking
+                            } else {
+                                R.string.settings_update_checking
+                            }
+                        )
                     } else {
-                        stringResource(R.string.settings_update_section_title)
+                        stringResource(
+                            if (BuildConfig.RELEASE_CHANNEL == "stable") {
+                                R.string.settings_stable_update_section_title
+                            } else {
+                                R.string.settings_update_section_title
+                            }
+                        )
                     },
-                    description = stringResource(R.string.settings_update_section_description),
+                    description = stringResource(
+                        if (BuildConfig.RELEASE_CHANNEL == "stable") {
+                            R.string.settings_stable_update_section_description
+                        } else {
+                            R.string.settings_update_section_description
+                        }
+                    ),
                     enabled = !checkingForUpdates,
                     onClick = {
                         onCheckingForUpdatesChange(true)
-                        checkForUpdate(
-                            context = context,
-                            releaseChannel = BuildConfig.RELEASE_CHANNEL,
-                            ignoreDismissedReleases = false
-                        ) { result ->
+                        val onResult: (it.palsoftware.pastiera.update.UpdateCheckResult) -> Unit = { result ->
                             onCheckingForUpdatesChange(false)
                             when {
+                                result.hasAnnouncement -> showReleaseNotice(context, result)
                                 !result.successful -> Toast.makeText(
                                     context,
                                     context.getString(R.string.settings_update_check_failed),
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                result.hasAnnouncement && result.releaseTag != null && result.displayName != null -> showUpdateDialog(
-                                    context,
-                                    result.releaseTag,
-                                    result.displayName,
-                                    result.releasePageUrl
-                                )
                                 else -> Toast.makeText(
                                     context,
-                                    context.getString(R.string.settings_update_up_to_date),
+                                    context.getString(
+                                        if (BuildConfig.RELEASE_CHANNEL == "stable") {
+                                            R.string.settings_stable_update_up_to_date
+                                        } else {
+                                            R.string.settings_update_up_to_date
+                                        }
+                                    ),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
                         }
+                        checkForUpdateNotices(
+                            context = context,
+                            releaseChannel = BuildConfig.RELEASE_CHANNEL,
+                            ignoreDismissedReleases = false,
+                            callback = onResult
+                        )
                     }
                 )
             }

@@ -5,10 +5,12 @@ import android.graphics.ColorFilter
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PixelFormat
+import android.graphics.PointF
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.view.View
 import it.palsoftware.pastiera.inputmethod.StatusBarController
+import kotlin.math.PI
 
 /** Draws the button and its border inside the display contour without shrinking its touch target. */
 internal class CurvedCornerButtonDrawable(
@@ -30,6 +32,7 @@ internal class CurvedCornerButtonDrawable(
     private var lastPlacementKey: List<Any>? = null
     private var lastPlacement = ContentPlacement(0f, 0f, 1f)
     data class ContentPlacement(val x: Float, val y: Float, val scale: Float)
+    data class OuterContour(val points: List<PointF>, val borderHalfWidthPx: Float)
 
 
     override fun isStateful() = true
@@ -65,9 +68,15 @@ internal class CurvedCornerButtonDrawable(
             val x = (location[0] - chromeLocation[0]).toFloat()
             val y = (location[1] - chromeLocation[1]).toFloat()
             val calibration = it.palsoftware.pastiera.T2eCornerCalibration.read(view.context)
+            val ledInset = if (chrome.contourIntegratedIndicators) {
+                it.palsoftware.pastiera.inputmethod.ui.LedStatusView.CONTOUR_BUTTON_INSET_DP *
+                    view.resources.displayMetrics.density
+            } else {
+                0f
+            }
             // Calibration already includes the intended visible gap. Offset only the
             // stroke centerline so its outside edge follows that exact contour.
-            val contourInset = halfStroke
+            val contourInset = halfStroke + ledInset
             displayPath.set(it.palsoftware.pastiera.T2eCornerGeometry.path(
                 chrome.width.toFloat(), chrome.height.toFloat(),
                 radii.first.toFloat(), radii.second.toFloat(), calibration, contourInset
@@ -105,6 +114,89 @@ internal class CurvedCornerButtonDrawable(
             }
             buttonPath.op(blend, Path.Op.INTERSECT)
         }
+    }
+
+    /** The visible outer button edge, including its rounded transition from the top edge. */
+    fun outerContourCenterline(): OuterContour? {
+        if (view.width <= 0 || view.height <= 0) return null
+        setBounds(0, 0, view.width, view.height)
+        val halfStroke = borderWidth / 2f
+        val rect = RectF(bounds).apply { inset(halfStroke, halfStroke) }
+        val bottomRadius = cornerRadius.coerceAtMost(minOf(rect.width(), rect.height()) / 2f)
+        val multiplier = it.palsoftware.pastiera.SettingsManager
+            .getTitan2EliteTopCornerMultiplier(view.context)
+        val topRadius = (cornerRadius * multiplier)
+            .coerceAtMost(minOf(rect.width() - bottomRadius, rect.height() - bottomRadius))
+        var ancestor = view.parent
+        while (ancestor != null && ancestor !is StatusBarController.ImeChromeLayout) ancestor = ancestor.parent
+        val chrome = ancestor as? StatusBarController.ImeChromeLayout ?: return null
+        val radii = chrome.bottomCornerRadiiPx ?: return null
+        view.getLocationInWindow(location)
+        chrome.getLocationInWindow(chromeLocation)
+        val x = (location[0] - chromeLocation[0]).toFloat()
+        val y = (location[1] - chromeLocation[1]).toFloat()
+        val calibration = it.palsoftware.pastiera.T2eCornerCalibration.read(view.context)
+        val ledInset = if (chrome.contourIntegratedIndicators) {
+            it.palsoftware.pastiera.inputmethod.ui.LedStatusView.CONTOUR_BUTTON_INSET_DP *
+                view.resources.displayMetrics.density
+        } else 0f
+        val contourInset = halfStroke + ledInset
+        val radius = (if (leftEdge) radii.first else radii.second).toFloat()
+        val outerX = (if (leftEdge) -x else chrome.width - x) + calibration.shiftXPx
+        fun boundary(atY: Float): Float =
+            it.palsoftware.pastiera.T2eCornerGeometry.atY(
+                radius, chrome.height.toFloat(), atY + y - calibration.shiftYPx,
+                calibration, contourInset
+            ).x
+        val joinY = (rect.top + topRadius).coerceAtMost(rect.bottom - bottomRadius)
+        val joinX = boundary(joinY)
+        val dx = (boundary(joinY + 0.05f) - boundary(joinY - 0.05f)).coerceAtLeast(0f)
+        val tangentLength = kotlin.math.sqrt(dx * dx + 0.1f * 0.1f)
+        val tangentX = dx / tangentLength
+        val tangentY = 0.1f / tangentLength
+        val available = if (leftEdge) rect.right - outerX else outerX - rect.left
+        val startX = (boundary(rect.top) + topRadius).coerceAtMost(available - bottomRadius)
+        val handle = (joinY - rect.top) * 0.55f
+        fun screenX(localX: Float) = outerX + if (leftEdge) localX else -localX
+        val p0 = PointF(screenX(startX), rect.top)
+        val p1 = PointF(screenX(startX - handle), rect.top)
+        val p2 = PointF(screenX(joinX - tangentX * handle), joinY - tangentY * handle)
+        val p3 = PointF(screenX(joinX), joinY)
+        val points = ArrayList<PointF>(130)
+        for (index in 0..32) {
+            val t = index / 32f
+            val u = 1f - t
+            points += PointF(
+                x + u * u * u * p0.x + 3f * u * u * t * p1.x +
+                    3f * u * t * t * p2.x + t * t * t * p3.x,
+                y + u * u * u * p0.y + 3f * u * u * t * p1.y +
+                    3f * u * t * t * p2.y + t * t * t * p3.y
+            )
+        }
+        fun contourPoint(fraction: Float): PointF {
+            val point = it.palsoftware.pastiera.T2eCornerGeometry.point(
+                radius, chrome.height.toFloat(), PI / 2.0 * fraction,
+                calibration, contourInset
+            )
+            return PointF(
+                if (leftEdge) point.x + calibration.shiftXPx
+                else chrome.width - point.x + calibration.shiftXPx,
+                point.y + calibration.shiftYPx
+            )
+        }
+        val joinGlobalY = y + joinY
+        var low = 0.0
+        var high = 1.0
+        repeat(28) {
+            val mid = (low + high) / 2.0
+            if (contourPoint(mid.toFloat()).y < joinGlobalY) low = mid else high = mid
+        }
+        val startFraction = ((low + high) / 2.0).toFloat()
+        for (index in 1..96) {
+            val fraction = startFraction + (1f - startFraction) * index / 96f
+            points += contourPoint(fraction)
+        }
+        return OuterContour(points, halfStroke)
     }
 
     /** Keep the complete icon/text box 2 dp inside the drawn shape, moving only inward/up. */

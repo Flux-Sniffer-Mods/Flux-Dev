@@ -58,6 +58,9 @@ fun StatusBarButtonsScreen(
     var titan2EliteRoundedCornerInsetsEnabled by remember {
         mutableStateOf(SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context))
     }
+    var titan2EliteFillBottomCorners by remember {
+        mutableStateOf(SettingsManager.getTitan2EliteFillBottomCorners(context))
+    }
     var topCornerMultiplier by remember {
         mutableStateOf(SettingsManager.getTitan2EliteTopCornerMultiplier(context))
     }
@@ -296,6 +299,33 @@ fun StatusBarButtonsScreen(
         }
 
         if (titan2EliteRoundedCornerInsetsEnabled) {
+            Surface(modifier = Modifier.fillMaxWidth().settingRow("status_bar.fill_bottom_corners")) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = stringResource(R.string.titan2_elite_fill_bottom_corners_title),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = stringResource(R.string.titan2_elite_fill_bottom_corners_description),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Switch(
+                        checked = titan2EliteFillBottomCorners,
+                        onCheckedChange = { enabled ->
+                            titan2EliteFillBottomCorners = enabled
+                            SettingsManager.setTitan2EliteFillBottomCorners(context, enabled)
+                        }
+                    )
+                }
+            }
             Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp)) {
                 Text(stringResource(R.string.titan2_elite_top_corner_title), modifier = Modifier.fillMaxWidth().settingRow("status_bar.top_corner"), style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface)
@@ -704,13 +734,35 @@ fun ModifierIndicatorMultiSelect(
                         if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
                     )
                 ) {
-                    Box(contentAlignment = Alignment.Center) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Text(
                             text = getModifierIndicatorLabel(indicator),
-                            style = MaterialTheme.typography.labelMedium,
+                            style = if (
+                                indicator == SettingsManager.MODIFIER_INDICATOR_BOTTOM_STRIP ||
+                                indicator == SettingsManager.MODIFIER_INDICATOR_STATUS_BAR
+                            ) {
+                                MaterialTheme.typography.labelSmall
+                            } else {
+                                MaterialTheme.typography.labelMedium
+                            },
                             fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Medium,
                             maxLines = 1
                         )
+                        if (
+                            indicator == SettingsManager.MODIFIER_INDICATOR_BOTTOM_STRIP ||
+                            indicator == SettingsManager.MODIFIER_INDICATOR_STATUS_BAR
+                        ) {
+                            Text(
+                                text = "WIP",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(start = 4.dp)
+                            )
+                        }
                     }
                 }
             }

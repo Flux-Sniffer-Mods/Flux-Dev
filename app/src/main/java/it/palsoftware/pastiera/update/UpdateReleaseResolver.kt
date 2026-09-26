@@ -48,7 +48,7 @@ internal fun findLatestRelease(releases: List<GitHubRelease>, releaseChannel: St
         if (release.draft) continue
 
         val matchesChannel = when (normalizedChannel) {
-            "nightly" -> release.prerelease && release.tagName.startsWith("nightly/")
+            "nightly" -> release.prerelease
             else -> !release.prerelease
         }
         if (!matchesChannel) continue
@@ -63,5 +63,29 @@ internal fun findLatestRelease(releases: List<GitHubRelease>, releaseChannel: St
     return null
 }
 
+internal fun findNewerStableRelease(
+    releases: List<GitHubRelease>,
+    currentVersion: String
+): ReleaseInfo? = releases
+    .filter { release ->
+        !release.draft &&
+            !release.prerelease &&
+            (compareReleaseVersions(release.tagName, currentVersion) ?: -1) > 0
+    }
+    .maxWithOrNull { first, second ->
+        compareReleaseVersions(first.tagName, second.tagName) ?: 0
+    }
+    ?.let { release ->
+        ReleaseInfo(
+            tagName = release.tagName,
+            displayName = release.name?.takeIf(String::isNotBlank) ?: release.tagName,
+            releasePageUrl = release.htmlUrl?.takeIf(String::isNotBlank),
+            downloadUrl = release.downloadUrl
+        )
+    }
+
 internal fun normalizeReleaseVersion(version: String): String =
     version.removePrefix("nightly/").removePrefix("v").removePrefix("V")
+
+internal fun normalizeReleaseNotesVersion(version: String): String =
+    normalizeReleaseVersion(version).substringBefore("-nightly.")

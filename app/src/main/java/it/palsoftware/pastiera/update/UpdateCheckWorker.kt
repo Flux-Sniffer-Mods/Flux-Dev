@@ -51,20 +51,27 @@ class UpdateCheckWorker(
         // Wait for the network response (or timeout).
         val awaitSuccess = latch.await(30, TimeUnit.SECONDS)
         val result = resultRef.get()
-        if (!awaitSuccess || !completedRef.get() || result == null || !result.successful) {
+        if (!awaitSuccess || !completedRef.get() || result == null) {
             // Network error or timeout: ask WorkManager to retry later.
             return Result.retry()
         }
 
-        if (result.hasAnnouncement) {
-            if (result.releaseTag != null && result.displayName != null) {
+        var announcement: UpdateCheckResult? = result
+        while (announcement != null) {
+            if (announcement.hasAnnouncement && announcement.displayName != null) {
                 NotificationHelper.showUpdateAvailableNotification(
                     context = context,
-                    displayName = result.displayName,
-                    releasePageUrl = result.releasePageUrl,
-                    isNightlyUpdate = result.isNightlyUpdate
+                    displayName = announcement.displayName,
+                    releasePageUrl = announcement.releasePageUrl,
+                    isNightlyUpdate = announcement.isNightlyUpdate,
+                    isPastieraStableUpdate = announcement.isPastieraStableUpdate
                 )
             }
+            announcement = announcement.followUpAnnouncement
+        }
+
+        if (!result.successful) {
+            return Result.retry()
         }
 
         return Result.success()

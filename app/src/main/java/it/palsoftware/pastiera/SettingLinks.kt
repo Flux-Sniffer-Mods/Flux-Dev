@@ -129,6 +129,8 @@ object SettingLinkIds {
 
     // About screen
     const val ABOUT_SUPPORT_KO_FI = "about.support_ko_fi"
+    const val ABOUT_SUPPORT_OPEN_COLLECTIVE = "about.support_open_collective"
+    const val ABOUT_PLEKTRA_GITHUB = "about.plektra_github"
 
     // Keyboard theme editor (customization sub-screen): behaviour toggles and
     // the aggregated LED colors. Individual color picker fields stay
@@ -804,7 +806,18 @@ object SettingLinkRegistry {
 
         entry(
             SettingLinkIds.ABOUT_SUPPORT_KO_FI,
-            R.string.settings_support_ko_fi,
+            R.string.settings_support_creator_ko_fi,
+            destination = SettingsDestination.About
+        ),
+        entry(
+            SettingLinkIds.ABOUT_SUPPORT_OPEN_COLLECTIVE,
+            R.string.settings_support_open_collective,
+            destination = SettingsDestination.About
+        ),
+        entry(
+            SettingLinkIds.ABOUT_PLEKTRA_GITHUB,
+            R.string.about_plektra_github_title,
+            R.string.about_plektra_github_description,
             destination = SettingsDestination.About
         ),
 
@@ -936,6 +949,8 @@ object SettingLinkRegistry {
         SettingLinkIds.MODIFIERS_INDICATORS to R.string.kw_modifier_indicators,
         SettingLinkIds.CUSTOM_INPUT_STYLES_LAYOUT_MODE to R.string.kw_custom_input_styles_layout_mode,
         SettingLinkIds.ABOUT_SUPPORT_KO_FI to R.string.kw_about_support_ko_fi,
+        SettingLinkIds.ABOUT_SUPPORT_OPEN_COLLECTIVE to R.string.kw_about_support_open_collective,
+        SettingLinkIds.ABOUT_PLEKTRA_GITHUB to R.string.kw_about_plektra_github,
         SettingLinkIds.KEYBOARD_THEME_TOGGLE_SHOW_LEDS to R.string.kw_theme_toggle_show_leds,
         SettingLinkIds.KEYBOARD_THEME_TOGGLE_DISTRIBUTE_SPACING to R.string.kw_theme_toggle_distribute_spacing,
         SettingLinkIds.KEYBOARD_THEME_TOGGLE_ORTHOLINEAR to R.string.kw_theme_toggle_ortholinear,

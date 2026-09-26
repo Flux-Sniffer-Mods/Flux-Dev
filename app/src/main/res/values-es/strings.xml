@@ -241,7 +241,7 @@
     <string name="app_picker_title">Seleccionar una aplicación</string>
     <string name="app_picker_cancel">Cancelar</string>
     <string name="app_picker_search_placeholder">Buscar aplicaciones…</string>
-    <string name="settings_support_ko_fi">Apoyar en Ko-fi</string>
+    <string name="settings_support_open_collective">Open Collective</string>
     <string name="settings_nav_mode_configure">Configurar asignaciones de teclas del modo de navegación</string>
     <string name="auto_correct_ricette_pastiera_name">Ricette Pastiera</string>
     <string name="settings_category_text_input">Entrada de Texto</string>
@@ -305,8 +305,8 @@
     <string name="tutorial_previous">Anterior</string>
     <string name="tutorial_next">Siguiente</string>
     <string name="tutorial_finish">Finalizar</string>
-    <string name="tutorial_page_welcome_title">Bienvenido a Pastiera</string>
-    <string name="tutorial_page_welcome_description">Pastiera es un método de entrada avanzado para dispositivos Android con teclado físico (PKB) con soporte para modo Nav, atajos, asignaciones de teclado personalizadas y más.</string>
+    <string name="tutorial_page_welcome_title">Pastiera continúa como Plektra</string>
+    <string name="tutorial_page_welcome_description">Pastiera 0.86 es la última versión planificada con funciones nuevas. Puedes seguir usando Pastiera; los problemas relevantes para la seguridad seguirán recibiendo actualizaciones. Plektra continúa el proyecto con los mismos principios y seguirá siendo software libre y de código abierto bajo la licencia copyleft GPLv3. Cuando Plektra esté listo, Pastiera te avisará y te guiará por la transferencia única de tus ajustes.</string>
     <string name="tutorial_page_enable_title">Activar Pastiera</string>
     <string name="tutorial_page_enable_description">Para comenzar, debes activar Pastiera como método de entrada en la Configuración de Android. Toca el botón a continuación para abrir la configuración.</string>
     <string name="tutorial_page_select_title">Seleccionar Pastiera</string>
@@ -566,9 +566,9 @@
     <string name="variation_global_layout_override_description">Force variation ordering from one layout across all layouts. Default is current IME layout (%1$s).</string>
     <string name="variation_global_layout_override_none">None (use current layout)</string>
     <string name="settings_update_section_title">Plektra</string>
-    <string name="settings_update_section_description">Buscar una nueva versión del sucesor Plektra.</string>
-    <string name="settings_update_checking">Buscando versiones de Plektra…</string>
-    <string name="settings_update_up_to_date">No se encontró ninguna versión de Plektra.</string>
+    <string name="settings_update_section_description">Buscar actualizaciones de seguridad de Pastiera y versiones Nightly de Plektra.</string>
+    <string name="settings_update_checking">Buscando actualizaciones de seguridad de Pastiera y versiones Nightly de Plektra…</string>
+    <string name="settings_update_up_to_date">No se encontraron actualizaciones de seguridad de Pastiera ni versiones Nightly de Plektra.</string>
     <string name="settings_update_check_failed">No se pudo acceder a GitHub.</string>
     <string name="languages_title">Idiomas</string>
     <string name="languages_description">Añade idiomas al selector de métodos de entrada de Android. Solo se muestran idiomas con diccionario que no son idiomas del sistema.</string>

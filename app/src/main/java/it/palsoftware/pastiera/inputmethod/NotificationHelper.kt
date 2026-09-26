@@ -262,7 +262,8 @@ object NotificationHelper {
         context: Context,
         displayName: String,
         releasePageUrl: String?,
-        isNightlyUpdate: Boolean = false
+        isNightlyUpdate: Boolean = false,
+        isPastieraStableUpdate: Boolean = false
     ) {
         if (!hasNotificationPermission(context)) {
             android.util.Log.w("NotificationHelper", "Notification permission not granted")
@@ -275,7 +276,11 @@ object NotificationHelper {
             createUpdateNotificationChannel(context)
         }
         
-        val targetUrl = releasePageUrl ?: if (isNightlyUpdate) "https://github.com/palsoftware/pastiera/releases" else successorReleasesPage()
+        val targetUrl = releasePageUrl ?: if (isNightlyUpdate || isPastieraStableUpdate) {
+            "https://github.com/palsoftware/pastiera/releases"
+        } else {
+            successorReleasesPage()
+        }
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(targetUrl)).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -293,11 +298,21 @@ object NotificationHelper {
             pendingIntentFlags
         )
         
+        val titleResource = when {
+            isNightlyUpdate -> R.string.nightly_update_title
+            isPastieraStableUpdate -> R.string.notification_pastiera_stable_update_title
+            else -> R.string.notification_successor_release_title
+        }
+        val textResource = when {
+            isNightlyUpdate -> R.string.nightly_update_message
+            isPastieraStableUpdate -> R.string.notification_pastiera_stable_update_text
+            else -> R.string.notification_successor_release_text
+        }
         val notificationBuilder = NotificationCompat.Builder(context, UPDATE_CHANNEL_ID)
-            .setContentTitle(context.getString(if (isNightlyUpdate) R.string.nightly_update_title else R.string.notification_successor_release_title))
+            .setContentTitle(context.getString(titleResource))
             .setContentText(
                 context.getString(
-                    if (isNightlyUpdate) R.string.nightly_update_message else R.string.notification_successor_release_text,
+                    textResource,
                     displayName
                 )
             )
@@ -314,7 +329,12 @@ object NotificationHelper {
         }
         
         val notification = notificationBuilder.build()
-        notificationManager.notify(if (isNightlyUpdate) UPDATE_NOTIFICATION_ID + 1 else UPDATE_NOTIFICATION_ID, notification)
+        val notificationId = when {
+            isNightlyUpdate -> UPDATE_NOTIFICATION_ID + 1
+            isPastieraStableUpdate -> UPDATE_NOTIFICATION_ID + 2
+            else -> UPDATE_NOTIFICATION_ID
+        }
+        notificationManager.notify(notificationId, notification)
     }
     
     /**

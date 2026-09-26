@@ -241,7 +241,7 @@
     <string name="app_picker_title">Wybierz aplikację</string>
     <string name="app_picker_cancel">Anuluj</string>
     <string name="app_picker_search_placeholder">Szukaj aplikacji…</string>
-    <string name="settings_support_ko_fi">Wsparcie na Ko-fi</string>
+    <string name="settings_support_open_collective">Open Collective</string>
     <string name="settings_nav_mode_configure">Skonfiguruj mapowania klawiszy trybu nawigacji</string>
     <string name="auto_correct_ricette_pastiera_name">Ricette Pastiera</string>
     <string name="settings_category_text_input">Wprowadzanie Tekstu</string>
@@ -305,8 +305,8 @@
     <string name="tutorial_previous">Poprzedni</string>
     <string name="tutorial_next">Następny</string>
     <string name="tutorial_finish">Zakończ</string>
-    <string name="tutorial_page_welcome_title">Witamy w Pastiera</string>
-    <string name="tutorial_page_welcome_description">Pastiera to zaawansowana metoda wprowadzania dla urządzeń Android z fizyczną klawiaturą PKB, obsługująca Nav Mode, skróty, własne mapowania klawiszy i wiele więcej.</string>
+    <string name="tutorial_page_welcome_title">Pastiera jest kontynuowana jako Plektra</string>
+    <string name="tutorial_page_welcome_description">Pastiera 0.86 to ostatnie planowane wydanie z nowymi funkcjami. Możesz nadal używać Pastiera; problemy istotne dla bezpieczeństwa będą nadal otrzymywać aktualizacje. Plektra kontynuuje projekt na tych samych zasadach i pozostaje wolnym oprogramowaniem open source na licencji copyleft GPLv3. Gdy Plektra będzie gotowa, Pastiera powiadomi Cię i przeprowadzi przez jednorazowe przeniesienie ustawień.</string>
     <string name="tutorial_page_enable_title">Włącz Pastiera</string>
     <string name="tutorial_page_enable_description">Aby rozpocząć, musisz włączyć Pastiera jako metodę wprowadzania w Ustawieniach Androida. Naciśnij przycisk poniżej, aby otworzyć ustawienia.</string>
     <string name="tutorial_page_select_title">Wybierz Pastiera</string>
@@ -566,9 +566,9 @@
     <string name="variation_global_layout_override_description">Force variation ordering from one layout across all layouts. Default is current IME layout (%1$s).</string>
     <string name="variation_global_layout_override_none">None (use current layout)</string>
     <string name="settings_update_section_title">Plektra</string>
-    <string name="settings_update_section_description">Sprawdź nowe wydanie następcy Plektra.</string>
-    <string name="settings_update_checking">Sprawdzanie wydań Plektra…</string>
-    <string name="settings_update_up_to_date">Nie znaleziono wydania Plektra.</string>
+    <string name="settings_update_section_description">Sprawdź aktualizacje zabezpieczeń Pastiera i wydania Nightly Plektra.</string>
+    <string name="settings_update_checking">Sprawdzanie aktualizacji zabezpieczeń Pastiera i wydań Nightly Plektra…</string>
+    <string name="settings_update_up_to_date">Nie znaleziono aktualizacji zabezpieczeń Pastiera ani wydania Nightly Plektra.</string>
     <string name="settings_update_check_failed">Nie udało się połączyć z GitHubem.</string>
     <string name="languages_title">Języki</string>
     <string name="languages_description">Dodaj języki do selektora metody wprowadzania Androida. Pokazywane są tylko języki ze słownikiem, które nie są językami systemowymi.</string>

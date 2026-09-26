@@ -30,7 +30,7 @@
     <string name="text_input_section_capitalization">Capitalization</string>
     <string name="text_input_section_spacing_punctuation">Spacing &amp; punctuation</string>
     <string name="text_input_section_typography">Typography</string>
-    <string name="text_input_section_keyboard_behavior">Keyboard behavior</string>
+    <string name="text_input_section_keyboard_behavior">Keyboard behaviour</string>
     <string name="text_input_section_delete">Delete</string>
 
     <!-- Auto Capitalize Section -->
@@ -461,7 +461,7 @@
     <string name="clicks_sticky_shift_title">Caps Lock</string>
     <string name="clicks_sticky_shift_description">Allow the keyboard firmware to lock Shift.</string>
     <string name="clicks_soft_return_title">Soft Return</string>
-    <string name="clicks_soft_return_description">Use the keyboard firmware’s soft-return behavior.</string>
+    <string name="clicks_soft_return_description">Use the keyboard firmware’s soft-return behaviour.</string>
     <string name="clicks_cursor_mode_title">Cursor Mode</string>
     <string name="clicks_cursor_mode_description">Enable the keyboard firmware’s cursor navigation mode.</string>
     <string name="clicks_recommended_settings_title">Apply recommended settings</string>
@@ -647,13 +647,13 @@
     <string name="alt_key_editor_transfer_description">Share custom profiles and restore them with Pastiera backups.</string>
     <string name="settings_planned_label">PLANNED</string>
     <string name="feature_status_construction_content_description">Under construction</string>
-    <string name="feature_status_construction_hint">This feature is work in progress or planned. It may be incomplete, unavailable, or still change.</string>
+    <string name="feature_status_construction_hint">This feature is still being developed. It will improve in an upcoming Plektra build.</string>
     <string name="feature_status_experimental_content_description">Experimental feature</string>
     <string name="feature_status_experimental_hint">This may already work, but it is new and may soon be changed or improved. Bug reports are welcome.</string>
     <string name="tutorial_feature_status_title">Feature status symbols</string>
     <string name="tutorial_feature_status_description">Pastiera marks work in progress directly in the app, so you do not need to search through every GitHub issue.</string>
     <string name="tutorial_feature_status_construction_title">Under construction</string>
-    <string name="tutorial_feature_status_construction_description">This feature is work in progress or planned. It may be incomplete, unavailable, or still change.</string>
+    <string name="tutorial_feature_status_construction_description">This feature is still being developed. It will improve in an upcoming Plektra build.</string>
     <string name="tutorial_feature_status_experimental_title">Experimental</string>
     <string name="tutorial_feature_status_experimental_description">The feature can work already, but it is new and may be adjusted or improved soon. Bug reports are welcome.</string>
     <string name="tutorial_feature_status_footer">Tap either symbol in Settings for a short explanation. A roadmap marker is not a promise for a particular release.</string>
@@ -664,6 +664,13 @@
     <string name="settings_device_keyboard_info">Device: %1$s; Keyboard: %2$s</string>
     <string name="about_title">About</string>
     <string name="about_credits_error">Unable to load credits information.</string>
+    <string name="about_final_stable_notice">Pastiera 0.86 is the final planned release with new features. Security-relevant issues will continue to be fixed and released as updates. New feature development continues as Plektra.</string>
+    <string name="about_imprint_title">Imprint</string>
+    <string name="about_imprint_current_pdf">Current signed version (PDF)</string>
+    <string name="about_imprint_details">Patrick Zauner\nBurgkmairstr. 51\n80686 München\n\nResponsible for content since 07.03.2026</string>
+    <string name="about_plektra_github_title">Star Plektra on GitHub</string>
+    <string name="about_plektra_github_description">Follow the successor project and help it grow.</string>
+    <string name="about_sbom_export">Export software bill of materials (CycloneDX JSON)</string>
     
     <!-- Launcher Shortcuts Section -->
     <string name="starter_launcher_shortcuts_title">Pastiera-QuickLauncher</string>
@@ -767,8 +774,8 @@
     <string name="keyboard_theme_wizard_leds_description">Choose the inactive, active, and locked modifier indicator colors.</string>
     <string name="keyboard_theme_wizard_geometry">Geometry</string>
     <string name="keyboard_theme_wizard_geometry_description">Configure rounding, key dimensions, spacing, suggestions, and variations.</string>
-    <string name="keyboard_theme_wizard_behavior">Keyboard behavior</string>
-    <string name="keyboard_theme_wizard_behavior_description">Confirm layout, LED, and key-popup presentation behavior.</string>
+    <string name="keyboard_theme_wizard_behavior">Keyboard behaviour</string>
+    <string name="keyboard_theme_wizard_behavior_description">Confirm layout, LED, and key-popup presentation behaviour.</string>
     <string name="keyboard_theme_wizard_review">Review</string>
     <string name="keyboard_theme_wizard_review_description">Review every confirmed section before turning this draft into the active theme.</string>
     <string name="keyboard_theme_confirm_continue">Confirm and continue</string>
@@ -866,6 +873,8 @@
     <string name="notification_update_channel_description">Notifications about new Pastiera versions</string>
     <string name="notification_successor_release_title">Plektra release available</string>
     <string name="notification_successor_release_text">%1$s is available as the successor to Pastiera.</string>
+    <string name="notification_pastiera_stable_update_title">Pastiera security update available</string>
+    <string name="notification_pastiera_stable_update_text">%1$s is available for Pastiera.</string>
     
     <!-- Speech Recognition -->
     <string name="speech_recognition_prompt">Speak now...</string>
@@ -1050,17 +1059,26 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="app_picker_search_placeholder">Search apps...</string>
     
     <!-- Settings Screen -->
-    <string name="settings_support_ko_fi">Support on Ko-fi</string>
+    <string name="settings_support_open_collective">Support the project</string>
+    <string name="settings_support_open_collective_description">Open Collective</string>
+    <string name="settings_support_creator_ko_fi">Support the creator on Ko-fi</string>
     <string name="settings_nav_mode_configure">Configure navigation mode key mappings</string>
     <string name="settings_update_section_title">Plektra</string>
-    <string name="settings_update_section_description">Check for a new Plektra successor release.</string>
-    <string name="settings_update_checking">Checking Plektra releases…</string>
-    <string name="settings_update_up_to_date">No Plektra release found.</string>
+    <string name="settings_update_section_description">Check for Pastiera security updates and Plektra Nightlies.</string>
+    <string name="settings_update_checking">Checking Pastiera security updates and Plektra Nightlies…</string>
+    <string name="settings_update_up_to_date">No Pastiera security update or Plektra Nightly found.</string>
+    <string name="settings_stable_update_section_title">Pastiera and Plektra updates</string>
+    <string name="settings_stable_update_section_description">Check for Pastiera security updates and Plektra releases.</string>
+    <string name="settings_stable_update_checking">Checking Pastiera and Plektra releases…</string>
+    <string name="settings_stable_update_up_to_date">No Pastiera or Plektra update found.</string>
     <string name="settings_update_check_failed">Unable to reach GitHub.</string>
     <string name="successor_dialog_title">Pastiera has a successor</string>
     <string name="successor_dialog_message">Plektra succeeds Pastiera. %1$s is available on GitHub.</string>
     <string name="successor_dialog_open_release">View Plektra release</string>
     <string name="successor_dialog_later">Later</string>
+    <string name="pastiera_stable_update_title">Pastiera security update available</string>
+    <string name="pastiera_stable_update_message">%1$s is available for Pastiera. Install it to receive the latest security fixes.</string>
+    <string name="pastiera_stable_update_open">View Pastiera release</string>
     
     <!-- Auto Correct Settings -->
     <string name="auto_correct_ricette_pastiera_name">Ricette Pastiera</string>
@@ -1230,11 +1248,20 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="tutorial_finish">Finish</string>
     <string name="tutorial_whats_new_title">New in this version: %1$s</string>
     <string name="tutorial_whats_new_description">A few changes are worth knowing before you continue.</string>
+    <string name="tutorial_final_stable_title">Pastiera continues as Plektra</string>
+    <string name="about_final_nightly_notice">This is the final planned Pastiera Nightly with new features. Security-relevant issues will continue to be fixed and released as updates. New feature development continues as Plektra.</string>
+    <string name="tutorial_final_nightly_title">The final Pastiera Nightly</string>
     <string name="tutorial_whats_new_bug_fixes_title">Bug fixes</string>
     <string name="tutorial_whats_new_docs_button">Open Pastiera docs</string>
     <string name="tutorial_whats_new_continue_hint">Continue through the tutorial to review the most useful settings for this release.</string>
-    <string name="tutorial_page_welcome_title">Welcome to Pastiera</string>
-    <string name="tutorial_page_welcome_description">Pastiera is an advanced input method for PKB Android devices with support for Nav Mode, shortcuts, custom keyboard mappings, and more.</string>
+    <string name="tutorial_page_welcome_title">Pastiera continues as Plektra</string>
+    <string name="tutorial_page_welcome_description">Pastiera 0.86 is the final planned Pastiera release with new features. You can keep using Pastiera; security-relevant issues will continue to receive updates. Plektra continues the project with the same principles and remains free, open-source software under the GPLv3 copyleft licence. When Plektra is ready, Pastiera will notify you and guide you through the one-time transfer of your settings.</string>
+    <string name="tutorial_t2e_title">Recommended for Titan 2 Elite</string>
+    <string name="tutorial_t2e_description">Pastiera 0.86 fits the status bar to the Elite’s rounded display.</string>
+    <string name="tutorial_t2e_bullet_rounded_corners">Keep rounded corners enabled so the outer controls follow the physical display curve.</string>
+    <string name="tutorial_t2e_bullet_fill_corners">Enable filling of the lower display corners so the theme reaches the edge behind the rounded buttons.</string>
+    <string name="tutorial_t2e_trackpad_note">Trackpad control still needs refinement and will continue to improve in Plektra.</string>
+    <string name="tutorial_t2e_open_settings">Review Titan 2 Elite settings</string>
     <string name="tutorial_devs_choice_button">Dev\'s Choice</string>
     <string name="tutorial_devs_choice_applied">Dev\'s Choice settings applied.</string>
     <string name="tutorial_page_enable_title">Enable Pastiera</string>
@@ -1567,6 +1594,8 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="device_specific_interface_section">Device-specific interface</string>
     <string name="titan2_elite_rounded_corners_title">Titan 2 Elite rounded corners</string>
     <string name="titan2_elite_rounded_corners_description">Round the bottom corners of the status bar to match the Elite’s rounded display corners.</string>
+    <string name="titan2_elite_fill_bottom_corners_title">Fill lower display corners</string>
+    <string name="titan2_elite_fill_bottom_corners_description">Keep the outer buttons rounded while extending the theme background to the physical display edge.</string>
     <string name="status_bar_slot_left">Left Slot</string>
     <string name="status_bar_slot_right_1">Right Slot 1</string>
     <string name="status_bar_slot_right_2">Right Slot 2</string>
@@ -1665,7 +1694,7 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="emoji_symbols_close_description">A closing colon expands a unique exact match. Collisions stay selectable.</string>
 
     <!-- Settings search and shareable setting links -->
-    <string name="settings_search_hint">Search settings</string>
+    <string name="settings_search_hint">Search Settings</string>
     <string name="settings_search_no_results">No matching settings</string>
     <string name="settings_link_copy">Copy link</string>
     <string name="settings_link_copy_markdown">Copy Markdown</string>
@@ -1706,7 +1735,9 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="kw_modifiers_long_press_threshold">long press, delay, threshold, modifier</string>
     <string name="kw_modifier_indicators">LED, LEDs, lights, indicators, where modifier state shows</string>
     <string name="kw_custom_input_styles_layout_mode">layout mode, per-app, switch</string>
-    <string name="kw_about_support_ko_fi">support, donate, ko-fi, coffee</string>
+    <string name="kw_about_support_ko_fi">support, donate, ko-fi, coffee, creator, Andrea Palumbo</string>
+    <string name="kw_about_support_open_collective">support, donate, open collective, Pastiera, Plektra</string>
+    <string name="kw_about_plektra_github">Plektra, GitHub, star, source, successor</string>
     <string name="kw_theme_toggle_show_leds">LED, LEDs, lights, indicators, on-screen keyboard</string>
     <string name="kw_theme_toggle_distribute_spacing">spacing, gaps, keys</string>
     <string name="kw_theme_toggle_ortholinear">grid, aligned keys, layout</string>

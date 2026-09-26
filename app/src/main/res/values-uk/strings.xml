@@ -271,12 +271,12 @@
     <string name="app_picker_title">Обрати додаток</string>
     <string name="app_picker_cancel">Скасувати</string>
     <string name="app_picker_search_placeholder">Шукати додатки…</string>
-    <string name="settings_support_ko_fi">Підтримати на Ko-fi</string>
+    <string name="settings_support_open_collective">Open Collective</string>
     <string name="settings_nav_mode_configure">Налаштувати розкладку режиму навігації</string>
     <string name="settings_update_section_title">Plektra</string>
-    <string name="settings_update_section_description">Перевірити новий випуск наступника Plektra.</string>
-    <string name="settings_update_checking">Перевірка випусків Plektra…</string>
-    <string name="settings_update_up_to_date">Випуск Plektra не знайдено.</string>
+    <string name="settings_update_section_description">Перевірити оновлення безпеки Pastiera та нічні збірки Plektra.</string>
+    <string name="settings_update_checking">Перевірка оновлень безпеки Pastiera та нічних збірок Plektra…</string>
+    <string name="settings_update_up_to_date">Оновлення безпеки Pastiera або нічну збірку Plektra не знайдено.</string>
     <string name="settings_update_check_failed">Не вдалося підключитися до GitHub.</string>
     <string name="successor_dialog_title">Pastiera має наступника</string>
     <string name="successor_dialog_message">Plektra змінює Pastiera. %1$s доступний на GitHub.</string>
@@ -347,8 +347,8 @@
     <string name="tutorial_previous">Назад</string>
     <string name="tutorial_next">Далі</string>
     <string name="tutorial_finish">Завершити</string>
-    <string name="tutorial_page_welcome_title">Ласкаво просимо до Pastiera</string>
-    <string name="tutorial_page_welcome_description">Pastiera — це просунутий метод введення для PKB Android пристроїв з підтримкою режиму навігації, гарячих клавіш, власних розкладок та іншого.</string>
+    <string name="tutorial_page_welcome_title">Pastiera продовжується як Plektra</string>
+    <string name="tutorial_page_welcome_description">Pastiera 0.86 — останній запланований випуск із новими функціями. Ви можете й надалі користуватися Pastiera; проблеми, пов’язані з безпекою, продовжать отримувати оновлення. Plektra продовжує проєкт на тих самих засадах і залишається вільним програмним забезпеченням із відкритим кодом за copyleft-ліцензією GPLv3. Коли Plektra буде готова, Pastiera повідомить вас і допоможе одноразово перенести налаштування.</string>
     <string name="tutorial_page_enable_title">Увімкнути Pastiera</string>
     <string name="tutorial_page_enable_description">Для початку потрібно увімкнути Pastiera як метод введення в налаштуваннях Android. Натисніть кнопку нижче щоб відкрити налаштування.</string>
     <string name="tutorial_page_select_title">Обрати Pastiera</string>

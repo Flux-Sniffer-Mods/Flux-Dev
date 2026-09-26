@@ -180,6 +180,7 @@ object SettingsManager {
     const val KEY_TITAN2_ELITE_MAX_ICON_SHRINK = "titan2_elite_max_icon_shrink"
     const val KEY_TITAN2_ELITE_TOP_CORNER_MULTIPLIER = "titan2_elite_top_corner_multiplier"
     const val KEY_TITAN2_ELITE_ROUNDED_CORNER_INSETS = "titan2_elite_rounded_corner_insets"
+    const val KEY_TITAN2_ELITE_FILL_BOTTOM_CORNERS = "titan2_elite_fill_bottom_corners"
     private const val KEY_ACCESSIBILITY_LIVE_ANNOUNCEMENTS_ENABLED = "accessibility_live_announcements_enabled" // Whether status bar accessibility live announcements are enabled
     private const val KEY_ACCESSIBILITY_READ_SECOND_ROW_ENABLED = "accessibility_read_second_row_enabled" // Whether TalkBack should read quick settings/variations row
     private const val KEY_ACCESSIBILITY_SUGGESTIONS_ANNOUNCEMENT_DELAY_MS = "accessibility_suggestions_announcement_delay_ms" // Delay before suggestions become accessible again while typing
@@ -1444,6 +1445,15 @@ object SettingsManager {
             KEY_TITAN2_ELITE_ROUNDED_CORNER_INSETS,
             DeviceSpecific.isTitan2EliteDevice()
         )
+
+    fun getTitan2EliteFillBottomCorners(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_TITAN2_ELITE_FILL_BOTTOM_CORNERS, true)
+
+    fun setTitan2EliteFillBottomCorners(context: Context, enabled: Boolean) {
+        getPreferences(context).edit()
+            .putBoolean(KEY_TITAN2_ELITE_FILL_BOTTOM_CORNERS, enabled)
+            .apply()
+    }
 
     fun getTitan2EliteTopCornerMultiplier(context: Context): Int =
         getPreferences(context).getInt(KEY_TITAN2_ELITE_TOP_CORNER_MULTIPLIER, 2).let {
