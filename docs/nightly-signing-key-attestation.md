@@ -1,0 +1,642 @@
+---
+title: "PKB.rocks Android App Signing Attestation"
+subtitle: "Plektra and Pastiera – Nightly"
+author: "Patrick Zauner"
+date: "2026-09-25"
+documentclass: extarticle
+geometry: "a4paper,margin=16mm"
+fontsize: 9pt
+header-includes:
+  - \usepackage{fancyvrb}
+  - \usepackage{qrcode}
+  - \usepackage{xurl}
+  - \newcommand{\certfont}{\fontsize{9pt}{9.3pt}\selectfont}
+  - \newcommand{\apkfont}{\fontsize{7.8pt}{8.4pt}\selectfont}
+  - \RecustomVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},fontsize=\apkfont}
+  - \setlength{\emergencystretch}{3em}
+---
+
+# Attestation
+
+I attest that Certificates A, B, and C are the PKB.rocks nightly Android app signing certificates for these application IDs:
+
+- `rocks.pkb.plektra.nightly`
+- `it.palsoftware.pastiera.nightly`
+
+The authorized signing succession is A → B → C. A is the initial signer; releases may switch directly from A to C, skipping B. Once B is adopted for releases, A must no longer sign new releases; once C is adopted, only C may sign new releases. Earlier signatures remain valid. Introducing a new signing key after C requires an authorized extension of the signing lineage.
+
+# Certificate identity
+
+```text
+Subject and issuer  CN=Patrick Zauner, O=PKB.rocks,
+                    OU=Plektra (successor to Pastiera) - Nightly Android App Signing
+Public key          ECC P-256
+Signature           ECDSA with SHA-256
+Validity start      2026-09-05 00:00:00 UTC
+Validity end        2126-09-05 00:00:00 UTC
+```
+
+## Certificate fingerprints
+
+Each fingerprint is the SHA-256 digest of the DER-encoded X.509 certificate.
+
+```text
+Certificate  Role     SHA-256
+A            Initial   9866536b5a6da5152b0ba30b12b3cffae54990c5200647f352f40edb0f04f51e
+B            Next     fe1d6f5c377843ef8875d598169c71afdb2913193681428d1446b261db678213
+C            Last     6b0b93663a562cd575b2696d5905a80d4ab68420b28d06980fa703d6e572ede1
+```
+
+# Hardware attestation
+
+```text
+PIV slot       82 (Retired Key 1)
+Key origin     GENERATED
+PIN policy     ALWAYS
+Touch policy   ALWAYS
+```
+
+The Yubico PIV attestation for each signer verifies on-device key generation. Each attested public key matches its Android signing certificate. Each attestation chain verifies to Yubico Attestation Root 1 through the included intermediate certificates. Complete hardware attestations and manufacturer certificates follow on separate pages.
+
+```text
+Signer  Slot-attestation certificate (DER, SHA-256)
+A       75ba4291299e0e2142a4ca44d9125c95136f3e4c9e6e9a95b53768b0d89f108d
+B       cd47eec94413c56352f62251d418b599fa25a1aad3f8a4dce422fc9025537136
+C       c4974a8fdb55233f0f1f12493aec29d6e2788e278aa9d0ed6519a86c13f8df32
+
+F9 attestation certificate (DER, SHA-256; A, B and C)
+7ee706d267df53e5cc4505372d26e5daeadd8feaaf4b58562afde8cc392192c1
+
+Yubico Attestation Root 1 (DER, SHA-256)
+62760c6a6ef91679f454c8902b80fd009825b3f25da90f1fbace2ec6586cd5a8
+```
+
+# Android signing continuity
+
+```text
+rocks.pkb.plektra.nightly
+Nightly A -> Nightly B -> Nightly C
+signing/lineages/plektra-nightly-v1.lineage
+SHA-256 f73e9266da27e770ef82e8cbb579730fd98e54c72c9aafba555af3eccd5ea945
+
+it.palsoftware.pastiera.nightly
+Legacy Nightly -> Nightly A -> Nightly B -> Nightly C
+signing/lineages/pastiera-nightly-v1.lineage
+SHA-256 d6a425ecb433c2104cf2109f9992f2282909f56e88146f108a875a5a64d1b1e9
+```
+
+Capabilities: `installed-data=true`, `shared-uid=false`, `permission=true`, `rollback=false`, `auth=false`.
+
+\clearpage
+
+# Public certificates
+
+\vspace{0.75\baselineskip}
+
+```{=latex}
+\noindent
+\begin{minipage}[t]{2.1in}
+\centering
+\subsection*{Certificate A}
+\qrcode[height=2.1in]{-----BEGIN CERTIFICATE-----MIICTjCCAfSgAwIBAgIUW0htP/Oo0JHBrtnupLLM/c83LW8wCgYIKoZIzj0EAwIwdTEXMBUGA1UEAwwOUGF0cmljayBaYXVuZXIxEjAQBgNVBAoMCVBLQi5yb2NrczFGMEQGA1UECww9UGxla3RyYSAoc3VjY2Vzc29yIHRvIFBhc3RpZXJhKSAtIE5pZ2h0bHkgQW5kcm9pZCBBcHAgU2lnbmluZzAgFw0yNjA5MDUwMDAwMDBaGA8yMTI2MDkwNTAwMDAwMFowdTEXMBUGA1UEAwwOUGF0cmljayBaYXVuZXIxEjAQBgNVBAoMCVBLQi5yb2NrczFGMEQGA1UECww9UGxla3RyYSAoc3VjY2Vzc29yIHRvIFBhc3RpZXJhKSAtIE5pZ2h0bHkgQW5kcm9pZCBBcHAgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJe4LRuBHA0nVRZtDaeqRnD0nRFxZb4spsdqHuvb6yUDG23KKW/+v5iSTD05I05FK4bymP/oCJmLUcK41WV5whyjYDBeMB8GA1UdIwQYMBaAFOssq47q2tM3egLA7DCiMxIbq6MwMAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgeAMB0GA1UdDgQWBBTrLKuO6trTN3oCwOwwojMSG6ujMDAKBggqhkjOPQQDAgNIADBFAiEAlgDYRPxPdTgp/+4ZaZoze4ZVr1T8vYSFZ/0tdUqDvd4CIGOVtYbyJj+ebtIrB3h8rnSq+PfCHAbeBCsYxQ/lqnRt-----END CERTIFICATE-----}\par\vspace{\baselineskip}
+\raggedright
+\begin{Verbatim}[fontsize=\certfont]
+-----BEGIN CERTIFICATE-----
+MIICTjCCAfSgAwIBAgIUW0htP/Oo0JHB
+rtnupLLM/c83LW8wCgYIKoZIzj0EAwIw
+dTEXMBUGA1UEAwwOUGF0cmljayBaYXVu
+ZXIxEjAQBgNVBAoMCVBLQi5yb2NrczFG
+MEQGA1UECww9UGxla3RyYSAoc3VjY2Vz
+c29yIHRvIFBhc3RpZXJhKSAtIE5pZ2h0
+bHkgQW5kcm9pZCBBcHAgU2lnbmluZzAg
+Fw0yNjA5MDUwMDAwMDBaGA8yMTI2MDkw
+NTAwMDAwMFowdTEXMBUGA1UEAwwOUGF0
+cmljayBaYXVuZXIxEjAQBgNVBAoMCVBL
+Qi5yb2NrczFGMEQGA1UECww9UGxla3Ry
+YSAoc3VjY2Vzc29yIHRvIFBhc3RpZXJh
+KSAtIE5pZ2h0bHkgQW5kcm9pZCBBcHAg
+U2lnbmluZzBZMBMGByqGSM49AgEGCCqG
+SM49AwEHA0IABJe4LRuBHA0nVRZtDaeq
+RnD0nRFxZb4spsdqHuvb6yUDG23KKW/+
+v5iSTD05I05FK4bymP/oCJmLUcK41WV5
+whyjYDBeMB8GA1UdIwQYMBaAFOssq47q
+2tM3egLA7DCiMxIbq6MwMAwGA1UdEwEB
+/wQCMAAwDgYDVR0PAQH/BAQDAgeAMB0G
+A1UdDgQWBBTrLKuO6trTN3oCwOwwojMS
+G6ujMDAKBggqhkjOPQQDAgNIADBFAiEA
+lgDYRPxPdTgp/+4ZaZoze4ZVr1T8vYSF
+Z/0tdUqDvd4CIGOVtYbyJj+ebtIrB3h8
+rnSq+PfCHAbeBCsYxQ/lqnRt
+-----END CERTIFICATE-----
+\end{Verbatim}
+\end{minipage}\hfill\begin{minipage}[t]{2.1in}
+\centering
+\subsection*{Certificate B}
+\qrcode[height=2.1in]{-----BEGIN CERTIFICATE-----MIICUDCCAfWgAwIBAgIVAMICz0bf2YIlIsmPSo+bu6C8lJpZMAoGCCqGSM49BAMCMHUxFzAVBgNVBAMMDlBhdHJpY2sgWmF1bmVyMRIwEAYDVQQKDAlQS0Iucm9ja3MxRjBEBgNVBAsMPVBsZWt0cmEgKHN1Y2Nlc3NvciB0byBQYXN0aWVyYSkgLSBOaWdodGx5IEFuZHJvaWQgQXBwIFNpZ25pbmcwIBcNMjYwOTA1MDAwMDAwWhgPMjEyNjA5MDUwMDAwMDBaMHUxFzAVBgNVBAMMDlBhdHJpY2sgWmF1bmVyMRIwEAYDVQQKDAlQS0Iucm9ja3MxRjBEBgNVBAsMPVBsZWt0cmEgKHN1Y2Nlc3NvciB0byBQYXN0aWVyYSkgLSBOaWdodGx5IEFuZHJvaWQgQXBwIFNpZ25pbmcwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAASwO9ejhIhN7qtr1t40PIAuLqgi3s1M6hdx9LR0u9bBzx4m1+xltrtrl2vicpYtcmORN1y/15s0Vt+S1rCuDTVKo2AwXjAfBgNVHSMEGDAWgBSxmbFX+mXG3NpWaq73YkIfjSifHzAMBgNVHRMBAf8EAjAAMA4GA1UdDwEB/wQEAwIHgDAdBgNVHQ4EFgQUsZmxV/plxtzaVmqu92JCH40onx8wCgYIKoZIzj0EAwIDSQAwRgIhAMV5XnuDgI6n+qb3EyghWhkr04ywRbd5iK8wLYI7g/b+AiEA9WUn4JgC7kxrTZsKEUbyaB+8feuc+LLovIzSnNLfbS0=-----END CERTIFICATE-----}\par\vspace{\baselineskip}
+\raggedright
+\begin{Verbatim}[fontsize=\certfont]
+-----BEGIN CERTIFICATE-----
+MIICUDCCAfWgAwIBAgIVAMICz0bf2YIl
+IsmPSo+bu6C8lJpZMAoGCCqGSM49BAMC
+MHUxFzAVBgNVBAMMDlBhdHJpY2sgWmF1
+bmVyMRIwEAYDVQQKDAlQS0Iucm9ja3Mx
+RjBEBgNVBAsMPVBsZWt0cmEgKHN1Y2Nl
+c3NvciB0byBQYXN0aWVyYSkgLSBOaWdo
+dGx5IEFuZHJvaWQgQXBwIFNpZ25pbmcw
+IBcNMjYwOTA1MDAwMDAwWhgPMjEyNjA5
+MDUwMDAwMDBaMHUxFzAVBgNVBAMMDlBh
+dHJpY2sgWmF1bmVyMRIwEAYDVQQKDAlQ
+S0Iucm9ja3MxRjBEBgNVBAsMPVBsZWt0
+cmEgKHN1Y2Nlc3NvciB0byBQYXN0aWVy
+YSkgLSBOaWdodGx5IEFuZHJvaWQgQXBw
+IFNpZ25pbmcwWTATBgcqhkjOPQIBBggq
+hkjOPQMBBwNCAASwO9ejhIhN7qtr1t40
+PIAuLqgi3s1M6hdx9LR0u9bBzx4m1+xl
+trtrl2vicpYtcmORN1y/15s0Vt+S1rCu
+DTVKo2AwXjAfBgNVHSMEGDAWgBSxmbFX
++mXG3NpWaq73YkIfjSifHzAMBgNVHRMB
+Af8EAjAAMA4GA1UdDwEB/wQEAwIHgDAd
+BgNVHQ4EFgQUsZmxV/plxtzaVmqu92JC
+H40onx8wCgYIKoZIzj0EAwIDSQAwRgIh
+AMV5XnuDgI6n+qb3EyghWhkr04ywRbd5
+iK8wLYI7g/b+AiEA9WUn4JgC7kxrTZsK
+EUbyaB+8feuc+LLovIzSnNLfbS0=
+-----END CERTIFICATE-----
+\end{Verbatim}
+\end{minipage}\hfill\begin{minipage}[t]{2.1in}
+\centering
+\subsection*{Certificate C}
+\qrcode[height=2.1in]{-----BEGIN CERTIFICATE-----MIICTzCCAfSgAwIBAgIUd5d0rsbqty+hTlJW920SHWU6isMwCgYIKoZIzj0EAwIwdTEXMBUGA1UEAwwOUGF0cmljayBaYXVuZXIxEjAQBgNVBAoMCVBLQi5yb2NrczFGMEQGA1UECww9UGxla3RyYSAoc3VjY2Vzc29yIHRvIFBhc3RpZXJhKSAtIE5pZ2h0bHkgQW5kcm9pZCBBcHAgU2lnbmluZzAgFw0yNjA5MDUwMDAwMDBaGA8yMTI2MDkwNTAwMDAwMFowdTEXMBUGA1UEAwwOUGF0cmljayBaYXVuZXIxEjAQBgNVBAoMCVBLQi5yb2NrczFGMEQGA1UECww9UGxla3RyYSAoc3VjY2Vzc29yIHRvIFBhc3RpZXJhKSAtIE5pZ2h0bHkgQW5kcm9pZCBBcHAgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABMxU97S83nHMLOWn6RMuBwaXJLhYlqeX38KLnCwrWLd8FVJERvRxelxxIHTu3XfFkMOQPBmhPtolhbhgH9yW+o6jYDBeMB8GA1UdIwQYMBaAFDARqrluP/9hAHhzwIqCb+bLg1DLMAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgeAMB0GA1UdDgQWBBQwEaq5bj//YQB4c8CKgm/my4NQyzAKBggqhkjOPQQDAgNJADBGAiEA8mRtAvDNuEvIat96T3Hc20fLlwLNYZuKkj3R82vwJkYCIQDDoclPYVa6bgPanJHGNKTmecwOzqE0abkSzIj798YOzw==-----END CERTIFICATE-----}\par\vspace{\baselineskip}
+\raggedright
+\begin{Verbatim}[fontsize=\certfont]
+-----BEGIN CERTIFICATE-----
+MIICTzCCAfSgAwIBAgIUd5d0rsbqty+h
+TlJW920SHWU6isMwCgYIKoZIzj0EAwIw
+dTEXMBUGA1UEAwwOUGF0cmljayBaYXVu
+ZXIxEjAQBgNVBAoMCVBLQi5yb2NrczFG
+MEQGA1UECww9UGxla3RyYSAoc3VjY2Vz
+c29yIHRvIFBhc3RpZXJhKSAtIE5pZ2h0
+bHkgQW5kcm9pZCBBcHAgU2lnbmluZzAg
+Fw0yNjA5MDUwMDAwMDBaGA8yMTI2MDkw
+NTAwMDAwMFowdTEXMBUGA1UEAwwOUGF0
+cmljayBaYXVuZXIxEjAQBgNVBAoMCVBL
+Qi5yb2NrczFGMEQGA1UECww9UGxla3Ry
+YSAoc3VjY2Vzc29yIHRvIFBhc3RpZXJh
+KSAtIE5pZ2h0bHkgQW5kcm9pZCBBcHAg
+U2lnbmluZzBZMBMGByqGSM49AgEGCCqG
+SM49AwEHA0IABMxU97S83nHMLOWn6RMu
+BwaXJLhYlqeX38KLnCwrWLd8FVJERvRx
+elxxIHTu3XfFkMOQPBmhPtolhbhgH9yW
++o6jYDBeMB8GA1UdIwQYMBaAFDARqrlu
+P/9hAHhzwIqCb+bLg1DLMAwGA1UdEwEB
+/wQCMAAwDgYDVR0PAQH/BAQDAgeAMB0G
+A1UdDgQWBBQwEaq5bj//YQB4c8CKgm/m
+y4NQyzAKBggqhkjOPQQDAgNJADBGAiEA
+8mRtAvDNuEvIat96T3Hc20fLlwLNYZuK
+kj3R82vwJkYCIQDDoclPYVa6bgPanJHG
+NKTmecwOzqE0abkSzIj798YOzw==
+-----END CERTIFICATE-----
+\end{Verbatim}
+\end{minipage}
+```
+
+# APK verification
+
+Use Android SDK `apksigner` to identify the current APK signer:
+
+```bash
+APK="${1:?usage: verify-nightly-apk APK}"
+ACTUAL="$(
+  apksigner verify --print-certs "$APK" |
+  awk -F': ' '/certificate SHA-256 digest/ { print tolower($2); exit }'
+)"
+case "$ACTUAL" in
+  9866536b5a6da5152b0ba30b12b3cffae54990c5200647f352f40edb0f04f51e) echo 'OK: PKB.rocks Nightly Certificate A' ;;
+  fe1d6f5c377843ef8875d598169c71afdb2913193681428d1446b261db678213) echo 'OK: PKB.rocks Nightly Certificate B' ;;
+  6b0b93663a562cd575b2696d5905a80d4ab68420b28d06980fa703d6e572ede1) echo 'OK: PKB.rocks Nightly Certificate C' ;;
+  *) echo 'NOT OK: unrecognized signer.' >&2
+     echo 'Check for updated signing attestations if this APK continues an authorized lineage.' >&2
+     printf 'Actual: %s\n' "$ACTUAL" >&2; exit 1 ;;
+esac
+```
+
+\clearpage
+
+# Hardware attestations
+
+\vspace{0.75\baselineskip}
+
+```{=latex}
+\noindent
+\begin{minipage}[t]{2.1in}
+\centering
+\subsection*{Signer A}
+\qrcode[height=2.1in]{-----BEGIN CERTIFICATE-----MIICVTCCAT2gAwIBAgIQAbqfeADPLquiTJ/7Q/Qf7DANBgkqhkiG9w0BAQsFADAhMR8wHQYDVQQDDBZZdWJpY28gUElWIEF0dGVzdGF0aW9uMCAXDTI0MTIwMTAwMDAwMFoYDzk5OTkxMjMxMjM1OTU5WjAlMSMwIQYDVQQDDBpZdWJpS2V5IFBJViBBdHRlc3RhdGlvbiA4MjBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJe4LRuBHA0nVRZtDaeqRnD0nRFxZb4spsdqHuvb6yUDG23KKW/+v5iSTD05I05FK4bymP/oCJmLUcK41WV5whyjTjBMMBEGCisGAQQBgsQKAwMEAwUHBDAUBgorBgEEAYLECgMHBAYCBAJRqQkwEAYKKwYBBAGCxAoDCAQCAwIwDwYKKwYBBAGCxAoDCQQBAzANBgkqhkiG9w0BAQsFAAOCAQEAWAUBW8/HH3ZOL6czTh9WPeL0A45tSKIXG2qWCuGznwquesL/Sv2F6XbWb9Ny8g0+vSbcsP393qffW1/Jy+mhCv0ZMkFl9uiIn+kofRm8KYfLlggpjJbGkzjMGvXLW46Swur7VICbKIEDXW03XHbeYj1kfiB7bVHlC70D7QWtBUv1i27m3bNZvr+C1Ry3z6CBgEBe//ZrpHrqBvU4LvNzQyDZdRw7kkF4l6fXMSherfXtd+pyogIn6dRyIkDeqEDr2l6vGUNQtJoFOCZZ+vG+evOIbXlim76i0XQHTezCR5o+0lPbQRks+PxhQQKIYO6e87/2CCv+3qgwtZTejB2adg==-----END CERTIFICATE-----}\par\vspace{\baselineskip}
+\raggedright
+\begin{Verbatim}[fontsize=\certfont]
+-----BEGIN CERTIFICATE-----
+MIICVTCCAT2gAwIBAgIQAbqfeADPLqui
+TJ/7Q/Qf7DANBgkqhkiG9w0BAQsFADAh
+MR8wHQYDVQQDDBZZdWJpY28gUElWIEF0
+dGVzdGF0aW9uMCAXDTI0MTIwMTAwMDAw
+MFoYDzk5OTkxMjMxMjM1OTU5WjAlMSMw
+IQYDVQQDDBpZdWJpS2V5IFBJViBBdHRl
+c3RhdGlvbiA4MjBZMBMGByqGSM49AgEG
+CCqGSM49AwEHA0IABJe4LRuBHA0nVRZt
+DaeqRnD0nRFxZb4spsdqHuvb6yUDG23K
+KW/+v5iSTD05I05FK4bymP/oCJmLUcK4
+1WV5whyjTjBMMBEGCisGAQQBgsQKAwME
+AwUHBDAUBgorBgEEAYLECgMHBAYCBAJR
+qQkwEAYKKwYBBAGCxAoDCAQCAwIwDwYK
+KwYBBAGCxAoDCQQBAzANBgkqhkiG9w0B
+AQsFAAOCAQEAWAUBW8/HH3ZOL6czTh9W
+PeL0A45tSKIXG2qWCuGznwquesL/Sv2F
+6XbWb9Ny8g0+vSbcsP393qffW1/Jy+mh
+Cv0ZMkFl9uiIn+kofRm8KYfLlggpjJbG
+kzjMGvXLW46Swur7VICbKIEDXW03XHbe
+Yj1kfiB7bVHlC70D7QWtBUv1i27m3bNZ
+vr+C1Ry3z6CBgEBe//ZrpHrqBvU4LvNz
+QyDZdRw7kkF4l6fXMSherfXtd+pyogIn
+6dRyIkDeqEDr2l6vGUNQtJoFOCZZ+vG+
+evOIbXlim76i0XQHTezCR5o+0lPbQRks
++PxhQQKIYO6e87/2CCv+3qgwtZTejB2a
+dg==
+-----END CERTIFICATE-----
+\end{Verbatim}
+\end{minipage}\hfill\begin{minipage}[t]{2.1in}
+\centering
+\subsection*{Signer B}
+\qrcode[height=2.1in]{-----BEGIN CERTIFICATE-----MIICVTCCAT2gAwIBAgIQAU4UXGhqZxgaDdviqa3gMTANBgkqhkiG9w0BAQsFADAhMR8wHQYDVQQDDBZZdWJpY28gUElWIEF0dGVzdGF0aW9uMCAXDTI0MTIwMTAwMDAwMFoYDzk5OTkxMjMxMjM1OTU5WjAlMSMwIQYDVQQDDBpZdWJpS2V5IFBJViBBdHRlc3RhdGlvbiA4MjBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABLA716OEiE3uq2vW3jQ8gC4uqCLezUzqF3H0tHS71sHPHibX7GW2u2uXa+Jyli1yY5E3XL/XmzRW35LWsK4NNUqjTjBMMBEGCisGAQQBgsQKAwMEAwUHBDAUBgorBgEEAYLECgMHBAYCBAJRqdcwEAYKKwYBBAGCxAoDCAQCAwIwDwYKKwYBBAGCxAoDCQQBAzANBgkqhkiG9w0BAQsFAAOCAQEALLQV3mtqjfv6V7yk3lesOWhxt0P9Vb3eDNDZewJHKcvarQsUN34J+S3mEi2SUGioxiVvFSDZ5pA8FPtCnn9fQXiOYTYlsYZL0odhmsRwkkPs7uHs9nRWjm8sMbAqeFqxX41lUZcBXJ3IptxVG+4qUicmLCeXPZReWnwE/1QfasOxANPWL4OKQLNpCQc5ZDYgmES90A6i161PB4A3iboWABsafHqAtDCawRbTcRtPumeps4EoXqbyjJvwIMXjvx/qd3YSHT1v5FQTDdURWbvrblEUBEy0eHvaavlXSvqOc2vGY18z4YUudH/Pl+O81neoIVvtf189ZB6dprGt8Z+VlQ==-----END CERTIFICATE-----}\par\vspace{\baselineskip}
+\raggedright
+\begin{Verbatim}[fontsize=\certfont]
+-----BEGIN CERTIFICATE-----
+MIICVTCCAT2gAwIBAgIQAU4UXGhqZxga
+Ddviqa3gMTANBgkqhkiG9w0BAQsFADAh
+MR8wHQYDVQQDDBZZdWJpY28gUElWIEF0
+dGVzdGF0aW9uMCAXDTI0MTIwMTAwMDAw
+MFoYDzk5OTkxMjMxMjM1OTU5WjAlMSMw
+IQYDVQQDDBpZdWJpS2V5IFBJViBBdHRl
+c3RhdGlvbiA4MjBZMBMGByqGSM49AgEG
+CCqGSM49AwEHA0IABLA716OEiE3uq2vW
+3jQ8gC4uqCLezUzqF3H0tHS71sHPHibX
+7GW2u2uXa+Jyli1yY5E3XL/XmzRW35LW
+sK4NNUqjTjBMMBEGCisGAQQBgsQKAwME
+AwUHBDAUBgorBgEEAYLECgMHBAYCBAJR
+qdcwEAYKKwYBBAGCxAoDCAQCAwIwDwYK
+KwYBBAGCxAoDCQQBAzANBgkqhkiG9w0B
+AQsFAAOCAQEALLQV3mtqjfv6V7yk3les
+OWhxt0P9Vb3eDNDZewJHKcvarQsUN34J
++S3mEi2SUGioxiVvFSDZ5pA8FPtCnn9f
+QXiOYTYlsYZL0odhmsRwkkPs7uHs9nRW
+jm8sMbAqeFqxX41lUZcBXJ3IptxVG+4q
+UicmLCeXPZReWnwE/1QfasOxANPWL4OK
+QLNpCQc5ZDYgmES90A6i161PB4A3iboW
+ABsafHqAtDCawRbTcRtPumeps4EoXqby
+jJvwIMXjvx/qd3YSHT1v5FQTDdURWbvr
+blEUBEy0eHvaavlXSvqOc2vGY18z4YUu
+dH/Pl+O81neoIVvtf189ZB6dprGt8Z+V
+lQ==
+-----END CERTIFICATE-----
+\end{Verbatim}
+\end{minipage}\hfill\begin{minipage}[t]{2.1in}
+\centering
+\subsection*{Signer C}
+\qrcode[height=2.1in]{-----BEGIN CERTIFICATE-----MIICVTCCAT2gAwIBAgIQAbIlSZzTcOZGQf3c7acbHTANBgkqhkiG9w0BAQsFADAhMR8wHQYDVQQDDBZZdWJpY28gUElWIEF0dGVzdGF0aW9uMCAXDTI0MTIwMTAwMDAwMFoYDzk5OTkxMjMxMjM1OTU5WjAlMSMwIQYDVQQDDBpZdWJpS2V5IFBJViBBdHRlc3RhdGlvbiA4MjBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABMxU97S83nHMLOWn6RMuBwaXJLhYlqeX38KLnCwrWLd8FVJERvRxelxxIHTu3XfFkMOQPBmhPtolhbhgH9yW+o6jTjBMMBEGCisGAQQBgsQKAwMEAwUHBDAUBgorBgEEAYLECgMHBAYCBAJRqdswEAYKKwYBBAGCxAoDCAQCAwIwDwYKKwYBBAGCxAoDCQQBAzANBgkqhkiG9w0BAQsFAAOCAQEAhxcRyM7NC4R3iABgUSJP3ScrfjOCmXbaQxk4dKhNCYgHR22A+8Mnj3ltbzSXLvgY1Vdtsh4WN/9AYGn0ON1bX40HcmVr7/FBLkN9CRqG5NS5Gqz82Rd6an7hjxsJr+QbaKdo+DybbocmLQ6CA7tTeET5uKcXmfkg5w7na7B1jhr1i9oekqzDCw+C8q8yH5LHZfsGR8gkcIXH19+78cZt6fUZIZrY6VuEEHmhmmrxBQuLJ4U14+A4iiS2KYTgxU0NkRY8WynxwJiii9xMbJQCxPBhimF1OKizFLUVx55YL0OsqHw7qPtsYXUS+56VXMLOjxmWq5GEaZQmiG3ncT1nfQ==-----END CERTIFICATE-----}\par\vspace{\baselineskip}
+\raggedright
+\begin{Verbatim}[fontsize=\certfont]
+-----BEGIN CERTIFICATE-----
+MIICVTCCAT2gAwIBAgIQAbIlSZzTcOZG
+Qf3c7acbHTANBgkqhkiG9w0BAQsFADAh
+MR8wHQYDVQQDDBZZdWJpY28gUElWIEF0
+dGVzdGF0aW9uMCAXDTI0MTIwMTAwMDAw
+MFoYDzk5OTkxMjMxMjM1OTU5WjAlMSMw
+IQYDVQQDDBpZdWJpS2V5IFBJViBBdHRl
+c3RhdGlvbiA4MjBZMBMGByqGSM49AgEG
+CCqGSM49AwEHA0IABMxU97S83nHMLOWn
+6RMuBwaXJLhYlqeX38KLnCwrWLd8FVJE
+RvRxelxxIHTu3XfFkMOQPBmhPtolhbhg
+H9yW+o6jTjBMMBEGCisGAQQBgsQKAwME
+AwUHBDAUBgorBgEEAYLECgMHBAYCBAJR
+qdswEAYKKwYBBAGCxAoDCAQCAwIwDwYK
+KwYBBAGCxAoDCQQBAzANBgkqhkiG9w0B
+AQsFAAOCAQEAhxcRyM7NC4R3iABgUSJP
+3ScrfjOCmXbaQxk4dKhNCYgHR22A+8Mn
+j3ltbzSXLvgY1Vdtsh4WN/9AYGn0ON1b
+X40HcmVr7/FBLkN9CRqG5NS5Gqz82Rd6
+an7hjxsJr+QbaKdo+DybbocmLQ6CA7tT
+eET5uKcXmfkg5w7na7B1jhr1i9oekqzD
+Cw+C8q8yH5LHZfsGR8gkcIXH19+78cZt
+6fUZIZrY6VuEEHmhmmrxBQuLJ4U14+A4
+iiS2KYTgxU0NkRY8WynxwJiii9xMbJQC
+xPBhimF1OKizFLUVx55YL0OsqHw7qPts
+YXUS+56VXMLOjxmWq5GEaZQmiG3ncT1n
+fQ==
+-----END CERTIFICATE-----
+\end{Verbatim}
+\end{minipage}
+```
+
+\clearpage
+
+# Device attestation certificates
+
+\vspace{0.75\baselineskip}
+
+```{=latex}
+\noindent
+\begin{minipage}[t]{2.1in}
+\centering
+\subsection*{YK1 F9}
+\qrcode[height=2.1in]{-----BEGIN CERTIFICATE-----MIIC8DCCAdqgAwIBAgIJALo25FZYZJYbMAsGCSqGSIb3DQEBCzAlMSMwIQYDVQQDDBpZdWJpY28gUElWIEF0dGVzdGF0aW9uIEIgMTAgFw0yNDEyMDEwMDAwMDBaGA85OTk5MTIzMTIzNTk1OVowITEfMB0GA1UEAwwWWXViaWNvIFBJViBBdHRlc3RhdGlvbjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALcKTvN4UA+ve35Fauusc5FOpJ+sjbdChdujlwJqBqgr7iIWwix7Y2+ElhtdLRPtnh9xJ5NQ/kj5MbuQYjHQQZCagyVgiZhLV2Z7BzovCw/tGFkY311TTaDfk1DABxAT8cMb6AOQa5fHzqNwagWtA3KTEPOUvBn8NKavxN5UmEoqL5OUdQbphWxQY8UhOgnWMeao30Vrx8ebyA5osIhDW9A10b5Pd4rgb11aa82P9C1cAPLsGvaq9ufaI2Yce890eJ037Jis6I1r3qHz6IvxdXgr5UXyOhslGpKr1jz983UjSnaKWbbSYIv6OuEqUbUqjIpSA2dRYJ3gcnMTKnQcy+cCAwEAAaMpMCcwEQYKKwYBBAGCxAoDAwQDBQcEMBIGA1UdEwEB/wQIMAYBAf8CAQAwCwYJKoZIhvcNAQELA4IBAQBqtYVRoyvkCHQO6m5xy5e4K/gE8apPoCmHmZXp7p6q5mtuFMbNHwuc/3yrllTlyov8JpZzY7U1Dwl2rK7H6pV9gVOCngesZsWk7eNH4hqGpG73/6+ymyokeADRD3AqdM6VurEa1HXL7qb9Rl3Hr8+YQXk/HpaDAyub/TN39Jxhydpn18L1fEDzVLq9kPuc4fBEK/ZmzHAH87a0o+sVVQ94MfcNAQhN4T3noUhXkq2fKhJQnOMg0SE2IKXblhZNTZXr0r55ssHyWwwFH9txKVtvr9voFaFMs2oOnFk6Qy6DcUD5rosE9WGo6r2HHBCda+J/kbm5BE1NPr4y8QzXIG8g-----END CERTIFICATE-----}\par\vspace{\baselineskip}
+\raggedright
+\begin{Verbatim}[fontsize=\certfont]
+-----BEGIN CERTIFICATE-----
+MIIC8DCCAdqgAwIBAgIJALo25FZYZJYb
+MAsGCSqGSIb3DQEBCzAlMSMwIQYDVQQD
+DBpZdWJpY28gUElWIEF0dGVzdGF0aW9u
+IEIgMTAgFw0yNDEyMDEwMDAwMDBaGA85
+OTk5MTIzMTIzNTk1OVowITEfMB0GA1UE
+AwwWWXViaWNvIFBJViBBdHRlc3RhdGlv
+bjCCASIwDQYJKoZIhvcNAQEBBQADggEP
+ADCCAQoCggEBALcKTvN4UA+ve35Fauus
+c5FOpJ+sjbdChdujlwJqBqgr7iIWwix7
+Y2+ElhtdLRPtnh9xJ5NQ/kj5MbuQYjHQ
+QZCagyVgiZhLV2Z7BzovCw/tGFkY311T
+TaDfk1DABxAT8cMb6AOQa5fHzqNwagWt
+A3KTEPOUvBn8NKavxN5UmEoqL5OUdQbp
+hWxQY8UhOgnWMeao30Vrx8ebyA5osIhD
+W9A10b5Pd4rgb11aa82P9C1cAPLsGvaq
+9ufaI2Yce890eJ037Jis6I1r3qHz6Ivx
+dXgr5UXyOhslGpKr1jz983UjSnaKWbbS
+YIv6OuEqUbUqjIpSA2dRYJ3gcnMTKnQc
+y+cCAwEAAaMpMCcwEQYKKwYBBAGCxAoD
+AwQDBQcEMBIGA1UdEwEB/wQIMAYBAf8C
+AQAwCwYJKoZIhvcNAQELA4IBAQBqtYVR
+oyvkCHQO6m5xy5e4K/gE8apPoCmHmZXp
+7p6q5mtuFMbNHwuc/3yrllTlyov8JpZz
+Y7U1Dwl2rK7H6pV9gVOCngesZsWk7eNH
+4hqGpG73/6+ymyokeADRD3AqdM6VurEa
+1HXL7qb9Rl3Hr8+YQXk/HpaDAyub/TN3
+9Jxhydpn18L1fEDzVLq9kPuc4fBEK/Zm
+zHAH87a0o+sVVQ94MfcNAQhN4T3noUhX
+kq2fKhJQnOMg0SE2IKXblhZNTZXr0r55
+ssHyWwwFH9txKVtvr9voFaFMs2oOnFk6
+Qy6DcUD5rosE9WGo6r2HHBCda+J/kbm5
+BE1NPr4y8QzXIG8g
+-----END CERTIFICATE-----
+\end{Verbatim}
+\end{minipage}\hfill\begin{minipage}[t]{2.1in}
+\centering
+\subsection*{YK2 F9}
+\qrcode[height=2.1in]{-----BEGIN CERTIFICATE-----MIIC8DCCAdqgAwIBAgIJALo25FZYZJYbMAsGCSqGSIb3DQEBCzAlMSMwIQYDVQQDDBpZdWJpY28gUElWIEF0dGVzdGF0aW9uIEIgMTAgFw0yNDEyMDEwMDAwMDBaGA85OTk5MTIzMTIzNTk1OVowITEfMB0GA1UEAwwWWXViaWNvIFBJViBBdHRlc3RhdGlvbjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALcKTvN4UA+ve35Fauusc5FOpJ+sjbdChdujlwJqBqgr7iIWwix7Y2+ElhtdLRPtnh9xJ5NQ/kj5MbuQYjHQQZCagyVgiZhLV2Z7BzovCw/tGFkY311TTaDfk1DABxAT8cMb6AOQa5fHzqNwagWtA3KTEPOUvBn8NKavxN5UmEoqL5OUdQbphWxQY8UhOgnWMeao30Vrx8ebyA5osIhDW9A10b5Pd4rgb11aa82P9C1cAPLsGvaq9ufaI2Yce890eJ037Jis6I1r3qHz6IvxdXgr5UXyOhslGpKr1jz983UjSnaKWbbSYIv6OuEqUbUqjIpSA2dRYJ3gcnMTKnQcy+cCAwEAAaMpMCcwEQYKKwYBBAGCxAoDAwQDBQcEMBIGA1UdEwEB/wQIMAYBAf8CAQAwCwYJKoZIhvcNAQELA4IBAQBqtYVRoyvkCHQO6m5xy5e4K/gE8apPoCmHmZXp7p6q5mtuFMbNHwuc/3yrllTlyov8JpZzY7U1Dwl2rK7H6pV9gVOCngesZsWk7eNH4hqGpG73/6+ymyokeADRD3AqdM6VurEa1HXL7qb9Rl3Hr8+YQXk/HpaDAyub/TN39Jxhydpn18L1fEDzVLq9kPuc4fBEK/ZmzHAH87a0o+sVVQ94MfcNAQhN4T3noUhXkq2fKhJQnOMg0SE2IKXblhZNTZXr0r55ssHyWwwFH9txKVtvr9voFaFMs2oOnFk6Qy6DcUD5rosE9WGo6r2HHBCda+J/kbm5BE1NPr4y8QzXIG8g-----END CERTIFICATE-----}\par\vspace{\baselineskip}
+\raggedright
+\begin{Verbatim}[fontsize=\certfont]
+-----BEGIN CERTIFICATE-----
+MIIC8DCCAdqgAwIBAgIJALo25FZYZJYb
+MAsGCSqGSIb3DQEBCzAlMSMwIQYDVQQD
+DBpZdWJpY28gUElWIEF0dGVzdGF0aW9u
+IEIgMTAgFw0yNDEyMDEwMDAwMDBaGA85
+OTk5MTIzMTIzNTk1OVowITEfMB0GA1UE
+AwwWWXViaWNvIFBJViBBdHRlc3RhdGlv
+bjCCASIwDQYJKoZIhvcNAQEBBQADggEP
+ADCCAQoCggEBALcKTvN4UA+ve35Fauus
+c5FOpJ+sjbdChdujlwJqBqgr7iIWwix7
+Y2+ElhtdLRPtnh9xJ5NQ/kj5MbuQYjHQ
+QZCagyVgiZhLV2Z7BzovCw/tGFkY311T
+TaDfk1DABxAT8cMb6AOQa5fHzqNwagWt
+A3KTEPOUvBn8NKavxN5UmEoqL5OUdQbp
+hWxQY8UhOgnWMeao30Vrx8ebyA5osIhD
+W9A10b5Pd4rgb11aa82P9C1cAPLsGvaq
+9ufaI2Yce890eJ037Jis6I1r3qHz6Ivx
+dXgr5UXyOhslGpKr1jz983UjSnaKWbbS
+YIv6OuEqUbUqjIpSA2dRYJ3gcnMTKnQc
+y+cCAwEAAaMpMCcwEQYKKwYBBAGCxAoD
+AwQDBQcEMBIGA1UdEwEB/wQIMAYBAf8C
+AQAwCwYJKoZIhvcNAQELA4IBAQBqtYVR
+oyvkCHQO6m5xy5e4K/gE8apPoCmHmZXp
+7p6q5mtuFMbNHwuc/3yrllTlyov8JpZz
+Y7U1Dwl2rK7H6pV9gVOCngesZsWk7eNH
+4hqGpG73/6+ymyokeADRD3AqdM6VurEa
+1HXL7qb9Rl3Hr8+YQXk/HpaDAyub/TN3
+9Jxhydpn18L1fEDzVLq9kPuc4fBEK/Zm
+zHAH87a0o+sVVQ94MfcNAQhN4T3noUhX
+kq2fKhJQnOMg0SE2IKXblhZNTZXr0r55
+ssHyWwwFH9txKVtvr9voFaFMs2oOnFk6
+Qy6DcUD5rosE9WGo6r2HHBCda+J/kbm5
+BE1NPr4y8QzXIG8g
+-----END CERTIFICATE-----
+\end{Verbatim}
+\end{minipage}\hfill\begin{minipage}[t]{2.1in}
+\centering
+\subsection*{YK3 F9}
+\qrcode[height=2.1in]{-----BEGIN CERTIFICATE-----MIIC8DCCAdqgAwIBAgIJALo25FZYZJYbMAsGCSqGSIb3DQEBCzAlMSMwIQYDVQQDDBpZdWJpY28gUElWIEF0dGVzdGF0aW9uIEIgMTAgFw0yNDEyMDEwMDAwMDBaGA85OTk5MTIzMTIzNTk1OVowITEfMB0GA1UEAwwWWXViaWNvIFBJViBBdHRlc3RhdGlvbjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALcKTvN4UA+ve35Fauusc5FOpJ+sjbdChdujlwJqBqgr7iIWwix7Y2+ElhtdLRPtnh9xJ5NQ/kj5MbuQYjHQQZCagyVgiZhLV2Z7BzovCw/tGFkY311TTaDfk1DABxAT8cMb6AOQa5fHzqNwagWtA3KTEPOUvBn8NKavxN5UmEoqL5OUdQbphWxQY8UhOgnWMeao30Vrx8ebyA5osIhDW9A10b5Pd4rgb11aa82P9C1cAPLsGvaq9ufaI2Yce890eJ037Jis6I1r3qHz6IvxdXgr5UXyOhslGpKr1jz983UjSnaKWbbSYIv6OuEqUbUqjIpSA2dRYJ3gcnMTKnQcy+cCAwEAAaMpMCcwEQYKKwYBBAGCxAoDAwQDBQcEMBIGA1UdEwEB/wQIMAYBAf8CAQAwCwYJKoZIhvcNAQELA4IBAQBqtYVRoyvkCHQO6m5xy5e4K/gE8apPoCmHmZXp7p6q5mtuFMbNHwuc/3yrllTlyov8JpZzY7U1Dwl2rK7H6pV9gVOCngesZsWk7eNH4hqGpG73/6+ymyokeADRD3AqdM6VurEa1HXL7qb9Rl3Hr8+YQXk/HpaDAyub/TN39Jxhydpn18L1fEDzVLq9kPuc4fBEK/ZmzHAH87a0o+sVVQ94MfcNAQhN4T3noUhXkq2fKhJQnOMg0SE2IKXblhZNTZXr0r55ssHyWwwFH9txKVtvr9voFaFMs2oOnFk6Qy6DcUD5rosE9WGo6r2HHBCda+J/kbm5BE1NPr4y8QzXIG8g-----END CERTIFICATE-----}\par\vspace{\baselineskip}
+\raggedright
+\begin{Verbatim}[fontsize=\certfont]
+-----BEGIN CERTIFICATE-----
+MIIC8DCCAdqgAwIBAgIJALo25FZYZJYb
+MAsGCSqGSIb3DQEBCzAlMSMwIQYDVQQD
+DBpZdWJpY28gUElWIEF0dGVzdGF0aW9u
+IEIgMTAgFw0yNDEyMDEwMDAwMDBaGA85
+OTk5MTIzMTIzNTk1OVowITEfMB0GA1UE
+AwwWWXViaWNvIFBJViBBdHRlc3RhdGlv
+bjCCASIwDQYJKoZIhvcNAQEBBQADggEP
+ADCCAQoCggEBALcKTvN4UA+ve35Fauus
+c5FOpJ+sjbdChdujlwJqBqgr7iIWwix7
+Y2+ElhtdLRPtnh9xJ5NQ/kj5MbuQYjHQ
+QZCagyVgiZhLV2Z7BzovCw/tGFkY311T
+TaDfk1DABxAT8cMb6AOQa5fHzqNwagWt
+A3KTEPOUvBn8NKavxN5UmEoqL5OUdQbp
+hWxQY8UhOgnWMeao30Vrx8ebyA5osIhD
+W9A10b5Pd4rgb11aa82P9C1cAPLsGvaq
+9ufaI2Yce890eJ037Jis6I1r3qHz6Ivx
+dXgr5UXyOhslGpKr1jz983UjSnaKWbbS
+YIv6OuEqUbUqjIpSA2dRYJ3gcnMTKnQc
+y+cCAwEAAaMpMCcwEQYKKwYBBAGCxAoD
+AwQDBQcEMBIGA1UdEwEB/wQIMAYBAf8C
+AQAwCwYJKoZIhvcNAQELA4IBAQBqtYVR
+oyvkCHQO6m5xy5e4K/gE8apPoCmHmZXp
+7p6q5mtuFMbNHwuc/3yrllTlyov8JpZz
+Y7U1Dwl2rK7H6pV9gVOCngesZsWk7eNH
+4hqGpG73/6+ymyokeADRD3AqdM6VurEa
+1HXL7qb9Rl3Hr8+YQXk/HpaDAyub/TN3
+9Jxhydpn18L1fEDzVLq9kPuc4fBEK/Zm
+zHAH87a0o+sVVQ94MfcNAQhN4T3noUhX
+kq2fKhJQnOMg0SE2IKXblhZNTZXr0r55
+ssHyWwwFH9txKVtvr9voFaFMs2oOnFk6
+Qy6DcUD5rosE9WGo6r2HHBCda+J/kbm5
+BE1NPr4y8QzXIG8g
+-----END CERTIFICATE-----
+\end{Verbatim}
+\end{minipage}
+```
+
+\clearpage
+
+# Manufacturer certificate chain
+
+\vspace{0.75\baselineskip}
+
+```{=latex}
+\noindent
+\begin{minipage}[t]{2.1in}
+\centering
+\subsection*{PIV Attestation B 1}
+\qrcode[height=2.1in]{-----BEGIN CERTIFICATE-----MIIDSTCCAjGgAwIBAgIUWVf2oJG+t1qP8t8TicWgJ2KYan4wDQYJKoZIhvcNAQELBQAwLjEsMCoGA1UEAwwjWXViaWNvIEF0dGVzdGF0aW9uIEludGVybWVkaWF0ZSBCIDEwIBcNMjQxMjAxMDAwMDAwWhgPOTk5OTEyMzEyMzU5NTlaMCUxIzAhBgNVBAMMGll1YmljbyBQSVYgQXR0ZXN0YXRpb24gQiAxMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv7WBL9/5AKxSpCMoL63183WqRtFrOHY7tdyuGtoidoYWQrxVaV9S+ZwH0aynh0IzD5A/PvCtuxdtL5w2cAI3tgsborOlEert4IZ904CZQfq3ooar1an/wssbtMpPOQkC3MQiqrUyHlFS2BTbuwbBXY66lSVX/tGRuUgnBdfBJtcQKS6MO4bU5ndPQqhGPyzcyY1LvlfzK7KJ1r/bixCRFqjhJRnPs0Czpg6rkRrFgC6cd5bK1UgTsJy+3wrIqkv4CeV3EhSVnhnQjZgIrdIcI5WZ8T1Oq3OhMlWmY0K0dy/oZdP/bpbG2qbyHLa6gprLT/qChQWLmffxn6D2DAB1zQIDAQABo2YwZDAdBgNVHQ4EFgQUM0Nt3QHo7eGzaKMZn2SmXT74vpcwHwYDVR0jBBgwFoAU6rdCkJ4Me2R621R8A7p8Tp/YoWEwEgYDVR0TAQH/BAgwBgEB/wIBATAOBgNVHQ8BAf8EBAMCAYYwDQYJKoZIhvcNAQELBQADggEBAI0HwoS84fKMUyIof1LdUXvyeAMmEwW7+nVETvxNNlTMuwv7zPJ4XZAm9Fv95tz9CqZBj6l1PAPQn6Zht9LQA92OF7W7buuXuxuusBTgLM0C1iX2CGXqY/k/uSNvi3ZYfrpd44TIrfrr8bCG9ux7B5ZCRqb8adDUm92Yz3lK1aX2M6CwjC9IZVTXQWhLyP8Ys3p7rb20CO2jJzV94deJ/+AsEb+bnCQImPat1GDKwrBosar+BxtU7k6kgkxZ0G384O59GFXqnwkbw2b5HhORvOsX7nhOUhePFufzi1vT1g8Tzbwr+TUfTwo2biKHHcI762KGtp8o6Bcv5y8WgExFuWY=-----END CERTIFICATE-----}\par\vspace{\baselineskip}
+\raggedright
+\begin{Verbatim}[fontsize=\certfont]
+-----BEGIN CERTIFICATE-----
+MIIDSTCCAjGgAwIBAgIUWVf2oJG+t1qP
+8t8TicWgJ2KYan4wDQYJKoZIhvcNAQEL
+BQAwLjEsMCoGA1UEAwwjWXViaWNvIEF0
+dGVzdGF0aW9uIEludGVybWVkaWF0ZSBC
+IDEwIBcNMjQxMjAxMDAwMDAwWhgPOTk5
+OTEyMzEyMzU5NTlaMCUxIzAhBgNVBAMM
+Gll1YmljbyBQSVYgQXR0ZXN0YXRpb24g
+QiAxMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEAv7WBL9/5AKxSpCMo
+L63183WqRtFrOHY7tdyuGtoidoYWQrxV
+aV9S+ZwH0aynh0IzD5A/PvCtuxdtL5w2
+cAI3tgsborOlEert4IZ904CZQfq3ooar
+1an/wssbtMpPOQkC3MQiqrUyHlFS2BTb
+uwbBXY66lSVX/tGRuUgnBdfBJtcQKS6M
+O4bU5ndPQqhGPyzcyY1LvlfzK7KJ1r/b
+ixCRFqjhJRnPs0Czpg6rkRrFgC6cd5bK
+1UgTsJy+3wrIqkv4CeV3EhSVnhnQjZgI
+rdIcI5WZ8T1Oq3OhMlWmY0K0dy/oZdP/
+bpbG2qbyHLa6gprLT/qChQWLmffxn6D2
+DAB1zQIDAQABo2YwZDAdBgNVHQ4EFgQU
+M0Nt3QHo7eGzaKMZn2SmXT74vpcwHwYD
+VR0jBBgwFoAU6rdCkJ4Me2R621R8A7p8
+Tp/YoWEwEgYDVR0TAQH/BAgwBgEB/wIB
+ATAOBgNVHQ8BAf8EBAMCAYYwDQYJKoZI
+hvcNAQELBQADggEBAI0HwoS84fKMUyIo
+f1LdUXvyeAMmEwW7+nVETvxNNlTMuwv7
+zPJ4XZAm9Fv95tz9CqZBj6l1PAPQn6Zh
+t9LQA92OF7W7buuXuxuusBTgLM0C1iX2
+CGXqY/k/uSNvi3ZYfrpd44TIrfrr8bCG
+9ux7B5ZCRqb8adDUm92Yz3lK1aX2M6Cw
+jC9IZVTXQWhLyP8Ys3p7rb20CO2jJzV9
+4deJ/+AsEb+bnCQImPat1GDKwrBosar+
+BxtU7k6kgkxZ0G384O59GFXqnwkbw2b5
+HhORvOsX7nhOUhePFufzi1vT1g8Tzbwr
++TUfTwo2biKHHcI762KGtp8o6Bcv5y8W
+gExFuWY=
+-----END CERTIFICATE-----
+\end{Verbatim}
+\end{minipage}\hfill\begin{minipage}[t]{2.1in}
+\centering
+\subsection*{Intermediate B 1}
+\qrcode[height=2.1in]{-----BEGIN CERTIFICATE-----MIIDSDCCAjCgAwIBAgIUDqERw+4RnGSggxgUewJFEPDRZ3YwDQYJKoZIhvcNAQELBQAwJDEiMCAGA1UEAwwZWXViaWNvIEF0dGVzdGF0aW9uIFJvb3QgMTAgFw0yNDEyMDEwMDAwMDBaGA85OTk5MTIzMTIzNTk1OVowLjEsMCoGA1UEAwwjWXViaWNvIEF0dGVzdGF0aW9uIEludGVybWVkaWF0ZSBCIDEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDI7XnH+ZvDwMCQU8M8ZeV5qscublvVYaaRt3Ybaxn9godLx5swH0lXrdgjh5h7FpVgCgYYX7E4bl1vbzULemrMWT8N3WMGUe8QAJbBeioV7W/E+hTZP/0SKJVa3ewKBo6ULeMnfQZDrVORAk8wTLq2v5Llj5vMj7JtOotKa9J7nHS8kLmzXXSaj0SwEPh5OAZUTNV4zs1bvoTAQQWrL4/J9QuKt6WCFE5nUNiRQcEbVF8mlqK2bx2z6okVltyDVLCxYbpUTELvY1usR3DTGPUoIClOm4crpwnDRLVHvjYePGBB//pEyzxA/gcScxjwaH1ZUw9bnSbHyurKqbTa1KvjAgMBAAGjZjBkMB0GA1UdDgQWBBTqt0KQngx7ZHrbVHwDunxOn9ihYTAfBgNVHSMEGDAWgBTS7u9aIo06bVwjlz3yhdUm8SV7kjASBgNVHRMBAf8ECDAGAQH/AgECMA4GA1UdDwEB/wQEAwIBhjANBgkqhkiG9w0BAQsFAAOCAQEAqQaCWMxTGqVVX7Sk7kkJmUueTSYKuU6+KBBSgwIRnlw9K7He1IpxZ0hdwpPNikKjmcyFgFPzhImwHJgxxuT90Pw3vYOdcJJNktDg35PXOfzSn15cFAx1RO0mPTmIb8dXiEWOpzoXvdwXDM41ZaCDYMT7w4IQtMyvE7xUBZq2bjtAnq/NDUA7be4H8H3ipC+/+NKlUrcUh+j48K67WI0u1m6FeQueBA7n06j825rqDqsaLs9Tb7KAHAw8PmrWaNPG2kjKerxPEfecivlFawp2RWZvxrVtn3TV2SBxyCJCkXsND05dCErVHSJIs+BdtTVNY9AwtyPmnyb0v4mSTzvWdw==-----END CERTIFICATE-----}\par\vspace{\baselineskip}
+\raggedright
+\begin{Verbatim}[fontsize=\certfont]
+-----BEGIN CERTIFICATE-----
+MIIDSDCCAjCgAwIBAgIUDqERw+4RnGSg
+gxgUewJFEPDRZ3YwDQYJKoZIhvcNAQEL
+BQAwJDEiMCAGA1UEAwwZWXViaWNvIEF0
+dGVzdGF0aW9uIFJvb3QgMTAgFw0yNDEy
+MDEwMDAwMDBaGA85OTk5MTIzMTIzNTk1
+OVowLjEsMCoGA1UEAwwjWXViaWNvIEF0
+dGVzdGF0aW9uIEludGVybWVkaWF0ZSBC
+IDEwggEiMA0GCSqGSIb3DQEBAQUAA4IB
+DwAwggEKAoIBAQDI7XnH+ZvDwMCQU8M8
+ZeV5qscublvVYaaRt3Ybaxn9godLx5sw
+H0lXrdgjh5h7FpVgCgYYX7E4bl1vbzUL
+emrMWT8N3WMGUe8QAJbBeioV7W/E+hTZ
+P/0SKJVa3ewKBo6ULeMnfQZDrVORAk8w
+TLq2v5Llj5vMj7JtOotKa9J7nHS8kLmz
+XXSaj0SwEPh5OAZUTNV4zs1bvoTAQQWr
+L4/J9QuKt6WCFE5nUNiRQcEbVF8mlqK2
+bx2z6okVltyDVLCxYbpUTELvY1usR3DT
+GPUoIClOm4crpwnDRLVHvjYePGBB//pE
+yzxA/gcScxjwaH1ZUw9bnSbHyurKqbTa
+1KvjAgMBAAGjZjBkMB0GA1UdDgQWBBTq
+t0KQngx7ZHrbVHwDunxOn9ihYTAfBgNV
+HSMEGDAWgBTS7u9aIo06bVwjlz3yhdUm
+8SV7kjASBgNVHRMBAf8ECDAGAQH/AgEC
+MA4GA1UdDwEB/wQEAwIBhjANBgkqhkiG
+9w0BAQsFAAOCAQEAqQaCWMxTGqVVX7Sk
+7kkJmUueTSYKuU6+KBBSgwIRnlw9K7He
+1IpxZ0hdwpPNikKjmcyFgFPzhImwHJgx
+xuT90Pw3vYOdcJJNktDg35PXOfzSn15c
+FAx1RO0mPTmIb8dXiEWOpzoXvdwXDM41
+ZaCDYMT7w4IQtMyvE7xUBZq2bjtAnq/N
+DUA7be4H8H3ipC+/+NKlUrcUh+j48K67
+WI0u1m6FeQueBA7n06j825rqDqsaLs9T
+b7KAHAw8PmrWaNPG2kjKerxPEfecivlF
+awp2RWZvxrVtn3TV2SBxyCJCkXsND05d
+CErVHSJIs+BdtTVNY9AwtyPmnyb0v4mS
+TzvWdw==
+-----END CERTIFICATE-----
+\end{Verbatim}
+\end{minipage}\hfill\begin{minipage}[t]{2.1in}
+\centering
+\subsection*{Attestation Root 1}
+\qrcode[height=2.1in]{-----BEGIN CERTIFICATE-----MIIDPjCCAiagAwIBAgIUXzeiEDJEOTt14F5n0o6Zf/bBwiUwDQYJKoZIhvcNAQENBQAwJDEiMCAGA1UEAwwZWXViaWNvIEF0dGVzdGF0aW9uIFJvb3QgMTAgFw0yNDEyMDEwMDAwMDBaGA85OTk5MTIzMTIzNTk1OVowJDEiMCAGA1UEAwwZWXViaWNvIEF0dGVzdGF0aW9uIFJvb3QgMTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMZ6/TxM8rIT+EaoPvG81ontMOo/2mQ2RBwJHS0QZcxVaNXvl12LUhBZ5LmiBScIZd1Rnx1od585h+/dhK7hEm7JAALkKKts1fO53KGNLZujz5h3wGncr4hyKF0G74b/U3K9hE5mGND6zqYchCRAHfrYMYRDF4YL0X4D5nGdxvppAy6nkEmtWmMnwO3i0TAucsrbE485HvGM4r0VpgVdJpvgQjiTJCTIq+D35hwtT8QDIv+nGvpcyi5wcIfCkzyCimJukhYy6KoqNMKQEdpNiSOvWyDMTMt1bwCvEzpw91u+msUt4rj0efnO9s0ZOwdwMRDnH4xgUl5ZLwrrPkfC1/0CAwEAAaNmMGQwHQYDVR0OBBYEFNLu71oijTptXCOXPfKF1SbxJXuSMB8GA1UdIwQYMBaAFNLu71oijTptXCOXPfKF1SbxJXuSMBIGA1UdEwEB/wQIMAYBAf8CAQMwDgYDVR0PAQH/BAQDAgGGMA0GCSqGSIb3DQEBDQUAA4IBAQC3IW/sgB9pZ8apJNjxuGoX+FkILks0wMNrdXL/coUvsrhzsvl6mePMrbGJByJ1XnquB5sgcRENFxdQFma3mio8Upf1owM1ZreXrJ0mADG2BplqbJnxiyYa+R11reIFTWeIhMNcZKsDZrFAyPuFjCWSQvJmNWe9mFRYFgNhXJKkXIb5H1XgEDlwiedYRM7VolBNlld6pRFKlX8ust6OTMOeADl2xNF0m1LThSdeuXvDyC1g9+ILfz3S6OIYgc3iroRcFD354g7rKfu67qFAw9gC4yi0xBTPrY95rh4/HqaUYCA/L8ldRk6H7Xk35D+WVpmq2Sh/xT5HiFuhf4wJb0bK-----END CERTIFICATE-----}\par\vspace{\baselineskip}
+\raggedright
+\begin{Verbatim}[fontsize=\certfont]
+-----BEGIN CERTIFICATE-----
+MIIDPjCCAiagAwIBAgIUXzeiEDJEOTt1
+4F5n0o6Zf/bBwiUwDQYJKoZIhvcNAQEN
+BQAwJDEiMCAGA1UEAwwZWXViaWNvIEF0
+dGVzdGF0aW9uIFJvb3QgMTAgFw0yNDEy
+MDEwMDAwMDBaGA85OTk5MTIzMTIzNTk1
+OVowJDEiMCAGA1UEAwwZWXViaWNvIEF0
+dGVzdGF0aW9uIFJvb3QgMTCCASIwDQYJ
+KoZIhvcNAQEBBQADggEPADCCAQoCggEB
+AMZ6/TxM8rIT+EaoPvG81ontMOo/2mQ2
+RBwJHS0QZcxVaNXvl12LUhBZ5LmiBScI
+Zd1Rnx1od585h+/dhK7hEm7JAALkKKts
+1fO53KGNLZujz5h3wGncr4hyKF0G74b/
+U3K9hE5mGND6zqYchCRAHfrYMYRDF4YL
+0X4D5nGdxvppAy6nkEmtWmMnwO3i0TAu
+csrbE485HvGM4r0VpgVdJpvgQjiTJCTI
+q+D35hwtT8QDIv+nGvpcyi5wcIfCkzyC
+imJukhYy6KoqNMKQEdpNiSOvWyDMTMt1
+bwCvEzpw91u+msUt4rj0efnO9s0ZOwdw
+MRDnH4xgUl5ZLwrrPkfC1/0CAwEAAaNm
+MGQwHQYDVR0OBBYEFNLu71oijTptXCOX
+PfKF1SbxJXuSMB8GA1UdIwQYMBaAFNLu
+71oijTptXCOXPfKF1SbxJXuSMBIGA1Ud
+EwEB/wQIMAYBAf8CAQMwDgYDVR0PAQH/
+BAQDAgGGMA0GCSqGSIb3DQEBDQUAA4IB
+AQC3IW/sgB9pZ8apJNjxuGoX+FkILks0
+wMNrdXL/coUvsrhzsvl6mePMrbGJByJ1
+XnquB5sgcRENFxdQFma3mio8Upf1owM1
+ZreXrJ0mADG2BplqbJnxiyYa+R11reIF
+TWeIhMNcZKsDZrFAyPuFjCWSQvJmNWe9
+mFRYFgNhXJKkXIb5H1XgEDlwiedYRM7V
+olBNlld6pRFKlX8ust6OTMOeADl2xNF0
+m1LThSdeuXvDyC1g9+ILfz3S6OIYgc3i
+roRcFD354g7rKfu67qFAw9gC4yi0xBTP
+rY95rh4/HqaUYCA/L8ldRk6H7Xk35D+W
+Vpmq2Sh/xT5HiFuhf4wJb0bK
+-----END CERTIFICATE-----
+\end{Verbatim}
+\end{minipage}
+```
+
+\clearpage
+
+# Hardware evidence verification
+
+The accompanying script `scripts/verify-signing-key-attestations.py` verifies the printed certificates and their QR payloads from this Markdown source. It traces each slot attestation through its F9 certificate and the two manufacturer intermediates to Yubico Attestation Root 1. It also verifies the Android certificate self-signatures and the matching public keys.
+
+```sh
+python3 scripts/verify-signing-key-attestations.py
+```
+
+Python 3 and OpenSSL 3 are required. If necessary, select OpenSSL explicitly with `--openssl /path/to/openssl`. No YubiKey, PIN, private evidence directory or additional Python package is required.
+
+The root is independently fetched over HTTPS from:
+
+<https://developers.yubico.com/PKI/yubico-ca-1.pem>
+
+The downloaded root must match this pinned DER SHA-256 fingerprint:
+
+```text
+62760c6a6ef91679f454c8902b80fd009825b3f25da90f1fbace2ec6586cd5a8
+```
+
+The root is cached under `~/.cache/pkb-signing-attestations`. Repeated runs reuse that file only after checking its fingerprint. An unexpected cached or downloaded root causes verification to fail. Embedded intermediates are treated as untrusted until their complete certificate chain verifies.
+
+This script does not validate the document QES signatures or Android installation behaviour.
