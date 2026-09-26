@@ -24,10 +24,11 @@ object OneTimeCodes {
 
     // Words that mark a message as carrying a code, in the keyboard's languages. Each starts a
     // word ("shipping" and "Pinterest" hold no PIN, "barcode" no code), and the short ones end
-    // one too ("opinion", "pins")
+    // one too ("opinion", "pins"). "Security" alone isn't one: security codes say "code" too,
+    // and "security briefing in room 2204" carries no code
     private val keyword = Regex(
         "(?<![\\p{L}\\p{N}])(?:(?:pin|otp|2fa)(?![\\p{L}])|code|passcode|verif|two.factor|one.time|login|sign.in|" +
-            "security|authenticat|codice|código|codigo|kod|код|mã|pinnwort|bestätigung|vérification|verificación|weryfik)",
+            "authenticat|codice|código|codigo|kod|код|mã|pinnwort|bestätigung|vérification|verificación|weryfik)",
         RegexOption.IGNORE_CASE
     )
     // 4–8 digits, optionally split in two halves ("123-456", "123 456") or after a prefix ("G-123456")

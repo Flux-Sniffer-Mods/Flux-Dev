@@ -39,6 +39,8 @@ class OneTimeCodesTest {
         assertNull(OneTimeCodes.extract("New Pinterest pins: 25 ideas for 2026"))
         assertNull(OneTimeCodes.extract("We value your opinion: survey 482913"))
         assertNull(OneTimeCodes.extract("Barcode 501234 scanned"))
+        assertNull(OneTimeCodes.extract("Meeting at 14:30 in room 2204. Security briefing."))
+        assertEquals("7294", OneTimeCodes.extract("Sign in to Microsoft: security code 7294."))
         assertEquals("4417", OneTimeCodes.extract("Your PIN is 4417"))
         assertEquals("735104", OneTimeCodes.extract("OTP: 735104"))
         assertEquals("190288", OneTimeCodes.extract("Twój kod weryfikacyjny: 190288"))
