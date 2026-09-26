@@ -133,6 +133,10 @@
   ],
   "bugFixes": [
     {
+      "text": "The paste chip no longer shows a broken character when the copied text is cut in the middle of an emoji.",
+      "after": "202609262118"
+    },
+    {
       "text": "After an update with nothing new to tell, What's new no longer opens with every change since Pastiera 0.85.",
       "after": "202609262101"
     },
