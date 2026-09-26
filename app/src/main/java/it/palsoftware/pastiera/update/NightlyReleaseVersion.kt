@@ -38,19 +38,39 @@ internal fun compareReleaseVersions(first: String, second: String): Int? {
 internal fun forkReleaseIsNewer(tag: String, current: String): Boolean =
     tag.startsWith("flux/") && (compareReleaseVersions(tag.removePrefix("flux/"), current) ?: -1) > 0
 
-/** The newest Flux Keyboard release ("flux/v…" tag) that is newer than [current]. */
 /** A dev build's release (flux/v0.92-flux.<time>), as opposed to a full release (flux/v0.91). */
 internal fun isForkDevRelease(tagName: String): Boolean = tagName.contains("-flux.")
 
-/** The newest release newer than [current]; dev builds only when [includeDev] (the Dev channel). */
 /**
- * The fork's releases to check: on Dev, the newest few of either kind (a newer full release is
- * among them); on Stable, GitHub's latest release, which is always the latest full release as
- * dev builds are pre-releases, however many dev builds came after it.
+ * What the update check reads. On Dev, the newest releases of either kind. On Stable, the
+ * fork's release tags: GitHub marks the newest build as its latest release, dev builds too, and
+ * with enough dev builds after it the latest full release drops out of any page of releases.
  */
 internal fun forkReleasesApiUrl(includeDev: Boolean): String =
-    "https://api.github.com/repos/${BuildConfig.FORK_GITHUB_REPOSITORY}/releases" + if (includeDev) "?per_page=20" else "/latest"
+    "https://api.github.com/repos/${BuildConfig.FORK_GITHUB_REPOSITORY}/" +
+        if (includeDev) "releases?per_page=20" else "git/matching-refs/tags/flux/v"
 
+/**
+ * The full releases among the fork's tags ("refs/tags/flux/v0.92"): the build publishes each
+ * one's APK as flux-keyboard-<version>.apk, so its page and download follow from the tag.
+ */
+internal fun forkFullReleasesFromTags(refs: List<String>): List<GitHubRelease> =
+    refs.map { it.removePrefix("refs/tags/") }
+        .filter { it.startsWith("flux/v") && !isForkDevRelease(it) }
+        .map { tag ->
+            val version = tag.removePrefix("flux/v")
+            val base = "https://github.com/${BuildConfig.FORK_GITHUB_REPOSITORY}/releases"
+            GitHubRelease(
+                tagName = tag,
+                name = "Flux Keyboard $version",
+                prerelease = false,
+                draft = false,
+                htmlUrl = "$base/tag/$tag",
+                downloadUrl = "$base/download/$tag/flux-keyboard-$version.apk"
+            )
+        }
+
+/** The newest release newer than [current]; dev builds only when [includeDev] (the Dev channel). */
 internal fun findNewerForkRelease(releases: List<GitHubRelease>, current: String, includeDev: Boolean = true): ReleaseInfo? =
     releases.filter { !it.draft && (includeDev || !isForkDevRelease(it.tagName)) && forkReleaseIsNewer(it.tagName, current) }
         .maxWithOrNull { a, b -> compareReleaseVersions(a.tagName.removePrefix("flux/"), b.tagName.removePrefix("flux/")) ?: 0 }

@@ -110,12 +110,12 @@ Everything else, including per-app exact typing and languages, automatic Shift b
 ## Backup, updates, and data
 - UI-based backup/restore in ZIP format: includes preferences, custom layouts, variations, SYM/Ctrl maps, and user dictionaries.
 - Restore merges saved variations with defaults to avoid losing newly added keys.
-- Update notices when opening settings and once a day (with option to ignore a release). Flux Keyboard checks [this fork's latest release](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases/latest) and offers its APK; offline mode turns the checks off.
+- Update notices when opening settings and once a day (with option to ignore a release). Flux Keyboard checks [this fork's releases](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases) and offers the newest one's APK; offline mode turns the checks off.
 - Customizable files in `files/`: `variations.json`, `ctrl_key_mappings.json`, `sym_key_mappings*.json`, `keyboard_layouts/*.json`, user dictionaries.
 - Android autobackup function 
 
 ## Installation
-1. Download the APK from the [latest Flux Keyboard release](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases/latest), or build it yourself.
+1. Download the APK from the [Flux Keyboard releases](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases): full releases, or the newest build with "dev" in its title. Or build it yourself.
 2. Android Settings → System → Languages & input → Virtual keyboard → Manage keyboards.
 3. Enable “Flux Keyboard” and select it from the input selector when typing.
 
@@ -151,11 +151,12 @@ Keyboard), then uninstall Pastiera Flux.
 
 ## Flux Keyboard builds
 - There are two kinds of build, picked by the branch `.github/workflows/fork-build.yml` is run on:
-  - **`flux-release` (the default branch): full releases** such as `0.92`, published as the repository's latest release and tagged `flux/v0.92`. The version is the newest one in the `"releases"` list of `app/src/main/assets/fork/whats_new.json`, which also records when it was built.
-  - **`flux-dev`: dev builds** such as `0.93-flux.202609262100`, the next version after the latest release plus the build time, published as pre-releases.
+  - **`flux-release` (the default branch): full releases** such as `0.92`, tagged `flux/v0.92`. The version is the newest one in the `"releases"` list of `app/src/main/assets/fork/whats_new.json`, which also records when it was built.
+  - **`flux-dev`: dev builds** such as `0.93-flux.202609262100`, the next version after the latest release plus the build time, with "dev" in the title.
 - The version and version code are worked out from the branch; a version given by hand has to be of the branch's kind.
 - Each release lists only what changed since the build before it: a full release since the previous full release, a dev build since the previous build of either kind. The list comes from the What's new entries (`"after"` is the build each entry is new since), followed by the whole [changelog](FORK_CHANGES.md).
-- The app's update check reads these releases: Stable offers full releases only, Dev offers both.
+- The newest build of either kind is marked as the repository's latest release, so a dev build shows as newer than the full release before it.
+- The app's update check reads these releases: Stable offers full releases only (found by their tags), Dev offers both.
 - Dev work goes on `flux-dev` as individual commits, one per change.
 - To make a full release: add it to `"releases"` on `flux-dev`, fold the commits since the last full release into category commits, move `flux-release` up to the result, and run the workflow on `flux-release`. Commits at or below `flux-release` are never rewritten.
 - Builds never delete earlier ones: every run, artifact and release (full or dev) stays.

@@ -15,7 +15,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONArray
-import org.json.JSONObject
 import java.io.IOException
 
 internal fun successorReleasesApiUrl(): String =
@@ -132,8 +131,7 @@ private fun checkRelease(
         override fun onResponse(call: Call, response: Response) {
             response.use { res ->
                 if (!res.isSuccessful) {
-                    // No full release yet is no update rather than a failed check
-                    postResult(callback, UpdateCheckResult(successful = fork && !includeDev && res.code == 404))
+                    postResult(callback, UpdateCheckResult(successful = false))
                     return
                 }
 
@@ -144,8 +142,11 @@ private fun checkRelease(
                 }
 
                 val latestRelease = try {
-                    // The latest full release is a single release rather than a list
-                    val releases = parseGitHubReleases(if (body.trimStart().startsWith("{")) JSONArray().put(JSONObject(body)) else JSONArray(body))
+                    val releases = if (fork && !includeDev) {
+                        // Stable reads the release tags (see forkReleasesApiUrl)
+                        val refs = JSONArray(body)
+                        forkFullReleasesFromTags((0 until refs.length()).mapNotNull { refs.optJSONObject(it)?.optString("ref") })
+                    } else parseGitHubReleases(JSONArray(body))
                     when {
                         nightly -> findNewerNightlyRelease(releases, BuildConfig.VERSION_NAME)
                         fork -> findNewerForkRelease(releases, BuildConfig.VERSION_NAME, includeDev)
