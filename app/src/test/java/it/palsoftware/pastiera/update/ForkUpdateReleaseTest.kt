@@ -5,7 +5,12 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [33])
 class ForkUpdateReleaseTest {
 
     private fun release(tag: String, draft: Boolean = false) = GitHubRelease(
@@ -84,7 +89,8 @@ class ForkUpdateReleaseTest {
         assertTrue(ForkUpdateInstaller.isTrustedApkUrl(stable.downloadUrl!!))
         val dev = requireNotNull(findNewerForkRelease(releases, "0.92", includeDev = true))
         assertEquals("flux/v0.93-flux.202609262047", dev.tagName)
-        assertEquals("Flux Keyboard 0.93 dev", dev.displayName)
+        assertTrue(dev.displayName, dev.displayName.startsWith("Flux Keyboard 0.93 dev · 26 "))
+        assertTrue(dev.displayName, dev.displayName.endsWith(" 2026, 20:47"))
         assertTrue(dev.downloadUrl!!.endsWith("/flux-keyboard-0.93-flux.202609262047.apk"))
     }
 }
