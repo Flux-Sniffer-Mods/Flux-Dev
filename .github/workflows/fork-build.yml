@@ -161,46 +161,6 @@ jobs:
             --notes-file out/RELEASE_NOTES.md \
             $kind
 
-  # Only the latest build is kept: once this APK is uploaded and released, every earlier workflow
-  # run in the repository is deleted with its artifacts and logs, and so is every earlier dev
-  # build's release (flux/v<version>-flux.<time>) with its tag. Real releases (flux/v0.91) stay.
-  tidy:
-    name: keep only the latest build
-    needs: [version, apk]
-    runs-on: ubuntu-latest
-    permissions:
-      actions: write
-      contents: write
-    steps:
-      - name: Delete earlier workflow runs
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-          CURRENT: ${{ github.run_id }}
-        run: |
-          gh api --paginate "repos/$REPO/actions/runs?per_page=100" --jq '.workflow_runs[] | select(.status == "completed") | .id' |
-            while read -r id; do
-              if [ "$id" != "$CURRENT" ]; then
-                gh api -X DELETE "repos/$REPO/actions/runs/$id" && echo "Deleted run $id"
-              fi
-            done
-
-      - name: Delete earlier Flux Keyboard releases
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-          CURRENT: flux/v${{ needs.version.outputs.name }}
-        run: |
-          gh release list --repo "$REPO" --limit 200 --json tagName --jq '.[].tagName' |
-            while read -r tag; do
-              case "$tag" in
-                flux/*-flux.*) if [ "$tag" != "$CURRENT" ]; then
-                          gh release delete "$tag" --repo "$REPO" --cleanup-tag --yes && echo "Deleted release $tag"
-                        fi ;;
-              esac
-            done
-
-
   tests:
     name: tests
     needs: version

@@ -157,7 +157,7 @@ Keyboard), then uninstall Pastiera Flux.
 - Each release lists only what changed since the build before it: a full release since the previous full release, a dev build since the previous build of either kind. The list comes from the What's new entries (`"after"` is the build each entry is new since), followed by the whole [changelog](FORK_CHANGES.md).
 - The app's update check reads these releases: Stable offers full releases only, Dev offers both.
 - To make a full release: add it to `"releases"` on `flux-dev`, move `flux-release` up to that commit, and run the workflow on `flux-release`. Commits below `flux-release` are never rewritten.
-- After a successful build it deletes earlier runs and earlier dev releases, so full releases and the latest dev build remain.
+- Builds never delete earlier ones: every run, artifact and release (full or dev) stays.
 
 The sections below describe upstream Pastiera's workflows and release channels. They need upstream's signing secrets and don't apply to Flux Keyboard builds.
 
