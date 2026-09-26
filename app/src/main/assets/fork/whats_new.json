@@ -133,6 +133,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Delivery and other notifications that only contain \"pin\" inside a word (\"shipping\", \"Pinterest\") are no longer mistaken for one-time codes.",
+      "after": "202609262058"
+    },
+    {
       "text": "A one-time code you've typed isn't offered again when its message's notification updates.",
       "after": "202609262030"
     },

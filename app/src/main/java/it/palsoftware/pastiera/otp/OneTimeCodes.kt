@@ -22,10 +22,12 @@ object OneTimeCodes {
 
     private val main by lazy { Handler(Looper.getMainLooper()) }
 
-    // Words that mark a message as carrying a code, in the keyboard's languages
+    // Words that mark a message as carrying a code, in the keyboard's languages. Each starts a
+    // word ("shipping" and "Pinterest" hold no PIN, "barcode" no code), and the short ones end
+    // one too ("opinion", "pins")
     private val keyword = Regex(
-        "(code|otp|passcode|pin|verif|2fa|two.factor|one.time|login|sign.in|security|authenticat|" +
-            "codice|código|codigo|kod|код|mã|pinnwort|bestätigung|vérification|verificación|weryfik)",
+        "(?<![\\p{L}\\p{N}])(?:(?:pin|otp|2fa)(?![\\p{L}])|code|passcode|verif|two.factor|one.time|login|sign.in|" +
+            "security|authenticat|codice|código|codigo|kod|код|mã|pinnwort|bestätigung|vérification|verificación|weryfik)",
         RegexOption.IGNORE_CASE
     )
     // 4–8 digits, optionally split in two halves ("123-456", "123 456") or after a prefix ("G-123456")

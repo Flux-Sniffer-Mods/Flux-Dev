@@ -27,6 +27,18 @@ class OneTimeCodesTest {
     }
 
     @Test
+    fun keywordsInsideOtherWordsDontCount() {
+        assertNull(OneTimeCodes.extract("Your order 845921 is shipping today"))
+        assertNull(OneTimeCodes.extract("New Pinterest pins: 25 ideas for 2026"))
+        assertNull(OneTimeCodes.extract("We value your opinion: survey 482913"))
+        assertNull(OneTimeCodes.extract("Barcode 501234 scanned"))
+        assertEquals("4417", OneTimeCodes.extract("Your PIN is 4417"))
+        assertEquals("735104", OneTimeCodes.extract("OTP: 735104"))
+        assertEquals("190288", OneTimeCodes.extract("Twój kod weryfikacyjny: 190288"))
+        assertEquals("583012", OneTimeCodes.extract("Use 583012 for 2FA"))
+    }
+
+    @Test
     fun skipsAmountsAndPrefersSixDigits() {
         assertEquals("402817", OneTimeCodes.extract("Payment of $1500 needs code 402817"))
     }
