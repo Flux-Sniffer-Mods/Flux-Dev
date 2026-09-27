@@ -107,7 +107,7 @@ Flux Keyboard includes everything the Pastiera team built for Pastiera 0.86 sinc
 - **Greek translation**, and configurable status buttons for the compact mode (Pastierina, called Solderina here).
 - Clipboard history **hidden while the phone is locked**.
 - **Safer backups** (themes and typing sounds included) and many fixes: suggestions in Telegram, emoji search, Firefox accents, Ctrl shortcuts in number fields and more.
-- **Contour LEDs** on the Titan 2 Elite: the modifier LEDs run as rails along the rounded corner buttons. In Flux Keyboard they show when the bar isn't lifted and the outer buttons are rounded; the lifted bar and straight buttons keep Flux Keyboard's LED band. Pastiera's "Fill lower display corners" is the same switch as Flux Keyboard's **Fill corners**.
+- **Contour LEDs** on the Titan 2 Elite: the modifier LEDs run as rails along the rounded corner buttons. In Flux Keyboard they're a choice: **Contour LEDs** on the Titan 2 Elite screen switches to them (rounding the corner buttons and dropping the lift while on), and off keeps Flux Keyboard's LEDs along the display's corners. Pastiera's "Fill lower display corners" is the same switch as Flux Keyboard's **Fill corners**.
 - The menu bar shows **SYM while it is held**, and the navigation bar under the keyboard takes the keyboard's colour.
 - A **software bill of materials** (CycloneDX) in release builds, exported from About.
 

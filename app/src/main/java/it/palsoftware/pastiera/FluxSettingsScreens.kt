@@ -1015,9 +1015,45 @@ fun FluxTitanScreenSettingsScreen(modifier: Modifier = Modifier, onBack: () -> U
                 }
             }
 
+            var contourLeds by remember {
+                mutableStateOf(SettingsManager.getTitan2EliteContourLeds(context))
+            }
             var straightOuterButtons by remember {
                 mutableStateOf(SettingsManager.getTitan2EliteStraightOuterButtons(context))
             }
+            var statusBarLiftDp by remember {
+                mutableStateOf(SettingsManager.getTitan2EliteStatusBarLiftDp(context).toFloat())
+            }
+            Surface(modifier = Modifier.fillMaxWidth().settingRow("titan_screen.contour_leds")) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(stringResource(R.string.titan2_elite_contour_leds_title),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Medium)
+                        Text(stringResource(R.string.titan2_elite_contour_leds_description),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    Switch(
+                        checked = contourLeds,
+                        onCheckedChange = { enabled ->
+                            contourLeds = enabled
+                            SettingsManager.setTitan2EliteContourLeds(context, enabled)
+                            // The stored choices come back when contour LEDs are off
+                            straightOuterButtons = SettingsManager.getTitan2EliteStraightOuterButtons(context)
+                            statusBarLiftDp = SettingsManager.getTitan2EliteStatusBarLiftDp(context).toFloat()
+                        }
+                    )
+                }
+            }
+
             Surface(modifier = Modifier.fillMaxWidth().settingRow("titan_screen.straight_outer_buttons")) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -1034,9 +1070,15 @@ fun FluxTitanScreenSettingsScreen(modifier: Modifier = Modifier, onBack: () -> U
                         Text(stringResource(R.string.titan2_elite_straight_outer_buttons_description),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        if (contourLeds) {
+                            Text(stringResource(R.string.titan2_elite_off_with_contour_leds),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.primary)
+                        }
                     }
                     Switch(
                         checked = straightOuterButtons,
+                        enabled = !contourLeds,
                         onCheckedChange = { enabled ->
                             straightOuterButtons = enabled
                             SettingsManager.setTitan2EliteStraightOuterButtons(context, enabled)
@@ -1045,9 +1087,6 @@ fun FluxTitanScreenSettingsScreen(modifier: Modifier = Modifier, onBack: () -> U
                 }
             }
 
-            var statusBarLiftDp by remember {
-                mutableStateOf(SettingsManager.getTitan2EliteStatusBarLiftDp(context).toFloat())
-            }
             Surface(modifier = Modifier.fillMaxWidth().settingRow("titan_screen.status_bar_lift")) {
                 Column(
                     modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -1059,12 +1098,18 @@ fun FluxTitanScreenSettingsScreen(modifier: Modifier = Modifier, onBack: () -> U
                     Text(stringResource(R.string.titan2_elite_status_bar_lift_description),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    if (contourLeds) {
+                        Text(stringResource(R.string.titan2_elite_off_with_contour_leds),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.primary)
+                    }
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Slider(
                             value = statusBarLiftDp,
+                            enabled = !contourLeds,
                             onValueChange = { statusBarLiftDp = kotlin.math.round(it) },
                             onValueChangeFinished = {
                                 SettingsManager.setTitan2EliteStatusBarLiftDp(

@@ -539,12 +539,19 @@ class StatusBarController(
         applySurfaceCloseButtonTheme(activeColors)
     }
 
-    private fun modifierLedLayout() = ModifierLedLayouts.resolve(
-        physicalProfileOverride = SettingsManager.getPhysicalKeyboardProfileOverride(context),
-        titan2EliteAutoDetected = DeviceSpecific.isTitan2EliteDevice(),
-        emojiLed = SettingsManager.getEmojiKeyLedEnabled(context) &&
-            SettingsManager.getEmojiPickerKey(context) != android.view.KeyEvent.KEYCODE_UNKNOWN
-    )
+    private fun modifierLedLayout(): it.palsoftware.pastiera.inputmethod.ui.ModifierLedLayout {
+        val contourLeds = SettingsManager.getTitan2EliteContourLeds(context)
+        val layout = ModifierLedLayouts.resolve(
+            physicalProfileOverride = SettingsManager.getPhysicalKeyboardProfileOverride(context),
+            titan2EliteAutoDetected = DeviceSpecific.isTitan2EliteDevice(),
+            // Contour LEDs have rails for Alt, Shift, Ctrl and Sym only
+            emojiLed = SettingsManager.getEmojiKeyLedEnabled(context) &&
+                SettingsManager.getEmojiPickerKey(context) != android.view.KeyEvent.KEYCODE_UNKNOWN &&
+                !contourLeds
+        )
+        // Contour LEDs draw Pastiera's Titan 2 Elite layout: Alt/Shift left, Sym/Ctrl/Shift right
+        return if (contourLeds && layout == ModifierLedLayouts.TITAN_2_ELITE_SPLIT) ModifierLedLayouts.TITAN_2_ELITE else layout
+    }
 
     private fun statusBarCallbacks(): StatusBarCallbacks =
         StatusBarCallbacks(
@@ -3524,16 +3531,15 @@ class StatusBarController(
         } else {
             showHardwareBottomIndicators
         }
-        // Pastiera's contour LEDs (rails along the curved outer buttons) on the plain keyboard.
-        // A lifted bar or straight outer buttons keep Flux Keyboard's LED band instead.
+        // LED style "Contour" (Pastiera's rails along the curved outer buttons), on the plain
+        // keyboard; the other screens and the default style keep Flux Keyboard's LEDs.
         val contourIntegratedIndicators =
             showLedStrip &&
+                SettingsManager.getTitan2EliteContourLeds(context) &&
                 snapshot.symPage == 0 && !snapshot.clipboardOverlay &&
                 !pastierinaModeActive &&
                 !isFullSoftwareKeyboardMode &&
                 activeLedLayout == ModifierLedLayouts.TITAN_2_ELITE &&
-                SettingsManager.getTitan2EliteStatusBarLiftDp(context) == 0 &&
-                !SettingsManager.getTitan2EliteStraightOuterButtons(context) &&
                 (statusBarLayout as? ImeChromeLayout)?.bottomCornerRadiiPx != null
         ledStatusView.contourIntegrated = contourIntegratedIndicators
         (statusBarLayout as? ImeChromeLayout)?.contourIntegratedIndicators =
@@ -4089,7 +4095,8 @@ class StatusBarController(
             android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
                 if (key == SettingsManager.KEY_TITAN2_ELITE_FILL_CORNERS ||
                     key == SettingsManager.KEY_TITAN2_ELITE_STATUS_BAR_LIFT ||
-                    key == SettingsManager.KEY_TITAN2_ELITE_STRAIGHT_OUTER_BUTTONS
+                    key == SettingsManager.KEY_TITAN2_ELITE_STRAIGHT_OUTER_BUTTONS ||
+                    key == SettingsManager.KEY_TITAN2_ELITE_CONTOUR_LEDS
                 ) {
                     applyBottomCornerClip()
                     requestLayout()

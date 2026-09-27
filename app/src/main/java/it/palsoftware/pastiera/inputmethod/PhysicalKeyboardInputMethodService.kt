@@ -2466,6 +2466,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 keyboardVisibilityController.syncStatusBarPresentationModeFromSettings()
             } else if (key == SettingsManager.KEY_TITAN2_ELITE_ROUNDED_CORNER_INSETS ||
                 key == SettingsManager.KEY_TITAN2_ELITE_FILL_CORNERS ||
+                key == SettingsManager.KEY_TITAN2_ELITE_CONTOUR_LEDS ||
                 key == it.palsoftware.pastiera.T2eCornerCalibration.KEY ||
                 key == SettingsManager.KEY_TITAN2_ELITE_TOP_CORNER_MULTIPLIER ||
                 key == SettingsManager.KEY_TITAN2_ELITE_MAX_ICON_SHRINK) {

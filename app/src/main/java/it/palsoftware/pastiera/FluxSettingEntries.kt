@@ -63,6 +63,8 @@ internal fun fluxSettingEntries(): List<SettingEntry> {
         // Titan 2 Elite screen (its corner calibration row is advanced.corner_calibration)
         SettingEntry("titan_screen.fill_corners", R.string.titan2_elite_fill_corners_title,
             summaryRes = R.string.titan2_elite_fill_corners_description, route = titan, availabilityCheck = onTitan),
+        SettingEntry("titan_screen.contour_leds", R.string.titan2_elite_contour_leds_title,
+            summaryRes = R.string.titan2_elite_contour_leds_description, route = titan, availabilityCheck = onTitan),
         SettingEntry("titan_screen.straight_outer_buttons", R.string.titan2_elite_straight_outer_buttons_title,
             summaryRes = R.string.titan2_elite_straight_outer_buttons_description, route = titan, availabilityCheck = onTitan),
         SettingEntry("titan_screen.status_bar_lift", R.string.titan2_elite_status_bar_lift_title,

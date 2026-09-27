@@ -1776,6 +1776,9 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="titan2_elite_status_bar_lift_title">Lift the status bar above the LEDs</string>
     <string name="titan2_elite_status_bar_lift_description">Raise the status bar so the modifier LEDs run in a clear band underneath it, following the display’s corners. 0 keeps the LEDs wrapped around the bar.</string>
     <string name="titan2_elite_status_bar_lift_value">%1$d dp</string>
+    <string name="titan2_elite_contour_leds_title">Contour LEDs</string>
+    <string name="titan2_elite_contour_leds_description">Run the modifier LEDs as two thin rails around the rounded corner buttons (Pastiera 0.86’s style) instead of along the display’s corners. The corner buttons are rounded and the bar isn’t lifted while this is on; the emoji key LED isn’t shown.</string>
+    <string name="titan2_elite_off_with_contour_leds">Off while Contour LEDs are on.</string>
     <string name="hidden_keyboard_apps_title">Hide keyboard in these apps</string>
     <string name="hidden_keyboard_apps_description">Pastiera stays out of sight in the apps you list and leaves every key to them. Useful for Termux:X11 desktops.</string>
     <string name="hidden_keyboard_apps_search">Search apps</string>
