@@ -133,6 +133,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Phone trackpad settings search for \"Keybord gesture\", as Unihertz spells the page.",
+      "after": "202609262118"
+    },
+    {
       "text": "Back cancels a tapped SYM or emoji key that's waiting for its one key, as it closes the symbols.",
       "after": "202609262118"
     },

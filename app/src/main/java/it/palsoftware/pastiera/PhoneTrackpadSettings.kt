@@ -11,15 +11,16 @@ import android.provider.Settings
 import android.widget.Toast
 
 /**
- * The phone's own settings for its keyboard trackpad: on the Titan 2 Elite, "Keyboard gestures"
+ * The phone's own settings for its keyboard trackpad: on the Titan 2 Elite, "Keybord gesture"
+ * (Unihertz's spelling)
  * (scrolling and moving the cursor on the keys). Unihertz doesn't publish an intent for that
  * page, so the phone's Settings app is searched for a page named like it; failing that,
- * Settings search opens with "Keyboard gestures" on the clipboard, ready to paste.
+ * Settings search opens with "Keybord gesture" on the clipboard, ready to paste.
  */
 object PhoneTrackpadSettings {
     private const val SETTINGS_PACKAGE = "com.android.settings"
     private const val ACTION_SETTINGS_SEARCH = "com.android.settings.action.SETTINGS_SEARCH"
-    private val PAGE_NAME = Regex("(?i)(keyboard.?gesture|touch.?(pad|scroll|keyboard)|keyboard.?(touch|scroll)|scroll.?assist|cursor.?(assist|control|move))")
+    private val PAGE_NAME = Regex("(?i)(keyboa?rd.?gesture|touch.?(pad|scroll|keyboard)|keyboard.?(touch|scroll)|scroll.?assist|cursor.?(assist|control|move))")
 
     /** An exported page of the phone's Settings app named like its keyboard gesture settings. */
     internal fun matchesTrackpadPage(className: String): Boolean = PAGE_NAME.containsMatchIn(className.substringAfterLast('.'))
