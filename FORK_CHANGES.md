@@ -63,7 +63,7 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 
 - **Recommended settings** apply a configuration made on a Titan 2 Elite, after saying how much would change. Settings that need a permission or another app (one-time codes, Niagara search, hidden-keyboard apps) start off and are set up from the tutorial.
 - A status bar fitted to the rounded display: filled corners, straight outer buttons, a 5 dp lift above the LEDs, and room around the SYM screens.
-- Every Titan 2 Elite setting on one screen, and a **phone trackpad settings** shortcut (also a quick launcher command) to the phone's Keybord gesture page (Unihertz's spelling), or Settings search with it ready to paste.
+- Every Titan 2 Elite setting on one screen, and a **phone trackpad settings** shortcut (also a quick launcher command) to the phone's Keyboard gesture page, or Settings search with it ready to paste.
 - **Per-LED colours**, a clear active-to-locked jump and an optional sweeping gradient when locked, set from one table with Off, Active and Locked columns.
 - **SYM's LED** is lit while SYM is held and locked while it's tapped for one symbol or the symbols are open. A **fifth LED** does the same for the emoji key (on by default; Look & sound > Status LED colours); all five LEDs share the width equally.
 - **Wallpaper colours** (option): the keyboard takes its colours from your wallpaper.

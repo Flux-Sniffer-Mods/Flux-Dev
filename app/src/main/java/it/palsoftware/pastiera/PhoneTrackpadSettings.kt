@@ -11,11 +11,10 @@ import android.provider.Settings
 import android.widget.Toast
 
 /**
- * The phone's own settings for its keyboard trackpad: on the Titan 2 Elite, "Keybord gesture"
- * (Unihertz's spelling)
+ * The phone's own settings for its keyboard trackpad: on the Titan 2 Elite, "Keyboard gesture"
  * (scrolling and moving the cursor on the keys). Unihertz doesn't publish an intent for that
  * page, so the phone's Settings app is searched for a page named like it; failing that,
- * Settings search opens with "Keybord gesture" on the clipboard, ready to paste.
+ * Settings search opens with "Keyboard gesture" on the clipboard, ready to paste.
  */
 object PhoneTrackpadSettings {
     private const val SETTINGS_PACKAGE = "com.android.settings"
