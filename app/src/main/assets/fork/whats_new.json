@@ -197,6 +197,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Automatic Shift works at the start of a new note in Keep, a new chat message, and WhatsApp's box after sending, where the field wasn't readable yet when it opened.",
+      "after": "202609271342"
+    },
+    {
       "text": "Passwords copied from a password manager no longer go into the clipboard history.",
       "after": "202609262118"
     },

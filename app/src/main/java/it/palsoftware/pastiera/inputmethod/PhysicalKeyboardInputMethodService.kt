@@ -749,6 +749,34 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         uiHandler.postDelayed(runnable, CURSOR_UPDATE_DELAY * 2)
     }
 
+    private val startAutoCapRechecks = mutableListOf<Runnable>()
+
+    /**
+     * A field that has just opened (a new note in Keep, WhatsApp's box after sending) often
+     * can't be read yet, and an empty field sends no cursor update to check again on. Checks
+     * again shortly after, while nothing has been typed, so it starts with a capital.
+     */
+    private fun scheduleStartAutoCapRechecks() {
+        startAutoCapRechecks.forEach { uiHandler.removeCallbacks(it) }
+        startAutoCapRechecks.clear()
+        listOf(120L, 450L).forEach { delay ->
+            val runnable = Runnable {
+                if (!inputContextState.isEditable) return@Runnable
+                AutoCapitalizeHelper.checkAutoCapitalizeOnRestart(
+                    this,
+                    currentInputConnection,
+                    shouldDisableAutoCapitalize,
+                    enableShift = { requestAutoCapShiftOneShot() },
+                    disableShift = { modifierStateController.consumeShiftOneShot() },
+                    onUpdateStatusBar = { updateStatusBarText() },
+                    inputContextState = inputContextState
+                )
+            }
+            startAutoCapRechecks += runnable
+            uiHandler.postDelayed(runnable, delay)
+        }
+    }
+
     private fun isPureModifierKey(keyCode: Int): Boolean {
         return keyCode == KeyEvent.KEYCODE_SHIFT_LEFT ||
             keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT ||
@@ -3973,6 +4001,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 onUpdateStatusBar = { updateStatusBarText() },
                 inputContextState = state
             )
+            scheduleStartAutoCapRechecks()
         }
 
         startClipboardCleanupTimer()
@@ -4066,6 +4095,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     override fun onFinishInput() {
+        startAutoCapRechecks.forEach { uiHandler.removeCallbacks(it) }
+        startAutoCapRechecks.clear()
         // Niagara's search closed: back to the app unless one opens from it meanwhile
         if (QuickLauncherOpener.NiagaraReturn.onInputFinished(currentInputEditorInfo?.packageName)) {
             uiHandler.postDelayed({
@@ -4716,6 +4747,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             pendingSelectionAutoCapCheck?.let { uiHandler.removeCallbacks(it) }
             pendingSelectionAutoCapCheck = null
             checkAutoCapitalizeOnSelectionChange(oldSelStart, oldSelEnd, newSelStart, newSelEnd)
+            // Back to the start of the field (a chat app clearing its box after sending): the
+            // text may still be there for a moment, so look again once it's gone
+            if (newSelStart == 0 && newSelEnd == 0 && oldSelStart > 0) scheduleStartAutoCapRechecks()
         }
         ImePerfLogger.logDuration(
             label = "onUpdateSelection",
