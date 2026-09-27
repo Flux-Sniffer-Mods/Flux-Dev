@@ -517,8 +517,8 @@ private fun MenuBarEditor() {
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .aspectRatio(1f, matchHeightConstraintsFirst = false)
-                    .heightIn(max = 40.dp)
+                    // The bar's height stays put: fewer buttons make each one wider, not taller
+                    .height(40.dp)
                     .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.small),
                 contentAlignment = Alignment.Center
             ) { content() }
@@ -528,7 +528,7 @@ private fun MenuBarEditor() {
                 Icons.Filled.Close,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.fillMaxSize(0.6f)
+                modifier = Modifier.size(22.dp)
             )
         }
         shown.forEach { buttonId ->
@@ -537,7 +537,7 @@ private fun MenuBarEditor() {
                     painter = painterResource(getButtonIconRes(buttonId)),
                     contentDescription = getButtonDisplayName(buttonId),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.fillMaxSize(0.6f)
+                    modifier = Modifier.size(22.dp)
                 )
             }
         }
