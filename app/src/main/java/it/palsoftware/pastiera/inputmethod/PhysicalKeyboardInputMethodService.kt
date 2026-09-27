@@ -6722,11 +6722,12 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         // Direction picks: the dominant direction counts (a 45° wedge each way) and a shorter
         // swipe does, so a swipe works from anywhere on the keys, edges included
         val pickDistance = suggestionThreshold * 0.6f
+        val sideDistance = SettingsManager.getTrackpadSideSwipeThreshold(this)
         val horizontalDominant = kotlin.math.abs(deltaX) > kotlin.math.abs(deltaY)
         val pickFastEnough = maxOf(kotlin.math.abs(deltaX), kotlin.math.abs(deltaY)) / durationMs >=
             NATIVE_TRACKPAD_MIN_SWIPE_VELOCITY_PX_PER_MS
-        val rightEnough = horizontalDominant && rightwardDistance >= pickDistance && pickFastEnough
-        val leftPicks = horizontalDominant && leftwardDistance >= pickDistance && pickFastEnough
+        val rightEnough = horizontalDominant && rightwardDistance >= sideDistance && pickFastEnough
+        val leftPicks = horizontalDominant && leftwardDistance >= sideDistance && pickFastEnough
         val upPicks = !horizontalDominant && upwardDistance >= pickDistance && pickFastEnough
         val downEnough = !horizontalDominant && downwardDistance >= deleteThreshold * 0.6f &&
             downwardDistance / durationMs >= NATIVE_TRACKPAD_MIN_SWIPE_VELOCITY_PX_PER_MS

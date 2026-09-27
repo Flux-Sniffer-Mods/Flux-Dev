@@ -143,6 +143,7 @@ object SettingLinkIds {
     const val TRACKPAD_SENSITIVITY = "trackpad.sensitivity"
     const val TRACKPAD_SUGGESTION_SWIPE_THRESHOLD = "trackpad.suggestion_swipe_threshold"
     const val TRACKPAD_DELETE_SWIPE_THRESHOLD = "trackpad.delete_swipe_threshold"
+    const val TRACKPAD_SIDE_SWIPE_THRESHOLD = "trackpad.side_swipe_threshold"
     const val TRACKPAD_DEBUG = "trackpad.debug"
 
     // Modifiers screen
@@ -762,6 +763,12 @@ object SettingLinkRegistry {
             SettingLinkIds.TRACKPAD_DELETE_SWIPE_THRESHOLD,
             R.string.trackpad_delete_swipe_threshold_title,
             R.string.trackpad_delete_swipe_threshold_description,
+            destination = SettingsDestination.TrackpadGestures
+        ),
+        entry(
+            SettingLinkIds.TRACKPAD_SIDE_SWIPE_THRESHOLD,
+            R.string.trackpad_side_swipe_threshold_title,
+            R.string.trackpad_side_swipe_threshold_description,
             destination = SettingsDestination.TrackpadGestures
         ),
         entry(

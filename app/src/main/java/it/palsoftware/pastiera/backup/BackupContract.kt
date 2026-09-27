@@ -429,6 +429,7 @@ internal object BackupPreferenceContract {
             "trackpad_swipe_threshold" to PreferenceValueType.FLOAT,
             "trackpad_suggestion_swipe_threshold" to PreferenceValueType.FLOAT,
             "trackpad_delete_swipe_threshold" to PreferenceValueType.FLOAT,
+            "trackpad_side_swipe_threshold" to PreferenceValueType.FLOAT,
             "trackpad_provider" to PreferenceValueType.STRING,
             "trackpad_shizuku_device" to PreferenceValueType.STRING,
             "pastierina_mode_override" to PreferenceValueType.STRING,

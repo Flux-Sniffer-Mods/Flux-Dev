@@ -7,6 +7,8 @@
     <string name="trackpad_swipe_down_delete_description">A quick swipe down on the trackpad deletes the word before the cursor.</string>
     <string name="phone_trackpad_settings_title">Phone trackpad settings</string>
     <string name="phone_trackpad_settings_description">Open the phone\'s Keybord gesture settings (Unihertz\'s spelling), for scrolling and moving the cursor on the keys. Also in the quick launcher as \"Trackpad scroll &amp; cursor\".</string>
+    <string name="trackpad_side_swipe_threshold_title">Left and right swipes</string>
+    <string name="trackpad_side_swipe_threshold_description">Distance to swipe left or right to take the left or right suggestion (with Swipe directions on).</string>
     <string name="phone_trackpad_settings_query">Keybord gesture</string>
     <string name="phone_trackpad_settings_fallback">Search Settings for \"%1$s\": it\'s copied, ready to paste.</string>
 </resources>

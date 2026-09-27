@@ -217,6 +217,7 @@ object SettingsManager {
     private const val KEY_TRACKPAD_SWIPE_THRESHOLD = "trackpad_swipe_threshold" // Threshold for swipe detection on trackpad
     private const val KEY_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD = "trackpad_suggestion_swipe_threshold"
     private const val KEY_TRACKPAD_DELETE_SWIPE_THRESHOLD = "trackpad_delete_swipe_threshold"
+    private const val KEY_TRACKPAD_SIDE_SWIPE_THRESHOLD = "trackpad_side_swipe_threshold"
     private const val KEY_TRACKPAD_PROVIDER = "trackpad_provider" // shizuku | native_ime
     private const val KEY_TRACKPAD_SHIZUKU_DEVICE = "trackpad_shizuku_device"
     private const val KEY_SHIFT_BACKSPACE_DELETE = "shift_backspace_delete" // Shift + Backspace performs forward delete
@@ -6187,6 +6188,22 @@ object SettingsManager {
         getPreferences(context).edit()
             .putFloat(KEY_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD, clamped)
             .commit()
+    }
+
+    /**
+     * How far a left or right swipe goes to take the left or right suggestion (Swipe
+     * directions). Until set, 60% of the suggestion swipe, as before it had a setting.
+     */
+    fun getTrackpadSideSwipeThreshold(context: Context): Float {
+        val prefs = getPreferences(context)
+        return prefs.getFloat(KEY_TRACKPAD_SIDE_SWIPE_THRESHOLD, getTrackpadSuggestionSwipeThreshold(context) * 0.6f)
+            .coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
+    }
+
+    fun setTrackpadSideSwipeThreshold(context: Context, threshold: Float) {
+        getPreferences(context).edit()
+            .putFloat(KEY_TRACKPAD_SIDE_SWIPE_THRESHOLD, threshold.coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD))
+            .apply()
     }
 
     fun getTrackpadDeleteSwipeThreshold(context: Context): Float {

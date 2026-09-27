@@ -50,6 +50,9 @@ fun TrackpadGestureSettingsScreen(
     var deleteSwipeThreshold by remember {
         mutableStateOf(SettingsManager.getTrackpadDeleteSwipeThreshold(context))
     }
+    var sideSwipeThreshold by remember {
+        mutableStateOf(SettingsManager.getTrackpadSideSwipeThreshold(context))
+    }
     var showTutorialDialog by remember { mutableStateOf(false) }
     var showSensitivitySettings by remember { mutableStateOf(settingsChild(context, "trackpad") == "sensitivity") }
     var shizukuStatus by remember { mutableStateOf(ShizukuStatus.NotConnected) }
@@ -78,6 +81,7 @@ fun TrackpadGestureSettingsScreen(
     LaunchedEffect(highlightedSettingId) {
         when (highlightedSettingId) {
             SettingLinkIds.TRACKPAD_SUGGESTION_SWIPE_THRESHOLD,
+            SettingLinkIds.TRACKPAD_SIDE_SWIPE_THRESHOLD,
             SettingLinkIds.TRACKPAD_DELETE_SWIPE_THRESHOLD -> showSensitivitySettings = true
             "trackpad.add_word",
             "trackpad.add_word_full_width",
@@ -172,6 +176,11 @@ fun TrackpadGestureSettingsScreen(
                     onSuggestionSwipeThresholdChange = { newValue ->
                         suggestionSwipeThreshold = newValue
                         SettingsManager.setTrackpadSuggestionSwipeThreshold(context, newValue)
+                    },
+                    sideSwipeThreshold = sideSwipeThreshold,
+                    onSideSwipeThresholdChange = { newValue ->
+                        sideSwipeThreshold = newValue
+                        SettingsManager.setTrackpadSideSwipeThreshold(context, newValue)
                     },
                     deleteSwipeThreshold = deleteSwipeThreshold,
                     onDeleteSwipeThresholdChange = { newValue ->
@@ -749,6 +758,8 @@ fun TrackpadGestureSettingsScreen(
 private fun TrackpadSensitivitySettings(
     suggestionSwipeThreshold: Float,
     onSuggestionSwipeThresholdChange: (Float) -> Unit,
+    sideSwipeThreshold: Float,
+    onSideSwipeThresholdChange: (Float) -> Unit,
     deleteSwipeThreshold: Float,
     onDeleteSwipeThresholdChange: (Float) -> Unit
 ) {
@@ -763,6 +774,13 @@ private fun TrackpadSensitivitySettings(
             value = suggestionSwipeThreshold,
             linkId = SettingLinkIds.TRACKPAD_SUGGESTION_SWIPE_THRESHOLD,
             onValueChange = onSuggestionSwipeThresholdChange
+        )
+        TrackpadSensitivitySlider(
+            title = stringResource(R.string.trackpad_side_swipe_threshold_title),
+            description = stringResource(R.string.trackpad_side_swipe_threshold_description),
+            value = sideSwipeThreshold,
+            linkId = SettingLinkIds.TRACKPAD_SIDE_SWIPE_THRESHOLD,
+            onValueChange = onSideSwipeThresholdChange
         )
         TrackpadSensitivitySlider(
             title = stringResource(R.string.trackpad_delete_swipe_threshold_title),
