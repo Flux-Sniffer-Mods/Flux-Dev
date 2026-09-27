@@ -1,6 +1,6 @@
 {
   "title": "Flux Keyboard",
-  "intro": "Everything new since Pastiera 0.85, the last official release: first what Flux Keyboard adds, then what the Pastiera team has built since.",
+  "intro": "Everything Flux Keyboard adds over Pastiera 0.86, Pastiera's final feature release, then what the Pastiera team built between 0.85 and 0.86, which Flux Keyboard includes.",
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
@@ -147,8 +147,24 @@
     "The quick launcher opens from other apps and the app icon.",
     "Pastiera Flux is now Flux Keyboard, at the Pastiera team's request: restore a backup from Pastiera Flux, then uninstall it."
   ],
-  "upstreamTitle": "From the Pastiera team since 0.85",
+  "upstreamTitle": "From the Pastiera team: 0.85 to 0.86",
   "upstream": [
+    {
+      "text": "Up to date with Pastiera 0.86, Pastiera's final feature release: its latest changes are merged in, and Flux Keyboard keeps following its security fixes.",
+      "after": "202609271253"
+    },
+    {
+      "text": "Titan 2 Elite: with the bar not lifted and rounded outer buttons, the modifier LEDs can run as rails along the corner buttons (Pastiera 0.86's contour LEDs).",
+      "after": "202609271253"
+    },
+    {
+      "text": "The menu bar shows SYM while it is held, and the navigation bar under the keyboard takes the keyboard's colour.",
+      "after": "202609271253"
+    },
+    {
+      "text": "About can export a software bill of materials (CycloneDX) for release builds.",
+      "after": "202609271253"
+    },
     "Clicks Power Keyboard support: controls, firmware status and SYM profiles for Razr and Pixel.",
     "An on-screen keyboard mode with themes, a number row, layout styles and long-press layers.",
     "Keyboard themes with an editor, per-app theme assignment and transparent presets.",

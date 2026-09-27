@@ -97,7 +97,7 @@ class ModifierIndicatorView(
             )
         }
 
-        if (snapshot.symPage > 0) {
+        if (snapshot.symPage > 0 || snapshot.symPhysicallyPressed) {
             specs.add(
                 IndicatorSpec.Text(
                     label = if (snapshot.symPage == 2) "SYM" else "SYM",

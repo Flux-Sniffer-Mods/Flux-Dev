@@ -1414,9 +1414,13 @@ private fun ReleaseNoteRow(
 }
 
 private fun buildReleaseRangeLabel(previousVersion: String?, currentVersion: String): String {
-    val normalizedCurrent = currentVersion.trim().ifBlank { "current" }
+    val normalizedCurrent = currentVersion
+        .trim()
+        .substringBefore("-nightly.")
+        .ifBlank { "current" }
     val normalizedPrevious = previousVersion
         ?.trim()
+        ?.substringBefore("-nightly.")
         ?.takeIf { it.isNotBlank() && it != normalizedCurrent }
     // Versions as people read them (a build's date rather than its timestamp)
     val current = it.palsoftware.pastiera.update.friendlyVersion(normalizedCurrent)
@@ -1441,11 +1445,12 @@ fun TutorialWelcomePageContent(
             .padding(horizontal = 20.dp, vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(260.dp),
-            contentAlignment = Alignment.Center
+                .height(148.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
             if (page.icon != null) {
                 Surface(
@@ -1493,6 +1498,7 @@ fun TutorialWelcomePageContent(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             lineHeight = MaterialTheme.typography.bodyMedium.lineHeight * 1.15f
         )
+
     }
 }
 

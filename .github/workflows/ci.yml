@@ -33,7 +33,7 @@ jobs:
         run: |
           ./gradlew :app:testStableDebugUnitTest --tests it.palsoftware.pastiera.inputmethod.InputEventRouterForwardDeleteAlternativesTest
 
-      - name: Run IME device behavior tests
+      - name: Run IME device behaviour tests
         run: |
           ./gradlew :app:testStableDebugUnitTest --tests it.palsoftware.pastiera.inputmethod.PhysicalKeyboardInputMethodServiceDeviceBehaviorTest
 

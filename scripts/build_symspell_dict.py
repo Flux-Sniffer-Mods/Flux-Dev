@@ -109,7 +109,7 @@ def main():
     for norm, entries in normalized_index.items():
         key = norm[: args.prefix_length]
         for d in generate_deletes(key, args.max_edit_distance):
-            # Store full normalized term (matches SymSpell.addWord behavior)
+            # Store full normalized term (matches SymSpell.addWord behaviour)
             deletes[d].add(norm)
 
     sym_deletes = {k: sorted(v) for k, v in deletes.items()}

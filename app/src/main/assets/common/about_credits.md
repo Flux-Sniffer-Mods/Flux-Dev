@@ -2,22 +2,22 @@
 # Flux Keyboard
 An unofficial fork of Pastiera, tuned for the Unihertz Titan 2 Elite. Pastiera and everything credited below is the work of the original Pastiera team; the fork is not affiliated with or endorsed by them. Please report problems with Flux Keyboard to the fork, not to Pastiera's issue tracker.
 #### [Flux Keyboard repository](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard)
-#### [Changelog since Pastiera 0.85](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md)
+#### [Changelog: Flux Keyboard over Pastiera 0.86](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md)
 ---
 
 # Pastiera - La Tastiera per la tua Tastiera
 ---
 #### Creator
-Andrea Palumbo (PalSoftware)
+Andrea Palumbo (PalSoftware) · [Support the creator on Ko-fi](https://ko-fi.com/palsoftware)
 
 #### Main Developers
-Andrea Palumbo, Patrick Zauner
+Patrick Zauner, Andrea Palumbo
 
 #### Additional Contributors
-Justin Mitchell, NeoTheFox, Oleksii Ilienko, Nikola Vukobrat, Mircea Horea IONICĂ, Nikita Tseykovets, Ivan Bulanov, Ratmir Karabut, Troidem, Vasu Bhatia, Zsolt Sz. Sz. Raven, Burekmaster (SVG logo assets), glebkuchay, drpepper240
+Justin Mitchell, NeoTheFox, Oleksii Ilienko, Nikola Vukobrat, Mircea Horea IONICĂ, Nikita Tseykovets, Ivan Bulanov, Ratmir Karabut, Troidem, Vasu Bhatia, Zsolt Sz. Sz. Raven, Burekmaster (SVG logo assets), glebkuchay, drpepper240, Matej Drobnič, astroboii47
 ---
 #### Pastiera Beta Testing Team
-Laggy Luke, Vittorio, Emmanuel, Sadako, NotTeganQuinn, DrumSyBeat, [Shane Craig (ShaneCraig.Tech)](https://shanecraig.tech/)
+Laggy Luke, Vittorio, Emmanuel, Sadako, NotTeganQuinn, DrumSyBeat, [Shane Craig (ShaneCraig.Tech)](https://shanecraig.tech/), [Returning Retro (Retro Jake)](https://www.returningretro.com/)
 
 #### Special Thanks
 Unihertz Titan 2 Discord, Unihertz Titan 2 FB page and all the people for the outstanding support! 
@@ -28,7 +28,7 @@ Unihertz Titan 2 Discord, Unihertz Titan 2 FB page and all the people for the ou
 #### [Issue tracker](https://github.com/palsoftware/pastiera/issues/)
 #### [Nightly GitHub releases](https://github.com/palsoftware/pastiera/releases?q=nightly%2F)
 #### [Nightly F-Droid repo](https://pastiera.eu/fdroid/nightly/repo)
-#### [Buy me a Coffee](https://ko-fi.com/palsoftware/)
+#### [Support the project on Open Collective](https://pastiera.eu/donate)
 ---
 **Grazie for using Pastiera! <3**
 

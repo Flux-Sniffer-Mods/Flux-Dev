@@ -902,7 +902,7 @@ object SettingLinkRegistry {
 
         entry(
             SettingLinkIds.ABOUT_SUPPORT_KO_FI,
-            R.string.settings_support_ko_fi,
+            R.string.settings_support_creator_ko_fi,
             destination = SettingsDestination.About
         ),
 

@@ -7,9 +7,14 @@
 > Pastiera team, so please report problems with Flux Keyboard to
 > [this fork](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard), not upstream.
 
+Flux Keyboard is up to date with **Pastiera 0.86**, Pastiera's final planned feature release.
+Pastiera keeps receiving security fixes, and its development continues as
+[Plektra](https://github.com/pkb-rocks/plektra). Flux Keyboard merges upstream changes as they land,
+so it never falls behind Pastiera.
+
 ### Support the original Pastiera project
 
-Support Pastiera on [OpenCollective](https://opencollective.com/pastiera)
+Support Pastiera on [OpenCollective](https://pastiera.eu/donate)
 
 <details>
 <summary>Alternative direct support options</summary>
@@ -33,8 +38,6 @@ For everyone who sees an IBAN and quietly gives up:
 
 </details>
 
-# Pastiera
-
 Input method for physical keyboards android devices (e.g. Unihertz Titan 2), designed to make typing faster through shortcuts, gestures, and customization.
 
 ## Flux Keyboard (this fork)
@@ -51,7 +54,7 @@ Input method for physical keyboards android devices (e.g. Unihertz Titan 2), des
 8. **Faster typing**: pick a suggestion with Ctrl+Shift+Q, W or E or a trackpad swipe, undo an auto-replace with Backspace, delete forwards with Shift + Backspace, and paste what you just copied from a chip, with tracking stripped from links.
 9. **Offline mode**, and **updates** from this fork's own releases that download and install from the app: full releases, or dev builds too (Developer options).
 
-Everything else, including per-app exact typing and languages, automatic Shift by field type, snippets and voice input that keeps listening, is in the [changelog](FORK_CHANGES.md). It covers everything since Pastiera 0.85, the last official release, including what the Pastiera team has added since, which Flux Keyboard also includes.
+Everything else, including per-app exact typing and languages, automatic Shift by field type, snippets and voice input that keeps listening, is in the [changelog](FORK_CHANGES.md). It lists what Flux Keyboard adds over Pastiera 0.86, Pastiera's final feature release, and what the Pastiera team built for 0.86, which Flux Keyboard includes.
 
 *The rest of this README is Pastiera's own documentation, updated where the fork differs.*
 
@@ -66,7 +69,7 @@ Everything else, including per-app exact typing and languages, automatic Shift b
 ## Typing and modifiers
 - Long press on a key can input Alt+key or Shift+Key (uppercase) timing configurable.
 - Shift/Ctrl/Alt in one-shot or lock mode (double tap), option to clear Alt on space.
-- Current behavior note: `Ctrl` used as a physically held shortcut modifier (e.g. hold `Ctrl` + `A`) intentionally follows the app shortcut path and is not the same flow as Nav Mode (`Ctrl` double-tap latch outside text fields). Nav Mode remains a separate implementation/state.
+- Current behaviour note: `Ctrl` used as a physically held shortcut modifier (e.g. hold `Ctrl` + `A`) intentionally follows the app shortcut path and is not the same flow as Nav Mode (`Ctrl` double-tap latch outside text fields). Nav Mode remains a separate implementation/state.
 - Multi-tap support for keys with layout-defined variants (e.g. Cyrillic)
 - Standard shortcuts: Ctrl+C/X/V, Ctrl+A, Ctrl+Backspace, Ctrl+E/D/S/F or I/J/K/L for arrows, Ctrl+W/R for selection, Ctrl+T for Tab, Ctrl+Y/H for Page Up/Down, Ctrl+Q for Esc (all customizable in the Customize Nav screen).
 
@@ -82,8 +85,8 @@ Everything else, including per-app exact typing and languages, automatic Shift b
 - Layout switching: select from the enabled layouts list (configurable).
 - Multi-tap support and mapping for complex characters.
 - JSON import/export directly from the app, with visual preview and list management (enable/disable, delete).
-- Layout maps are stored in `files/keyboard_layouts` and can also be edited manually, or in the app (Keyboard layout > a layout's pencil).
-- Device/firmware behavior snapshots for physical keyboards are archived under [docs/device-archives](docs/device-archives/).
+- Layout maps are stored in `files/keyboard_layouts` and can also be edited manually, in the app (Keyboard layout > a layout's pencil), or with the web editor at https://pastierakeyedit.vercel.app/
+- Device/firmware behaviour snapshots for physical keyboards are archived under [docs/device-archives](docs/device-archives/).
 
 ## Symbols, emoji, and variations
 - Touch-based SYM pages (emoji, symbols, clipboard and the full emoji picker with search): reorderable/enableable, auto-close after input, customizable keycaps. Flux Keyboard adds a Device SYM layer editor and GIF and symbol search.
@@ -130,6 +133,19 @@ Keyboard), then uninstall Pastiera Flux.
 - Android 10 (API 29) or higher.
 - Device with a physical keyboard (profiled on Unihertz Titan 2 and Titan 2 Elite, adaptable via JSON).
 
+## Contributing
+
+Pastiera now accepts security, compatibility, and maintenance changes. Active feature development continues in [Plektra](https://github.com/pkb-rocks/plektra).
+Flux Keyboard issues and suggestions go to [this fork](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/issues), never to Pastiera.
+
+### Pastiera's forking policy
+
+Pastiera is free software under the GPLv3. You can fork, modify, and redistribute the code under the terms of that licence.
+
+A distributed fork must use its own distinct identity. Its project, repository, application, and release names must not contain “Pastiera” as a standalone word, prefix, suffix, or other name component.
+
+Forks must retain the required copyright and licence notices. They must not present themselves as an official Pastiera release. Before distribution, a fork must use its own application ID, update endpoints, and branding.
+
 ## Development / Tests
 - Run core + routing + service modifier regression tests:
   - `./gradlew :app:testStableDebugUnitTest --tests it.palsoftware.pastiera.core.ModifierStateControllerTest --tests it.palsoftware.pastiera.inputmethod.InputEventRouterModifierE2ETest --tests it.palsoftware.pastiera.inputmethod.PhysicalKeyboardInputMethodServiceDeviceBehaviorTest`
@@ -138,7 +154,7 @@ Keyboard), then uninstall Pastiera Flux.
   - `./gradlew :app:testNightlyDebugUnitTest --tests it.palsoftware.pastiera.FlavorBuildConfigTest --tests it.palsoftware.pastiera.update.UpdateCheckerFlavorLogicTest`
 - Run the stable F-Droid-path tests:
   - `./gradlew :app:testStableDebugUnitTest -PPASTIERA_FDROID_BUILD=true`
-- Service-level (device-near) modifier behavior regressions:
+- Service-level (device-near) modifier behaviour regressions:
   - `./gradlew :app:testStableDebugUnitTest --tests it.palsoftware.pastiera.inputmethod.PhysicalKeyboardInputMethodServiceDeviceBehaviorTest`
 - Router-level input pipeline modifier/SYM tests:
   - `./gradlew :app:testStableDebugUnitTest --tests it.palsoftware.pastiera.inputmethod.InputEventRouterModifierE2ETest`
@@ -268,15 +284,18 @@ The sections below describe upstream Pastiera's workflows and release channels. 
 ## Signing Attestations
 *Upstream only: these cover official Pastiera builds. Flux Keyboard is signed with a different key.*
 
-These attestations document the public signing certificates used for Nightly and official Release builds.
-They are intended to strengthen the project's chain of trust: the markdown files are the browser-friendly reference version rendered directly on GitHub, and the signed PDFs are the archival verification artifacts.
-The `_signed.pdf` variants do not turn the APK signing certificates themselves into identity certificates. They are private attestations: the signer states that the published public key is the one they currently trust for the respective build channel.
-Where a qualified electronic signature is present, that attestation can be validated against the EU DSS validator and interpreted in the context of the eIDAS trust-services framework.
+These attestations document the public signing certificates and Android proof-of-rotation lineages used for stable and Nightly builds.
+The current PKB.rocks attestations include complete YubiKey hardware attestations and manufacturer certificates on additional pages, with QR codes and PEM text. Android lineages are provided under signing/lineages and referenced by hash.
+The Markdown files are the browser-friendly references. The PDFs are the archival artifacts prepared for qualified electronic signatures.
+The legacy signed PDFs remain available under explicit legacy names.
 
-| Channel | Source | Signed PDF | Purpose |
-| --- | --- | --- | --- |
-| Nightly | [docs/nightly-signing-certificate-attestation.md](docs/nightly-signing-certificate-attestation.md) | [docs/nightly-signing-certificate-attestation_signed.pdf](docs/nightly-signing-certificate-attestation_signed.pdf) | Documents the shared Nightly signing certificate used by local and CI Nightly builds. |
-| Release | [docs/release-signing-certificate-attestation.md](docs/release-signing-certificate-attestation.md) | [docs/release-signing-certificate-attestation_signed.pdf](docs/release-signing-certificate-attestation_signed.pdf) | Documents the official Release signing certificate used for stable public releases. |
+| Channel | Current source | Prepared PDF | Signed PDF | Legacy signed PDF |
+| --- | --- | --- | --- | --- |
+| Stable | [docs/stable-signing-key-attestation.md](docs/stable-signing-key-attestation.md) | [docs/stable-signing-key-attestation.pdf](docs/stable-signing-key-attestation.pdf) | [docs/stable-signing-key-attestation_signed_signed.pdf](docs/stable-signing-key-attestation_signed_signed.pdf) | [docs/pastiera-legacy-release-signing-certificate-attestation_signed.pdf](docs/pastiera-legacy-release-signing-certificate-attestation_signed.pdf) |
+| Nightly | [docs/nightly-signing-key-attestation.md](docs/nightly-signing-key-attestation.md) | [docs/nightly-signing-key-attestation.pdf](docs/nightly-signing-key-attestation.pdf) | [docs/nightly-signing-key-attestation_signed_signed.pdf](docs/nightly-signing-key-attestation_signed_signed.pdf) | [docs/pastiera-legacy-nightly-signing-certificate-attestation_signed.pdf](docs/pastiera-legacy-nightly-signing-certificate-attestation_signed.pdf) |
+
+The signed PDF variants do not turn APK signing certificates into identity certificates. They authenticate the signer's statement about the documented Android signing keys and evidence.
+Where a qualified electronic signature is present, validate it with the EU DSS validator and interpret it in the context of the eIDAS trust-services framework.
 
 External verification references:
 

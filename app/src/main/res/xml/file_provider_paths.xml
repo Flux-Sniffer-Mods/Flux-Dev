@@ -11,4 +11,7 @@
     <cache-path
         name="updates"
         path="updates/" />
+    <cache-path
+        name="sbom"
+        path="sbom/" />
 </paths>
