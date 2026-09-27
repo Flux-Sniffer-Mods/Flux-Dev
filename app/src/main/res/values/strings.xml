@@ -1554,15 +1554,15 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="trackpad_delete_swipe_threshold_description">Distance required to swipe left and delete the previous word.</string>
 
     <!-- Trackpad Gesture Tutorial -->
-    <string name="trackpad_tutorial_title">Trackpad Gesture Suggestions</string>
-    <string name="trackpad_tutorial_welcome_title">Trackpad Gesture Suggestions</string>
-    <string name="trackpad_tutorial_welcome_description">Swipe up on your trackpad to quickly accept word suggestions without clicking!</string>
+    <string name="trackpad_tutorial_title">Trackpad swipes</string>
+    <string name="trackpad_tutorial_welcome_title">Trackpad swipes</string>
+    <string name="trackpad_tutorial_welcome_description">Swipe on the keyboard\'s touch surface to take a suggestion or delete a word, without reaching for the screen.</string>
     <string name="trackpad_tutorial_how_it_works_title">How It Works</string>
-    <string name="trackpad_tutorial_how_it_works_description">The trackpad is divided into three sections:\n\n• Left third → Accept left suggestion\n• Center third → Accept center suggestion\n• Right third → Accept right suggestion\n\nSimply swipe up in the corresponding area to insert that suggestion.</string>
-    <string name="trackpad_tutorial_shizuku_required_title">Shizuku Required</string>
-    <string name="trackpad_tutorial_shizuku_required_description">This feature requires Shizuku to access trackpad events.\n\n1. Install Shizuku from GitHub releases\n2. Enable developer options in Android settings\n3. Plug your device into a PC with ADB installed\n4. Run the command that Shizuku shows in its app\n5. Grant permission to Pastiera in Shizuku\n\nThe feature will work automatically once Shizuku is running.</string>
+    <string name="trackpad_tutorial_how_it_works_description">• Swipe up over the left, middle or right third of the keys for that suggestion.\n• With Swipe direction on, swipe left, up or right anywhere for the left, middle or right suggestion instead.\n• Delete a word with a swipe left or down: Delete a word with a swipe.\n• Trackpad sensitivity sets how far each swipe has to go.</string>
+    <string name="trackpad_tutorial_shizuku_required_title">Set up the phone</string>
+    <string name="trackpad_tutorial_shizuku_required_description">On the Titan 2 Elite the phone only passes keyboard swipes on while its own Scroll assistant is on: Settings › Gestures › Keyboard gesture (Phone trackpad settings below opens it), or the Scroll assistant tile in quick settings.\n\n• Scroll assistant: on. Without it, no swipe reaches the keyboard.\n• Cursor assistant: optional. While its cursor mode is on (double tap the keys), swipes move the cursor instead.\n\nFlux Keyboard reads the swipes itself (Native IME events); Shizuku is only needed with the Shizuku provider.</string>
     <string name="trackpad_tutorial_tips_title">Tips</string>
-    <string name="trackpad_tutorial_tips_description">• Make sure your swipe is primarily vertical\n• The gesture works best with quick, deliberate swipes\n• If other fingers are on the keyboard, gestures may not be detected (hardware palm rejection)\n• The feature can be enabled/disabled in Advanced Settings</string>
+    <string name="trackpad_tutorial_tips_description">• Quick, deliberate swipes work best.\n• A natural flick on the Titan 2 Elite covers about 300 of its 750 points of height, so a sensitivity around 200–250 suits it.\n• Fingers resting on other keys can stop a swipe being seen.\n• If no swipe registers at all, check Scroll assistant is on.</string>
     <string name="trackpad_tutorial_complete">Got It</string>
     <string name="trackpad_tutorial_next">Next</string>
     <string name="trackpad_tutorial_previous">Previous</string>
