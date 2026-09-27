@@ -57,16 +57,8 @@
   ],
   "improvements": [
     {
-      "text": "Contoured LEDs fill out to the square corners, as filled corners do, so they meet the display's real edge.",
+      "text": "Contoured LEDs run along the display edge, through the bottom corners over the corner buttons, and fill out to the square corners so they meet the display's real edge. The Contoured LED offset in Display contour calibration moves them in.",
       "after": "202609272249"
-    },
-    {
-      "text": "Contoured LEDs run into the bottom corners over the corner buttons, which reach the display edge underneath.",
-      "after": "202609271852"
-    },
-    {
-      "text": "Contoured LEDs run right along the display edge. The Contoured LED offset in Display contour calibration still moves them in, and starts again from the edge.",
-      "after": "202609271801"
     },
     {
       "text": "Terminal apps: no microphone button on the bar or in the menu.",
@@ -254,10 +246,6 @@
     },
     {
       "text": "Updates: allowing Flux Keyboard to install apps no longer loses the update. It downloads first, and installs when you come back from Android's switch.",
-      "after": "202609271754"
-    },
-    {
-      "text": "Contoured LEDs: the corner buttons now shape themselves round the LEDs as soon as they switch on, instead of covering them until the bar was redrawn.",
       "after": "202609271754"
     },
     {
