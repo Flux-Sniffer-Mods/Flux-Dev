@@ -159,14 +159,24 @@ class StatusBarButtonRegistry {
         return getEnabledButtons(
             leftSlots = SettingsManager.getStatusBarSlotsLeft(context),
             rightSlots = SettingsManager.getStatusBarSlotsRight(context)
-        )
+        ).filterNot { it.id in hiddenForApp }
     }
 
     fun getEnabledPastierinaButtons(context: Context): List<StatusBarButtonConfig> {
         return getEnabledButtons(
             leftSlots = SettingsManager.getPastierinaStatusBarSlotsLeft(context),
             rightSlots = SettingsManager.getPastierinaStatusBarSlotsRight(context)
-        )
+        ).filterNot { it.id in hiddenForApp }
+    }
+
+    companion object {
+        /** Buttons the current app has no use for: the microphone in terminal apps. */
+        @Volatile
+        var hiddenForApp: Set<StatusBarButtonId> = emptySet()
+
+        fun setTerminalApp(terminal: Boolean) {
+            hiddenForApp = if (terminal) setOf(StatusBarButtonId.Microphone) else emptySet()
+        }
     }
 
     fun getEnabledButtons(

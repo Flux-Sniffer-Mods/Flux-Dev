@@ -57,6 +57,10 @@
   ],
   "improvements": [
     {
+      "text": "Terminal apps: no microphone button on the bar or in the menu.",
+      "after": "202609271342"
+    },
+    {
       "text": "Contoured LEDs: the corner and bottom buttons keep a clear gap from the LEDs, as big as the straight buttons' lift (5 dp).",
       "after": "202609271342"
     },

@@ -3875,6 +3875,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             } else null
         )
         terminalModeActive = SettingsManager.isTerminalModeApp(this, info?.packageName) && TerminalMode.apply(info)
+        // Flux Keyboard: no microphone button in terminal apps
+        it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonRegistry.setTerminalApp(
+            SettingsManager.isTerminalModeApp(this, info?.packageName)
+        )
         terminalHidesKeyboard = terminalModeActive && SettingsManager.getTerminalModeHideKeyboard(this)
         terminalSurfaceShown = false
         terminalCtrlKeysDown.clear()

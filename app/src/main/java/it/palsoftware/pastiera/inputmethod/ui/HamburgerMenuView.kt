@@ -215,7 +215,8 @@ class HamburgerMenuView(
         // The buttons chosen in Settings, in their order; GIF only when GIFs are on and online
         val byKey = menuButtonIds.associateBy { it.key }
         shownButtonIds = SettingsManager.getMenuBarButtons(context).mapNotNull { byKey[it] }.filter {
-            it != StatusBarButtonId.Gif || SettingsManager.gifsAvailable(context)
+            (it != StatusBarButtonId.Gif || SettingsManager.gifsAvailable(context)) &&
+                it !in StatusBarButtonRegistry.hiddenForApp
         }
         shownButtonIds.forEach { id ->
             val hosted = buttonHost.getOrCreateButton(
