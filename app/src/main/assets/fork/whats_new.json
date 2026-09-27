@@ -241,6 +241,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Contoured LEDs work in Solderina too, instead of falling back to a thin line cut off in the corners.",
+      "after": "202609272327"
+    },
+    {
       "text": "Symbols layer: ~ is on A, instead of hiding under the search key on Q and leaving A empty.",
       "after": "202609272310"
     },

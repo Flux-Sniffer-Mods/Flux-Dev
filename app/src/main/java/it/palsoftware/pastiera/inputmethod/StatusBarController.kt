@@ -3540,12 +3540,12 @@ class StatusBarController(
             showHardwareBottomIndicators
         }
         // Corner style "Contoured LEDs": one LED rail along the display curve under the rounded
-        // buttons, on the plain keyboard; the other screens keep the LEDs along the corners.
+        // buttons, on the plain keyboard and in Solderina; the other screens keep the LEDs
+        // along the corners.
         val contourIntegratedIndicators =
             showLedStrip &&
                 SettingsManager.getTitan2EliteContourLeds(context) &&
                 snapshot.symPage == 0 && !snapshot.clipboardOverlay &&
-                !pastierinaModeActive &&
                 !isFullSoftwareKeyboardMode &&
                 ModifierLedLayouts.isSplit(activeLedLayout) &&
                 (statusBarLayout as? ImeChromeLayout)?.bottomCornerRadiiPx != null
