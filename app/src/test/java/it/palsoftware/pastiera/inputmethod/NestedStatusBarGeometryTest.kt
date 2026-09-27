@@ -172,7 +172,8 @@ class NestedStatusBarGeometryTest {
         chrome.draw(Canvas(bitmap))
 
         assertEquals(Color.WHITE, bitmap.getPixel(1, row.height / 2))
-        assertEquals(0, Color.alpha(bitmap.getPixel(1, chrome.height - 1)))
+        // The square corner outside the display curve is filled with the keyboard colour
+        assertEquals(Color.WHITE, bitmap.getPixel(1, chrome.height - 1))
         assertEquals(Color.WHITE, bitmap.getPixel(chrome.width / 2, chrome.height - 1))
     }
 }
