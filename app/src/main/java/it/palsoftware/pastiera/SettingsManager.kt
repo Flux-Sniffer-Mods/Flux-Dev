@@ -806,23 +806,49 @@ object SettingsManager {
             ?: defaultValue
     }
 
-    fun defaultKeyboardTheme(): KeyboardThemeSettings =
-        KeyboardThemeSettings(
-            background = 0xFFF2F2F2.toInt(),
-            divider = 0xFFB8B8B8.toInt(),
-            normalKey = 0xFFFAFAFA.toInt(),
-            specialKey = 0xFFDDDDDD.toInt(),
-            textAndIcons = 0xFF111111.toInt(),
-            ledInactive = 0xFFB0B0B0.toInt(),
-            ledActive = 0xFF555555.toInt(),
-            ledLocked = 0xFF111111.toInt(),
-            accent = 0xFF3F8C96.toInt(),
-            cursorSwipe = 0xFF3F8C96.toInt(),
-            keyPopup = 0xFFDDDDDD.toInt(),
-            keyPopupSelected = 0xFF3F8C96.toInt(),
-            suggestion = 0xFFFAFAFA.toInt(),
-            statusBarButton = 0xFFDDDDDD.toInt()
-        )
+    /** Classic Cloud: the light built-in theme, and the default for a fixed theme. */
+    private val CLASSIC_CLOUD = KeyboardThemeSettings(
+        background = 0xFFCCD2DC.toInt(),
+        divider = 0xFF9EA5AF.toInt(),
+        normalKey = 0xFFFFFFFF.toInt(),
+        specialKey = 0xFFAFB6C2.toInt(),
+        textAndIcons = 0xFF000000.toInt(),
+        ledInactive = 0xFFAEB5C0.toInt(),
+        ledActive = 0xFF007AFF.toInt(),
+        ledLocked = 0xFFFF9500.toInt(),
+        accent = 0xFF007AFF.toInt(),
+        cursorSwipe = 0xFF007AFF.toInt(),
+        keyPopup = 0xFFFFFFFF.toInt(),
+        keyPopupSelected = 0xFF007AFF.toInt(),
+        suggestion = 0xFFCCD2DC.toInt(),
+        statusBarButton = 0xFFAFB6C2.toInt(),
+        keyCornerRadiusRatio = 0.118f,
+        chromeCornerRadiusRatio = 0.09f,
+        keyPopupStyle = KEYBOARD_THEME_POPUP_STYLE_CLASSIC
+    )
+
+    /** Classic Midnight: the dark built-in theme. */
+    private val CLASSIC_MIDNIGHT = KeyboardThemeSettings(
+        background = 0xFF1C1C1E.toInt(),
+        divider = 0xFF4A4A4D.toInt(),
+        normalKey = 0xFF3A3A3C.toInt(),
+        specialKey = 0xFF2C2C2E.toInt(),
+        textAndIcons = 0xFFFFFFFF.toInt(),
+        ledInactive = 0xFF404044.toInt(),
+        ledActive = 0xFF0A84FF.toInt(),
+        ledLocked = 0xFFFF9F0A.toInt(),
+        accent = 0xFF0A84FF.toInt(),
+        cursorSwipe = 0xFF0A84FF.toInt(),
+        keyPopup = 0xFF3A3A3C.toInt(),
+        keyPopupSelected = 0xFF0A84FF.toInt(),
+        suggestion = 0xFF202124.toInt(),
+        statusBarButton = 0xFF2C2C2E.toInt(),
+        keyCornerRadiusRatio = 0.118f,
+        chromeCornerRadiusRatio = 0.09f,
+        keyPopupStyle = KEYBOARD_THEME_POPUP_STYLE_CLASSIC
+    )
+
+    fun defaultKeyboardTheme(): KeyboardThemeSettings = CLASSIC_CLOUD
 
     private fun defaultKeyboardTheme(target: KeyboardThemeTarget): KeyboardThemeSettings =
         when (target) {
@@ -840,46 +866,9 @@ object SettingsManager {
             )
         }
 
+    /** Following the system: Classic Midnight in dark mode, Classic Cloud in light mode. */
     private fun defaultSystemKeyboardTheme(target: KeyboardThemeTarget, dark: Boolean): KeyboardThemeSettings {
-        val base = if (dark) {
-            KeyboardThemeSettings(
-                background = 0xFF000000.toInt(),
-                divider = 0xFF2C3136.toInt(),
-                normalKey = 0xFF15191D.toInt(),
-                specialKey = 0xFF2B3138.toInt(),
-                textAndIcons = 0xFFEFEFEF.toInt(),
-                ledInactive = 0xFF303030.toInt(),
-                ledActive = 0xFF6496FF.toInt(),
-                ledLocked = 0xFFF76300.toInt(),
-                accent = 0xFF6496FF.toInt(),
-                cursorSwipe = 0xFF6496FF.toInt(),
-                keyPopup = 0xFF2B3138.toInt(),
-                keyPopupSelected = 0xFF6496FF.toInt(),
-                suggestion = 0xFF15191D.toInt(),
-                statusBarButton = 0xFF2B3138.toInt(),
-                keyCornerRadiusRatio = 0.10f,
-                chromeCornerRadiusRatio = 0.10f
-            )
-        } else {
-            KeyboardThemeSettings(
-                background = 0xFFF8FAFC.toInt(),
-                divider = 0xFFC7CDD4.toInt(),
-                normalKey = 0xFFFFFFFF.toInt(),
-                specialKey = 0xFFE0E6EE.toInt(),
-                textAndIcons = 0xFF171A1F.toInt(),
-                ledInactive = 0xFFD1D5DB.toInt(),
-                ledActive = 0xFF276EF1.toInt(),
-                ledLocked = 0xFFD65A00.toInt(),
-                accent = 0xFF276EF1.toInt(),
-                cursorSwipe = 0xFF276EF1.toInt(),
-                keyPopup = 0xFFE0E6EE.toInt(),
-                keyPopupSelected = 0xFF276EF1.toInt(),
-                suggestion = 0xFFFFFFFF.toInt(),
-                statusBarButton = 0xFFE0E6EE.toInt(),
-                keyCornerRadiusRatio = 0.10f,
-                chromeCornerRadiusRatio = 0.10f
-            )
-        }
+        val base = if (dark) CLASSIC_MIDNIGHT else CLASSIC_CLOUD
         return when (target) {
             KeyboardThemeTarget.HARDWARE -> base
             KeyboardThemeTarget.SOFTWARE -> base.copy(
@@ -998,7 +987,8 @@ object SettingsManager {
     fun getKeyboardThemeAssignmentMode(context: Context, target: KeyboardThemeTarget): String {
         val stored = getPreferences(context).getString(
             keyboardThemeAssignmentModeKeyForTarget(target),
-            KEYBOARD_THEME_ASSIGNMENT_MODE_FIXED
+            // Until chosen, the keyboard follows the system's dark or light mode
+            KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM
         )
         return if (stored == KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM) {
             KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM
@@ -1055,12 +1045,47 @@ object SettingsManager {
         return getEffectiveKeyboardTheme(context, target, locale = null, layout = null)
     }
 
+    private const val KEY_REMOVED_THEMES_MIGRATED = "removed_builtin_themes_migrated"
+
+    /**
+     * Once: a keyboard still coloured like a built-in theme that's gone (Flux Dark, Nord…) moves
+     * to the system-matched classic theme. Themes are saved as colours, so they're recognised by
+     * their colours; your own and your saved themes stay.
+     */
+    fun migrateRemovedBuiltInThemes(context: Context) {
+        val prefs = getPreferences(context)
+        if (prefs.getBoolean(KEY_REMOVED_THEMES_MIGRATED, false)) return
+        val removed = removedBuiltInThemes()
+        fun wasBuiltIn(key: String): Boolean {
+            val stored = prefs.getString(key, null) ?: return false
+            val json = runCatching { JSONObject(stored) }.getOrNull() ?: return false
+            return removed.any { preset ->
+                json.optInt("background") == preset.background &&
+                    json.optInt("normal_key") == preset.normalKey &&
+                    json.optInt("text_and_icons") == preset.textAndIcons &&
+                    json.optInt("accent") == preset.accent
+            }
+        }
+        val editor = prefs.edit()
+        KeyboardThemeTarget.values().forEach { target ->
+            if (wasBuiltIn(keyboardThemeKeyForTarget(target))) {
+                editor.remove(keyboardThemeKeyForTarget(target))
+                editor.putString(keyboardThemeAssignmentModeKeyForTarget(target), KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM)
+            }
+            listOf(keyboardThemeDarkKeyForTarget(target), keyboardThemeLightKeyForTarget(target)).forEach { key ->
+                if (wasBuiltIn(key)) editor.remove(key)
+            }
+        }
+        editor.putBoolean(KEY_REMOVED_THEMES_MIGRATED, true).apply()
+    }
+
     fun getEffectiveKeyboardTheme(
         context: Context,
         target: KeyboardThemeTarget,
         locale: String?,
         layout: String?
     ): KeyboardThemeSettings {
+        migrateRemovedBuiltInThemes(context)
         val theme = findKeyboardThemeLayoutOverride(context, target, locale, layout)?.theme
             ?: if (getKeyboardThemeAssignmentMode(context, target) == KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM) {
                 getKeyboardThemeSystemSlot(context, target, dark = isSystemDarkTheme(context))
