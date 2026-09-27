@@ -366,6 +366,16 @@ fun AdvancedSettingsScreen(
                             )
                         }
                         FluxSwitchRow(
+                            linkId = SettingLinkIds.PRIVACY_CLEAN_LINKS,
+                            title = stringResource(R.string.clean_links_title),
+                            description = stringResource(R.string.clean_links_description),
+                            checked = cleanLinks,
+                            onCheckedChange = {
+                                cleanLinks = it
+                                SettingsManager.setCleanPastedLinks(context, it)
+                            }
+                        )
+                        FluxSwitchRow(
                             linkId = SettingLinkIds.PRIVACY_ONE_TIME_CODES,
                             title = stringResource(R.string.one_time_codes_title),
                             description = stringResource(R.string.one_time_codes_description),
@@ -390,16 +400,6 @@ fun AdvancedSettingsScreen(
                                 onClick = { RestrictedSettings.openNotificationAccess(context) }
                             )
                         }
-                        FluxSwitchRow(
-                            linkId = SettingLinkIds.PRIVACY_CLEAN_LINKS,
-                            title = stringResource(R.string.clean_links_title),
-                            description = stringResource(R.string.clean_links_description),
-                            checked = cleanLinks,
-                            onCheckedChange = {
-                                cleanLinks = it
-                                SettingsManager.setCleanPastedLinks(context, it)
-                            }
-                        )
 
                         // Clipboard Retention Time
                         Surface(

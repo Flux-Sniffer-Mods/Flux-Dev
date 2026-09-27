@@ -492,6 +492,7 @@ fun TrackpadGestureSettingsScreen(
                 }
             }
 
+            SettingsSectionDivider(stringResource(R.string.trackpad_section_swipes))
             ExposedDropdownMenuBox(
                 expanded = swipeToDeleteProviderMenuExpanded,
                 onExpandedChange = { swipeToDeleteProviderMenuExpanded = it },
@@ -580,14 +581,6 @@ fun TrackpadGestureSettingsScreen(
                 }
             }
 
-            if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice()) {
-                FluxActionRow(
-                    linkId = "trackpad.phone_settings",
-                    title = stringResource(R.string.phone_trackpad_settings_title),
-                    description = stringResource(R.string.phone_trackpad_settings_description),
-                    onClick = { PhoneTrackpadSettings.open(context) }
-                )
-            }
             FluxSwitchRow(
                 linkId = "trackpad.suggestion_swipe_directions",
                 title = stringResource(R.string.trackpad_swipe_directions_title),
@@ -653,6 +646,16 @@ fun TrackpadGestureSettingsScreen(
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+            }
+
+            if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice()) {
+                SettingsSectionDivider(stringResource(R.string.trackpad_section_phone))
+                FluxActionRow(
+                    linkId = "trackpad.phone_settings",
+                    title = stringResource(R.string.phone_trackpad_settings_title),
+                    description = stringResource(R.string.phone_trackpad_settings_description),
+                    onClick = { PhoneTrackpadSettings.open(context) }
+                )
             }
 
             // Show Tutorial Button
