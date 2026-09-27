@@ -197,6 +197,10 @@
   ],
   "bugFixes": [
     {
+      "text": "The clipboard button keeps its place in the menu bar when it shows a count; the count floats in its corner.",
+      "after": "202609271342"
+    },
+    {
       "text": "A locked Ctrl lets go once an app shortcut has run, so the next key types normally (Nav Mode's Ctrl stays).",
       "after": "202609271342"
     },
