@@ -57,6 +57,14 @@
   ],
   "improvements": [
     {
+      "text": "Titan 2 Elite: the display contour follows the screen's real corner, a near-circle of about 80 px, measured from Unihertz's own images. Tap Reset in Display contour calibration to use it if you saved your own.",
+      "after": "202609272343"
+    },
+    {
+      "text": "Contoured LEDs on every screen: SYM and emoji pages and the clipboard too.",
+      "after": "202609272343"
+    },
+    {
       "text": "Contoured LEDs: the corner buttons follow the LEDs' curve and every button sits 2 dp above them.",
       "after": "202609272308"
     },

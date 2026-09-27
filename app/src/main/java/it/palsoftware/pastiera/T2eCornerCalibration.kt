@@ -5,9 +5,11 @@ import android.graphics.Path
 import kotlin.math.*
 
 internal data class T2eCornerCalibration(
-    val size: Float = 1.17f,
+    // Fitted to Unihertz's front render: a near-circular corner of about 80 px on the
+    // 1080 x 1200 display, the radius Android reports
+    val size: Float = 1.0f,
     val offsetPx: Float = 2.25f,
-    val squircle: Float = 0.85f,
+    val squircle: Float = 0f,
     val shiftXPx: Float = -0.50f,
     val shiftYPx: Float = -1.25f,
     /** Contoured LEDs: how far the LED rail sits inside the calibrated display edge (0: on the edge) */
