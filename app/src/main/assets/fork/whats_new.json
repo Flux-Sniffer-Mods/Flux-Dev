@@ -5,11 +5,11 @@
   "highlights": [
     {
       "text": "Background picture: put your own picture behind the keyboard (Keyboard theme). With Auto colours on, the keys go see-through and are shaded against it, dark over a bright picture and light over a dark one, with text in whichever of black or white reads better; Key opacity sets how solid they are. The picture is kept in backups.",
-      "after": "202609271342"
+      "after": "202609271714"
     },
     {
       "text": "After an update, Flux Keyboard offers any recommended settings that differ from yours, listing each one from what you have to what's recommended, with Apply all or Keep mine. Looks are never touched.",
-      "after": "202609271342"
+      "after": "202609271701"
     },
     {
       "text": "Ctrl + Shift + D adds the last word you typed to the dictionary, and the suggestions' “add to dictionary” can be switched off (Auto-correction > Dictionary).",
@@ -58,47 +58,47 @@
   "improvements": [
     {
       "text": "Contoured LEDs fill out to the square corners, as filled corners do, so they meet the display's real edge.",
-      "after": "202609271342"
+      "after": "202609272249"
     },
     {
       "text": "Contoured LEDs run into the bottom corners over the corner buttons, which reach the display edge underneath.",
-      "after": "202609271342"
+      "after": "202609271852"
     },
     {
       "text": "Contoured LEDs run right along the display edge. The Contoured LED offset in Display contour calibration still moves them in, and starts again from the edge.",
-      "after": "202609271342"
+      "after": "202609271801"
     },
     {
       "text": "Terminal apps: no microphone button on the bar or in the menu.",
-      "after": "202609271342"
+      "after": "202609271754"
     },
     {
       "text": "The keyboard follows your phone's dark and light mode with Classic Midnight and Classic Cloud, now its only built-in themes; a keyboard still coloured like one of the old ones moves to them. Your own and saved themes stay.",
-      "after": "202609271342"
+      "after": "202609271706"
     },
     {
       "text": "Trackpad & gestures moved into Suggestions & auto-correction, with its sensitivity sliders on the same page. Adding words by gesture greys out while suggestions are off, the sliders show only with a trackpad, they go much lower, and a flick across one key is enough by default on the Titan 2 Elite. Ctrl+Shift+Q/W/E starts off when trackpad swipes pick suggestions.",
-      "after": "202609271342"
+      "after": "202609271657"
     },
     {
       "text": "Settings: \"Type to search\" on the emoji and symbols layers, \"Automatic Shift\", a description of what accent & spelling marks do, and the tutorial's Niagara step switches back to the built-in quick launcher too.",
-      "after": "202609271342"
+      "after": "202609271652"
     },
     {
       "text": "The menu bar starts with the everyday buttons: symbols, emoji, GIF, Solderina and keyboard mode are opt-in, and the language button stays hidden while only one language is on.",
-      "after": "202609271342"
+      "after": "202609271649"
     },
     {
       "text": "The quick launcher finds app actions, device controls and navigation actions by default, and in terminal mode the emoji key is Alt until you choose otherwise.",
-      "after": "202609271342"
+      "after": "202609271647"
     },
     {
       "text": "Symbols is the only SYM layer until you turn on others: the emoji and device layers start off, and the search key moves to Q with Recents on A.",
-      "after": "202609271342"
+      "after": "202609271645"
     },
     {
       "text": "Titan 2 Elite: straight corner buttons with filled corners and the 5 dp lift are the default again, contoured LEDs an option, and the LEDs always draw above the bar so the corner buttons never cover them.",
-      "after": "202609271342"
+      "after": "202609271633"
     },
     {
       "text": "Titan 2 Elite: one Corner style choice, Contoured LEDs or Straight buttons (which lift the bar a fixed 5 dp). Fill corners switches itself off with contoured LEDs.",
@@ -246,39 +246,39 @@
   "bugFixes": [
     {
       "text": "Titan 2 Elite: the square corners outside the display's curve are filled with the keyboard's colour instead of showing the app behind it (as in screenshots).",
-      "after": "202609271342"
+      "after": "202609272015"
     },
     {
       "text": "Contoured LEDs are drawn on top of everything, so the corner buttons and the close button no longer hide parts of them.",
-      "after": "202609271342"
+      "after": "202609272012"
     },
     {
       "text": "Updates: allowing Flux Keyboard to install apps no longer loses the update. It downloads first, and installs when you come back from Android's switch.",
-      "after": "202609271342"
+      "after": "202609271754"
     },
     {
       "text": "Contoured LEDs: the corner buttons now shape themselves round the LEDs as soon as they switch on, instead of covering them until the bar was redrawn.",
-      "after": "202609271342"
+      "after": "202609271754"
     },
     {
       "text": "Enter per app's chat standard works in chat apps whose message box asks Android to keep Enter as a new line (Instagram, Snapchat and most others).",
-      "after": "202609271342"
+      "after": "202609271654"
     },
     {
       "text": "The spell checker no longer underlines part of a word with an apostrophe (\"couldn't\", \"it's\", \"Sam's\"), and typing \"i'm\", \"i've\", \"i'd\" or \"i'll\" corrects to I'm, I've, I'd and I'll.",
-      "after": "202609271342"
+      "after": "202609271652"
     },
     {
       "text": "The clipboard button keeps its place in the menu bar when it shows a count; the count floats in its corner.",
-      "after": "202609271342"
+      "after": "202609271638"
     },
     {
       "text": "A locked Ctrl lets go once an app shortcut has run, so the next key types normally (Nav Mode's Ctrl stays).",
-      "after": "202609271342"
+      "after": "202609271637"
     },
     {
       "text": "Automatic Shift works at the start of a new note in Keep, a new chat message, and WhatsApp's box after sending, where the field wasn't readable yet when it opened.",
-      "after": "202609271342"
+      "after": "202609271636"
     },
     {
       "text": "Passwords copied from a password manager no longer go into the clipboard history.",
