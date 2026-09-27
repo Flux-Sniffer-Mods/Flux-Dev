@@ -6744,9 +6744,38 @@ object SettingsManager {
         STATUS_BAR_BUTTON_SETTINGS
     )
 
+    /**
+     * Until chosen, the menu bar leaves out the symbols, emoji and GIF buttons (the SYM and emoji
+     * keys open those), Solderina and keyboard mode; and the language button while only one
+     * input language is on.
+     */
+    private val MENU_BAR_OFF_BY_DEFAULT = setOf(
+        STATUS_BAR_BUTTON_SYMBOLS,
+        STATUS_BAR_BUTTON_EMOJI,
+        STATUS_BAR_BUTTON_GIF,
+        STATUS_BAR_BUTTON_MINIMAL_UI,
+        STATUS_BAR_BUTTON_SOFTWARE_KEYBOARD_MODE
+    )
+
+    fun defaultMenuBarButtons(context: Context): List<String> =
+        MENU_BAR_BUTTON_OPTIONS.filter { button ->
+            button !in MENU_BAR_OFF_BY_DEFAULT &&
+                !(button == STATUS_BAR_BUTTON_LANGUAGE && hasSingleInputLanguage(context))
+        }
+
+    /** Whether only one input language is on for this keyboard (false when it can't tell). */
+    fun hasSingleInputLanguage(context: Context): Boolean = runCatching {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE)
+            as? android.view.inputmethod.InputMethodManager ?: return false
+        val ime = imm.enabledInputMethodList.firstOrNull { it.packageName == context.packageName }
+            ?: return false
+        imm.getEnabledInputMethodSubtypeList(ime, true).size <= 1
+    }.getOrDefault(false)
+
     /** The menu bar's buttons, in order (its close button always comes first). */
     fun getMenuBarButtons(context: Context): List<String> {
-        val stored = getPreferences(context).getString(KEY_MENU_BAR_BUTTONS, null) ?: return MENU_BAR_BUTTON_OPTIONS
+        val stored = getPreferences(context).getString(KEY_MENU_BAR_BUTTONS, null)
+            ?: return defaultMenuBarButtons(context)
         return stored.split(',').map { it.trim() }.filter { it in MENU_BAR_BUTTON_OPTIONS }.distinct()
     }
 

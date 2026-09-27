@@ -18,8 +18,20 @@ class MenuBarButtonsTest {
     fun reset() = SettingsManager.resetMenuBarButtons(context)
 
     @Test
-    fun everyButtonByDefault() {
-        assertEquals(SettingsManager.MENU_BAR_BUTTON_OPTIONS, SettingsManager.getMenuBarButtons(context))
+    fun theEverydayButtonsByDefault() {
+        // Symbols, emoji, GIF, Solderina and keyboard mode are opt-in; the language button stays
+        // off while only one input language is on (the test phone can't tell, so it shows)
+        assertEquals(
+            listOf(
+                SettingsManager.STATUS_BAR_BUTTON_MICROPHONE,
+                SettingsManager.STATUS_BAR_BUTTON_CLIPBOARD,
+                SettingsManager.STATUS_BAR_BUTTON_UNDO,
+                SettingsManager.STATUS_BAR_BUTTON_REDO,
+                SettingsManager.STATUS_BAR_BUTTON_LANGUAGE,
+                SettingsManager.STATUS_BAR_BUTTON_SETTINGS
+            ),
+            SettingsManager.getMenuBarButtons(context)
+        )
     }
 
     @Test

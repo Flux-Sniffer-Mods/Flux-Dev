@@ -49,6 +49,10 @@
   ],
   "improvements": [
     {
+      "text": "The menu bar starts with the everyday buttons: symbols, emoji, GIF, Solderina and keyboard mode are opt-in, and the language button stays hidden while only one language is on.",
+      "after": "202609271342"
+    },
+    {
       "text": "The quick launcher finds app actions, device controls and navigation actions by default, and in terminal mode the emoji key is Alt until you choose otherwise.",
       "after": "202609271342"
     },
