@@ -57,6 +57,10 @@
   ],
   "improvements": [
     {
+      "text": "Contoured LEDs run right along the display edge. The Contoured LED offset in Display contour calibration still moves them in, and starts again from the edge.",
+      "after": "202609271342"
+    },
+    {
       "text": "Terminal apps: no microphone button on the bar or in the menu.",
       "after": "202609271342"
     },
