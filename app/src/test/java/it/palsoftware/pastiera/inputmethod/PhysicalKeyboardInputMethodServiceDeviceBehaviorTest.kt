@@ -1267,6 +1267,29 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
         assertEquals(0, symLayout().currentSymPage())
     }
 
+    @Test
+    fun shiftHeldWithBackspace_deletesTheCharacterAfterTheCursor() {
+        recorder.textBeforeCursor = "abc"
+        val shiftMeta = KeyEvent.META_SHIFT_ON or KeyEvent.META_SHIFT_LEFT_ON
+        service.onKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT, 40_000L, 40_000L, shiftMeta))
+        val handled = service.onKeyDown(KeyEvent.KEYCODE_DEL, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL, 40_050L, 40_050L, shiftMeta))
+        service.onKeyUp(KeyEvent.KEYCODE_DEL, keyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL, 40_050L, 40_080L, shiftMeta))
+        service.onKeyUp(KeyEvent.KEYCODE_SHIFT_LEFT, keyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT, 40_000L, 40_100L))
+
+        assertTrue(handled)
+        assertEquals(listOf(1), recorder.forwardDeletes)
+        assertEquals("abc", recorder.textBeforeCursor)
+    }
+
+    @Test
+    fun backspaceAfterATappedShift_stillDeletesBackwards() {
+        recorder.textBeforeCursor = "abc"
+        tapShift(41_000L)
+        pressKey(KeyEvent.KEYCODE_DEL, 41_100L)
+
+        assertTrue(recorder.forwardDeletes.isEmpty())
+    }
+
     private fun pressKey(keyCode: Int, start: Long): Pair<Boolean, Boolean> {
         val down = service.onKeyDown(keyCode, keyEvent(KeyEvent.ACTION_DOWN, keyCode, start, start))
         val up = service.onKeyUp(keyCode, keyEvent(KeyEvent.ACTION_UP, keyCode, start, start + 30L))
@@ -1453,6 +1476,7 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
         val editorActions = mutableListOf<Int>()
         val contextMenuActions = mutableListOf<Int>()
         val deleteSurroundingTextCalls = mutableListOf<Pair<Int, Int>>()
+        val forwardDeletes = mutableListOf<Int>()
 
         fun asProxy(): InputConnection {
             return Proxy.newProxyInstance(
@@ -1466,6 +1490,10 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
                             committedTexts += text
                             textBeforeCursor += text
                         }
+                        true
+                    }
+                    "deleteSurroundingTextInCodePoints" -> {
+                        forwardDeletes += ((args?.getOrNull(1) as? Int) ?: 0)
                         true
                     }
                     "deleteSurroundingText" -> {

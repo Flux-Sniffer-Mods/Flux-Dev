@@ -5409,6 +5409,19 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             typingSoundPlayer.play(keyCode)
         }
 
+        // Shift+Backspace deletes the character after the cursor. Only a held Shift: an automatic
+        // capital or a tapped Shift leaves Backspace as it is. A selection is deleted as usual.
+        if (keyCode == KeyEvent.KEYCODE_DEL && hasEditableField && symPage == 0 && !terminalModeActive &&
+            (shiftPhysicallyPressed || event?.isShiftPressed == true) &&
+            event?.isCtrlPressed != true && event?.isAltPressed != true
+        ) {
+            val ic = initialInputConnection
+            if (ic != null && ic.getSelectedText(0).isNullOrEmpty()) {
+                ic.deleteSurroundingTextInCodePoints(0, 1)
+                return true
+            }
+        }
+
         val emojiSearchCtrlActive = event?.isCtrlPressed == true ||
             ctrlPressed ||
             ctrlPhysicallyPressed ||

@@ -41,6 +41,10 @@
   ],
   "improvements": [
     {
+      "text": "Hold Shift and press Backspace to delete the character after the cursor.",
+      "after": "202609262118"
+    },
+    {
       "text": "Updates can offer dev builds too, or only full releases (Settings > Privacy & system); dev builds start on dev updates, full releases on releases.",
       "after": "202609262020"
     },
