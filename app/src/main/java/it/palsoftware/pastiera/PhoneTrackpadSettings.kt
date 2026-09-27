@@ -12,8 +12,8 @@ import android.widget.Toast
 
 /**
  * The phone's own settings for its keyboard trackpad: on the Titan 2 Elite, "Keyboard gesture"
- * (scrolling and moving the cursor on the keys). Unihertz doesn't publish an intent for that
- * page, so the phone's Settings app is searched for a page named like it; failing that,
+ * (scrolling and moving the cursor on the keys), opened directly (see [KNOWN_PAGES]). On other
+ * phones the Settings app is searched for a page named like it; failing that,
  * Settings search opens with "Keyboard gesture" on the clipboard, ready to paste.
  */
 object PhoneTrackpadSettings {
@@ -38,7 +38,18 @@ object PhoneTrackpadSettings {
     private fun start(context: Context, intent: Intent): Boolean =
         runCatching { context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }.isSuccess
 
+    /**
+     * The Titan 2 Elite's page, found with tools/find-keyboard-gesture-page.sh: Unihertz's own
+     * settings app, not Android's. Its Scroll assistant page next, should the first be missing.
+     */
+    internal val KNOWN_PAGES = listOf(
+        ComponentName("com.agui.settings", "com.agui.settings.touchpad.KeyboardGestureActivity"),
+        ComponentName("com.agui.settings", "com.agui.settings.touchpad.ScrollAssistantActivity")
+    )
+
     fun open(context: Context): Boolean {
+        // Opening an activity the phone doesn't have, or doesn't let other apps open, just fails
+        KNOWN_PAGES.forEach { page -> if (start(context, Intent().setComponent(page))) return true }
         findDevicePage(context)?.let { page ->
             if (start(context, Intent().setComponent(page))) return true
         }
