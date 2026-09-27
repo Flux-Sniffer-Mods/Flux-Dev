@@ -4386,10 +4386,7 @@ class StatusBarController(
                 invalidateTree(this)
             }
         var onContourGeometryChanged: ((LedStatusView.ContourGeometry?) -> Unit)? = null
-        /**
-         * Draws the contoured LEDs after everything else, outside the display-curve clip, so
-         * nothing covers them and they reach into the square corners.
-         */
+        /** Draws the contoured LEDs after everything else, so nothing covers them. */
         var contourLedOverlay: ((Canvas) -> Unit)? = null
 
         private fun drawContourLeds(canvas: Canvas) {
