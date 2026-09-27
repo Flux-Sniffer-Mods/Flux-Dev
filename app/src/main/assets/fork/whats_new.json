@@ -57,6 +57,10 @@
   ],
   "improvements": [
     {
+      "text": "Contoured LEDs fill out to the square corners, as filled corners do, so they meet the display's real edge.",
+      "after": "202609271342"
+    },
+    {
       "text": "Contoured LEDs run into the bottom corners over the corner buttons, which reach the display edge underneath.",
       "after": "202609271342"
     },

@@ -4270,6 +4270,7 @@ class StatusBarController(
             }
             if (fillDisplayCorners || radii == null || radii.first <= 0 && radii.second <= 0) {
                 super.draw(canvas)
+                drawContourLeds(canvas)
                 return
             }
             val calibration = it.palsoftware.pastiera.T2eCornerCalibration.read(context)
@@ -4308,6 +4309,7 @@ class StatusBarController(
             canvas.clipPath(path)
             super.draw(canvas)
             canvas.restoreToCount(contentSave)
+            drawContourLeds(canvas)
         }
 
         private fun drawStatusRowSideFill(canvas: Canvas, radii: Pair<Int, Int>) {
@@ -4384,11 +4386,13 @@ class StatusBarController(
                 invalidateTree(this)
             }
         var onContourGeometryChanged: ((LedStatusView.ContourGeometry?) -> Unit)? = null
-        /** Draws the contoured LEDs after every child, so nothing covers them. */
+        /**
+         * Draws the contoured LEDs after everything else, outside the display-curve clip, so
+         * nothing covers them and they reach into the square corners.
+         */
         var contourLedOverlay: ((Canvas) -> Unit)? = null
 
-        override fun dispatchDraw(canvas: Canvas) {
-            super.dispatchDraw(canvas)
+        private fun drawContourLeds(canvas: Canvas) {
             if (contourIntegratedIndicators) contourLedOverlay?.invoke(canvas)
         }
         private var nestedRow: View? = null
