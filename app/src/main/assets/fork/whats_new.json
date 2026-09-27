@@ -241,6 +241,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Titan 2 Elite: the square corners outside the display's curve are filled with the keyboard's colour instead of showing the app behind it (as in screenshots).",
+      "after": "202609271342"
+    },
+    {
       "text": "Contoured LEDs are drawn on top of everything, so the corner buttons and the close button no longer hide parts of them.",
       "after": "202609271342"
     },
