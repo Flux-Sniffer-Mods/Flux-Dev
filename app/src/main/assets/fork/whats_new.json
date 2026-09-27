@@ -197,6 +197,10 @@
   ],
   "bugFixes": [
     {
+      "text": "A locked Ctrl lets go once an app shortcut has run, so the next key types normally (Nav Mode's Ctrl stays).",
+      "after": "202609271342"
+    },
+    {
       "text": "Automatic Shift works at the start of a new note in Keep, a new chat message, and WhatsApp's box after sending, where the field wasn't readable yet when it opened.",
       "after": "202609271342"
     },

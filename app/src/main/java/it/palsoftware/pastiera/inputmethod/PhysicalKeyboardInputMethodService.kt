@@ -5260,8 +5260,12 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             }
         }
         appShortcutKeysDown += pressedKeyCode
-        if (ctrlOneShot) {
+        // The shortcut has run: a one-shot or locked Ctrl lets go (Nav Mode's Ctrl stays)
+        if (ctrlOneShot || (ctrlLatchActive && !ctrlLatchFromNavMode)) {
             ctrlOneShot = false
+            if (ctrlLatchActive && !ctrlLatchFromNavMode) {
+                modifierStateController.clearCtrlState(resetPressedState = false)
+            }
             updateStatusBarText()
         }
         return true
