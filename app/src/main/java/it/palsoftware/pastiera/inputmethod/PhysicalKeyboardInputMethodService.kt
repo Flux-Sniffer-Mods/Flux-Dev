@@ -941,6 +941,14 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
     }
 
+    /**
+     * Whether the field says it sends (a message or comment box). Most chat apps declare Send and
+     * also ask for Enter to stay a new line (IME_FLAG_NO_ENTER_ACTION), so the flag is ignored here.
+     */
+    private fun declaresSendAction(info: EditorInfo): Boolean =
+        info.actionId == EditorInfo.IME_ACTION_SEND ||
+            info.imeOptions and EditorInfo.IME_MASK_ACTION == EditorInfo.IME_ACTION_SEND
+
     private fun resolveAppEnterBehavior(info: EditorInfo?): String? {
         val packageName = info?.packageName ?: return null
         if (!SettingsManager.getAppEnterBehaviorEnabled(this)) return null
@@ -958,7 +966,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             return AppEnterStandards.behaviorFor(
                 packageName,
                 SettingsManager.getAppEnterBehaviorPreset(this),
-                fieldSends = resolveEditorAction(info) == EditorInfo.IME_ACTION_SEND
+                fieldSends = declaresSendAction(info)
             )
         }
 

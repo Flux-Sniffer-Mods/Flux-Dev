@@ -213,6 +213,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Enter per app's chat standard works in chat apps whose message box asks Android to keep Enter as a new line (Instagram, Snapchat and most others).",
+      "after": "202609271342"
+    },
+    {
       "text": "The spell checker no longer underlines part of a word with an apostrophe (\"couldn't\", \"it's\", \"Sam's\"), and typing \"i'm\", \"i've\", \"i'd\" or \"i'll\" corrects to I'm, I've, I'd and I'll.",
       "after": "202609271342"
     },
