@@ -116,12 +116,14 @@ class LedStatusView(
             field = value
             rebuildSegments()
             container?.invalidate()
+            railChrome()?.invalidate()
         }
 
     internal var contourGeometry: ContourGeometry? = null
         set(value) {
             if (field == value) return
             field = value
+            railChrome()?.invalidate()
             container?.let { canvas ->
                 for (index in 0 until canvas.childCount) canvas.getChildAt(index).invalidate()
             }
@@ -157,6 +159,36 @@ class LedStatusView(
 
     private fun invalidateAllLeds() {
         container?.let { canvas -> for (index in 0 until canvas.childCount) canvas.getChildAt(index).invalidate() }
+        railChrome()?.invalidate()
+    }
+
+    /** Each LED's current colour on the contoured rail. */
+    private val railColors = mutableMapOf<ModifierLedSegment, Int>()
+    private val railPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    private fun railChrome(): StatusBarController.ImeChromeLayout? {
+        var ancestor = container?.parent
+        while (ancestor != null && ancestor !is StatusBarController.ImeChromeLayout) ancestor = ancestor.parent
+        return ancestor as? StatusBarController.ImeChromeLayout
+    }
+
+    /**
+     * Contoured LEDs, drawn by the keyboard frame after everything in it, in its coordinates:
+     * nothing (buttons, the close button, fills) can cover them.
+     */
+    fun drawRailOverlay(canvas: Canvas) {
+        if (!contourIntegrated || !ModifierLedLayouts.isSplit(layout)) return
+        if (container?.isShown != true) return
+        val rail = railPath(inChrome = true) ?: return
+        layout.segments.forEach { segment ->
+            val color = railColors[segment] ?: return@forEach
+            railPaint.shader = null
+            railPaint.color = color
+            if (lockAnimator != null && statePriority[segment.state] == 2) {
+                railPaint.shader = lockShader(color, railChrome()?.width?.toFloat() ?: 1f)
+            }
+            drawRailSegment(canvas, rail, segment, railPaint)
+        }
     }
 
     /** The gradient a locked LED sweeps: its colour, a more intense version, and back. */
@@ -235,6 +267,8 @@ class LedStatusView(
     }
 
     private fun createDrawable(color: Int, segment: ModifierLedSegment): GradientDrawable {
+        railColors[segment] = color
+        railChrome()?.invalidate()
         return object : GradientDrawable() {
             private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 this.color = color
@@ -259,14 +293,8 @@ class LedStatusView(
                 }
                 paint.shader = null
                 // Pastiera's contour LEDs: rails along the outer buttons (bar not lifted)
-                if (contourIntegrated && ModifierLedLayouts.isSplit(layout)) {
-                    paint.color = color
-                    if (lockAnimator != null && statePriority[segment.state] == 2) {
-                        paint.shader = lockShader(paint.color, bounds.width().toFloat())
-                    }
-                    drawRailSegment(canvas, segment, paint)
-                    return
-                }
+                // (drawn by the keyboard frame over everything else: see drawRailOverlay)
+                if (contourIntegrated && ModifierLedLayouts.isSplit(layout)) return
                 // One physical contour per side in rounded mode. Alt/Sym and
                 // Shift share it; a locked modifier wins over an active one.
                 if (layout == ModifierLedLayouts.TITAN_2_ELITE && segment.y == 0f) return
@@ -433,8 +461,7 @@ class LedStatusView(
      * inside it, from the top of the left corner button, along the bottom, to the top of the right
      * one. Each LED lights its share in physical order: a quarter with four LEDs, a fifth with five.
      */
-    private fun drawRailSegment(canvas: Canvas, segment: ModifierLedSegment, paint: Paint) {
-        val rail = railPath() ?: return
+    private fun drawRailSegment(canvas: Canvas, rail: Path, segment: ModifierLedSegment, paint: Paint) {
         val order = layout.segments.sortedBy { it.x }
         val index = order.indexOf(segment).takeIf { it >= 0 } ?: return
         val density = context.resources.displayMetrics.density
@@ -455,8 +482,8 @@ class LedStatusView(
         canvas.drawPath(piece, paint)
     }
 
-    /** The whole rail in this view's coordinates, or null before the keyboard is laid out. */
-    private fun railPath(): Path? {
+    /** The whole rail in this view's (or the frame's) coordinates, or null before the keyboard is laid out. */
+    private fun railPath(inChrome: Boolean = false): Path? {
         val canvasView = container ?: return null
         val radii = bottomCornerRadiiPx ?: return null
         var ancestor = canvasView.parent
@@ -490,7 +517,8 @@ class LedStatusView(
             moveTo(points.first().x, points.first().y)
             points.drop(1).forEach { lineTo(it.x, it.y) }
             // Chrome coordinates to this view's, plus the calibrated shift the buttons use
-            offset(
+            if (inChrome) offset(calibration.shiftXPx, calibration.shiftYPx)
+            else offset(
                 calibration.shiftXPx + chromeLocation[0] - location[0],
                 calibration.shiftYPx + chromeLocation[1] - location[1]
             )

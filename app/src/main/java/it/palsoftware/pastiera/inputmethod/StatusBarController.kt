@@ -887,6 +887,7 @@ class StatusBarController(
                 onContourGeometryChanged = { geometry ->
                     ledStatusView.contourGeometry = geometry
                 }
+                contourLedOverlay = { canvas -> ledStatusView.drawRailOverlay(canvas) }
             }
             applyChromeZOrder()
             applyAccessibilitySecondRowReadPreference()
@@ -4377,6 +4378,13 @@ class StatusBarController(
                 invalidateTree(this)
             }
         var onContourGeometryChanged: ((LedStatusView.ContourGeometry?) -> Unit)? = null
+        /** Draws the contoured LEDs after every child, so nothing covers them. */
+        var contourLedOverlay: ((Canvas) -> Unit)? = null
+
+        override fun dispatchDraw(canvas: Canvas) {
+            super.dispatchDraw(canvas)
+            if (contourIntegratedIndicators) contourLedOverlay?.invoke(canvas)
+        }
         private var nestedRow: View? = null
         private var originalRowMargins = intArrayOf(0, 0, 0)
         private var originalRowOutline: ViewOutlineProvider? = null

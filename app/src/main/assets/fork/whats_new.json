@@ -241,6 +241,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Contoured LEDs are drawn on top of everything, so the corner buttons and the close button no longer hide parts of them.",
+      "after": "202609271342"
+    },
+    {
       "text": "Updates: allowing Flux Keyboard to install apps no longer loses the update. It downloads first, and installs when you come back from Android's switch.",
       "after": "202609271342"
     },
