@@ -49,6 +49,10 @@
   ],
   "improvements": [
     {
+      "text": "Symbols is the only SYM layer until you turn on others: the emoji and device layers start off, and the search key moves to Q with Recents on A.",
+      "after": "202609271342"
+    },
+    {
       "text": "Titan 2 Elite: straight corner buttons with filled corners and the 5 dp lift are the default again, contoured LEDs an option, and the LEDs always draw above the bar so the corner buttons never cover them.",
       "after": "202609271342"
     },

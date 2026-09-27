@@ -452,7 +452,16 @@ object SettingsManager {
     private const val DEFAULT_OVERLAPPING_KEYS_ENABLED = false
     private const val DEFAULT_EMOJI_PICKER_EXPANDED_HEIGHT = true
     private const val DEFAULT_EMOJI_PICKER_KEY = KeyEvent.KEYCODE_SHIFT_RIGHT // fork default
-    private val DEFAULT_SYM_PAGES_CONFIG = SymPagesConfig()
+    // Until chosen: only the symbols layer, first; the emoji and device layers are opt-in
+    private val DEFAULT_SYM_PAGES_CONFIG = SymPagesConfig(
+        deviceEnabled = false,
+        emojiEnabled = false,
+        symbolsEnabled = true,
+        symPageOrder = listOf(
+            SymPagesConfig.PAGE_SYMBOLS, SymPagesConfig.PAGE_EMOJI, SymPagesConfig.PAGE_DEVICE,
+            SymPagesConfig.PAGE_CLIPBOARD, SymPagesConfig.PAGE_EMOJI_PICKER
+        )
+    )
     private const val SYM_PAGES_SCHEMA_VERSION = 2
     private const val DEFAULT_STATIC_VARIATION_BAR_MODE = false
     private const val DEFAULT_STATIC_VARIATION_BAR_BASE_LAYER_ENABLED = false
@@ -5858,7 +5867,7 @@ object SettingsManager {
      * the emoji and GIF picker's search: A unless changed (KEYCODE_UNKNOWN = off).
      */
     fun getSearchKey(context: Context): Int {
-        val keyCode = getPreferences(context).getInt(KEY_SEARCH_KEY, KeyEvent.KEYCODE_A)
+        val keyCode = getPreferences(context).getInt(KEY_SEARCH_KEY, KeyEvent.KEYCODE_Q)
         return if (keyCode in EMOJI_LAYER_KEYS) keyCode else KeyEvent.KEYCODE_UNKNOWN
     }
 
@@ -5982,7 +5991,7 @@ object SettingsManager {
 
     /** The emoji layer key that shows recent emoji instead of its own: Q unless changed (KEYCODE_UNKNOWN = off). */
     fun getEmojiLayerRecentsKey(context: Context): Int {
-        val keyCode = getPreferences(context).getInt(KEY_EMOJI_LAYER_RECENTS_KEY, KeyEvent.KEYCODE_Q)
+        val keyCode = getPreferences(context).getInt(KEY_EMOJI_LAYER_RECENTS_KEY, KeyEvent.KEYCODE_A)
         return if (keyCode in EMOJI_LAYER_KEYS) keyCode else KeyEvent.KEYCODE_UNKNOWN
     }
 
