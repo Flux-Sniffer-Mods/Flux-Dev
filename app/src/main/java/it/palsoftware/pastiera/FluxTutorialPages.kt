@@ -10,7 +10,9 @@ import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.EmojiEmotions
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.Palette
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -29,7 +31,7 @@ import it.palsoftware.pastiera.inputmethod.DeviceSpecific
  */
 
 /** The settings the tutorial's buttons open. */
-internal val fluxTutorialSettingIds = listOf("flux_emoji.picker_key", "auto_correction.spell_checker", "main.app_shortcuts", "hidden_apps.apps", "led_colors.individual")
+internal val fluxTutorialSettingIds = listOf("flux_emoji.picker_key", "auto_correction.spell_checker", "main.app_shortcuts", "hidden_apps.apps", "led_colors.individual", "main.typing")
 
 /** Opens a setting by its link ID, as search and deep links do. */
 private fun openTutorialSetting(context: Context, id: String) {
@@ -48,7 +50,7 @@ private fun openTutorialSetting(context: Context, id: String) {
 @Composable
 fun FluxTutorialSetupPageContent(modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    var differing by remember { mutableIntStateOf(DefaultConfig.differingSettings(context)) }
+    var differing by remember { mutableIntStateOf(RecommendedSettings.differingSettings(context)) }
     val bullets = buildList {
         add(stringResource(R.string.flux_tutorial_setup_bullet_change))
         add(stringResource(R.string.flux_tutorial_setup_bullet_again))
@@ -67,10 +69,10 @@ fun FluxTutorialSetupPageContent(modifier: Modifier = Modifier) {
         },
         buttonEnabled = differing > 0,
         onButtonClick = {
-            if (!DefaultConfig.apply(context)) {
+            if (!RecommendedSettings.apply(context)) {
                 Toast.makeText(context, R.string.flux_tutorial_setup_failed, Toast.LENGTH_SHORT).show()
             }
-            differing = DefaultConfig.differingSettings(context)
+            differing = RecommendedSettings.differingSettings(context)
         },
         modifier = modifier
     )
@@ -255,4 +257,77 @@ fun FluxTutorialPersonalisePageContent(modifier: Modifier = Modifier) {
         onButtonClick = { openTutorialSetting(context, "led_colors.individual") },
         modifier = modifier
     )
+}
+
+/**
+ * Your choices: matters of taste the recommended settings leave alone, each a switch. Shown in
+ * the tutorial and after applying the recommended settings.
+ */
+@Composable
+fun FluxTutorialChoicesPageContent(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    TutorialFeaturePageContent(
+        title = stringResource(R.string.flux_tutorial_choices_title),
+        description = stringResource(R.string.flux_tutorial_choices_description),
+        icon = Icons.Filled.Tune,
+        tint = MaterialTheme.colorScheme.primary,
+        bullets = emptyList(),
+        buttonText = stringResource(R.string.flux_tutorial_choices_button),
+        onButtonClick = { openTutorialSetting(context, "main.typing") },
+        modifier = modifier,
+        extraContent = {
+            androidx.compose.foundation.layout.Column(
+                verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(4.dp)
+            ) {
+                ChoiceSwitch(
+                    R.string.flux_choice_auto_correct_title, R.string.flux_choice_auto_correct_text,
+                    SettingsManager.getAutoCorrectEnabled(context)
+                ) { SettingsManager.setAutoCorrectEnabled(context, it) }
+                ChoiceSwitch(
+                    R.string.flux_choice_double_space_title, R.string.flux_choice_double_space_text,
+                    SettingsManager.getDoubleSpaceToPeriod(context)
+                ) { SettingsManager.setDoubleSpaceToPeriod(context, it) }
+                ChoiceSwitch(
+                    R.string.flux_choice_emoji_suggestions_title, R.string.flux_choice_emoji_suggestions_text,
+                    SettingsManager.getEmojiSuggestionsEnabled(context)
+                ) { SettingsManager.setEmojiSuggestionsEnabled(context, it) }
+                ChoiceSwitch(
+                    R.string.flux_choice_gifs_title, R.string.flux_choice_gifs_text,
+                    SettingsManager.getGifsEnabled(context)
+                ) { SettingsManager.setGifsEnabled(context, it) }
+                ChoiceSwitch(
+                    R.string.flux_choice_emoji_layer_title, R.string.flux_choice_emoji_layer_text,
+                    SettingsManager.getEmojiKeyOpensLayer(context)
+                ) { SettingsManager.setEmojiKeyOpensLayer(context, it) }
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                    ChoiceSwitch(
+                        R.string.flux_choice_wallpaper_title, R.string.flux_choice_wallpaper_text,
+                        SettingsManager.getKeyboardWallpaperColours(context)
+                    ) { SettingsManager.setKeyboardWallpaperColours(context, it) }
+                }
+            }
+        }
+    )
+}
+
+@Composable
+private fun ChoiceSwitch(titleRes: Int, textRes: Int, initial: Boolean, onChange: (Boolean) -> Unit) {
+    var checked by remember { androidx.compose.runtime.mutableStateOf(initial) }
+    androidx.compose.foundation.layout.Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { checked = !checked; onChange(checked) }
+            .padding(vertical = 6.dp),
+        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+    ) {
+        androidx.compose.foundation.layout.Column(modifier = Modifier.weight(1f)) {
+            androidx.compose.material3.Text(stringResource(titleRes), style = MaterialTheme.typography.titleSmall)
+            androidx.compose.material3.Text(
+                stringResource(textRes),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        androidx.compose.material3.Switch(checked = checked, onCheckedChange = { checked = it; onChange(it) })
+    }
 }

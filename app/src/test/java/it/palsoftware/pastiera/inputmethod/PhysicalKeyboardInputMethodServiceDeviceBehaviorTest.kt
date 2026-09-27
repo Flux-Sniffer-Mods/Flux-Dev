@@ -544,7 +544,7 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
     @Test
     fun autoCap_recommendedSettings_startEveryTextBoxWithShift() {
         val context = RuntimeEnvironment.getApplication()
-        assertTrue(it.palsoftware.pastiera.DefaultConfig.apply(context))
+        assertTrue(it.palsoftware.pastiera.RecommendedSettings.apply(context))
         val kinds = mapOf(
             "plain" to InputType.TYPE_CLASS_TEXT,
             "sentences" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES),

@@ -4,7 +4,7 @@ Changes since **Pastiera 0.85**, the last official Pastiera release (May 2026): 
 
 Flux Keyboard is an unofficial fork of [Pastiera](https://github.com/palsoftware/pastiera), the physical-keyboard input method created by Andrea Palumbo (PalSoftware) and developed by Andrea Palumbo, Patrick Zauner and the Pastiera contributors. All credit for Pastiera itself goes to them; this page lists only what the fork changes. Flux Keyboard is not affiliated with or endorsed by the Pastiera team, and like Pastiera it is licensed under the GNU GPL v3.
 
-The fork is tuned for the Unihertz Titan 2 Elite and works on any phone with a hardware keyboard. It installs alongside Pastiera (app ID `io.github.fluxsniffermods.fluxkeyboard`) and starts from a configuration made on a Titan 2 Elite. Sections and items are ordered with the biggest differences first.
+The fork is tuned for the Unihertz Titan 2 Elite and works on any phone with a hardware keyboard. It installs alongside Pastiera (app ID `io.github.fluxsniffermods.fluxkeyboard`) and starts with a few recommended settings. Sections and items are ordered with the biggest differences first.
 
 Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux`) until September 2026; it was renamed at the Pastiera team's request. The new app ID makes it a separate app: install it, restore a backup from Pastiera Flux, then uninstall Pastiera Flux.
 
@@ -61,7 +61,7 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 
 ## Titan 2 Elite, status bar and LEDs
 
-- **Recommended settings** apply a configuration made on a Titan 2 Elite, after saying how much would change. Settings that need a permission or another app (one-time codes, Niagara search, hidden-keyboard apps) start off and are set up from the tutorial.
+- **Recommended settings**: a short list that suits nearly everyone (modifiers, suggestions, LEDs; on the Titan 2 Elite its trackpad swipes and compact bar), applied on a fresh install or with the Apply button in Privacy & system, which then offers to go through the rest. Matters of taste (auto-correct, GIFs, colours, what the emoji key opens) are switches on the tutorial's Your choices page, and settings that need a permission or another app (one-time codes, Niagara search, hidden-keyboard apps) start off and are set up from its Extras page.
 - A status bar fitted to the rounded display: filled corners, straight outer buttons, a 5 dp lift above the LEDs, and room around the SYM screens.
 - Every Titan 2 Elite setting on one screen, and a **phone trackpad settings** shortcut (also a quick launcher command) to the phone's Keyboard gesture page, or Settings search with it ready to paste.
 - **Per-LED colours**, a clear active-to-locked jump and an optional sweeping gradient when locked, set from one table with Off, Active and Locked columns.

@@ -45,6 +45,10 @@
   ],
   "improvements": [
     {
+      "text": "Recommended settings are a short list that suits everyone, with an Apply button that then offers to go through your choices (auto-correct, GIFs, colours) in the tutorial. Nothing personal from the old built-in configuration is applied any more.",
+      "after": "202609271150"
+    },
+    {
       "text": "Developer options are on by default in dev builds and off in full releases, and the Dev builds switch lives there.",
       "after": "202609271150"
     },

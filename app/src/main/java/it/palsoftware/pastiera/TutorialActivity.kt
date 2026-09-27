@@ -75,6 +75,8 @@ class TutorialActivity : LocalizedComponentActivity() {
         const val EXTRA_UPDATE_TUTORIAL = "it.palsoftware.pastiera.UPDATE_TUTORIAL"
         const val EXTRA_PREVIEW_UPDATE_TUTORIAL = "it.palsoftware.pastiera.PREVIEW_UPDATE_TUTORIAL"
         const val EXTRA_PREVIOUS_VERSION = "it.palsoftware.pastiera.PREVIOUS_VERSION"
+        /** Only the pages for setting things up: your choices, extras and making it yours. */
+        const val EXTRA_CONFIGURE = "it.palsoftware.pastiera.CONFIGURE"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,12 +85,18 @@ class TutorialActivity : LocalizedComponentActivity() {
         val updateTutorial = intent.getBooleanExtra(EXTRA_UPDATE_TUTORIAL, false)
         val previewUpdateTutorial = intent.getBooleanExtra(EXTRA_PREVIEW_UPDATE_TUTORIAL, false)
         val previousVersionOverride = intent.getStringExtra(EXTRA_PREVIOUS_VERSION)
+        val configureOnly = intent.getBooleanExtra(EXTRA_CONFIGURE, false)
         setContent {
             PastieraTheme {
                 TutorialScreen(
                     updateTutorial = updateTutorial,
                     previousVersionOverride = previousVersionOverride,
+                    configureOnly = configureOnly,
                     onComplete = {
+                        if (configureOnly) {
+                            finish()
+                            return@TutorialScreen
+                        }
                         SettingsManager.setTutorialCompleted(this@TutorialActivity)
                         if (updateTutorial && !previewUpdateTutorial) {
                             SettingsManager.markWhatsNewSeen(this@TutorialActivity, BuildConfig.VERSION_NAME)
@@ -125,6 +133,7 @@ sealed class TutorialPageType {
     object FluxApps : TutorialPageType()
     object FluxExtras : TutorialPageType()
     object FluxPersonalise : TutorialPageType()
+    object FluxChoices : TutorialPageType()
     
     data class Standard(
         val title: String,
@@ -187,6 +196,7 @@ sealed class TutorialPageType {
 fun TutorialScreen(
     updateTutorial: Boolean = false,
     previousVersionOverride: String? = null,
+    configureOnly: Boolean = false,
     onComplete: () -> Unit
 ) {
     val context = LocalContext.current
@@ -242,6 +252,12 @@ fun TutorialScreen(
     }
 
     val pages = buildList {
+        if (configureOnly) {
+            add(TutorialPageType.FluxChoices)
+            add(TutorialPageType.FluxExtras)
+            add(TutorialPageType.FluxPersonalise)
+            return@buildList
+        }
         if (updateTutorial) {
             add(
                 TutorialPageType.WhatsNew(
@@ -289,6 +305,7 @@ fun TutorialScreen(
         add(TutorialPageType.FluxEmoji)
         add(TutorialPageType.FluxTyping)
         add(TutorialPageType.FluxApps)
+        add(TutorialPageType.FluxChoices)
         add(TutorialPageType.FluxPersonalise)
         add(TutorialPageType.FluxExtras)
         add(TutorialPageType.QuickLauncher)
@@ -425,6 +442,7 @@ fun TutorialScreen(
                         TutorialPageType.FluxApps -> FluxTutorialAppsPageContent(modifier = Modifier.fillMaxSize())
                         TutorialPageType.FluxExtras -> FluxTutorialExtrasPageContent(modifier = Modifier.fillMaxSize())
                         TutorialPageType.FluxPersonalise -> FluxTutorialPersonalisePageContent(modifier = Modifier.fillMaxSize())
+                        TutorialPageType.FluxChoices -> FluxTutorialChoicesPageContent(modifier = Modifier.fillMaxSize())
                         TutorialPageType.FeatureStatuses -> {
                             TutorialFeatureStatusesPageContent(modifier = Modifier.fillMaxSize())
                         }
