@@ -241,6 +241,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Symbols layer: ~ is on A, instead of hiding under the search key on Q and leaving A empty.",
+      "after": "202609272310"
+    },
+    {
       "text": "Titan 2 Elite: the square corners outside the display's curve are filled with the keyboard's colour instead of showing the app behind it (as in screenshots).",
       "after": "202609272015"
     },
