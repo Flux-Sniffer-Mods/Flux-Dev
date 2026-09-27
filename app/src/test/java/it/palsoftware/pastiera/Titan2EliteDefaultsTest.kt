@@ -37,15 +37,17 @@ class Titan2EliteDefaultsTest {
             product = "titan2elite_qwerty"
         )
         assertTrue(SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context))
+        // Contoured LEDs: rounded buttons, no lift, corners not filled
+        assertTrue(SettingsManager.getTitan2EliteContourLeds(context))
+        assertFalse(SettingsManager.getTitan2EliteFillCorners(context))
+        assertFalse(SettingsManager.getTitan2EliteStraightOuterButtons(context))
+        assertEquals(0, SettingsManager.getTitan2EliteStatusBarLiftDp(context))
+
+        // Straight buttons: filled corners (on by default here) and the fixed 5 dp lift
+        SettingsManager.setTitan2EliteContourLeds(context, false)
         assertTrue(SettingsManager.getTitan2EliteFillCorners(context))
         assertTrue(SettingsManager.getTitan2EliteStraightOuterButtons(context))
         assertEquals(5, SettingsManager.getTitan2EliteStatusBarLiftDp(context))
-
-        // Your own choice still wins
-        SettingsManager.setTitan2EliteStraightOuterButtons(context, false)
-        SettingsManager.setTitan2EliteStatusBarLiftDp(context, 0)
-        assertFalse(SettingsManager.getTitan2EliteStraightOuterButtons(context))
-        assertEquals(0, SettingsManager.getTitan2EliteStatusBarLiftDp(context))
     }
 
     @Test

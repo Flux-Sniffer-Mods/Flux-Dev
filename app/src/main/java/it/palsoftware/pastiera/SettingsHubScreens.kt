@@ -447,6 +447,14 @@ fun DeveloperOptionsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     FluxScreenScaffold(stringResource(R.string.developer_options_title), onBack, modifier) {
         FluxNote(stringResource(R.string.developer_options_note))
         if (it.palsoftware.pastiera.update.forkUpdatesEnabled()) ForkUpdateChannelRow(context)
+        if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice() || SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context)) {
+            FluxActionRow(
+                linkId = "advanced.corner_calibration",
+                title = stringResource(R.string.corner_calibration_title),
+                description = stringResource(R.string.corner_calibration_description),
+                onClick = { context.startActivity(android.content.Intent(context, CornerCalibrationActivity::class.java)) }
+            )
+        }
         FluxActionRow(
             linkId = SettingLinkIds.TRACKPAD_DEBUG,
             title = stringResource(R.string.trackpad_debug_title),

@@ -60,15 +60,11 @@ internal fun fluxSettingEntries(): List<SettingEntry> {
             summaryRes = R.string.flux_enter_symbol_description, route = emoji),
         SettingEntry("flux_emoji.enter_gif", R.string.flux_enter_gif_title,
             summaryRes = R.string.flux_enter_gif_description, route = emoji),
-        // Titan 2 Elite screen (its corner calibration row is advanced.corner_calibration)
+        // Titan 2 Elite screen (display contour calibration is in Developer options)
         SettingEntry("titan_screen.fill_corners", R.string.titan2_elite_fill_corners_title,
             summaryRes = R.string.titan2_elite_fill_corners_description, route = titan, availabilityCheck = onTitan),
-        SettingEntry("titan_screen.contour_leds", R.string.titan2_elite_contour_leds_title,
-            summaryRes = R.string.titan2_elite_contour_leds_description, route = titan, availabilityCheck = onTitan),
-        SettingEntry("titan_screen.straight_outer_buttons", R.string.titan2_elite_straight_outer_buttons_title,
-            summaryRes = R.string.titan2_elite_straight_outer_buttons_description, route = titan, availabilityCheck = onTitan),
-        SettingEntry("titan_screen.status_bar_lift", R.string.titan2_elite_status_bar_lift_title,
-            summaryRes = R.string.titan2_elite_status_bar_lift_description, route = titan, availabilityCheck = onTitan),
+        SettingEntry("titan_screen.corner_style", R.string.titan2_elite_corner_style_title,
+            summaryRes = R.string.titan2_elite_corner_style_description, route = titan, availabilityCheck = onTitan),
         // Hidden keyboard apps
         SettingEntry("hidden_apps.apps", R.string.hidden_keyboard_apps_title,
             summaryRes = R.string.hidden_keyboard_apps_description, route = hidden),

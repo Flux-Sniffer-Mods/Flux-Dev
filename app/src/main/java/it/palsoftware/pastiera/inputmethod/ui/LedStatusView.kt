@@ -49,12 +49,19 @@ class LedStatusView(
         internal const val LED_ZONE_HEIGHT_DP = 6.5f
         /** One LED contour per side (Flux Keyboard's Titan 2 Elite layouts) */
         internal const val MERGED_LED_ZONE_HEIGHT_DP = 3.1f
-        private const val CONTOUR_LED_STROKE_DP = 1.4f
-        private const val CONTOUR_LED_GAP_DP = 2.2f
-        private const val CONTOUR_EDGE_PADDING_DP = 1f
-        // Keep the two clear gaps equal: outer rail -> inner rail -> button border.
-        internal const val CONTOUR_BUTTON_INSET_DP =
-            CONTOUR_EDGE_PADDING_DP + 2f * CONTOUR_LED_STROKE_DP + 2f * CONTOUR_LED_GAP_DP
+        /** Contoured LEDs: the rail's thickness, and the clear gap between it and the buttons */
+        private const val CONTOUR_LED_STROKE_DP = 1.6f
+        private const val CONTOUR_LED_GAP_DP = 2f
+        /** Space between neighbouring LEDs on the rail, in rail thicknesses */
+        private const val CONTOUR_LED_SPACING = 2.5f
+
+        /**
+         * How far inside the calibrated display edge the buttons start when the LEDs are
+         * contoured: the LED offset, the rail and the gap after it.
+         */
+        internal fun contourButtonInsetPx(context: Context): Float =
+            T2eCornerCalibration.read(context).ledOffsetPx +
+                (CONTOUR_LED_STROKE_DP + CONTOUR_LED_GAP_DP) * context.resources.displayMetrics.density
     }
 
     private val ledHeight: Int by lazy {
@@ -261,14 +268,12 @@ class LedStatusView(
                 }
                 paint.shader = null
                 // Pastiera's contour LEDs: rails along the outer buttons (bar not lifted)
-                if (contourIntegrated && layout == ModifierLedLayouts.TITAN_2_ELITE) {
-                    val level = if (segment.state == ModifierLedState.SHIFT && segment.x >= 0.5f && !rightShiftIsShift) 0
-                        else statePriority[segment.state] ?: 0
-                    paint.color = if (segment.state == ModifierLedState.SHIFT && segment.x >= 0.5f && !rightShiftIsShift) {
-                        ledColor(ModifierLedState.SHIFT, 0)
-                    } else color
-                    if (lockAnimator != null && level == 2) paint.shader = lockShader(paint.color, bounds.width().toFloat())
-                    drawContourIndicator(canvas, segment, paint, radii)
+                if (contourIntegrated && ModifierLedLayouts.isSplit(layout)) {
+                    paint.color = color
+                    if (lockAnimator != null && statePriority[segment.state] == 2) {
+                        paint.shader = lockShader(paint.color, bounds.width().toFloat())
+                    }
+                    drawRailSegment(canvas, segment, paint)
                     return
                 }
                 // One physical contour per side in rounded mode. Alt/Sym and
@@ -432,125 +437,73 @@ class LedStatusView(
         }
     }
 
-    private fun drawContourIndicator(
-        canvas: Canvas,
-        segment: ModifierLedSegment,
-        paint: Paint,
-        @Suppress("UNUSED_PARAMETER") radii: Pair<Int, Int>
-    ) {
-        val stroke = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            CONTOUR_LED_STROKE_DP,
-            context.resources.displayMetrics
-        )
-        val railGap = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            CONTOUR_LED_GAP_DP,
-            context.resources.displayMetrics
-        )
-        val geometry = contourGeometry ?: return
-        val leftSide = segment.x < 0.5f
-        val outerRail = segment.state == ModifierLedState.SHIFT
-        val buttonContour = (
-            if (leftSide) geometry.leftButtonContour else geometry.rightButtonContour
-        ) ?: return
-        if (buttonContour.points.size < 2) return
-        val distanceFromButtonCenterline = buttonContour.borderHalfWidthPx + railGap + stroke / 2f +
-            if (outerRail) stroke + railGap else 0f
-        val offsetPoints = buttonContour.points.mapIndexed { index, point ->
-            val previous = buttonContour.points[(index - 1).coerceAtLeast(0)]
-            val next = buttonContour.points[(index + 1).coerceAtMost(buttonContour.points.lastIndex)]
-            val dx = next.x - previous.x
-            val dy = next.y - previous.y
-            val length = hypot(dx, dy).coerceAtLeast(0.001f)
-            val normalX = if (leftSide) -dy / length else dy / length
-            val normalY = if (leftSide) dx / length else -dx / length
-            PointF(
-                point.x + normalX * distanceFromButtonCenterline,
-                point.y + normalY * distanceFromButtonCenterline
-            )
-        }
-        val topCenterY = geometry.buttonTopPx + stroke / 2f
-        val topTrimmed = ArrayList<PointF>(offsetPoints.size)
-        for (index in 1 until offsetPoints.size) {
-            val previous = offsetPoints[index - 1]
-            val point = offsetPoints[index]
-            if (topTrimmed.isEmpty()) {
-                if (point.y < topCenterY) continue
-                val denominator = point.y - previous.y
-                val ratio = if (kotlin.math.abs(denominator) < 0.001f) 1f
-                    else ((topCenterY - previous.y) / denominator).coerceIn(0f, 1f)
-                topTrimmed += PointF(
-                    previous.x + (point.x - previous.x) * ratio,
-                    topCenterY
-                )
-            }
-            topTrimmed += point
-        }
-        if (topTrimmed.size < 2) return
-
-        val targetX = if (leftSide) geometry.leftButtonEndPx - stroke / 2f
-            else geometry.rightButtonStartPx + stroke / 2f
-        val trimmed = ArrayList<PointF>(topTrimmed.size)
-        for (point in topTrimmed) {
-            val reached = if (leftSide) point.x >= targetX else point.x <= targetX
-            if (!reached) {
-                trimmed += point
-                continue
-            }
-            val previous = trimmed.lastOrNull()
-            if (previous != null) {
-                val denominator = point.x - previous.x
-                val ratio = if (kotlin.math.abs(denominator) < 0.001f) 1f
-                    else ((targetX - previous.x) / denominator).coerceIn(0f, 1f)
-                trimmed += PointF(targetX, previous.y + (point.y - previous.y) * ratio)
-            }
-            break
-        }
-        if (trimmed.size < 2) return
-
-        val cumulative = FloatArray(trimmed.size)
-        for (index in 1 until trimmed.size) {
-            cumulative[index] = cumulative[index - 1] + hypot(
-                trimmed[index].x - trimmed[index - 1].x,
-                trimmed[index].y - trimmed[index - 1].y
-            )
-        }
-        val totalLength = cumulative.last().coerceAtLeast(0.001f)
-        val range = when (segment.state) {
-            ModifierLedState.SYM -> 0f to 0.46f
-            ModifierLedState.CTRL -> 0.54f to 1f
-            else -> 0f to 1f
-        }
-        fun pointAt(distance: Float): PointF {
-            val target = distance.coerceIn(0f, totalLength)
-            var index = 1
-            while (index < cumulative.size && cumulative[index] < target) index++
-            if (index >= cumulative.size) return trimmed.last()
-            val segmentLength = (cumulative[index] - cumulative[index - 1]).coerceAtLeast(0.001f)
-            val ratio = (target - cumulative[index - 1]) / segmentLength
-            val from = trimmed[index - 1]
-            val to = trimmed[index]
-            return PointF(from.x + (to.x - from.x) * ratio, from.y + (to.y - from.y) * ratio)
-        }
-        val path = android.graphics.Path()
-        val rangeStart = range.first * totalLength
-        val rangeEnd = range.second * totalLength
-        val first = pointAt(rangeStart)
-        path.moveTo(first.x, first.y)
-        for (index in 1 until trimmed.size) {
-            if (cumulative[index] <= rangeStart) continue
-            if (cumulative[index] >= rangeEnd) break
-            path.lineTo(trimmed[index].x, trimmed[index].y)
-        }
-        val last = pointAt(rangeEnd)
-        path.lineTo(last.x, last.y)
-
+    /**
+     * Contoured LEDs: one rail following the calibrated display curve, [T2eCornerCalibration.ledOffsetPx]
+     * inside it, from the top of the left corner button, along the bottom, to the top of the right
+     * one. Each LED lights its share in physical order: a quarter with four LEDs, a fifth with five.
+     */
+    private fun drawRailSegment(canvas: Canvas, segment: ModifierLedSegment, paint: Paint) {
+        val rail = railPath() ?: return
+        val order = layout.segments.sortedBy { it.x }
+        val index = order.indexOf(segment).takeIf { it >= 0 } ?: return
+        val density = context.resources.displayMetrics.density
+        val stroke = CONTOUR_LED_STROKE_DP * density
+        val measure = PathMeasure(rail, false)
+        val share = measure.length / order.size
+        val spacing = stroke * CONTOUR_LED_SPACING
+        // Round caps reach half a stroke past each end
+        val start = share * index + (if (index == 0) 0f else spacing / 2f) + stroke / 2f
+        val end = share * (index + 1) - (if (index == order.lastIndex) 0f else spacing / 2f) - stroke / 2f
+        if (end <= start) return
+        val piece = Path()
+        measure.getSegment(start, end, piece, true)
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = stroke
         paint.strokeCap = Paint.Cap.ROUND
         paint.strokeJoin = Paint.Join.ROUND
-        canvas.drawPath(path, paint)
+        canvas.drawPath(piece, paint)
+    }
+
+    /** The whole rail in this view's coordinates, or null before the keyboard is laid out. */
+    private fun railPath(): Path? {
+        val canvasView = container ?: return null
+        val radii = bottomCornerRadiiPx ?: return null
+        var ancestor = canvasView.parent
+        while (ancestor != null && ancestor !is StatusBarController.ImeChromeLayout) ancestor = ancestor.parent
+        val chrome = ancestor as? StatusBarController.ImeChromeLayout ?: return null
+        if (chrome.width <= 0 || chrome.height <= 0) return null
+        val location = IntArray(2)
+        val chromeLocation = IntArray(2)
+        canvasView.getLocationInWindow(location)
+        chrome.getLocationInWindow(chromeLocation)
+        val calibration = T2eCornerCalibration.read(context)
+        val stroke = CONTOUR_LED_STROKE_DP * context.resources.displayMetrics.density
+        val inset = calibration.ledOffsetPx + stroke / 2f
+        val width = chrome.width.toFloat()
+        val bottom = chrome.height.toFloat()
+        val left = radii.first.toFloat().coerceIn(0f, width / 2f)
+        val right = radii.second.toFloat().coerceIn(0f, width / 2f)
+        fun point(radius: Float, step: Int) =
+            T2eCornerGeometry.point(radius, bottom, Math.PI / 2 * step / CONTOUR_STEPS, calibration, inset)
+        val leftArc = (0..CONTOUR_STEPS).map { point(left, it) }
+        val rightArc = (CONTOUR_STEPS downTo 0).map { point(right, it).let { p -> T2eCornerGeometry.Point(width - p.x, p.y) } }
+        // Up the sides of the corner buttons to their top edge, when they reach above the curve
+        val top = contourGeometry?.buttonTopPx?.plus(stroke)
+        val points = buildList {
+            if (top != null && top < leftArc.first().y) add(T2eCornerGeometry.Point(leftArc.first().x, top))
+            addAll(leftArc)
+            addAll(rightArc)
+            if (top != null && top < rightArc.last().y) add(T2eCornerGeometry.Point(rightArc.last().x, top))
+        }
+        return Path().apply {
+            moveTo(points.first().x, points.first().y)
+            points.drop(1).forEach { lineTo(it.x, it.y) }
+            // Chrome coordinates to this view's, plus the calibrated shift the buttons use
+            offset(
+                calibration.shiftXPx + chromeLocation[0] - location[0],
+                calibration.shiftYPx + chromeLocation[1] - location[1]
+            )
+        }
     }
 
     private fun updateLeds(state: ModifierLedState, isLocked: Boolean, isActive: Boolean = false) {

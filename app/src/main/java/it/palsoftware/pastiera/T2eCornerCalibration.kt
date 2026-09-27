@@ -9,7 +9,9 @@ internal data class T2eCornerCalibration(
     val offsetPx: Float = 2.25f,
     val squircle: Float = 0.85f,
     val shiftXPx: Float = -0.50f,
-    val shiftYPx: Float = -1.25f
+    val shiftYPx: Float = -1.25f,
+    /** Contoured LEDs: how far the LED rail sits inside the calibrated display edge */
+    val ledOffsetPx: Float = 4f
 ) {
     companion object {
         const val KEY = "titan2_elite_corner_calibration"
@@ -39,13 +41,14 @@ internal data class T2eCornerCalibration(
                 }
             T2eCornerCalibration(number("size", defaults.size, 0.4f..1.8f),
                 number("offset_px", defaults.offsetPx, -16f..16f), number("squircle", defaults.squircle, 0f..4f),
-                number("shift_x_px", defaults.shiftXPx, -16f..16f), number("shift_y_px", defaults.shiftYPx, -16f..16f))
+                number("shift_x_px", defaults.shiftXPx, -16f..16f), number("shift_y_px", defaults.shiftYPx, -16f..16f),
+                number("led_offset_px", defaults.ledOffsetPx, 0f..32f))
         }.getOrDefault(T2eCornerCalibration())
     }
 
     fun save(context: Context) {
         val json = org.json.JSONObject().put("size", size).put("offset_px", offsetPx).put("squircle", squircle)
-            .put("shift_x_px", shiftXPx).put("shift_y_px", shiftYPx)
+            .put("shift_x_px", shiftXPx).put("shift_y_px", shiftYPx).put("led_offset_px", ledOffsetPx)
         SettingsManager.getPreferences(context).edit().putString(KEY, json.toString()).apply()
     }
 }

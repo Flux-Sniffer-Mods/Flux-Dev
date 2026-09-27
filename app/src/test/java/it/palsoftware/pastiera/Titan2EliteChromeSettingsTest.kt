@@ -30,31 +30,22 @@ class Titan2EliteChromeSettingsTest {
     }
 
     @Test
-    fun fillCornersIsStored() {
+    fun fillCornersIsStoredAndOffWhileContoured() {
         SettingsManager.setTitan2EliteFillCorners(context, true)
+        assertFalse(SettingsManager.getTitan2EliteFillCorners(context))
+        SettingsManager.setTitan2EliteContourLeds(context, false)
         assertTrue(SettingsManager.getTitan2EliteFillCorners(context))
     }
 
     @Test
-    fun straightOuterButtonsIsStored() {
-        SettingsManager.setTitan2EliteStraightOuterButtons(context, true)
+    fun straightButtonsLiftTheBarByAFixedAmount() {
+        SettingsManager.setTitan2EliteContourLeds(context, false)
         assertTrue(SettingsManager.getTitan2EliteStraightOuterButtons(context))
-        assertTrue(
-            SettingsManager.getPreferences(context)
-                .contains(SettingsManager.KEY_TITAN2_ELITE_STRAIGHT_OUTER_BUTTONS)
-        )
-    }
-
-    @Test
-    fun liftIsClampedAndConvertedToPixels() {
-        SettingsManager.setTitan2EliteStatusBarLiftDp(context, 99)
-        assertEquals(SettingsManager.TITAN2_ELITE_STATUS_BAR_LIFT_MAX_DP, SettingsManager.getTitan2EliteStatusBarLiftDp(context))
-
-        SettingsManager.setTitan2EliteStatusBarLiftDp(context, -3)
-        assertEquals(0, SettingsManager.getTitan2EliteStatusBarLiftDp(context))
-
-        SettingsManager.setTitan2EliteStatusBarLiftDp(context, 8)
+        assertEquals(SettingsManager.TITAN2_ELITE_DEFAULT_LIFT_DP, SettingsManager.getTitan2EliteStatusBarLiftDp(context))
         val density = context.resources.displayMetrics.density
-        assertEquals(Math.round(8 * density), SettingsManager.getTitan2EliteStatusBarLiftPx(context))
+        assertEquals(
+            Math.round(SettingsManager.TITAN2_ELITE_DEFAULT_LIFT_DP * density),
+            SettingsManager.getTitan2EliteStatusBarLiftPx(context)
+        )
     }
 }

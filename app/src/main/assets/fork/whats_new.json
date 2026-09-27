@@ -45,6 +45,14 @@
   ],
   "improvements": [
     {
+      "text": "Titan 2 Elite: one Corner style choice, Contoured LEDs or Straight buttons (which lift the bar a fixed 5 dp). Fill corners switches itself off with contoured LEDs.",
+      "after": "202609271321"
+    },
+    {
+      "text": "Display contour calibration is in English, lives in Developer options, and sets how far inside the display edge the LED rail runs.",
+      "after": "202609271321"
+    },
+    {
       "text": "Recommended settings are a short list that suits everyone, with an Apply button that then offers to go through your choices (auto-correct, GIFs, colours) in the tutorial. Nothing personal from the old built-in configuration is applied any more.",
       "after": "202609271150"
     },
@@ -154,7 +162,7 @@
       "after": "202609271253"
     },
     {
-      "text": "Titan 2 Elite: a Contour LEDs switch runs the modifier LEDs as rails around the rounded corner buttons (Pastiera 0.86's style) instead of along the display's corners.",
+      "text": "Titan 2 Elite: contour LEDs, now Flux Keyboard's default corner style. One LED rail follows the calibrated display curve under the rounded corner buttons, each LED lighting a quarter (or a fifth with the emoji LED).",
       "after": "202609271253"
     },
     {

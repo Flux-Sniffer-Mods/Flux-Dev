@@ -243,7 +243,6 @@ object SettingsManager {
     const val KEY_TITAN2_ELITE_STRAIGHT_OUTER_BUTTONS = "titan2_elite_straight_outer_buttons"
     const val KEY_TITAN2_ELITE_STATUS_BAR_LIFT = "titan2_elite_status_bar_lift_dp"
     const val KEY_TITAN2_ELITE_CONTOUR_LEDS = "titan2_elite_contour_leds"
-    const val TITAN2_ELITE_STATUS_BAR_LIFT_MAX_DP = 16
     const val TITAN2_ELITE_DEFAULT_LIFT_DP = 5
     private const val KEY_ACCESSIBILITY_LIVE_ANNOUNCEMENTS_ENABLED = "accessibility_live_announcements_enabled" // Whether status bar accessibility live announcements are enabled
     private const val KEY_ACCESSIBILITY_READ_SECOND_ROW_ENABLED = "accessibility_read_second_row_enabled" // Whether TalkBack should read quick settings/variations row
@@ -1546,56 +1545,38 @@ object SettingsManager {
             .apply()
     }
 
-    /** Paint the keyboard background into the display's rounded corners instead of clipping to them. */
-    /** On by default on a Titan 2 Elite, like the rounded status bar. */
+    /**
+     * Paint the keyboard background into the display's rounded corners instead of clipping to them.
+     * On by default on a Titan 2 Elite. Off while the LEDs are contoured: the rail runs along the
+     * display curve, which a filled corner would cover.
+     */
     fun getTitan2EliteFillCorners(context: Context): Boolean =
-        getPreferences(context).getBoolean(KEY_TITAN2_ELITE_FILL_CORNERS, DeviceSpecific.isTitan2EliteDevice())
+        !getTitan2EliteContourLeds(context) &&
+            getPreferences(context).getBoolean(KEY_TITAN2_ELITE_FILL_CORNERS, DeviceSpecific.isTitan2EliteDevice())
 
     fun setTitan2EliteFillCorners(context: Context, enabled: Boolean) {
         getPreferences(context).edit().putBoolean(KEY_TITAN2_ELITE_FILL_CORNERS, enabled).apply()
     }
 
     /**
-     * Rounded corners for sizing and spacing only: the outer bar buttons are plain buttons
-     * reaching straight down into the corners instead of shapes following the display curve.
-     */
-    /** On by default on a Titan 2 Elite. */
-    /** Contour LEDs round the outer buttons, so they're never straight while those are on. */
-    fun getTitan2EliteStraightOuterButtons(context: Context): Boolean =
-        !getTitan2EliteContourLeds(context) &&
-            getPreferences(context).getBoolean(KEY_TITAN2_ELITE_STRAIGHT_OUTER_BUTTONS, DeviceSpecific.isTitan2EliteDevice())
-
-    fun setTitan2EliteStraightOuterButtons(context: Context, enabled: Boolean) {
-        getPreferences(context).edit().putBoolean(KEY_TITAN2_ELITE_STRAIGHT_OUTER_BUTTONS, enabled).apply()
-    }
-
-    /** How far the status bar sits above the modifier LEDs, in dp (0 = LEDs hug the bar). */
-    /** A Titan 2 Elite starts with the bar lifted by [TITAN2_ELITE_DEFAULT_LIFT_DP]; other phones at 0. */
-    /** No lift while contour LEDs are on: they sit along the buttons, not in a band under the bar. */
-    fun getTitan2EliteStatusBarLiftDp(context: Context): Int =
-        if (getTitan2EliteContourLeds(context)) 0 else getPreferences(context).getInt(
-            KEY_TITAN2_ELITE_STATUS_BAR_LIFT,
-            if (DeviceSpecific.isTitan2EliteDevice()) TITAN2_ELITE_DEFAULT_LIFT_DP else 0
-        )
-            .coerceIn(0, TITAN2_ELITE_STATUS_BAR_LIFT_MAX_DP)
-
-    fun setTitan2EliteStatusBarLiftDp(context: Context, dp: Int) {
-        getPreferences(context).edit()
-            .putInt(KEY_TITAN2_ELITE_STATUS_BAR_LIFT, dp.coerceIn(0, TITAN2_ELITE_STATUS_BAR_LIFT_MAX_DP))
-            .apply()
-    }
-
-    /**
-     * LED style on the Titan 2 Elite: Pastiera's contour LEDs, two rails along the rounded corner
-     * buttons (true), or Flux Keyboard's LEDs following the display's corners (false, the default).
-     * Contour LEDs round the outer buttons and drop the lift; the stored choices return when off.
+     * Titan 2 Elite corner style. Contoured LEDs (true, the default): the outer
+     * buttons follow the display curve and one LED rail runs round it beneath them. Straight
+     * buttons (false): the outer buttons reach straight down into the corners, and the bar is
+     * lifted [TITAN2_ELITE_DEFAULT_LIFT_DP] above the LEDs running along the corners.
      */
     fun getTitan2EliteContourLeds(context: Context): Boolean =
-        getPreferences(context).getBoolean(KEY_TITAN2_ELITE_CONTOUR_LEDS, false)
+        getPreferences(context).getBoolean(KEY_TITAN2_ELITE_CONTOUR_LEDS, true)
 
     fun setTitan2EliteContourLeds(context: Context, enabled: Boolean) {
         getPreferences(context).edit().putBoolean(KEY_TITAN2_ELITE_CONTOUR_LEDS, enabled).apply()
     }
+
+    /** Straight outer buttons: the corner style that isn't contoured LEDs. */
+    fun getTitan2EliteStraightOuterButtons(context: Context): Boolean = !getTitan2EliteContourLeds(context)
+
+    /** How far the status bar sits above the modifier LEDs, in dp: fixed with straight buttons, none when contoured. */
+    fun getTitan2EliteStatusBarLiftDp(context: Context): Int =
+        if (getTitan2EliteContourLeds(context)) 0 else TITAN2_ELITE_DEFAULT_LIFT_DP
 
     fun getTitan2EliteStatusBarLiftPx(context: Context): Int =
         Math.round(getTitan2EliteStatusBarLiftDp(context) * context.resources.displayMetrics.density)

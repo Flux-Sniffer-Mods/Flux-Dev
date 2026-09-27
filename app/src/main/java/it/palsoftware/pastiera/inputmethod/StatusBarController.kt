@@ -540,17 +540,12 @@ class StatusBarController(
     }
 
     private fun modifierLedLayout(): it.palsoftware.pastiera.inputmethod.ui.ModifierLedLayout {
-        val contourLeds = SettingsManager.getTitan2EliteContourLeds(context)
-        val layout = ModifierLedLayouts.resolve(
+        return ModifierLedLayouts.resolve(
             physicalProfileOverride = SettingsManager.getPhysicalKeyboardProfileOverride(context),
             titan2EliteAutoDetected = DeviceSpecific.isTitan2EliteDevice(),
-            // Contour LEDs have rails for Alt, Shift, Ctrl and Sym only
             emojiLed = SettingsManager.getEmojiKeyLedEnabled(context) &&
-                SettingsManager.getEmojiPickerKey(context) != android.view.KeyEvent.KEYCODE_UNKNOWN &&
-                !contourLeds
+                SettingsManager.getEmojiPickerKey(context) != android.view.KeyEvent.KEYCODE_UNKNOWN
         )
-        // Contour LEDs draw Pastiera's Titan 2 Elite layout: Alt/Shift left, Sym/Ctrl/Shift right
-        return if (contourLeds && layout == ModifierLedLayouts.TITAN_2_ELITE_SPLIT) ModifierLedLayouts.TITAN_2_ELITE else layout
     }
 
     private fun statusBarCallbacks(): StatusBarCallbacks =
@@ -3531,15 +3526,15 @@ class StatusBarController(
         } else {
             showHardwareBottomIndicators
         }
-        // LED style "Contour" (Pastiera's rails along the curved outer buttons), on the plain
-        // keyboard; the other screens and the default style keep Flux Keyboard's LEDs.
+        // Corner style "Contoured LEDs": one LED rail along the display curve under the rounded
+        // buttons, on the plain keyboard; the other screens keep the LEDs along the corners.
         val contourIntegratedIndicators =
             showLedStrip &&
                 SettingsManager.getTitan2EliteContourLeds(context) &&
                 snapshot.symPage == 0 && !snapshot.clipboardOverlay &&
                 !pastierinaModeActive &&
                 !isFullSoftwareKeyboardMode &&
-                activeLedLayout == ModifierLedLayouts.TITAN_2_ELITE &&
+                ModifierLedLayouts.isSplit(activeLedLayout) &&
                 (statusBarLayout as? ImeChromeLayout)?.bottomCornerRadiiPx != null
         ledStatusView.contourIntegrated = contourIntegratedIndicators
         (statusBarLayout as? ImeChromeLayout)?.contourIntegratedIndicators =
@@ -4089,6 +4084,12 @@ class StatusBarController(
             applyBottomCornerClip()
             requestLayout()
             invalidate()
+            // The LEDs draw from the calibration too (contoured LED rail and offset)
+            fun invalidateTree(view: View) {
+                view.invalidate()
+                if (view is ViewGroup) for (index in 0 until view.childCount) invalidateTree(view.getChildAt(index))
+            }
+            indicatorView?.let(::invalidateTree)
         }
         // Kept as a field: SharedPreferences only holds listeners weakly
         private val chromePrefsListener =
@@ -4528,7 +4529,12 @@ class StatusBarController(
                     return false
                 }
                 fun extendButtonBranches(view: ViewGroup, offsetY: Int) {
-                    val borderInset = kotlin.math.ceil(3f * resources.displayMetrics.density).toInt()
+                    // Clear of the LED rail running along the bottom edge
+                    val calibration = it.palsoftware.pastiera.T2eCornerCalibration.read(context)
+                    val borderInset = kotlin.math.ceil(
+                        (calibration.offsetPx + LedStatusView.contourButtonInsetPx(context))
+                            .coerceAtLeast(3f * resources.displayMetrics.density)
+                    ).toInt()
                     val visibleBottom = (row.height - this@ImeChromeLayout.paddingBottom).coerceAtLeast(0)
                     for (index in 0 until view.childCount) {
                         val child = view.getChildAt(index)
@@ -4569,7 +4575,8 @@ class StatusBarController(
                     }
                     onContourGeometryChanged?.invoke(
                         LedStatusView.ContourGeometry(
-                            buttonTopPx = minOf(leftButton.top, rightButton.top) - surfaceTop,
+                            // Chrome coordinates: the LED rail climbs the corner buttons to here
+                            buttonTopPx = minOf(leftButton.top, rightButton.top).toFloat(),
                             leftButtonEndPx = leftButton.right.toFloat(),
                             rightButtonStartPx = rightButton.left.toFloat(),
                             leftButtonContour = contourFor(leftButtonView),

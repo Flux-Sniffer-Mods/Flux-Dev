@@ -1,7 +1,6 @@
 package it.palsoftware.pastiera
 
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,18 +12,13 @@ import org.robolectric.annotation.Config
 @Config(sdk = [33])
 class Titan2EliteContourLedsTest {
     @Test
-    fun contourLedsRoundTheButtonsAndDropTheLiftUntilTurnedOff() {
+    fun ledOffsetIsCalibratedAndPushesTheButtonsInward() {
         val context = RuntimeEnvironment.getApplication()
-        SettingsManager.setTitan2EliteStraightOuterButtons(context, true)
-        SettingsManager.setTitan2EliteStatusBarLiftDp(context, 7)
-        assertFalse(SettingsManager.getTitan2EliteContourLeds(context))
-
-        SettingsManager.setTitan2EliteContourLeds(context, true)
-        assertFalse(SettingsManager.getTitan2EliteStraightOuterButtons(context))
-        assertEquals(0, SettingsManager.getTitan2EliteStatusBarLiftDp(context))
-
-        SettingsManager.setTitan2EliteContourLeds(context, false)
-        assertTrue(SettingsManager.getTitan2EliteStraightOuterButtons(context))
-        assertEquals(7, SettingsManager.getTitan2EliteStatusBarLiftDp(context))
+        val base = it.palsoftware.pastiera.inputmethod.ui.LedStatusView.contourButtonInsetPx(context)
+        T2eCornerCalibration(ledOffsetPx = 10f).save(context)
+        assertEquals(10f, T2eCornerCalibration.readSaved(context).ledOffsetPx)
+        val moved = it.palsoftware.pastiera.inputmethod.ui.LedStatusView.contourButtonInsetPx(context)
+        assertTrue(moved > base)
+        assertEquals(10f - T2eCornerCalibration().ledOffsetPx, moved - base, 0.01f)
     }
 }
