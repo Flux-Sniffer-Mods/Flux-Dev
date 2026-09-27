@@ -252,6 +252,11 @@
             android:finishOnTaskLaunch="true" />
 
         <activity
+            android:name=".update.UpdateInstallActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="false"
+            android:excludeFromRecents="true" />
+        <activity
             android:name=".inputmethod.QuickLauncherActivity"
             android:theme="@style/Theme.Pastiera.QuickLauncherOverlay"
             android:exported="false"

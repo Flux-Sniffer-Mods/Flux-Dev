@@ -237,6 +237,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Updates: allowing Flux Keyboard to install apps no longer loses the update. It downloads first, and installs when you come back from Android's switch.",
+      "after": "202609271342"
+    },
+    {
       "text": "Contoured LEDs: the corner buttons now shape themselves round the LEDs as soon as they switch on, instead of covering them until the bar was redrawn.",
       "after": "202609271342"
     },

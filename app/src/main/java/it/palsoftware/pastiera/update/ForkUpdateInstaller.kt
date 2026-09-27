@@ -52,12 +52,6 @@ object ForkUpdateInstaller {
             open(app, fallback)
             return
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !app.packageManager.canRequestPackageInstalls()) {
-            // Android's "Install unknown apps" switch for this app, once
-            Toast.makeText(app, R.string.fork_update_allow_installs, Toast.LENGTH_LONG).show()
-            open(app, "package:${app.packageName}", Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
-            return
-        }
         if (downloading) return
         downloading = true
         Toast.makeText(app, R.string.fork_update_downloading, Toast.LENGTH_SHORT).show()
@@ -70,8 +64,10 @@ object ForkUpdateInstaller {
                 if (apk == null) {
                     Toast.makeText(app, R.string.fork_update_download_failed, Toast.LENGTH_LONG).show()
                     open(app, fallback)
-                } else {
+                } else if (canInstall(app)) {
                     install(app, apk)
+                } else {
+                    askToAllowInstalls(app)
                 }
             }
         }.start()
@@ -107,9 +103,42 @@ object ForkUpdateInstaller {
             }
     }
 
-    /** A downloaded update is only needed until it's installed. */
+    private fun canInstall(context: Context) =
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.O || context.packageManager.canRequestPackageInstalls()
+
+    private fun pendingApk(context: Context) = File(File(context.cacheDir, DIR), "flux-keyboard-update.apk")
+
+    /**
+     * Android's "Install unknown apps" switch, the first time. Flipping it restarts the app, so
+     * the download is kept and [UpdateInstallActivity], which Android brings back afterwards,
+     * picks the install up again.
+     */
+    private fun askToAllowInstalls(context: Context) {
+        Toast.makeText(context, R.string.fork_update_allow_installs, Toast.LENGTH_LONG).show()
+        runCatching {
+            context.startActivity(Intent(context, UpdateInstallActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        }.onFailure { open(context, "package:${context.packageName}", Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES) }
+    }
+
+    internal fun allowInstallsIntent(context: Context) =
+        Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:${context.packageName}"))
+
+    /** Installs a kept download once installs are allowed. Whether it did. */
+    internal fun installPending(context: Context): Boolean {
+        val apk = pendingApk(context)
+        if (!apk.isFile || !canInstall(context)) return false
+        install(context.applicationContext, apk)
+        return true
+    }
+
+    /** A downloaded update is only needed until it's installed (or while installs are being allowed). */
     fun clearDownloads(context: Context) {
-        if (!downloading) File(context.cacheDir, DIR).deleteRecursively()
+        if (downloading) return
+        val apk = pendingApk(context)
+        @Suppress("DEPRECATION")
+        val info = if (apk.isFile) context.packageManager.getPackageArchiveInfo(apk.path, 0) else null
+        if (isNewerBuildOfThisApp(info?.packageName, info?.versionName, context.packageName, BuildConfig.VERSION_NAME)) return
+        File(context.cacheDir, DIR).deleteRecursively()
     }
 
     private fun open(context: Context, url: String, action: String = Intent.ACTION_VIEW) {
