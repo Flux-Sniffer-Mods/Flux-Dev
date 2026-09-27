@@ -1,4 +1,6 @@
 #!/system/bin/sh
+PATH=/system/bin:/system/xbin:$PATH
+# Needs root: run it with su (plain Termux can't see other apps' screens).
 # Finds exactly which screen is the phone's "Keyboard gesture" page, so Flux Keyboard can open it
 # directly on phones without root. Run it as root from Termux:
 #
