@@ -569,6 +569,11 @@ fun AutoCorrectionCategoryScreen(
                                         style = MaterialTheme.typography.titleMedium,
                                         fontWeight = FontWeight.Medium
                                     )
+                                    Text(
+                                        text = stringResource(R.string.auto_correct_accent_matching_description),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
                                 }
                                 Switch(
                                     checked = accentMatchingEnabled,

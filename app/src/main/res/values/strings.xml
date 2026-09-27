@@ -38,7 +38,7 @@
     <string name="auto_capitalize_description">Capitalize the first letter when starting in an empty text field.</string>
     <string name="auto_capitalize_respect_manual_shift_off_title">Respect manual Shift off</string>
     <string name="auto_capitalize_respect_manual_shift_off_description">Keep automatic Shift off while you remain in the same text field.</string>
-    <string name="auto_capitalize_restricted_fields_title">Automatic Shift in</string>
+    <string name="auto_capitalize_restricted_fields_title">Automatic Shift</string>
     <string name="auto_capitalize_restricted_fields_description">Choose which kinds of text field start with Shift. Password fields never do.</string>
 
     <!-- Auto Capitalize After Period Section -->
@@ -235,6 +235,7 @@
     <string name="auto_correct_language_already_exists">This substitution already exists</string>
     <string name="auto_correct_suggestions_toggle_title">Suggestions while typing</string>
     <string name="auto_correct_accent_matching_title">Accent &amp; spelling marks</string>
+    <string name="auto_correct_accent_matching_description">Suggestions and corrections treat letters with and without accents as the same letter, so typing \"cafe\" can offer \"café\", \"resume\" can offer \"résumé\", and \"uber\" can offer \"über\". Off, only words spelled with exactly the marks you typed are offered.</string>
     <string name="auto_correct_auto_replace_title">Automatic correction</string>
     <string name="auto_correct_auto_replace_description">Use dictionary suggestions to fix likely typos when pressing Space or Enter.</string>
     <string name="auto_correct_max_distance_title">Maximum correction distance</string>
@@ -1873,9 +1874,9 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="flux_focus_picker_description">The emoji picker opens with its search taking your typing. Off: tap the search first.</string>
     <string name="flux_focus_gif_title">GIFs: type to search</string>
     <string name="flux_focus_gif_description">GIF search opens with its search taking your typing. Off: tap the search first.</string>
-    <string name="flux_type_to_search_layer_title">Emoji layer: letters search</string>
+    <string name="flux_type_to_search_layer_title">Emoji layer: type to search</string>
     <string name="flux_type_to_search_layer_description">A letter key on the emoji layer starts emoji search with that letter, instead of typing its emoji. Tapping an emoji on screen still types it.</string>
-    <string name="flux_type_to_search_symbols_title">Symbols pages: letters search</string>
+    <string name="flux_type_to_search_symbols_title">Symbols pages: type to search</string>
     <string name="flux_type_to_search_symbols_description">A letter key on a symbols page starts symbol search with that letter, instead of typing its symbol. Tapping a symbol on screen still types it.</string>
     <string name="gif_section_favourites">Favourites</string>
     <string name="gif_section_recent">Recent</string>

@@ -49,6 +49,10 @@
   ],
   "improvements": [
     {
+      "text": "Settings: \"Type to search\" on the emoji and symbols layers, \"Automatic Shift\", a description of what accent & spelling marks do, and the tutorial's Niagara step switches back to the built-in quick launcher too.",
+      "after": "202609271342"
+    },
+    {
       "text": "The menu bar starts with the everyday buttons: symbols, emoji, GIF, Solderina and keyboard mode are opt-in, and the language button stays hidden while only one language is on.",
       "after": "202609271342"
     },

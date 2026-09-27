@@ -198,10 +198,18 @@ fun FluxTutorialExtrasPageContent(modifier: Modifier = Modifier) {
                     ExtraStep(
                         title = stringResource(R.string.flux_tutorial_extras_niagara_title),
                         text = stringResource(R.string.flux_tutorial_extras_niagara_text),
-                        button = stringResource(if (niagaraOn) R.string.flux_tutorial_extras_on else R.string.flux_tutorial_extras_niagara_button),
-                        enabled = !niagaraOn,
+                        // Switches both ways: Niagara's search, or back to the built-in quick launcher
+                        button = stringResource(
+                            if (niagaraOn) R.string.flux_tutorial_extras_niagara_off_button
+                            else R.string.flux_tutorial_extras_niagara_button
+                        ),
+                        enabled = true,
                         onClick = {
-                            SettingsManager.setQuickLauncherBehavior(context, SettingsManager.QUICK_LAUNCHER_BEHAVIOR_NIAGARA)
+                            SettingsManager.setQuickLauncherBehavior(
+                                context,
+                                if (niagaraOn) SettingsManager.QUICK_LAUNCHER_BEHAVIOR_PASTIERA
+                                else SettingsManager.QUICK_LAUNCHER_BEHAVIOR_NIAGARA
+                            )
                             refresh++
                         }
                     )

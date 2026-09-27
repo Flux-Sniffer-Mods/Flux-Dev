@@ -599,6 +599,7 @@ object SettingLinkRegistry {
         entry(
             SettingLinkIds.AUTO_CORRECTION_ACCENT_MATCHING,
             R.string.auto_correct_accent_matching_title,
+            R.string.auto_correct_accent_matching_description,
             destination = SettingsDestination.AutoCorrection
         ),
         entry(

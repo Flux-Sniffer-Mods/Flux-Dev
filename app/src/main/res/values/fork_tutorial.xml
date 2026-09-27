@@ -62,6 +62,7 @@
     <string name="flux_tutorial_extras_niagara_title">Niagara search as the quick launcher</string>
     <string name="flux_tutorial_extras_niagara_text">The quick launcher opens Niagara\'s search instead of the built-in one, and Back takes you back to your app.</string>
     <string name="flux_tutorial_extras_niagara_button">Use Niagara</string>
+    <string name="flux_tutorial_extras_niagara_off_button">Use the built-in one</string>
     <string name="flux_tutorial_extras_hidden_apps_title">Apps that handle the keyboard themselves</string>
     <string name="flux_tutorial_extras_hidden_apps_text">In apps like Termux:X11, the keyboard can stay out of sight and leave every key to the app. Its status LEDs there need the accessibility service.</string>
     <string name="flux_tutorial_extras_hidden_apps_button">Choose these apps</string>
