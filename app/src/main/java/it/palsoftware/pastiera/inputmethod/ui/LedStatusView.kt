@@ -49,9 +49,12 @@ class LedStatusView(
         internal const val LED_ZONE_HEIGHT_DP = 6.5f
         /** One LED contour per side (Flux Keyboard's Titan 2 Elite layouts) */
         internal const val MERGED_LED_ZONE_HEIGHT_DP = 3.1f
-        /** Contoured LEDs: the rail's thickness, and the clear gap between it and the buttons */
+        /**
+         * Contoured LEDs: the rail's thickness, and the clear gap between it and the buttons, the
+         * same as the straight buttons' lift above their LEDs
+         */
         private const val CONTOUR_LED_STROKE_DP = 1.6f
-        private const val CONTOUR_LED_GAP_DP = 2f
+        private val CONTOUR_LED_GAP_DP = it.palsoftware.pastiera.SettingsManager.TITAN2_ELITE_DEFAULT_LIFT_DP.toFloat()
         /** Space between neighbouring LEDs on the rail, in rail thicknesses */
         private const val CONTOUR_LED_SPACING = 2.5f
 
