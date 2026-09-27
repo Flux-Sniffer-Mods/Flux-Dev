@@ -4299,11 +4299,14 @@ class StatusBarController(
             canvas.drawPath(bottomContour, cornerFillPaint)
             cornerFillPaint.style = Paint.Style.FILL
             // The square corners outside the display curve: the keyboard's colour, not the app
-            // behind it (it shows in screenshots and wherever the calibration is slightly off)
-            val cornerSave = canvas.save()
-            canvas.clipOutPath(path)
-            canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), cornerFillPaint)
-            canvas.restoreToCount(cornerSave)
+            // behind it (it shows in screenshots and wherever the calibration is slightly off).
+            // Not with contoured LEDs, which follow the curve itself.
+            if (!contourIntegratedIndicators) {
+                val cornerSave = canvas.save()
+                canvas.clipOutPath(path)
+                canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), cornerFillPaint)
+                canvas.restoreToCount(cornerSave)
+            }
 
             val contentSave = canvas.save()
             canvas.clipPath(path)
