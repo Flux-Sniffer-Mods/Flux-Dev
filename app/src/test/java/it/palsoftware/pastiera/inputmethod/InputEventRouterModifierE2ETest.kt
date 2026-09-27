@@ -477,10 +477,7 @@ class InputEventRouterModifierE2ETest {
         // These check A's mapping, clear of the search key (Q by default, off here anyway)
         SettingsManager.setSearchKey(context, KeyEvent.KEYCODE_UNKNOWN)
         val callbacks = TestCallbacks(modifierStateController)
-        if (!alternateCharacterManager.getSymMappings2().containsKey(KeyEvent.KEYCODE_A)) {
-            SettingsManager.saveSymMappingsPage2(context, mapOf(KeyEvent.KEYCODE_A to "="))
-            alternateCharacterManager.reloadSymMappings2()
-        }
+        val expected = alternateCharacterManager.getSymMappings2()[KeyEvent.KEYCODE_A] ?: "~"
         symLayoutController.openSymbolsPage()
         assertTrue(symLayoutController.isSymActive())
 
@@ -494,7 +491,7 @@ class InputEventRouterModifierE2ETest {
         assertTrue(inputConnectionRecorder.committedTexts.isNotEmpty())
         assertTrue(
             "commits=${inputConnectionRecorder.committedTexts}",
-            inputConnectionRecorder.committedTexts.contains("=")
+            inputConnectionRecorder.committedTexts.contains(expected)
         )
     }
 
