@@ -45,6 +45,10 @@
   ],
   "improvements": [
     {
+      "text": "Deleting a word with a trackpad swipe is one choice: off, swipe left or swipe down. Left isn't offered while swipe directions pick suggestions.",
+      "after": "202609271150"
+    },
+    {
       "text": "Settings tidied: search options for the pickers have a page of their own, one-tap SYM is with the other modifiers, the emoji key LED is with the LED colours, and the quick launcher is called that everywhere.",
       "after": "202609262118"
     },

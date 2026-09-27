@@ -723,7 +723,6 @@ private val TRACKPAD_SETTING_LINK_IDS = setOf(
     "trackpad.swipe_to_delete",
     "trackpad.swipe_to_delete_provider",
     "trackpad.suggestion_swipe_directions",
-    "trackpad.swipe_down_deletes_word",
     "trackpad.phone_settings",
     SettingLinkIds.TRACKPAD_GESTURES_ENABLED,
     SettingLinkIds.TRACKPAD_PROVIDER,

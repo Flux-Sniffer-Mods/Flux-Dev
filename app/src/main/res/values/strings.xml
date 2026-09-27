@@ -80,8 +80,8 @@
     <string name="clear_alt_on_space_description">End Alt or Alt-Lock when Space is pressed.</string>
     
     <!-- Swipe to Delete Section -->
-    <string name="swipe_to_delete_title">Enable Swipe to Delete</string>
-    <string name="swipe_to_delete_description">Delete the previous word with a left swipe on supported trackpad input.</string>
+    <string name="swipe_to_delete_title">Delete a word with a swipe</string>
+    <string name="swipe_to_delete_description">Which swipe on the trackpad deletes the word before the cursor.</string>
     <string name="swipe_to_delete_provider_title">Swipe to Delete Provider</string>
     <string name="swipe_to_delete_provider_titan2_keycode">Titan 2 keycode workaround</string>
     <string name="swipe_to_delete_provider_native_ime">Native IME events</string>
