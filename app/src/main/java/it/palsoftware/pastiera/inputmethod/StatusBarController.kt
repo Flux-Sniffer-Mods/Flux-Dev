@@ -4438,7 +4438,7 @@ class StatusBarController(
                 (LedStatusView.MERGED_LED_ZONE_HEIGHT_DP * resources.displayMetrics.density).toInt()
             // Lift: a taller LED surface raises the row by the same amount; onLayout keeps the
             // row's bottom that far above the LEDs, leaving them a clear band underneath.
-            nestedRowLiftPx = SettingsManager.getTitan2EliteStatusBarLiftPx(context)
+            nestedRowLiftPx = if (contourIntegratedIndicators) 0 else SettingsManager.getTitan2EliteStatusBarLiftPx(context)
             indicatorView?.layoutParams?.height =
                 maxOf(radius + stripTop, requestedRowHeight + bottomInset) + nestedRowLiftPx
             // A fixed-height row does not honor minimumHeight during measurement.
@@ -4761,7 +4761,12 @@ class StatusBarController(
                 ?.takeIf { it in 0 until childCount }
                 ?: return super.getChildDrawingOrder(childCount, drawingPosition)
 
-            if (contourIntegratedIndicators) {
+            // The LEDs draw above the status bar whenever it nests into the rounded corners, so
+            // straight corner buttons and filled corners never cover them. (The surface is
+            // transparent there; an open SYM or emoji screen keeps the usual order.)
+            val ledsOnTop = contourIntegratedIndicators ||
+                (bottomCornerRadiiPx != null && expandedSurfaceView?.visibility != View.VISIBLE)
+            if (ledsOnTop) {
                 return if (drawingPosition == childCount - 1) {
                     surfaceIndex
                 } else if (drawingPosition < surfaceIndex) {

@@ -60,7 +60,12 @@ class NestedStatusBarGeometryTest {
         assertEquals(row.height, button.height)
         assertTrue(row.bottom > surface.top)
         assertEquals("No unused band may remain below the indicators", chrome.height, surface.bottom)
-        assertEquals((LedStatusView.MERGED_LED_ZONE_HEIGHT_DP * context.resources.displayMetrics.density).toInt(), surface.bottom - row.bottom)
+        // The LED band under the row, plus the straight-buttons lift above it
+        assertEquals(
+            (LedStatusView.MERGED_LED_ZONE_HEIGHT_DP * context.resources.displayMetrics.density).toInt() +
+                it.palsoftware.pastiera.SettingsManager.getTitan2EliteStatusBarLiftPx(context),
+            surface.bottom - row.bottom
+        )
         val nestedHeight = chrome.measuredHeight
         measure()
         assertEquals(nestedHeight, chrome.measuredHeight)

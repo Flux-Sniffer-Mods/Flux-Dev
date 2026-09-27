@@ -49,6 +49,10 @@
   ],
   "improvements": [
     {
+      "text": "Titan 2 Elite: straight corner buttons with filled corners and the 5 dp lift are the default again, contoured LEDs an option, and the LEDs always draw above the bar so the corner buttons never cover them.",
+      "after": "202609271342"
+    },
+    {
       "text": "Titan 2 Elite: one Corner style choice, Contoured LEDs or Straight buttons (which lift the bar a fixed 5 dp). Fill corners switches itself off with contoured LEDs.",
       "after": "202609271321"
     },

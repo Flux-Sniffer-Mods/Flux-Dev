@@ -22,19 +22,18 @@ class Titan2EliteChromeSettingsTest {
     }
 
     @Test
-    fun defaultsKeepTheCurrentLook() {
-        assertFalse(SettingsManager.getTitan2EliteFillCorners(context))
-        assertFalse(SettingsManager.getTitan2EliteStraightOuterButtons(context))
-        assertEquals(0, SettingsManager.getTitan2EliteStatusBarLiftDp(context))
-        assertEquals(0, SettingsManager.getTitan2EliteStatusBarLiftPx(context))
+    fun straightButtonsAreTheDefault() {
+        assertFalse(SettingsManager.getTitan2EliteContourLeds(context))
+        assertTrue(SettingsManager.getTitan2EliteStraightOuterButtons(context))
+        assertEquals(SettingsManager.TITAN2_ELITE_DEFAULT_LIFT_DP, SettingsManager.getTitan2EliteStatusBarLiftDp(context))
     }
 
     @Test
     fun fillCornersIsStoredAndOffWhileContoured() {
         SettingsManager.setTitan2EliteFillCorners(context, true)
-        assertFalse(SettingsManager.getTitan2EliteFillCorners(context))
-        SettingsManager.setTitan2EliteContourLeds(context, false)
         assertTrue(SettingsManager.getTitan2EliteFillCorners(context))
+        SettingsManager.setTitan2EliteContourLeds(context, true)
+        assertFalse(SettingsManager.getTitan2EliteFillCorners(context))
     }
 
     @Test

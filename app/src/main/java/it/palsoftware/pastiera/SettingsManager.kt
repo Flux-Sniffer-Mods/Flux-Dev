@@ -1561,13 +1561,13 @@ object SettingsManager {
     }
 
     /**
-     * Titan 2 Elite corner style. Contoured LEDs (true, the default): the outer
+     * Titan 2 Elite corner style. Contoured LEDs (true): the outer
      * buttons follow the display curve and one LED rail runs round it beneath them. Straight
-     * buttons (false): the outer buttons reach straight down into the corners, and the bar is
+     * buttons (false, the default): the outer buttons reach straight down into the corners, and the bar is
      * lifted [TITAN2_ELITE_DEFAULT_LIFT_DP] above the LEDs running along the corners.
      */
     fun getTitan2EliteContourLeds(context: Context): Boolean =
-        getPreferences(context).getBoolean(KEY_TITAN2_ELITE_CONTOUR_LEDS, true)
+        getPreferences(context).getBoolean(KEY_TITAN2_ELITE_CONTOUR_LEDS, false)
 
     fun setTitan2EliteContourLeds(context: Context, enabled: Boolean) {
         getPreferences(context).edit().putBoolean(KEY_TITAN2_ELITE_CONTOUR_LEDS, enabled).apply()

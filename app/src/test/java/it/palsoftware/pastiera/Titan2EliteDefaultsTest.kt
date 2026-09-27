@@ -37,23 +37,23 @@ class Titan2EliteDefaultsTest {
             product = "titan2elite_qwerty"
         )
         assertTrue(SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context))
-        // Contoured LEDs: rounded buttons, no lift, corners not filled
-        assertTrue(SettingsManager.getTitan2EliteContourLeds(context))
-        assertFalse(SettingsManager.getTitan2EliteFillCorners(context))
-        assertFalse(SettingsManager.getTitan2EliteStraightOuterButtons(context))
-        assertEquals(0, SettingsManager.getTitan2EliteStatusBarLiftDp(context))
-
-        // Straight buttons: filled corners (on by default here) and the fixed 5 dp lift
-        SettingsManager.setTitan2EliteContourLeds(context, false)
+        // Straight buttons by default: filled corners and the fixed 5 dp lift
+        assertFalse(SettingsManager.getTitan2EliteContourLeds(context))
         assertTrue(SettingsManager.getTitan2EliteFillCorners(context))
         assertTrue(SettingsManager.getTitan2EliteStraightOuterButtons(context))
         assertEquals(5, SettingsManager.getTitan2EliteStatusBarLiftDp(context))
-    }
 
-    @Test
-    fun otherPhonesKeepThemOff() {
+        // Contoured LEDs: rounded buttons, no lift, corners not filled
+        SettingsManager.setTitan2EliteContourLeds(context, true)
         assertFalse(SettingsManager.getTitan2EliteFillCorners(context))
         assertFalse(SettingsManager.getTitan2EliteStraightOuterButtons(context))
         assertEquals(0, SettingsManager.getTitan2EliteStatusBarLiftDp(context))
+    }
+
+    @Test
+    fun otherPhonesDontFillCorners() {
+        // The corner style only matters once rounded corners are on, which they aren't here
+        assertFalse(SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context))
+        assertFalse(SettingsManager.getTitan2EliteFillCorners(context))
     }
 }
