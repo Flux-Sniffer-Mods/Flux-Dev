@@ -100,8 +100,8 @@ Keyboard, then uninstall Pastiera Flux.
 - Builds never delete earlier ones, and run one at a time.
 - `tools/find-keyboard-gesture-page.sh` (as root from Termux, with the page open) prints which screen a phone's keyboard gesture settings are.
 
-Pastiera's own release, nightly, F-Droid and signing workflows remain in the repository from
-upstream but need Pastiera's secrets and aren't used for Flux Keyboard.
+Pastiera's release, nightly and CI workflows aren't kept: Flux Keyboard builds only with
+`fork-build.yml`. When Pastiera changes them, a merge keeps them deleted.
 
 ## Contributing
 
