@@ -4,6 +4,10 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "After an update, Flux Keyboard offers any recommended settings that differ from yours, listing each one from what you have to what's recommended, with Apply all or Keep mine. Looks are never touched.",
+      "after": "202609271342"
+    },
+    {
       "text": "Ctrl + Shift + D adds the last word you typed to the dictionary, and the suggestions' “add to dictionary” can be switched off (Auto-correction > Dictionary).",
       "after": "202609271321"
     },

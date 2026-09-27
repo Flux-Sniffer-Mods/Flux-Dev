@@ -31,7 +31,12 @@ object RecommendedSettings {
         "led_locked_animation" to true,
         // :shortcodes: expand with Enter, or with Space on an exact match
         "emoji_symbols_accept_with_enter" to true,
-        "emoji_symbols_exact_on_space" to true
+        "emoji_symbols_exact_on_space" to true,
+        // Alt+Shift switches layout; automatic Shift in text, names, addresses and search
+        "alt_shift_layout_switch" to true,
+        "auto_shift_field_types" to "addresses,names,search,text",
+        // New words are added on purpose (Ctrl+Shift+D), not from a chip in the suggestions
+        "show_add_word_suggestion" to false
     )
 
     /** On the Titan 2 Elite: its trackpad swipes and the compact bar fitted to its screen. */
@@ -41,6 +46,14 @@ object RecommendedSettings {
         "trackpad_suggestion_swipe_directions" to true,
         "trackpad_swipe_down_deletes_word" to true,
         "swipe_to_delete" to false,
+        // Swipes pick the suggestions, so no Ctrl shortcuts for them, and no adding words by gesture
+        "suggestion_keys" to "off",
+        "trackpad_gesture_add_word_enabled" to false,
+        "trackpad_gesture_add_word_full_width_enabled" to false,
+        // A flick across one key
+        "trackpad_suggestion_swipe_threshold" to 120f,
+        "trackpad_side_swipe_threshold" to 120f,
+        "trackpad_delete_swipe_threshold" to 120f,
         "pastierina_mode_override" to "pastierina",
         "pastierina_status_bar_slots_left" to "[\"microphone\"]",
         "pastierina_status_bar_slots_right" to "[\"hamburger\"]"
@@ -73,8 +86,34 @@ object RecommendedSettings {
     }
 
     /** How many of the recommended settings you have set differently, or not at all. */
-    fun differingSettings(context: Context): Int {
+    fun differingSettings(context: Context): Int = changes(context).size
+
+    /** A recommended setting you have set differently: [from] is null while it's still unset. */
+    data class Change(val key: String, val from: Any?, val to: Any)
+
+    /** What applying would change, setting by setting. */
+    fun changes(context: Context): List<Change> {
         val current = SettingsManager.getPreferences(context).all
-        return values().count { (key, value) -> current[key] != value }
+        return values().mapNotNull { (key, value) ->
+            val now = current[key]
+            val same = now == value || (now is Number && value is Number && now.toFloat() == value.toFloat())
+            if (same) null else Change(key, now, value)
+        }
+    }
+
+    private const val PREF_PROMPTED_VERSION = "recommended_settings_prompted_version"
+
+    /**
+     * After an update: whether to offer the recommended settings that differ, once per version
+     * (a fresh install already has them).
+     */
+    fun shouldOfferAfterUpdate(context: Context, version: String): Boolean {
+        val prefs = SettingsManager.getPreferences(context)
+        if (prefs.getString(PREF_PROMPTED_VERSION, null) == version) return false
+        return changes(context).isNotEmpty()
+    }
+
+    fun markOffered(context: Context, version: String) {
+        SettingsManager.getPreferences(context).edit().putString(PREF_PROMPTED_VERSION, version).apply()
     }
 }
