@@ -110,6 +110,7 @@ fun AdvancedSettingsScreen(
     }
     var developerOptions by remember { mutableStateOf(SettingsManager.getDeveloperOptionsEnabled(context)) }
     var pasteSuggestion by remember { mutableStateOf(SettingsManager.getPasteSuggestionEnabled(context)) }
+    var pasteInPasswordFields by remember { mutableStateOf(SettingsManager.getPasteSuggestionInPasswordFields(context)) }
     var oneTimeCodes by remember { mutableStateOf(SettingsManager.getOneTimeCodesEnabled(context)) }
     // Notification access, re-read when coming back from Android's settings
     var notificationAccess by remember { mutableStateOf(SettingsManager.hasNotificationAccess(context)) }
@@ -352,6 +353,18 @@ fun AdvancedSettingsScreen(
                                 SettingsManager.setPasteSuggestionEnabled(context, it)
                             }
                         )
+                        if (pasteSuggestion) {
+                            FluxSwitchRow(
+                                linkId = SettingLinkIds.PRIVACY_PASTE_IN_PASSWORD_FIELDS,
+                                title = stringResource(R.string.paste_in_password_fields_title),
+                                description = stringResource(R.string.paste_in_password_fields_description),
+                                checked = pasteInPasswordFields,
+                                onCheckedChange = {
+                                    pasteInPasswordFields = it
+                                    SettingsManager.setPasteSuggestionInPasswordFields(context, it)
+                                }
+                            )
+                        }
                         FluxSwitchRow(
                             linkId = SettingLinkIds.PRIVACY_ONE_TIME_CODES,
                             title = stringResource(R.string.one_time_codes_title),

@@ -71,6 +71,7 @@ object SettingsManager {
     private const val KEY_DEVELOPER_OPTIONS_ENABLED = "developer_options_enabled"
     private const val KEY_INCOGNITO_ALWAYS = "incognito_always"
     private const val KEY_PASTE_SUGGESTION = "paste_suggestion_enabled"
+    private const val KEY_PASTE_SUGGESTION_PASSWORD_FIELDS = "paste_suggestion_password_fields"
     private const val KEY_LANGUAGE_PER_APP = "language_per_app_enabled"
     private const val KEY_KEYBOARD_WALLPAPER_COLOURS = "keyboard_theme_wallpaper_colours"
     private const val KEY_ONE_TIME_CODES = "one_time_codes_enabled"
@@ -3052,6 +3053,14 @@ object SettingsManager {
 
     fun setPasteSuggestionEnabled(context: Context, enabled: Boolean) {
         getPreferences(context).edit().putBoolean(KEY_PASTE_SUGGESTION, enabled).apply()
+    }
+
+    /** The paste suggestion in password fields too, masked (a password you just copied). */
+    fun getPasteSuggestionInPasswordFields(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_PASTE_SUGGESTION_PASSWORD_FIELDS, true)
+
+    fun setPasteSuggestionInPasswordFields(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_PASTE_SUGGESTION_PASSWORD_FIELDS, enabled).apply()
     }
 
     /** Incognito typing everywhere: Pastiera learns nothing from what you type. */

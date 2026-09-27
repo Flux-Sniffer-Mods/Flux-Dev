@@ -30,7 +30,7 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 - **Shift+Backspace deletes forwards**: with Shift held, Backspace deletes the character after the cursor.
 - **Backspace undoes an auto-replace** and keeps the space after it; text replacements can be undone with auto-replace off too.
 - **Automatic Shift by field type**: choose which kinds of text field start with a capital (text, names and addresses by default; search, links and email addresses off). A kind that's off gets no automatic Shift, even when an app asks for capitals.
-- **Paste suggestion**: what you just copied, offered in the next text field.
+- **Paste suggestion**: what you just copied, offered in the next text field. In a password field it's offered as ⎘ •••••••• (never the text itself), including a password you copied from a password manager; those stay in memory only and never go into the clipboard history.
 - **Clean pasted links**: pasted links lose tracking (utm_, fbclid, si…) and open the full site rather than the mobile one.
 - **Emoji suggestions**: an emoji for the word you're typing.
 - **Exact typing** (Apps): in the apps you pick (SSH clients, code editors, AI agents) nothing rewrites what you type: no auto-correct, text replacements, auto-capitals, double-space full stop or automatic spaces. Optionally also wherever an app itself asks for no suggestions.

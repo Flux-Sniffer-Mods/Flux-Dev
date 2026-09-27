@@ -4,6 +4,10 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "Password fields offer the password you just copied as ⎘ •••••••• (never the text itself), from a password manager too.",
+      "after": "202609262118"
+    },
+    {
       "text": "Edit keyboard layouts in the app: tap a key to change what it types, then save, restore, copy or export the layout.",
       "after": "202609261444"
     },
@@ -144,6 +148,10 @@
     "Safer backups (themes and typing sounds included) and many fixes, from Telegram suggestions to Firefox accents."
   ],
   "bugFixes": [
+    {
+      "text": "Passwords copied from a password manager no longer go into the clipboard history.",
+      "after": "202609262118"
+    },
     {
       "text": "Phone trackpad settings search for \"Keybord gesture\", as Unihertz spells the page.",
       "after": "202609262118"

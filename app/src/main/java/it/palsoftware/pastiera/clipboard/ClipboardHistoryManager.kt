@@ -59,8 +59,14 @@ class ClipboardHistoryManager internal constructor(
         accessStateListeners.clear()
     }
 
-    /** The last text copied while Pastiera was listening, for the paste suggestion. */
-    data class RecentCopy(val timestamp: Long, val text: String)
+    /**
+     * The last text copied while Pastiera was listening, for the paste suggestion. [sensitive]:
+     * marked so by the app it came from (a password manager); kept in memory only and offered
+     * only in password fields, masked.
+     */
+    data class RecentCopy(val timestamp: Long, val text: String, val sensitive: Boolean = false) {
+        override fun toString() = "RecentCopy(timestamp=$timestamp, sensitive=$sensitive)"
+    }
 
     @Volatile
     var recentCopy: RecentCopy? = null
@@ -81,11 +87,10 @@ class ClipboardHistoryManager internal constructor(
         recentCopy = null
         val clipData = runCatching { clipboardManager.primaryClip }.getOrNull() ?: return
         if (clipData.itemCount == 0 || clipData.description?.hasMimeType("text/*") == false) return
-        // Passwords and codes copied from password managers are never suggested
-        if (clipData.description?.extras?.getBoolean("android.content.extra.IS_SENSITIVE") == true) return
         val text = clipData.getItemAt(0)?.coerceToText(context)?.toString()
         if (text.isNullOrBlank()) return
-        recentCopy = RecentCopy(System.currentTimeMillis(), text)
+        // Passwords and codes copied from password managers: only for password fields, masked
+        recentCopy = RecentCopy(System.currentTimeMillis(), text, sensitive = isSensitive(clipData))
     }
 
     private fun fetchPrimaryClip() {
@@ -94,6 +99,9 @@ class ClipboardHistoryManager internal constructor(
         if (clipData.itemCount == 0 || clipData.description?.hasMimeType("text/*") == false) {
             return
         }
+
+        // Passwords and codes copied from password managers never go into the history
+        if (isSensitive(clipData)) return
 
         clipData.getItemAt(0)?.let { clipItem ->
             val timeStamp = System.currentTimeMillis() // TODO: Get actual clip timestamp if available
@@ -105,6 +113,9 @@ class ClipboardHistoryManager internal constructor(
             clipboardDao?.addClip(timeStamp, false, content.toString(), retentionMinutes)
         }
     }
+
+    private fun isSensitive(clipData: android.content.ClipData): Boolean =
+        clipData.description?.extras?.getBoolean(SENSITIVE_EXTRA) == true
 
     fun toggleClipPinned(id: Long) {
         if (!isHistoryAccessible()) return
@@ -255,5 +266,7 @@ class ClipboardHistoryManager internal constructor(
 
     companion object {
         private const val TAG = "ClipboardHistoryManager"
+        // ClipDescription.EXTRA_IS_SENSITIVE (Android 13), set by password managers and read on every version
+        private const val SENSITIVE_EXTRA = "android.content.extra.IS_SENSITIVE"
     }
 }

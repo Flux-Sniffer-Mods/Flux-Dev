@@ -21,4 +21,9 @@ class PasteSuggestionTest {
         assertEquals("\u2398 " + "a".repeat(19) + "🇬🇧…", PasteSuggestion.label("a".repeat(19) + "🇬🇧🇬🇧"))
         assertEquals("\u2398 " + "a".repeat(21) + "…", PasteSuggestion.label("a".repeat(21) + "🇬🇧🇬🇧"))
     }
+
+    @Test
+    fun thePasswordFieldLabelGivesNothingAway() {
+        assertEquals("\u2398 \u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022", PasteSuggestion.MASKED_LABEL)
+    }
 }

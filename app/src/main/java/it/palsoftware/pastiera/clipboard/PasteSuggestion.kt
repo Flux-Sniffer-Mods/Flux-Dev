@@ -4,6 +4,12 @@ package it.palsoftware.pastiera.clipboard
 object PasteSuggestion {
     private const val MAX_LABEL_LENGTH = 24
 
+    /**
+     * The chip's label in a password field: masked, and always the same length so it doesn't
+     * give away how long the copied text is.
+     */
+    const val MASKED_LABEL = "\u2398 \u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
+
     fun label(text: String): String {
         val oneLine = text.trim().replace(Regex("\\s+"), " ")
         val shown = if (oneLine.length > MAX_LABEL_LENGTH) oneLine.substring(0, cutBefore(oneLine, MAX_LABEL_LENGTH - 1)).trimEnd() + "…" else oneLine

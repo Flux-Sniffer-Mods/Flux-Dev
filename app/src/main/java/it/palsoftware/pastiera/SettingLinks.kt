@@ -43,6 +43,7 @@ object SettingLinkIds {
     const val PRIVACY_INCOGNITO_ALWAYS = "privacy.incognito_always"
     const val PRIVACY_PASTE_SUGGESTION = "privacy.paste_suggestion"
     const val PRIVACY_ONE_TIME_CODES = "privacy.one_time_codes"
+    const val PRIVACY_PASTE_IN_PASSWORD_FIELDS = "privacy.paste_in_password_fields"
     const val PRIVACY_CLEAN_LINKS = "privacy.clean_links"
     const val PRIVACY_INCOGNITO_FOLLOW_APPS = "privacy.incognito_follow_apps"
     const val TERMINAL_MODE_ENABLED = "terminal_mode.enabled"

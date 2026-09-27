@@ -4918,14 +4918,19 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (!::clipboardHistoryManager.isInitialized || !::candidatesBarController.isInitialized) return
         if (!SettingsManager.getPasteSuggestionEnabled(this)) return
         val state = inputContextState
-        if (!state.isReallyEditable || state.isPasswordField || terminalModeActive || keyboardHiddenForApp) return
+        if (!state.isReallyEditable || terminalModeActive || keyboardHiddenForApp) return
+        val passwordField = state.isPasswordField
+        if (passwordField && !SettingsManager.getPasteSuggestionInPasswordFields(this)) return
         val copy = clipboardHistoryManager.recentCopy ?: return
         if (System.currentTimeMillis() - copy.timestamp > PASTE_SUGGESTION_WINDOW_MS) return
-        val label = PasteSuggestion.label(copy.text)
+        // A password manager's copy only goes into password fields
+        if (copy.sensitive && !passwordField) return
+        // In a password field the chip never shows the text, and it's pasted exactly as copied
+        val label = if (passwordField) PasteSuggestion.MASKED_LABEL else PasteSuggestion.label(copy.text)
         pasteSuggestionShown = true
         candidatesBarController.showExpansionSuggestions(listOf(label)) { _ ->
             clearPasteSuggestion()
-            currentInputConnection?.commitText(SettingsManager.textToPaste(this, copy.text), 1)
+            currentInputConnection?.commitText(if (passwordField) copy.text else SettingsManager.textToPaste(this, copy.text), 1)
             clipboardHistoryManager.consumeRecentCopy()
             updateStatusBarText()
         }
