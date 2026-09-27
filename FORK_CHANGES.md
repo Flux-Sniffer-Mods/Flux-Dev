@@ -27,7 +27,7 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 - **One-time codes**: a code from a notification (sign-in, bank, delivery) is offered as a chip in the next text field for three minutes, and not again once typed. Off until you give it notification access.
 - **Pick suggestions from the keyboard**: Ctrl+Shift+Q, W or E takes the left, middle or right suggestion (Ctrl+1/2/3 on keyboards with a number row). Either Shift works, including Right Shift while it's the emoji key.
 - **Trackpad swipes**: optionally, swipe left, up or right anywhere on the trackpad for the left, middle or right suggestion, and swipe down to delete the previous word. Short and slanted swipes count, whichever way they mostly go. Left and right swipes have their own sensitivity.
-- **Shift+Backspace deletes forwards**: with Shift held, Backspace deletes the character after the cursor.
+- **Shift + Backspace deletes forwards** on the Titan too (the setting now sees a held Shift).
 - **Backspace undoes an auto-replace** and keeps the space after it; text replacements can be undone with auto-replace off too.
 - **Automatic Shift by field type**: choose which kinds of text field start with a capital (text, names and addresses by default; search, links and email addresses off). A kind that's off gets no automatic Shift, even when an app asks for capitals.
 - **Paste suggestion**: what you just copied, offered in the next text field. In a password field it's offered as ⎘ •••••••• (never the text itself), including a password you copied from a password manager; those stay in memory only and never go into the clipboard history.

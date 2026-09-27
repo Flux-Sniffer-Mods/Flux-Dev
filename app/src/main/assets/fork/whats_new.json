@@ -57,7 +57,7 @@
       "after": "202609262118"
     },
     {
-      "text": "Hold Shift and press Backspace to delete the character after the cursor.",
+      "text": "Shift + Backspace (Settings > Typing > Editing keys) deletes the character after the cursor on the Titan too: it now sees a held Shift.",
       "after": "202609262118"
     },
     {

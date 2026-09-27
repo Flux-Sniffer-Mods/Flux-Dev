@@ -5414,9 +5414,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             typingSoundPlayer.play(keyCode)
         }
 
-        // Shift+Backspace deletes the character after the cursor. Only a held Shift: an automatic
-        // capital or a tapped Shift leaves Backspace as it is. A selection is deleted as usual.
+        // Shift + Backspace (Text input > Shift + Backspace) deletes the character after the
+        // cursor. Only a held Shift, which the key event itself may not report on the Titan: an
+        // automatic capital or a tapped Shift leaves Backspace as it is. A selection is deleted as usual.
         if (keyCode == KeyEvent.KEYCODE_DEL && hasEditableField && symPage == 0 && !terminalModeActive &&
+            SettingsManager.getShiftBackspaceDelete(this) &&
             (shiftPhysicallyPressed || event?.isShiftPressed == true) &&
             event?.isCtrlPressed != true && event?.isAltPressed != true
         ) {

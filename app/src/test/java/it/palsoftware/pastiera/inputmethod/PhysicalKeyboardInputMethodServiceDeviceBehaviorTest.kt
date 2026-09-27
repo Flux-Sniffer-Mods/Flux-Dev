@@ -1269,6 +1269,7 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
 
     @Test
     fun shiftHeldWithBackspace_deletesTheCharacterAfterTheCursor() {
+        SettingsManager.setShiftBackspaceDelete(RuntimeEnvironment.getApplication(), true)
         recorder.textBeforeCursor = "abc"
         val shiftMeta = KeyEvent.META_SHIFT_ON or KeyEvent.META_SHIFT_LEFT_ON
         service.onKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT, 40_000L, 40_000L, shiftMeta))
@@ -1282,7 +1283,19 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
     }
 
     @Test
+    fun shiftHeldWithBackspace_deletesBackwardsWhenTheSettingIsOff() {
+        SettingsManager.setShiftBackspaceDelete(RuntimeEnvironment.getApplication(), false)
+        recorder.textBeforeCursor = "abc"
+        val shiftMeta = KeyEvent.META_SHIFT_ON or KeyEvent.META_SHIFT_LEFT_ON
+        service.onKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT, 42_000L, 42_000L, shiftMeta))
+        service.onKeyDown(KeyEvent.KEYCODE_DEL, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL, 42_050L, 42_050L, shiftMeta))
+
+        assertTrue(recorder.forwardDeletes.isEmpty())
+    }
+
+    @Test
     fun backspaceAfterATappedShift_stillDeletesBackwards() {
+        SettingsManager.setShiftBackspaceDelete(RuntimeEnvironment.getApplication(), true)
         recorder.textBeforeCursor = "abc"
         tapShift(41_000L)
         pressKey(KeyEvent.KEYCODE_DEL, 41_100L)
