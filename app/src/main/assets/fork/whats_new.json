@@ -49,6 +49,10 @@
   ],
   "improvements": [
     {
+      "text": "The quick launcher finds app actions, device controls and navigation actions by default, and in terminal mode the emoji key is Alt until you choose otherwise.",
+      "after": "202609271342"
+    },
+    {
       "text": "Symbols is the only SYM layer until you turn on others: the emoji and device layers start off, and the search key moves to Q with Recents on A.",
       "after": "202609271342"
     },

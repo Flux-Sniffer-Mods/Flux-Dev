@@ -491,7 +491,8 @@ class SettingsManagerLayoutSwitchTest {
             registry.getCommands(CommandSurface.NavMode)
                 .any { it.id == "device.home" && it.source == CommandSourceId.DeviceControl }
         )
-        assertFalse(
+        // Device control shows in the quick launcher by default
+        assertTrue(
             registry.getCommands(CommandSurface.QuickLauncher)
                 .any { it.id == "device.home" }
         )
@@ -720,6 +721,13 @@ class SettingsManagerLayoutSwitchTest {
         assertTrue(SettingsManager.isCommandSourceEnabled(context, CommandSourceId.Apps.storageValue, CommandSurface.NavMode))
         assertTrue(SettingsManager.isCommandSourceEnabled(context, CommandSourceId.Pastiera.storageValue, CommandSurface.QuickLauncher))
         assertTrue(SettingsManager.isCommandSourceEnabled(context, CommandSourceId.DeviceControl.storageValue, CommandSurface.AssignedKey))
+        assertTrue(SettingsManager.isCommandSourceEnabled(context, CommandSourceId.DeviceControl.storageValue, CommandSurface.QuickLauncher))
+        assertTrue(SettingsManager.isCommandSourceEnabled(context, CommandSourceId.DeviceControl.storageValue, CommandSurface.NavMode))
+        // Turned off, a source only leaves the quick launcher's search
+        SettingsManager.setCommandSourceVisibility(
+            context,
+            listOf(SettingsManager.CommandSourceVisibility(CommandSourceId.DeviceControl.storageValue, quickLauncherEnabled = false))
+        )
         assertFalse(SettingsManager.isCommandSourceEnabled(context, CommandSourceId.DeviceControl.storageValue, CommandSurface.QuickLauncher))
         assertTrue(SettingsManager.isCommandSourceEnabled(context, CommandSourceId.DeviceControl.storageValue, CommandSurface.NavMode))
     }

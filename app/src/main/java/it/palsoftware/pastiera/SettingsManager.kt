@@ -4254,9 +4254,9 @@ object SettingsManager {
         return listOf(
             CommandSourceVisibility(CommandSourceId.Apps.storageValue, quickLauncherEnabled = true),
             CommandSourceVisibility(CommandSourceId.Pastiera.storageValue, quickLauncherEnabled = true),
-            CommandSourceVisibility(CommandSourceId.AppActions.storageValue, quickLauncherEnabled = false),
-            CommandSourceVisibility(CommandSourceId.DeviceControl.storageValue, quickLauncherEnabled = false),
-            CommandSourceVisibility(CommandSourceId.NavActions.storageValue, quickLauncherEnabled = false)
+            CommandSourceVisibility(CommandSourceId.AppActions.storageValue, quickLauncherEnabled = true),
+            CommandSourceVisibility(CommandSourceId.DeviceControl.storageValue, quickLauncherEnabled = true),
+            CommandSourceVisibility(CommandSourceId.NavActions.storageValue, quickLauncherEnabled = true)
         )
     }
 
@@ -5651,9 +5651,9 @@ object SettingsManager {
         getPreferences(context).edit().putBoolean(KEY_TERMINAL_MODE_HIDE_KEYBOARD, enabled).apply()
     }
 
-    /** What the emoji key does in terminal mode, a TerminalMode.EmojiKeyAction id. */
+    /** What the emoji key does in terminal mode, a TerminalMode.EmojiKeyAction id (Alt until chosen). */
     fun getTerminalModeEmojiKeyAction(context: Context): String =
-        getPreferences(context).getString(KEY_TERMINAL_MODE_EMOJI_KEY, "emoji_picker") ?: "emoji_picker"
+        getPreferences(context).getString(KEY_TERMINAL_MODE_EMOJI_KEY, "alt") ?: "alt"
 
     fun setTerminalModeEmojiKeyAction(context: Context, id: String) {
         getPreferences(context).edit().putString(KEY_TERMINAL_MODE_EMOJI_KEY, id).apply()
