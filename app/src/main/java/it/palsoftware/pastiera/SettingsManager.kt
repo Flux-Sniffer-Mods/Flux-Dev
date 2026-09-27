@@ -472,8 +472,7 @@ object SettingsManager {
     private const val DEFAULT_TRACKPAD_GESTURE_ADD_WORD_ENABLED = true
     private const val DEFAULT_TRACKPAD_GESTURE_ADD_WORD_FULL_WIDTH_ENABLED = true
     private const val DEFAULT_TRACKPAD_SWIPE_THRESHOLD = 500f
-    private const val DEFAULT_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD = DEFAULT_TRACKPAD_SWIPE_THRESHOLD
-    private const val DEFAULT_TRACKPAD_DELETE_SWIPE_THRESHOLD = DEFAULT_TRACKPAD_SWIPE_THRESHOLD
+    private const val TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD = 230f
     private const val MIN_TRACKPAD_SWIPE_THRESHOLD = 120f
     private const val MAX_TRACKPAD_SWIPE_THRESHOLD = 750f
     const val TRACKPAD_PROVIDER_SHIZUKU = "shizuku"
@@ -6165,7 +6164,7 @@ object SettingsManager {
      * Returns the swipe threshold for trackpad gestures.
      */
     fun getTrackpadSwipeThreshold(context: Context): Float {
-        return getPreferences(context).getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, DEFAULT_TRACKPAD_SWIPE_THRESHOLD)
+        return getPreferences(context).getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, defaultTrackpadSwipeThreshold())
             .coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
     }
 
@@ -6182,13 +6181,22 @@ object SettingsManager {
 
     fun getMinTrackpadSwipeThreshold(): Float = MIN_TRACKPAD_SWIPE_THRESHOLD
     fun getMaxTrackpadSwipeThreshold(): Float = MAX_TRACKPAD_SWIPE_THRESHOLD
-    fun getDefaultTrackpadSwipeThreshold(): Float = DEFAULT_TRACKPAD_SWIPE_THRESHOLD
+    fun getDefaultTrackpadSwipeThreshold(): Float = defaultTrackpadSwipeThreshold()
+
+    /**
+     * How far a trackpad swipe goes until set. The Titan 2 Elite's touch layer is about 750
+     * points tall and a natural flick covers about 300, so 500 (two thirds of it) missed most
+     * swipes there; 230 suits it.
+     */
+    private fun defaultTrackpadSwipeThreshold(): Float =
+        if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice()) TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD
+        else DEFAULT_TRACKPAD_SWIPE_THRESHOLD
 
     fun getTrackpadSuggestionSwipeThreshold(context: Context): Float {
         val prefs = getPreferences(context)
         return prefs.getFloat(
             KEY_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD,
-            prefs.getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, DEFAULT_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD)
+            prefs.getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, defaultTrackpadSwipeThreshold())
         ).coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
     }
 
@@ -6201,11 +6209,16 @@ object SettingsManager {
 
     /**
      * How far a left or right swipe goes to take the left or right suggestion (Swipe
-     * directions). Until set, 60% of the suggestion swipe, as before it had a setting.
+     * directions). Until set: 230 on the Titan 2 Elite, elsewhere 60% of the suggestion swipe.
      */
     fun getTrackpadSideSwipeThreshold(context: Context): Float {
         val prefs = getPreferences(context)
-        return prefs.getFloat(KEY_TRACKPAD_SIDE_SWIPE_THRESHOLD, getTrackpadSuggestionSwipeThreshold(context) * 0.6f)
+        val fallback = if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice()) {
+            TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD
+        } else {
+            getTrackpadSuggestionSwipeThreshold(context) * 0.6f
+        }
+        return prefs.getFloat(KEY_TRACKPAD_SIDE_SWIPE_THRESHOLD, fallback)
             .coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
     }
 
@@ -6219,7 +6232,7 @@ object SettingsManager {
         val prefs = getPreferences(context)
         return prefs.getFloat(
             KEY_TRACKPAD_DELETE_SWIPE_THRESHOLD,
-            prefs.getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, DEFAULT_TRACKPAD_DELETE_SWIPE_THRESHOLD)
+            prefs.getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, defaultTrackpadSwipeThreshold())
         ).coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
     }
 
