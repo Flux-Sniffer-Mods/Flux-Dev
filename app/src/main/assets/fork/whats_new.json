@@ -41,6 +41,10 @@
   ],
   "improvements": [
     {
+      "text": "The emoji key's LED is pink and SYM's a deeper purple by default.",
+      "after": "202609262118"
+    },
+    {
       "text": "Hold Shift and press Backspace to delete the character after the cursor.",
       "after": "202609262118"
     },
