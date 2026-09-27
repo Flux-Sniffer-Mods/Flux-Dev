@@ -50,7 +50,7 @@
     <string name="flux_tutorial_extras_hidden_apps_title">Apps that handle the keyboard themselves</string>
     <string name="flux_tutorial_extras_hidden_apps_text">In apps like Termux:X11, the keyboard can stay out of sight and leave every key to the app. Its status LEDs there need the accessibility service.</string>
     <string name="flux_tutorial_extras_hidden_apps_button">Choose these apps</string>
-    <string name="flux_tutorial_emoji_bullet_sticky">Tap SYM or the emoji key once and the next key types its symbol or emoji, without opening a screen (turn it on in Emoji, symbols &amp; GIFs).</string>
+    <string name="flux_tutorial_emoji_bullet_sticky">Tap SYM or the emoji key once and the next key types its symbol or emoji, without opening a screen (turn them on in Modifiers &amp; SYM and in Emoji, symbols &amp; GIFs).</string>
     <string name="flux_tutorial_typing_bullet_swipes">On the trackpad, swipe left, up or right to pick a suggestion, and down to delete a word (Trackpad gestures).</string>
     <string name="flux_tutorial_typing_bullet_shift">Choose which kinds of text field start with a capital: messages, names and addresses by default.</string>
     <string name="flux_tutorial_typing_bullet_language">Each app can keep the language you last typed in there.</string>

@@ -56,7 +56,7 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 - **Terminal mode**: Termux gets the keyboard's Alt and SYM, a real Ctrl, a hidden keyboard and a choice of what the emoji key sends, including Alt.
 - **Enter per app** gets standards by app category (chat apps use your messaging preset, email apps send with Ctrl+Enter), next to App shortcuts.
 - **Hidden-keyboard apps** (Niagara Launcher by default; Termux:X11 and others from the tutorial), with LEDs and panels per app. SYM chords reach the keyboard there, so SYM + Space opens the quick launcher instead of the symbols panel.
-- The **QuickLauncher** opens from other apps (key mappers, Tasker) and the app icon.
+- The **quick launcher** opens from other apps (key mappers, Tasker) and the app icon.
 - **Linux desktop** keyboard layout from the keyboard's Alt map and SYM page.
 
 ## Titan 2 Elite, status bar and LEDs
@@ -65,7 +65,7 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 - A status bar fitted to the rounded display: filled corners, straight outer buttons, a 5 dp lift above the LEDs, and room around the SYM screens.
 - Every Titan 2 Elite setting on one screen, and a **phone trackpad settings** shortcut (also a quick launcher command) to the phone's Keybord gesture page (Unihertz's spelling), or Settings search with it ready to paste.
 - **Per-LED colours**, a clear active-to-locked jump and an optional sweeping gradient when locked, set from one table with Off, Active and Locked columns.
-- **SYM's LED** is lit while SYM is held and locked while it's tapped for one symbol or the symbols are open. A **fifth LED** does the same for the emoji key (on by default, off in Settings); all five LEDs share the width equally.
+- **SYM's LED** is lit while SYM is held and locked while it's tapped for one symbol or the symbols are open. A **fifth LED** does the same for the emoji key (on by default; Look & sound > Status LED colours); all five LEDs share the width equally.
 - **Wallpaper colours** (option): the keyboard takes its colours from your wallpaper.
 - A **customisable menu bar** (which buttons, in what order) with a GIF button.
 

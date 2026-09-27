@@ -478,7 +478,7 @@
     <string name="clicks_cursor_mode_title">Cursor Mode</string>
     <string name="clicks_cursor_mode_description">Enable the keyboard firmware’s cursor navigation mode.</string>
     <string name="clicks_recommended_settings_title">Apply recommended settings</string>
-    <string name="clicks_recommended_settings_description">Restore native Tab and Alt outputs; assign the microphone button to Pastiera dictation; assign the red Clicks button and Launcher button directly to QuickLauncher; and disable Caps Lock and Cursor Mode.</string>
+    <string name="clicks_recommended_settings_description">Restore native Tab and Alt outputs; assign the microphone button to Pastiera dictation; assign the red Clicks button and Launcher button directly to the quick launcher; and disable Caps Lock and Cursor Mode.</string>
     <string name="clicks_recommended_settings_success">Recommended Clicks settings applied.</string>
     <string name="clicks_recommended_settings_failure">Recommended settings could not be applied completely.</string>
     <string name="clicks_sticky_alt_help">Controls the Clicks firmware’s SYM Lock behaviour. Pastiera’s separate Sticky Alt behaviour remains configured under Modifiers.</string>
@@ -547,8 +547,8 @@
     <string name="clicks_launcher_interception_disabled">Required for software-assigned Clicks buttons. Tap to enable it in Android Accessibility settings.</string>
     <string name="clicks_button_mode_native">Native</string>
     <string name="clicks_button_mode_native_description">Keep the button’s original Android key event.</string>
-    <string name="clicks_button_mode_quick_launcher">QuickLauncher</string>
-    <string name="clicks_button_mode_quick_launcher_description">Open Pastiera QuickLauncher directly and do not pass the key event to the app.</string>
+    <string name="clicks_button_mode_quick_launcher">Quick launcher</string>
+    <string name="clicks_button_mode_quick_launcher_description">Open the built-in quick launcher directly and do not pass the key event to the app.</string>
     <string name="clicks_button_mode_open_pastiera">Open Pastiera</string>
     <string name="clicks_button_mode_open_pastiera_description">Open the Pastiera settings directly and do not pass the key event to the app.</string>
     <string name="clicks_button_mode_toggle_keyboard_mode">Toggle keyboard mode</string>
@@ -679,7 +679,7 @@
     <string name="about_credits_error">Unable to load credits information.</string>
     
     <!-- Launcher Shortcuts Section -->
-    <string name="starter_launcher_shortcuts_title">Pastiera-QuickLauncher</string>
+    <string name="starter_launcher_shortcuts_title">Quick launcher</string>
     <string name="starter_launcher_shortcuts_description">Quick launching, SYM shortcuts, and launcher key assignments</string>
     <string name="starter_launcher_shortcuts_intro">These settings share one launcher-key assignment list. Choose where Pastiera should listen for those assigned keys.</string>
     <string name="launcher_shortcuts_title">Homescreen shortcuts</string>
@@ -691,7 +691,7 @@
     <string name="quick_launcher_default_blocked_hint">New: SYM can open the quick launcher. Pastiera would normally assign it to Space, but Space already has a shortcut. Open the assignments page and choose “Open quick launcher” on any key to try it.</string>
     
     <!-- Launcher Shortcuts Screen -->
-    <string name="launcher_shortcuts_screen_title">Pastiera-QuickLauncher</string>
+    <string name="launcher_shortcuts_screen_title">Quick launcher</string>
     <string name="launcher_shortcuts_not_assigned">Not assigned</string>
     <string name="launcher_shortcuts_remove">Remove</string>
     <string name="launcher_shortcuts_app_name_unavailable">App (name unavailable)</string>
@@ -709,7 +709,7 @@
     <string name="launcher_shortcut_assignment_no_apps">No commands found</string>
     <string name="launcher_shortcut_assignment_no_results">No results for \"%1$s\"</string>
     <string name="launcher_shortcut_assignment_key_name">Key %1$d</string>
-    <string name="quick_launcher_title">Pastiera-QuickLauncher</string>
+    <string name="quick_launcher_title">Quick launcher</string>
     <string name="quick_launcher_subtitle">Type to search. Enter opens the top result.</string>
     <string name="quick_launcher_close">Close</string>
     <string name="quick_launcher_search_placeholder">Start typing...</string>
@@ -719,22 +719,22 @@
     <string name="quick_launcher_limit_results_title">Show only top search results</string>
     <string name="quick_launcher_limit_results_description">Do not render the full alphabetical app list. The quick launcher stays empty until you type and then shows only the top three matches.</string>
     <string name="quick_launcher_text_field_shortcuts_title">Allow SYM+Space in text fields</string>
-    <string name="quick_launcher_text_field_shortcuts_description">When enabled, the QuickLauncher can also open while the cursor is inside an app text field.</string>
+    <string name="quick_launcher_text_field_shortcuts_description">When enabled, the quick launcher can also open while the cursor is inside an app text field.</string>
     <string name="quick_launcher_text_field_shortcuts_hint">In text fields, hold SYM and press Space. SYM latch cannot trigger this because tapping SYM cycles the SYM pages.</string>
     <string name="quick_launcher_alt_space_text_fields_title">Allow Alt+Space in text fields</string>
-    <string name="quick_launcher_alt_space_text_fields_description">Open QuickLauncher with Alt+Space instead of inserting a space. Disabled by default.</string>
+    <string name="quick_launcher_alt_space_text_fields_description">Open the quick launcher with Alt+Space instead of inserting a space. Disabled by default.</string>
     <string name="quick_launcher_alt_shortcuts_outside_fields_title">Allow Alt shortcuts outside text fields</string>
     <string name="quick_launcher_alt_shortcuts_outside_fields_description">Use Alt with an assigned key to launch the same app or action as its SYM key shortcut.</string>
     <string name="quick_launcher_respect_keyboard_layout_title">Use active keyboard layout</string>
     <string name="quick_launcher_respect_keyboard_layout_description">When enabled, search input follows the current Pastiera layout instead of Android’s raw QWERTY key output.</string>
     <string name="quick_launcher_typo_tolerant_ranking_title">Typo-tolerant search</string>
     <string name="quick_launcher_typo_tolerant_ranking_description">Also match app names with small typing mistakes. Existing prefix and abbreviation matches still rank higher.</string>
-    <string name="quick_launcher_provider_title">QuickLauncher behaviour</string>
+    <string name="quick_launcher_provider_title">Quick launcher behaviour</string>
     <string name="quick_launcher_provider_description">Choose whether the shortcut opens Pastiera search or Niagara Launcher search. Niagara falls back to Pastiera if unavailable.</string>
-    <string name="quick_launcher_provider_pastiera">Pastiera QuickLauncher</string>
+    <string name="quick_launcher_provider_pastiera">Built-in quick launcher</string>
     <string name="quick_launcher_provider_niagara">Niagara Launcher Search</string>
     <string name="quick_launcher_ranking_info_button">How ranking works</string>
-    <string name="quick_launcher_ranking_info_title">QuickLauncher ranking</string>
+    <string name="quick_launcher_ranking_info_title">Quick launcher ranking</string>
     <string name="quick_launcher_ranking_info_body">Results are ranked in this order: exact app name, app name prefix, word prefix, abbreviation/subsequence match, typo-tolerant app name match, then package-name match. Typo tolerance is ignored for very short queries.</string>
     <string name="quick_launcher_behaviour_title">Behaviour</string>
     <string name="quick_launcher_behaviour_description">Launcher provider, search/ranking rules, and SYM+Space from text fields.</string>
@@ -1034,8 +1034,8 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="app_enter_behaviour_additional_send_shortcut_description">Apply an extra send shortcut to the rendered app list below.</string>
     <string name="app_enter_behaviour_additional_send_shortcut_none">None</string>
     <string name="app_enter_behaviour_additional_send_shortcut_sym_enter">SYM + Enter</string>
-    <string name="app_enter_behaviour_sym_enter_conflict_title">SYM + Enter is already used by QuickLauncher</string>
-    <string name="app_enter_behaviour_sym_enter_conflict_description">Move the QuickLauncher trigger to another key before using SYM + Enter as an additional send shortcut.</string>
+    <string name="app_enter_behaviour_sym_enter_conflict_title">SYM + Enter is already used by the quick launcher</string>
+    <string name="app_enter_behaviour_sym_enter_conflict_description">Move the quick launcher trigger to another key before using SYM + Enter as an additional send shortcut.</string>
     <string name="app_enter_behaviour_sym_enter_conflict_action">Change trigger</string>
     <string name="variation_instructions_title">Instructions</string>
     <string name="variation_instructions_description">Tap on any variation box to select a character. Each letter can have up to 7 variation characters.</string>
@@ -1287,16 +1287,16 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="tutorial_nav_mode_bullet_media">Mappings can also handle app shortcuts, media controls, Escape, Tab, Page Up/Down, and Pastierina.</string>
     <string name="tutorial_page_customization_title">Customization</string>
     <string name="tutorial_page_customization_description">Pastiera offers many customization options:\n• Customizable keyboard layouts\n• Launcher shortcuts &amp; Power Shortcuts\n• IME bar can act as a swipe bar to move the cursor\n• Custom mappings for Nav Mode\nExplore the settings to find the perfect configuration for you!</string>
-    <string name="tutorial_quick_launcher_title">QuickLauncher</string>
+    <string name="tutorial_quick_launcher_title">Quick launcher</string>
     <string name="tutorial_quick_launcher_description">Open apps from the keyboard without leaving your typing flow.</string>
-    <string name="tutorial_quick_launcher_bullet_sym_space">Hold SYM and press Space to open QuickLauncher from anywhere.</string>
+    <string name="tutorial_quick_launcher_bullet_sym_space">Hold SYM and press Space to open the quick launcher from anywhere.</string>
     <string name="tutorial_quick_launcher_bullet_text_fields">It also works while the cursor is inside a text field, so you can switch apps from typing context.</string>
     <string name="tutorial_quick_launcher_bullet_search">Type a few letters, abbreviations, or small typos to find the app you want.</string>
     <string name="tutorial_quick_launcher_bullet_layout">Search can respect your active Pastiera layout, such as QWERTZ.</string>
-    <string name="tutorial_quick_launcher_button">Open QuickLauncher settings</string>
+    <string name="tutorial_quick_launcher_button">Open quick launcher settings</string>
     <string name="tutorial_quick_launcher_mapping_conflict_title">SYM + Space is assigned to something else</string>
-    <string name="tutorial_quick_launcher_mapping_conflict_description">Space currently opens “%1$s”. Replace that mapping with QuickLauncher and enable it in text fields to try the new feature.</string>
-    <string name="tutorial_quick_launcher_mapping_conflict_button">Use SYM + Space for QuickLauncher</string>
+    <string name="tutorial_quick_launcher_mapping_conflict_description">Space currently opens “%1$s”. Replace that mapping with the quick launcher and enable it in text fields to try the new feature.</string>
+    <string name="tutorial_quick_launcher_mapping_conflict_button">Use SYM + Space for the quick launcher</string>
     <string name="tutorial_messenger_presets_title">Messenger presets</string>
     <string name="tutorial_messenger_presets_description">Choose how Enter should behave in chat apps, where newline and send often differ by app.</string>
     <string name="tutorial_messenger_presets_bullet_enter">Use tested presets for common messenger apps instead of tuning each key manually.</string>
@@ -1840,6 +1840,11 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="gif_favourite_added">Added to your favourite GIFs</string>
     <string name="gif_favourite_removed">Taken out of your favourite GIFs</string>
     <string name="flux_section_recents">Favourites and recents</string>
+    <string name="flux_section_recents_search">Results</string>
+    <string name="flux_section_search">Search</string>
+    <string name="flux_section_gif_library">GIF favourites and recents</string>
+    <string name="flux_search_page_title">Search &amp; Enter</string>
+    <string name="flux_search_page_description">What opens ready to type, the search key, what Enter picks, and recently used first</string>
     <string name="flux_recents_first_title">Recently used first in search</string>
     <string name="flux_recents_first_description">Emoji, symbols and GIFs you’ve used lately, and your favourite GIFs, come first in their searches.</string>
     <string name="flux_gif_favourites_title">Favourite GIFs</string>

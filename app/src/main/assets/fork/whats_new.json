@@ -45,6 +45,10 @@
   ],
   "improvements": [
     {
+      "text": "Settings tidied: search options for the pickers have a page of their own, one-tap SYM is with the other modifiers, the emoji key LED is with the LED colours, and the quick launcher is called that everywhere.",
+      "after": "202609262118"
+    },
+    {
       "text": "Trackpad sensitivity has its own slider for left and right suggestion swipes.",
       "after": "202609262118"
     },
@@ -128,7 +132,7 @@
     "Voice input keeps listening through pauses.",
     "Smart Alt and Ctrl, and incognito typing.",
     "Ctrl+Shift+Space switches language backwards; bold suggestions option.",
-    "The QuickLauncher opens from other apps and the app icon.",
+    "The quick launcher opens from other apps and the app icon.",
     "Pastiera Flux is now Flux Keyboard, at the Pastiera team's request: restore a backup from Pastiera Flux, then uninstall it."
   ],
   "upstreamTitle": "From the Pastiera team since 0.85",

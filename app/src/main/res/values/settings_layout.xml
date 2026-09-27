@@ -39,7 +39,7 @@
     <string name="settings_quick_launcher_description">Open apps and commands from the keyboard</string>
 
     <string name="settings_section_privacy">Privacy</string>
-    <string name="settings_section_backup">Backup &amp; clipboard</string>
+    <string name="settings_section_backup">Backup &amp; restore</string>
     <string name="settings_accessibility_row_description">Reading aloud, bounce keys and overlapping keys</string>
     <string name="settings_section_experimental">Experimental</string>
     <string name="settings_section_help_about">Help, updates &amp; about</string>
@@ -119,7 +119,7 @@
     </plurals>
     <string name="clicks_all_key_mappings_ready_description">Your own Alt and SYM characters for every key, in a custom Device SYM profile. Ctrl shortcuts are under Key shortcuts.</string>
     <string name="alt_key_editor_no_profiles">No profiles yet. Start one above.</string>
-    <string name="settings_section_clipboard">Clipboard</string>
+    <string name="settings_section_clipboard">Clipboard &amp; codes</string>
     <string name="settings_section_editing">Editing and moving around</string>
     <string name="settings_nav_mode_hub_description">Arrow keys, selection and more from the letter keys, with Ctrl</string>
     <string name="settings_section_terminals">Terminals and desktops</string>
