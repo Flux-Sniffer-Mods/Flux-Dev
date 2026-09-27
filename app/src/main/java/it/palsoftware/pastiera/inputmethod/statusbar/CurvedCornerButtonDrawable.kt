@@ -35,6 +35,11 @@ internal class CurvedCornerButtonDrawable(
     data class OuterContour(val points: List<PointF>, val borderHalfWidthPx: Float)
 
 
+    private fun ledInset(chrome: StatusBarController.ImeChromeLayout): Float =
+        if (chrome.contourIntegratedIndicators) {
+            it.palsoftware.pastiera.inputmethod.ui.LedStatusView.contourButtonInsetPx(view.context)
+        } else 0f
+
     override fun isStateful() = true
     override fun onStateChange(state: IntArray): Boolean {
         invalidateSelf()
@@ -69,9 +74,9 @@ internal class CurvedCornerButtonDrawable(
             val y = (location[1] - chromeLocation[1]).toFloat()
             val calibration = it.palsoftware.pastiera.T2eCornerCalibration.read(view.context)
             // Calibration already includes the intended visible gap. Offset only the
-            // stroke centerline so its outside edge follows that exact contour. Contoured LEDs
-            // draw over the buttons' corners, so the buttons still reach the display edge.
-            val contourInset = halfStroke
+            // stroke centerline so its outside edge follows that exact contour; with contoured
+            // LEDs, the LEDs' inner edge plus the same small gap the other buttons keep.
+            val contourInset = halfStroke + ledInset(chrome)
             // Lifted status bar: the same display curve, moved up with the row
             val displayBottom = chrome.height.toFloat() - chrome.liftFor(view)
             displayPath.set(it.palsoftware.pastiera.T2eCornerGeometry.path(
@@ -133,7 +138,7 @@ internal class CurvedCornerButtonDrawable(
         val x = (location[0] - chromeLocation[0]).toFloat()
         val y = (location[1] - chromeLocation[1]).toFloat()
         val calibration = it.palsoftware.pastiera.T2eCornerCalibration.read(view.context)
-        val contourInset = halfStroke
+        val contourInset = halfStroke + ledInset(chrome)
         val radius = (if (leftEdge) radii.first else radii.second).toFloat()
         val displayBottom = chrome.height.toFloat() - chrome.liftFor(view)
         val outerX = (if (leftEdge) -x else chrome.width - x) + calibration.shiftXPx
