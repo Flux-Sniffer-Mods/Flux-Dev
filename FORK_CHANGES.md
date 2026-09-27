@@ -11,26 +11,26 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 ## Emoji, symbols and GIFs
 
 - **Emoji picker key**: a dedicated key (Right Shift by default), assigned by pressing it. A modifier key opens the picker when released, so it still works in chords like Ctrl+Shift+Q.
-- **Hold or tap the emoji key**: hold it and press a key to type that key's emoji from the emoji layer; optionally, one tap makes the next key do the same, and a second tap opens the emoji screen. Held without choosing anything, it just lets go.
-- **Tap SYM for one symbol** (option): one tap makes the next key type its symbol without opening the symbols; a second tap opens them. Holding SYM works as before, and held without choosing anything it just lets go.
-- **GIF search** (KLIPY) in the picker and on the emoji layer, with favourites, recents and caching.
+- **Hold or tap the emoji key**: hold it and press a key to type that key's emoji from the emoji layer; optionally, one tap makes the next key do the same, a second tap opens the emoji screen, and Back cancels it. Held without choosing anything, it just lets go.
+- **Tap SYM for one symbol** (option): one tap makes the next key type its symbol without opening the symbols; a second tap opens them, and Back cancels it. Holding SYM works as before, and held without choosing anything it just lets go. (Modifiers & SYM > Tap, lock & long press.)
+- **GIF search** (KLIPY) in the picker and on the emoji layer, with favourites, recents and caching (a search's results are kept for a week after last use).
 - **Symbol search** across every Unicode symbol.
 - **Emoji layer**: search, a Recents key, and **profiles** for common situations (chatting, work, social…) that can follow the app you're in.
 - Search, Recents and GIF keys on the layers have a tint of their own, and nothing in the default layers sits under them.
 - Emoji beyond the system font, and names for every emoji in search.
-- A search key (⌕) on every panel; letters type the layer's mappings unless type-to-search is on.
+- A search key (⌕) on every panel; letters type the layer's mappings unless type-to-search is on. What opens ready to type, the search key, what Enter picks and recently used first have a Search & Enter page of their own.
 
 ## Typing
 
 - **Spell checker**: Flux Keyboard as Android's spell checker, underlining typos in any app.
 - **Inline autofill**: password manager chips in the suggestion bar.
-- **One-time codes**: a code from a notification (sign-in, bank, delivery) is offered as a chip in the next text field for three minutes, and not again once typed. Off until you give it notification access.
+- **One-time codes**: a code from a notification (sign-in, bank, delivery) is offered as a chip in the next text field for three minutes, and not again once typed. The code is the number next to a word like "code" or "PIN" (whole words: "shipping" and "security briefing" don't count), so order and account numbers aren't mistaken for it. Off until you give it notification access.
 - **Pick suggestions from the keyboard**: Ctrl+Shift+Q, W or E takes the left, middle or right suggestion (Ctrl+1/2/3 on keyboards with a number row). Either Shift works, including Right Shift while it's the emoji key.
 - **Trackpad swipes**: optionally, swipe left, up or right anywhere on the trackpad for the left, middle or right suggestion, and choose whether a swipe left or down deletes the previous word. Short and slanted swipes count, whichever way they mostly go. Left and right swipes have their own sensitivity.
-- **Shift + Backspace deletes forwards** on the Titan too (the setting now sees a held Shift).
+- **Shift + Backspace deletes forwards** on the Titan too (Typing > Editing keys; the setting now sees a held Shift, and is among the recommended settings).
 - **Backspace undoes an auto-replace** and keeps the space after it; text replacements can be undone with auto-replace off too.
 - **Automatic Shift by field type**: choose which kinds of text field start with a capital (text, names and addresses by default; search, links and email addresses off). A kind that's off gets no automatic Shift, even when an app asks for capitals.
-- **Paste suggestion**: what you just copied, offered in the next text field. In a password field it's offered as ⎘ •••••••• (never the text itself), including a password you copied from a password manager; those stay in memory only and never go into the clipboard history.
+- **Paste suggestion**: what you just copied, offered in the next text field (long text is shortened without breaking an emoji). In a password field it's offered as ⎘ •••••••• (never the text itself), including a password you copied from a password manager; those stay in memory only and never go into the clipboard history.
 - **Clean pasted links**: pasted links lose tracking (utm_, fbclid, si…) and open the full site rather than the mobile one.
 - **Emoji suggestions**: an emoji for the word you're typing.
 - **Exact typing** (Apps): in the apps you pick (SSH clients, code editors, AI agents) nothing rewrites what you type: no auto-correct, text replacements, auto-capitals, double-space full stop or automatic spaces. Optionally also wherever an app itself asks for no suggestions.
@@ -62,24 +62,25 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 ## Titan 2 Elite, status bar and LEDs
 
 - **Recommended settings**: a short list that suits nearly everyone (modifiers, suggestions, LEDs; on the Titan 2 Elite its trackpad swipes and compact bar), applied on a fresh install or with the Apply button in Privacy & system, which then offers to go through the rest. Matters of taste (auto-correct, GIFs, colours, what the emoji key opens) are switches on the tutorial's Your choices page, and settings that need a permission or another app (one-time codes, Niagara search, hidden-keyboard apps) start off and are set up from its Extras page.
+- **Trackpad swipes on the Titan 2 Elite**: they reach the keyboard only while the phone's Scroll assistant is on (Settings > Gestures > Keyboard gesture), which the trackpad tutorial and the phone trackpad settings row explain; Cursor assistant is optional, but its cursor mode takes the swipes. Swipes need to travel 230 by default there (500 elsewhere), as a natural flick covers about 300 of the Elite's 750-point touch layer.
 - A status bar fitted to the rounded display: filled corners, straight outer buttons, a 5 dp lift above the LEDs, and room around the SYM screens.
-- Every Titan 2 Elite setting on one screen, and a **phone trackpad settings** shortcut (also a quick launcher command) to the phone's Keyboard gesture page, or Settings search with it ready to paste.
-- **Per-LED colours**, a clear active-to-locked jump and an optional sweeping gradient when locked, set from one table with Off, Active and Locked columns.
+- Every Titan 2 Elite setting on one screen, and a **phone trackpad settings** shortcut (also a quick launcher command) that opens the phone's Keyboard gesture page directly (Unihertz's own settings app, `com.agui.settings`), or Settings search with it ready to paste on other phones.
+- **Per-LED colours**, a clear active-to-locked jump and an optional sweeping gradient when locked, set from one table with Off, Active and Locked columns. Shift is blue, Ctrl orange, Alt green, SYM purple and the emoji key pink by default.
 - **SYM's LED** is lit while SYM is held and locked while it's tapped for one symbol or the symbols are open. A **fifth LED** does the same for the emoji key (on by default; Look & sound > Status LED colours); all five LEDs share the width equally.
 - **Wallpaper colours** (option): the keyboard takes its colours from your wallpaper.
-- A **customisable menu bar** (which buttons, in what order) with a GIF button.
+- A **customisable menu bar** (which buttons, in what order) with a GIF button, and a preview of it at its real height.
 
 ## Settings, tutorial and privacy
 
 - **Flux Keyboard**: its own name, app ID, icon (a keyboard, in Niagara's icon packs too) and home screen fitted to the Titan 2 Elite, crediting and linking the original Pastiera. The compact mode is called **Solderina**.
-- **A tutorial of its own**: one-step setup, every new feature, a page for making it yours, and the extras that need a permission, on pages that scroll. After an update, **What's new** shows alone, lists only what's new since the version you had, and closes with ✕ or Done.
-- **Updates from this fork**: Flux Keyboard checks this repository's releases, not upstream's, compares versions properly, and downloads and installs the update itself (Android asks before installing). Choose full releases only (always the latest, however many dev builds follow it), or dev builds too; a dev build starts on dev updates and a full release on releases.
+- **A tutorial of its own**: one-step setup, every new feature, **Your choices** (auto-correct, double-space full stop, emoji suggestions, GIF search, what the emoji key opens, wallpaper colours, each a switch), a page for making it yours, and the extras that need a permission, on pages that scroll. The trackpad has its own up-to-date guide. After an update, **What's new** shows alone, lists only what's new since the version you had (nothing at all after an update with nothing new), and closes with ✕ or Done.
+- **Updates from this fork**: Flux Keyboard checks this repository's releases, not upstream's, compares versions properly, and downloads and installs the update itself (Android asks before installing). Choose full releases only (always the latest, however many dev builds follow it), or dev builds too; a dev build starts on dev updates and a full release on releases. Dev builds are offered with their build time ("0.93 dev · 27 Sep 2026, 11:50").
 - **Restricted settings**: features that need the accessibility service or notification access say when Android blocks them for apps installed from a file, and open App info to lift the block.
-- Settings grouped by task, ordered by usefulness, searchable, with rows sized to their text. Search keeps your query and your place when you open a result and come back, and nothing is focused on its own.
+- Settings grouped by task, ordered by usefulness, searchable, with rows sized to their text, and choices that go together in one dropdown (which swipe deletes a word). Search keeps your query and your place when you open a result and come back, and nothing is focused on its own.
 - Input Languages laid out like every other page.
 - **Offline mode**: nothing in the keyboard goes online.
 - Settings for hardware the phone doesn't have (Clicks keyboard, Titan 2 layout) stay hidden.
-- Developer options gather calibration and debug tools.
+- **Developer options** gather the Dev builds update switch and calibration and debug tools; they're on by default in dev builds and off in full releases.
 
 ## SYM layers and variations
 
@@ -113,4 +114,4 @@ palsoftware/pastiera #108, #217, #267, #278, #282, #292, #302, #310, #316, #317.
 
 ## Builds
 
-Signed APKs come from the fork build workflow on GitHub Actions, in two kinds: **full releases** (such as `0.92`, tag `flux/v0.92`) from the `flux-release` branch, and **dev releases** (such as `0.93-flux.202609262047`, published as pre-releases) from the `flux-dev` branch. The repository's latest release is always the latest full release. Every build is kept, and each one's notes list what changed since the build before it; the notes also ship as `RELEASE_NOTES.md` in the build artifact. Flux Keyboard builds are signed with the fork's own key and don't update, or get updated by, official Pastiera.
+Signed APKs come from the fork build workflow on GitHub Actions, in two kinds: **full releases** (such as `0.92`, tag `flux/v0.92`) from the `flux-release` branch, and **dev releases** (such as `0.93-flux.202609262047`, published as pre-releases) from the `flux-dev` branch. The repository's latest release is always the latest full release. Every build is kept, and each one's notes list what changed since the build before it; the notes also ship as `RELEASE_NOTES.md` in the build artifact. Builds run one at a time. `tools/find-keyboard-gesture-page.sh` (root, from Termux) finds which screen a phone's keyboard gesture settings are. Flux Keyboard builds are signed with the fork's own key and don't update, or get updated by, official Pastiera.
