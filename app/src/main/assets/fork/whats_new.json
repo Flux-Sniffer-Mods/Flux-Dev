@@ -209,6 +209,10 @@
   ],
   "bugFixes": [
     {
+      "text": "The spell checker no longer underlines part of a word with an apostrophe (\"couldn't\", \"it's\", \"Sam's\"), and typing \"i'm\", \"i've\", \"i'd\" or \"i'll\" corrects to I'm, I've, I'd and I'll.",
+      "after": "202609271342"
+    },
+    {
       "text": "The clipboard button keeps its place in the menu bar when it shows a count; the count floats in its corner.",
       "after": "202609271342"
     },
