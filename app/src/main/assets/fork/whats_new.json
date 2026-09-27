@@ -4,6 +4,10 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "Background picture: put your own picture behind the keyboard (Keyboard theme). With Auto colours on, the keys go see-through and are shaded against it, dark over a bright picture and light over a dark one, with text in whichever of black or white reads better; Key opacity sets how solid they are. The picture is kept in backups.",
+      "after": "202609271342"
+    },
+    {
       "text": "After an update, Flux Keyboard offers any recommended settings that differ from yours, listing each one from what you have to what's recommended, with Apply all or Keep mine. Looks are never touched.",
       "after": "202609271342"
     },

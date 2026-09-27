@@ -657,6 +657,36 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
         unavailableFallbackId = "keyboard_theme.hardware.assignment"
     ),
     SettingEntry(
+        id = SettingLinkIds.KEYBOARD_BACKGROUND_IMAGE,
+        titleRes = R.string.keyboard_background_image_title,
+        summaryRes = R.string.keyboard_background_image_description,
+        route = SettingRoute(
+            destination = SettingsDestination.Customization,
+            customizationDestination = "keyboard_theme_assignment",
+            keyboardThemeTarget = SettingsManager.KeyboardThemeTarget.HARDWARE
+        )
+    ),
+    SettingEntry(
+        id = SettingLinkIds.KEYBOARD_BACKGROUND_AUTO_COLOURS,
+        titleRes = R.string.keyboard_background_auto_colours_title,
+        summaryRes = R.string.keyboard_background_auto_colours_description,
+        route = SettingRoute(
+            destination = SettingsDestination.Customization,
+            customizationDestination = "keyboard_theme_assignment",
+            keyboardThemeTarget = SettingsManager.KeyboardThemeTarget.HARDWARE
+        )
+    ),
+    SettingEntry(
+        id = SettingLinkIds.KEYBOARD_BACKGROUND_KEY_OPACITY,
+        titleRes = R.string.keyboard_background_key_opacity_search,
+        summaryRes = R.string.keyboard_background_auto_colours_description,
+        route = SettingRoute(
+            destination = SettingsDestination.Customization,
+            customizationDestination = "keyboard_theme_assignment",
+            keyboardThemeTarget = SettingsManager.KeyboardThemeTarget.HARDWARE
+        )
+    ),
+    SettingEntry(
         id = "keyboard_theme.hardware.light_theme",
         titleRes = R.string.setting_link_theme_hardware_light_theme,
         route = SettingRoute(

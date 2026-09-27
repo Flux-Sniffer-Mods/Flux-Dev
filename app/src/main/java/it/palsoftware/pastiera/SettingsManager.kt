@@ -74,6 +74,9 @@ object SettingsManager {
     private const val KEY_PASTE_SUGGESTION_PASSWORD_FIELDS = "paste_suggestion_password_fields"
     private const val KEY_LANGUAGE_PER_APP = "language_per_app_enabled"
     private const val KEY_KEYBOARD_WALLPAPER_COLOURS = "keyboard_theme_wallpaper_colours"
+    private const val KEY_KEYBOARD_BACKGROUND_AUTO_COLOURS = "keyboard_background_auto_colours"
+    private const val KEY_KEYBOARD_BACKGROUND_KEY_OPACITY = "keyboard_background_key_opacity"
+    const val KEY_KEYBOARD_BACKGROUND_UPDATED = "keyboard_background_updated"
     private const val KEY_ONE_TIME_CODES = "one_time_codes_enabled"
     private const val KEY_AUTO_SHIFT_FIELD_TYPES = "auto_shift_field_types"
     private const val KEY_SEARCH_BAR_WAITS_FOR_TYPING = "search_bar_waits_for_typing"
@@ -916,7 +919,9 @@ object SettingsManager {
         }
 
     fun isKeyboardThemePreferenceKey(key: String?): Boolean {
-        return key == KEY_KEYBOARD_THEME_HARDWARE || key == KEY_KEYBOARD_THEME_SOFTWARE
+        return key == KEY_KEYBOARD_THEME_HARDWARE || key == KEY_KEYBOARD_THEME_SOFTWARE ||
+            key == KEY_KEYBOARD_WALLPAPER_COLOURS || key == KEY_KEYBOARD_BACKGROUND_AUTO_COLOURS ||
+            key == KEY_KEYBOARD_BACKGROUND_KEY_OPACITY || key == KEY_KEYBOARD_BACKGROUND_UPDATED
     }
 
     fun isModifierIndicatorPreferenceKey(key: String?): Boolean {
@@ -1093,7 +1098,35 @@ object SettingsManager {
                 getKeyboardTheme(context, target)
             }
         // Flux Keyboard: colours from the wallpaper, over whichever theme applies
-        return if (getKeyboardWallpaperColours(context)) WallpaperKeyboardColours.recolour(context, theme) else theme
+        val coloured = if (getKeyboardWallpaperColours(context)) WallpaperKeyboardColours.recolour(context, theme) else theme
+        // Flux Keyboard: a picture behind the keyboard, keys shaded against it
+        val luminance = KeyboardBackgroundImage.luminance(context) ?: return coloured
+        return KeyboardBackgroundImage.recolour(
+            coloured, luminance, getKeyboardBackgroundAutoColours(context), getKeyboardBackgroundKeyOpacity(context)
+        )
+    }
+
+    /** Over a background picture: keys see-through and shaded against it. */
+    fun getKeyboardBackgroundAutoColours(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_KEYBOARD_BACKGROUND_AUTO_COLOURS, true)
+
+    fun setKeyboardBackgroundAutoColours(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_KEYBOARD_BACKGROUND_AUTO_COLOURS, enabled).apply()
+    }
+
+    const val KEYBOARD_BACKGROUND_KEY_OPACITY_DEFAULT = 35
+
+    /** How solid the keys are over a background picture, in percent. */
+    fun getKeyboardBackgroundKeyOpacity(context: Context): Int =
+        getPreferences(context).getInt(KEY_KEYBOARD_BACKGROUND_KEY_OPACITY, KEYBOARD_BACKGROUND_KEY_OPACITY_DEFAULT).coerceIn(0, 100)
+
+    fun setKeyboardBackgroundKeyOpacity(context: Context, percent: Int) {
+        getPreferences(context).edit().putInt(KEY_KEYBOARD_BACKGROUND_KEY_OPACITY, percent.coerceIn(0, 100)).apply()
+    }
+
+    /** Tells the keyboard the picture changed. */
+    fun touchKeyboardBackgroundImage(context: Context) {
+        getPreferences(context).edit().putLong(KEY_KEYBOARD_BACKGROUND_UPDATED, System.currentTimeMillis()).apply()
     }
 
     /** Keyboard colours from the wallpaper (Material You, Android 12+). */

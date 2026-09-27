@@ -37,6 +37,7 @@ import it.palsoftware.pastiera.data.gif.KlipyGifs
 import it.palsoftware.pastiera.data.symbols.SymbolSearch
 import it.palsoftware.pastiera.MainActivity
 import it.palsoftware.pastiera.SymCustomizationActivity
+import it.palsoftware.pastiera.KeyboardBackgroundImage
 import it.palsoftware.pastiera.SettingsManager
 import it.palsoftware.pastiera.SymPagesConfig
 import it.palsoftware.pastiera.data.layout.LayoutFileStore
@@ -509,13 +510,24 @@ class StatusBarController(
         activeThemeSettings(isFullSoftwareKeyboardMode).toKeyboardThemeColors()
 
     private fun applyKeyboardThemeOverrides(activeColors: KeyboardThemeColors) {
+        val backgroundImage = KeyboardBackgroundImage.bitmap(context)
         (context as? InputMethodService)?.window?.window?.let { imeWindow ->
-            imeWindow.navigationBarColor = activeColors.background
+            imeWindow.navigationBarColor = backgroundImage?.let { KeyboardBackgroundImage.averageColour(context) }
+                ?: activeColors.background
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 imeWindow.isNavigationBarContrastEnforced = false
             }
         }
-        statusBarLayout?.setBackgroundColor(activeColors.background)
+        statusBarLayout?.let { layout ->
+            // Flux Keyboard: the background picture, under the (see-through) theme background
+            val current = layout.background as? KeyboardBackgroundImage.Drawable
+            when {
+                backgroundImage == null && current != null -> layout.background = null
+                backgroundImage != null && current?.bitmap !== backgroundImage ->
+                    layout.background = KeyboardBackgroundImage.Drawable(backgroundImage)
+            }
+            layout.setBackgroundColor(activeColors.background)
+        }
         val roundedCorners = SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context)
         val surfaceBackground = if (roundedCorners) Color.TRANSPARENT else activeColors.background
         symSurfaceStack?.setBackgroundColor(surfaceBackground)
