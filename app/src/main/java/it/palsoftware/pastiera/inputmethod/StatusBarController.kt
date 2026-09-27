@@ -4367,7 +4367,14 @@ class StatusBarController(
                 if (field == value) return
                 field = value
                 requestLayout()
-                invalidate()
+                // The corner buttons shape themselves round the LED rail: redraw them too, not
+                // just this layout, or they keep covering the rail with their old shape
+                fun invalidateTree(view: View) {
+                    view.invalidate()
+                    view.background?.invalidateSelf()
+                    if (view is ViewGroup) for (index in 0 until view.childCount) invalidateTree(view.getChildAt(index))
+                }
+                invalidateTree(this)
             }
         var onContourGeometryChanged: ((LedStatusView.ContourGeometry?) -> Unit)? = null
         private var nestedRow: View? = null

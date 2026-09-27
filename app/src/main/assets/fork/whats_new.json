@@ -233,6 +233,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Contoured LEDs: the corner buttons now shape themselves round the LEDs as soon as they switch on, instead of covering them until the bar was redrawn.",
+      "after": "202609271342"
+    },
+    {
       "text": "Enter per app's chat standard works in chat apps whose message box asks Android to keep Enter as a new line (Instagram, Snapchat and most others).",
       "after": "202609271342"
     },
