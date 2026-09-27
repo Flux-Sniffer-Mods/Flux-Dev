@@ -719,7 +719,9 @@ object SettingLinkRegistry {
             SettingLinkIds.FORK_UPDATE_CHANNEL,
             R.string.fork_update_channel_title,
             R.string.fork_update_channel_stable,
-            destination = SettingsDestination.Advanced
+            destination = SettingsDestination.Developer,
+            availability = SettingAvailability.DeveloperOptionsEnabled,
+            unavailableFallbackId = SettingLinkIds.DEVELOPER_OPTIONS_ENABLED
         ),
         entry(
             SettingLinkIds.ADVANCED_SHOW_RELEASE_NOTES_TUTORIAL,

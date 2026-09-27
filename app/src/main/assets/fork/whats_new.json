@@ -45,6 +45,10 @@
   ],
   "improvements": [
     {
+      "text": "Developer options are on by default in dev builds and off in full releases, and the Dev builds switch lives there.",
+      "after": "202609271150"
+    },
+    {
       "text": "Deleting a word with a trackpad swipe is one choice: off, swipe left or swipe down. Left isn't offered while swipe directions pick suggestions.",
       "after": "202609271150"
     },
@@ -65,7 +69,7 @@
       "after": "202609262118"
     },
     {
-      "text": "Updates can offer dev builds too, or only full releases (Settings > Privacy & system); dev builds start on dev updates, full releases on releases.",
+      "text": "Updates can offer dev builds too, or only full releases (Settings > Privacy & system > Developer options); dev builds start on dev updates, full releases on releases.",
       "after": "202609262020"
     },
     {

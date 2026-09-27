@@ -3085,8 +3085,9 @@ object SettingsManager {
                 imeOptions and android.view.inputmethod.EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING != 0)
 
     /** Developer options (calibration, debugging and preview tools) are shown in the settings. */
+    /** Developer options: on by default in dev builds (x.yy-flux.<time>), off in full releases. */
     fun getDeveloperOptionsEnabled(context: Context): Boolean =
-        getPreferences(context).getBoolean(KEY_DEVELOPER_OPTIONS_ENABLED, false)
+        getPreferences(context).getBoolean(KEY_DEVELOPER_OPTIONS_ENABLED, BuildConfig.VERSION_NAME.contains("-flux."))
 
     fun setDeveloperOptionsEnabled(context: Context, enabled: Boolean) {
         getPreferences(context).edit().putBoolean(KEY_DEVELOPER_OPTIONS_ENABLED, enabled).apply()
