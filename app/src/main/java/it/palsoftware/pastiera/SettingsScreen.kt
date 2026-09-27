@@ -530,13 +530,6 @@ private fun SettingsMainScreen(
                         onClick = { onNavigate(SettingsDestination.LookSound) }
                     )
                     SettingsCategoryRow(
-                        icon = Icons.Filled.TouchApp,
-                        title = stringResource(R.string.settings_trackpad_gestures_title),
-                        description = stringResource(R.string.settings_trackpad_gestures_description),
-                        linkId = SettingLinkIds.ADVANCED_TRACKPAD_GESTURES,
-                        onClick = { onNavigate(SettingsDestination.TrackpadGestures) }
-                    )
-                    SettingsCategoryRow(
                         icon = Icons.Filled.Shield,
                         title = stringResource(R.string.settings_privacy_system_title),
                         description = if (SettingsManager.isOfflineMode(context)) {

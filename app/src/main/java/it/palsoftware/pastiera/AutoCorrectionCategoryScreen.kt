@@ -384,6 +384,16 @@ fun AutoCorrectionCategoryScreen(
                             )
                         }
 
+                        // Gestures that pick, add or delete words live with the suggestions
+                        FluxActionRow(
+                            linkId = SettingLinkIds.ADVANCED_TRACKPAD_GESTURES,
+                            title = stringResource(R.string.settings_trackpad_gestures_title),
+                            description = stringResource(R.string.settings_trackpad_gestures_description),
+                            onClick = {
+                                openSettingsPage(context, SettingsPage(SettingsDestination.TrackpadGestures))
+                            }
+                        )
+
                         SettingsSectionDivider(stringResource(R.string.autocorrect_section_dictionary))
                         Surface(
                             modifier = Modifier

@@ -232,10 +232,10 @@ class SettingsManagerLayoutSwitchTest {
         assertEquals(240f, SettingsManager.getTrackpadSuggestionSwipeThreshold(context), 0.01f)
         assertEquals(720f, SettingsManager.getTrackpadDeleteSwipeThreshold(context), 0.01f)
 
-        SettingsManager.setTrackpadSuggestionSwipeThreshold(context, 40f)
+        SettingsManager.setTrackpadSuggestionSwipeThreshold(context, 10f)
         SettingsManager.setTrackpadDeleteSwipeThreshold(context, 2000f)
 
-        assertEquals(120f, SettingsManager.getTrackpadSuggestionSwipeThreshold(context), 0.01f)
+        assertEquals(40f, SettingsManager.getTrackpadSuggestionSwipeThreshold(context), 0.01f)
         assertEquals(750f, SettingsManager.getTrackpadDeleteSwipeThreshold(context), 0.01f)
     }
 

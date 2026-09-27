@@ -483,8 +483,8 @@ object SettingsManager {
     private const val DEFAULT_TRACKPAD_GESTURE_ADD_WORD_ENABLED = true
     private const val DEFAULT_TRACKPAD_GESTURE_ADD_WORD_FULL_WIDTH_ENABLED = true
     private const val DEFAULT_TRACKPAD_SWIPE_THRESHOLD = 500f
-    private const val TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD = 230f
-    private const val MIN_TRACKPAD_SWIPE_THRESHOLD = 120f
+    private const val TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD = 150f
+    private const val MIN_TRACKPAD_SWIPE_THRESHOLD = 40f
     private const val MAX_TRACKPAD_SWIPE_THRESHOLD = 750f
     const val TRACKPAD_PROVIDER_SHIZUKU = "shizuku"
     const val TRACKPAD_PROVIDER_NATIVE_IME = "native_ime"
@@ -2961,10 +2961,15 @@ object SettingsManager {
     }
 
     /** Keys that pick a suggestion (an [it.palsoftware.pastiera.inputmethod.SuggestionKeys] option). */
+    /** Until chosen: Ctrl+Shift+Q/W/E, or off while trackpad swipes pick the suggestions. */
     fun getSuggestionKeys(context: Context): String =
         getPreferences(context).getString(KEY_SUGGESTION_KEYS, null)
             ?.takeIf { option -> option in it.palsoftware.pastiera.inputmethod.SuggestionKeys.OPTIONS }
-            ?: it.palsoftware.pastiera.inputmethod.SuggestionKeys.CTRL_SHIFT_QWE
+            ?: if (getTrackpadGesturesEnabled(context) && getTrackpadSuggestionSwipeDirections(context)) {
+                it.palsoftware.pastiera.inputmethod.SuggestionKeys.OFF
+            } else {
+                it.palsoftware.pastiera.inputmethod.SuggestionKeys.CTRL_SHIFT_QWE
+            }
 
     fun setSuggestionKeys(context: Context, option: String) {
         getPreferences(context).edit().putString(KEY_SUGGESTION_KEYS, option).apply()
@@ -6211,7 +6216,7 @@ object SettingsManager {
     /**
      * How far a trackpad swipe goes until set. The Titan 2 Elite's touch layer is about 750
      * points tall and a natural flick covers about 300, so 500 (two thirds of it) missed most
-     * swipes there; 230 suits it.
+     * swipes there; 150, about one key, catches a flick across a single key.
      */
     private fun defaultTrackpadSwipeThreshold(): Float =
         if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice()) TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD
@@ -6234,7 +6239,7 @@ object SettingsManager {
 
     /**
      * How far a left or right swipe goes to take the left or right suggestion (Swipe
-     * directions). Until set: 230 on the Titan 2 Elite, elsewhere 60% of the suggestion swipe.
+     * directions). Until set: 150 on the Titan 2 Elite, elsewhere 60% of the suggestion swipe.
      */
     fun getTrackpadSideSwipeThreshold(context: Context): Float {
         val prefs = getPreferences(context)

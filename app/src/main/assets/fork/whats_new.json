@@ -49,6 +49,10 @@
   ],
   "improvements": [
     {
+      "text": "Trackpad & gestures moved into Suggestions & auto-correction, with its sensitivity sliders on the same page. Adding words by gesture greys out while suggestions are off, the sliders show only with a trackpad, they go much lower, and a flick across one key is enough by default on the Titan 2 Elite. Ctrl+Shift+Q/W/E starts off when trackpad swipes pick suggestions.",
+      "after": "202609271342"
+    },
+    {
       "text": "Settings: \"Type to search\" on the emoji and symbols layers, \"Automatic Shift\", a description of what accent & spelling marks do, and the tutorial's Niagara step switches back to the built-in quick launcher too.",
       "after": "202609271342"
     },
