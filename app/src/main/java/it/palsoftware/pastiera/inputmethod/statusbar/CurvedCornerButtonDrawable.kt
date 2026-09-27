@@ -68,14 +68,10 @@ internal class CurvedCornerButtonDrawable(
             val x = (location[0] - chromeLocation[0]).toFloat()
             val y = (location[1] - chromeLocation[1]).toFloat()
             val calibration = it.palsoftware.pastiera.T2eCornerCalibration.read(view.context)
-            val ledInset = if (chrome.contourIntegratedIndicators) {
-                it.palsoftware.pastiera.inputmethod.ui.LedStatusView.contourButtonInsetPx(view.context)
-            } else {
-                0f
-            }
             // Calibration already includes the intended visible gap. Offset only the
-            // stroke centerline so its outside edge follows that exact contour.
-            val contourInset = halfStroke + ledInset
+            // stroke centerline so its outside edge follows that exact contour. Contoured LEDs
+            // draw over the buttons' corners, so the buttons still reach the display edge.
+            val contourInset = halfStroke
             // Lifted status bar: the same display curve, moved up with the row
             val displayBottom = chrome.height.toFloat() - chrome.liftFor(view)
             displayPath.set(it.palsoftware.pastiera.T2eCornerGeometry.path(
@@ -137,10 +133,7 @@ internal class CurvedCornerButtonDrawable(
         val x = (location[0] - chromeLocation[0]).toFloat()
         val y = (location[1] - chromeLocation[1]).toFloat()
         val calibration = it.palsoftware.pastiera.T2eCornerCalibration.read(view.context)
-        val ledInset = if (chrome.contourIntegratedIndicators) {
-            it.palsoftware.pastiera.inputmethod.ui.LedStatusView.contourButtonInsetPx(view.context)
-        } else 0f
-        val contourInset = halfStroke + ledInset
+        val contourInset = halfStroke
         val radius = (if (leftEdge) radii.first else radii.second).toFloat()
         val displayBottom = chrome.height.toFloat() - chrome.liftFor(view)
         val outerX = (if (leftEdge) -x else chrome.width - x) + calibration.shiftXPx

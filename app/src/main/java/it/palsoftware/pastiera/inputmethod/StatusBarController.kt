@@ -4548,11 +4548,10 @@ class StatusBarController(
                     return false
                 }
                 fun extendButtonBranches(view: ViewGroup, offsetY: Int) {
-                    // Clear of the LED rail running along the bottom edge
+                    // To the display edge: the contoured LEDs draw over the buttons
                     val calibration = it.palsoftware.pastiera.T2eCornerCalibration.read(context)
                     val borderInset = kotlin.math.ceil(
-                        (calibration.offsetPx + LedStatusView.contourButtonInsetPx(context))
-                            .coerceAtLeast(3f * resources.displayMetrics.density)
+                        calibration.offsetPx.coerceAtLeast(3f * resources.displayMetrics.density)
                     ).toInt()
                     val visibleBottom = (row.height - this@ImeChromeLayout.paddingBottom).coerceAtLeast(0)
                     for (index in 0 until view.childCount) {
