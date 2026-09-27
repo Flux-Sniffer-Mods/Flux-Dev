@@ -122,7 +122,7 @@
     <string name="settings_section_clipboard">Clipboard &amp; codes</string>
     <string name="settings_section_editing">Editing and moving around</string>
     <string name="settings_nav_mode_hub_description">Arrow keys, selection and more from the letter keys, with Ctrl</string>
-    <string name="settings_section_terminals">Terminals and desktops</string>
+    <string name="settings_section_terminals">Terminals, code &amp; desktops</string>
     <string name="settings_section_swipe_pad">Status bar swipe pad</string>
     <string name="autocorrect_section_suggestions">Suggestions and correction</string>
     <string name="autocorrect_section_dictionary">Dictionary and spelling</string>

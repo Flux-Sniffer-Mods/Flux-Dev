@@ -684,14 +684,6 @@ fun FluxEmojiGifsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 }
             }
 
-            SettingsSectionDivider(stringResource(R.string.flux_section_search))
-            FluxActionRow(
-                linkId = "flux_emoji.search_page",
-                title = stringResource(R.string.flux_search_page_title),
-                description = stringResource(R.string.flux_search_page_description),
-                onClick = { openSettingsChild(context, "flux_emoji", "search") }
-            )
-
             SettingsSectionDivider(stringResource(R.string.flux_section_gif_library))
             FluxSwitchRow(
                 linkId = "flux_emoji.gif_favourites",
@@ -714,6 +706,14 @@ fun FluxEmojiGifsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 }
             )
 
+
+            SettingsSectionDivider(stringResource(R.string.flux_section_search))
+            FluxActionRow(
+                linkId = "flux_emoji.search_page",
+                title = stringResource(R.string.flux_search_page_title),
+                description = stringResource(R.string.flux_search_page_description),
+                onClick = { openSettingsChild(context, "flux_emoji", "search") }
+            )
         }
 
         // The search key: press the letter key to use, like the Recents and GIF keys
