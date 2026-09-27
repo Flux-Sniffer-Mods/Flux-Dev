@@ -22,6 +22,7 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 
 ## Typing
 
+- **Ctrl + Shift + D adds the last word** you typed to the dictionary (Auto-correction > Dictionary, on by default), and the suggestions' **“add to dictionary”** chip can be switched off.
 - **Spell checker**: Flux Keyboard as Android's spell checker, underlining typos in any app.
 - **Inline autofill**: password manager chips in the suggestion bar.
 - **One-time codes**: a code from a notification (sign-in, bank, delivery) is offered as a chip in the next text field for three minutes, and not again once typed. The code is the number next to a word like "code" or "PIN" (whole words: "shipping" and "security briefing" don't count), so order and account numbers aren't mistaken for it. Off until you give it notification access.

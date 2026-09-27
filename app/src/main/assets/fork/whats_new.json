@@ -4,6 +4,10 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "Ctrl + Shift + D adds the last word you typed to the dictionary, and the suggestions' “add to dictionary” can be switched off (Auto-correction > Dictionary).",
+      "after": "202609271321"
+    },
+    {
       "text": "Password fields offer the password you just copied as ⎘ •••••••• (never the text itself), from a password manager too.",
       "after": "202609262118"
     },

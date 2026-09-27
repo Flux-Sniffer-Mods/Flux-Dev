@@ -1777,6 +1777,13 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="titan2_elite_status_bar_lift_description">Raise the status bar so the modifier LEDs run in a clear band underneath it, following the display’s corners. 0 keeps the LEDs wrapped around the bar.</string>
     <string name="titan2_elite_status_bar_lift_value">%1$d dp</string>
     <string name="titan2_elite_corner_style_title">Corner style</string>
+    <string name="show_add_word_suggestion_title">Offer to add new words</string>
+    <string name="show_add_word_suggestion_description">Show an “add to dictionary” suggestion when you type a word the dictionary doesn’t know. Off, you can still add words with Ctrl + Shift + D or from the dictionary settings.</string>
+    <string name="add_last_word_shortcut_title">Ctrl + Shift + D adds the last word</string>
+    <string name="add_last_word_shortcut_description">Adds the word before the cursor to your dictionary, so it’s suggested and never auto-corrected.</string>
+    <string name="add_last_word_added">Added “%1$s” to the dictionary</string>
+    <string name="add_last_word_known">“%1$s” is already in the dictionary</string>
+    <string name="add_last_word_none">No word before the cursor to add</string>
     <string name="titan2_elite_corner_style_description">Contoured LEDs: the corner buttons follow the display’s curve, with one LED rail running round it beneath them, each LED lighting its share. Straight buttons: the corner buttons reach straight down into the corners, and the bar sits a little above the LEDs.</string>
     <string name="titan2_elite_corner_style_contoured">Contoured LEDs</string>
     <string name="titan2_elite_corner_style_straight">Straight buttons</string>

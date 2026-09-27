@@ -3512,7 +3512,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         
         val modifierSnapshot = modifierStateController.snapshot()
         val state = inputContextState
+        // The suggestions' "add to dictionary" chip, unless it's switched off
         val addWordCandidate = suggestionController.pendingAddWord()
+            ?.takeIf { SettingsManager.getShowAddWordSuggestion(this) }
         val suggestionsEnabled = SettingsManager.isExperimentalSuggestionsEnabled(this) && SettingsManager.getSuggestionsEnabled(this)
         val suggestionsStart = ImePerfLogger.mark()
         val baseSuggestions = if (suggestionsEnabled) visibleSuggestionStrings() else emptyList()
@@ -5889,6 +5891,22 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             }
         }
 
+        // Ctrl + Shift + D: add the last word typed to the dictionary
+        if (
+            hasEditableField &&
+            keyCode == KeyEvent.KEYCODE_D &&
+            event?.repeatCount == 0 &&
+            (event.isCtrlPressed || ctrlPressed || ctrlLatchActive || ctrlOneShot) &&
+            (event.isShiftPressed || shiftPhysicallyPressed) &&
+            SettingsManager.getAddLastWordShortcut(this)
+        ) {
+            modifierStateController.clearCtrlState(resetPressedState = true)
+            modifierStateController.clearShiftState(resetPressedState = true)
+            addLastWordToDictionary()
+            updateStatusBarText()
+            return true
+        }
+
         // Handle Ctrl+Space for subtype cycling
         if (
             layoutSwitchChordsAllowed &&
@@ -6490,6 +6508,25 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             textExpansionController.scheduleRefresh()
         }
         return handled
+    }
+
+    /**
+     * Adds the word before the cursor (or the unknown word the suggestions offered) to the
+     * dictionary, and says what happened.
+     */
+    private fun addLastWordToDictionary() {
+        val before = currentInputConnection?.getTextBeforeCursor(64, 0)?.toString().orEmpty()
+        val word = lastWordIn(before) ?: suggestionController.pendingAddWord()
+        val message = when {
+            word.isNullOrBlank() -> getString(R.string.add_last_word_none)
+            suggestionController.isKnownWordInActiveDictionaries(word) -> getString(R.string.add_last_word_known, word)
+            else -> {
+                suggestionController.addUserWord(word)
+                suggestionController.clearPendingAddWord()
+                getString(R.string.add_last_word_added, word)
+            }
+        }
+        android.widget.Toast.makeText(this, message, android.widget.Toast.LENGTH_SHORT).show()
     }
 
     /**
@@ -7135,3 +7172,13 @@ private val HIDDEN_APP_SYSTEM_KEYS = setOf(
     KeyEvent.KEYCODE_VOLUME_DOWN,
     KeyEvent.KEYCODE_VOLUME_MUTE
 )
+
+/** The last word in [text], skipping the spaces and punctuation after it; null when there's none. */
+internal fun lastWordIn(text: String): String? {
+    fun wordChar(c: Char) = c.isLetterOrDigit() || c == '\'' || c == '’' || c == '-'
+    var end = text.length
+    while (end > 0 && !text[end - 1].isLetterOrDigit()) end--
+    var start = end
+    while (start > 0 && wordChar(text[start - 1])) start--
+    return text.substring(start, end).trim('\'', '’', '-').takeIf { word -> word.any { it.isLetter() } }
+}

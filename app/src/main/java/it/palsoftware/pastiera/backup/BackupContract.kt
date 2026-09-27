@@ -461,6 +461,8 @@ internal object BackupPreferenceContract {
             "titan2_elite_straight_outer_buttons" to PreferenceValueType.BOOLEAN,
             "titan2_elite_status_bar_lift_dp" to PreferenceValueType.INT,
             "titan2_elite_contour_leds" to PreferenceValueType.BOOLEAN,
+            "show_add_word_suggestion" to PreferenceValueType.BOOLEAN,
+            "add_last_word_shortcut" to PreferenceValueType.BOOLEAN,
             "experimental_candidates_view_enabled" to PreferenceValueType.BOOLEAN,
             "alt_shift_layout_switch" to PreferenceValueType.BOOLEAN,
             "ctrl_space_layout_switch" to PreferenceValueType.BOOLEAN,

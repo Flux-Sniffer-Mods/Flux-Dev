@@ -222,6 +222,8 @@ object SettingsManager {
     private const val KEY_TRACKPAD_PROVIDER = "trackpad_provider" // shizuku | native_ime
     private const val KEY_TRACKPAD_SHIZUKU_DEVICE = "trackpad_shizuku_device"
     private const val KEY_SHIFT_BACKSPACE_DELETE = "shift_backspace_delete" // Shift + Backspace performs forward delete
+    const val KEY_SHOW_ADD_WORD_SUGGESTION = "show_add_word_suggestion" // Offer "add to dictionary" in the suggestions
+    const val KEY_ADD_LAST_WORD_SHORTCUT = "add_last_word_shortcut" // Ctrl + Shift + D adds the last word to the dictionary
     private const val KEY_ALT_BACKSPACE_DELETE = "alt_backspace_delete" // Alt + Backspace performs forward delete
     private const val KEY_BACKSPACE_AT_START_DELETE = "backspace_at_start_delete" // Backspace at line start performs forward delete
     private const val KEY_PASTIERINA_MODE_OVERRIDE = "pastierina_mode_override" // pastierina | full_status_bar
@@ -2679,6 +2681,22 @@ object SettingsManager {
     /**
      * Returns whether Shift+Backspace performs forward delete.
      */
+    /** Whether the suggestions offer to add an unknown word to the dictionary (on by default). */
+    fun getShowAddWordSuggestion(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_SHOW_ADD_WORD_SUGGESTION, true)
+
+    fun setShowAddWordSuggestion(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_SHOW_ADD_WORD_SUGGESTION, enabled).apply()
+    }
+
+    /** Whether Ctrl + Shift + D adds the last word typed to the dictionary (on by default). */
+    fun getAddLastWordShortcut(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_ADD_LAST_WORD_SHORTCUT, true)
+
+    fun setAddLastWordShortcut(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_ADD_LAST_WORD_SHORTCUT, enabled).apply()
+    }
+
     fun getShiftBackspaceDelete(context: Context): Boolean {
         return getPreferences(context).getBoolean(KEY_SHIFT_BACKSPACE_DELETE, DEFAULT_SHIFT_BACKSPACE_DELETE)
     }
