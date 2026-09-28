@@ -4299,15 +4299,20 @@ class StatusBarController(
             cornerFillPaint.strokeCap = Paint.Cap.ROUND
             canvas.drawPath(bottomContour, cornerFillPaint)
             cornerFillPaint.style = Paint.Style.FILL
-            // The square corners outside the display curve: the keyboard's colour, not the app
-            // behind it (it shows in screenshots and wherever the calibration is slightly off).
-            // Not with contoured LEDs, which follow the curve itself.
-            if (!contourIntegratedIndicators) {
-                val cornerSave = canvas.save()
-                canvas.clipOutPath(path)
+            // The square corners outside the display curve, repainted every frame: otherwise what
+            // was drawn there before (the contoured LEDs, see-through keys) never clears and each
+            // frame stacks on the last. The background picture where there is one, else the
+            // keyboard's colour; contoured LEDs draw over it afterwards.
+            val cornerSave = canvas.save()
+            canvas.clipOutPath(path)
+            val picture = background as? it.palsoftware.pastiera.KeyboardBackgroundImage.Drawable
+            if (picture != null) {
+                picture.setBounds(0, 0, width, height)
+                picture.draw(canvas)
+            } else {
                 canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), cornerFillPaint)
-                canvas.restoreToCount(cornerSave)
             }
+            canvas.restoreToCount(cornerSave)
 
             val contentSave = canvas.save()
             canvas.clipPath(path)

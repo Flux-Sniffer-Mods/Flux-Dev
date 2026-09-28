@@ -293,6 +293,10 @@
   ],
   "bugFixes": [
     {
+      "text": "See-through keys and contoured LEDs no longer pile up in the corners: the corners are repainted every frame, with the background picture or the keyboard's colour.",
+      "after": "202609280101"
+    },
+    {
       "text": "Contoured LEDs: the suggestions and the menu bar's buttons reach down to just above the LEDs again, and the menu bar's buttons are full height.",
       "after": "202609280053"
     },
