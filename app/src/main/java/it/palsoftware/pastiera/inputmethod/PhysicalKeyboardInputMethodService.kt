@@ -4918,14 +4918,19 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (!::clipboardHistoryManager.isInitialized || !::candidatesBarController.isInitialized) return
         if (!SettingsManager.getPasteSuggestionEnabled(this)) return
         val state = inputContextState
-        if (!state.isReallyEditable || state.isPasswordField || terminalModeActive || keyboardHiddenForApp) return
+        if (!state.isReallyEditable || terminalModeActive || keyboardHiddenForApp) return
+        val passwordField = state.isPasswordField
+        if (passwordField && !SettingsManager.getPasteSuggestionInPasswordFields(this)) return
         val copy = clipboardHistoryManager.recentCopy ?: return
         if (System.currentTimeMillis() - copy.timestamp > PASTE_SUGGESTION_WINDOW_MS) return
-        val label = PasteSuggestion.label(copy.text)
+        // A password manager's copy only goes into password fields
+        if (copy.sensitive && !passwordField) return
+        // In a password field the chip never shows the text, and it's pasted exactly as copied
+        val label = if (passwordField) PasteSuggestion.MASKED_LABEL else PasteSuggestion.label(copy.text)
         pasteSuggestionShown = true
         candidatesBarController.showExpansionSuggestions(listOf(label)) { _ ->
             clearPasteSuggestion()
-            currentInputConnection?.commitText(SettingsManager.textToPaste(this, copy.text), 1)
+            currentInputConnection?.commitText(if (passwordField) copy.text else SettingsManager.textToPaste(this, copy.text), 1)
             clipboardHistoryManager.consumeRecentCopy()
             updateStatusBarText()
         }
@@ -5409,6 +5414,21 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             typingSoundPlayer.play(keyCode)
         }
 
+        // Shift + Backspace (Text input > Shift + Backspace) deletes the character after the
+        // cursor. Only a held Shift, which the key event itself may not report on the Titan: an
+        // automatic capital or a tapped Shift leaves Backspace as it is. A selection is deleted as usual.
+        if (keyCode == KeyEvent.KEYCODE_DEL && hasEditableField && symPage == 0 && !terminalModeActive &&
+            SettingsManager.getShiftBackspaceDelete(this) &&
+            (shiftPhysicallyPressed || event?.isShiftPressed == true) &&
+            event?.isCtrlPressed != true && event?.isAltPressed != true
+        ) {
+            val ic = initialInputConnection
+            if (ic != null && ic.getSelectedText(0).isNullOrEmpty()) {
+                ic.deleteSurroundingTextInCodePoints(0, 1)
+                return true
+            }
+        }
+
         val emojiSearchCtrlActive = event?.isCtrlPressed == true ||
             ctrlPressed ||
             ctrlPhysicallyPressed ||
@@ -5642,6 +5662,13 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                     updateStatusBarText()
                     return true
                 }
+            }
+            // A tapped SYM or emoji key waiting for its one key: Back cancels it, as it closes a page
+            if (symSticky || emojiSticky) {
+                symSticky = false
+                emojiSticky = false
+                updateStatusBarText()
+                return true
             }
             // A user dismissal wins over an in-flight backend switch or queued recovery.
             pendingKeyboardSurfaceTransition?.let(uiHandler::removeCallbacks)
@@ -6702,11 +6729,12 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         // Direction picks: the dominant direction counts (a 45° wedge each way) and a shorter
         // swipe does, so a swipe works from anywhere on the keys, edges included
         val pickDistance = suggestionThreshold * 0.6f
+        val sideDistance = SettingsManager.getTrackpadSideSwipeThreshold(this)
         val horizontalDominant = kotlin.math.abs(deltaX) > kotlin.math.abs(deltaY)
         val pickFastEnough = maxOf(kotlin.math.abs(deltaX), kotlin.math.abs(deltaY)) / durationMs >=
             NATIVE_TRACKPAD_MIN_SWIPE_VELOCITY_PX_PER_MS
-        val rightEnough = horizontalDominant && rightwardDistance >= pickDistance && pickFastEnough
-        val leftPicks = horizontalDominant && leftwardDistance >= pickDistance && pickFastEnough
+        val rightEnough = horizontalDominant && rightwardDistance >= sideDistance && pickFastEnough
+        val leftPicks = horizontalDominant && leftwardDistance >= sideDistance && pickFastEnough
         val upPicks = !horizontalDominant && upwardDistance >= pickDistance && pickFastEnough
         val downEnough = !horizontalDominant && downwardDistance >= deleteThreshold * 0.6f &&
             downwardDistance / durationMs >= NATIVE_TRACKPAD_MIN_SWIPE_VELOCITY_PX_PER_MS

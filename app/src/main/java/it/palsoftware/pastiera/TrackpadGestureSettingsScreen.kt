@@ -50,6 +50,9 @@ fun TrackpadGestureSettingsScreen(
     var deleteSwipeThreshold by remember {
         mutableStateOf(SettingsManager.getTrackpadDeleteSwipeThreshold(context))
     }
+    var sideSwipeThreshold by remember {
+        mutableStateOf(SettingsManager.getTrackpadSideSwipeThreshold(context))
+    }
     var showTutorialDialog by remember { mutableStateOf(false) }
     var showSensitivitySettings by remember { mutableStateOf(settingsChild(context, "trackpad") == "sensitivity") }
     var shizukuStatus by remember { mutableStateOf(ShizukuStatus.NotConnected) }
@@ -78,13 +81,13 @@ fun TrackpadGestureSettingsScreen(
     LaunchedEffect(highlightedSettingId) {
         when (highlightedSettingId) {
             SettingLinkIds.TRACKPAD_SUGGESTION_SWIPE_THRESHOLD,
+            SettingLinkIds.TRACKPAD_SIDE_SWIPE_THRESHOLD,
             SettingLinkIds.TRACKPAD_DELETE_SWIPE_THRESHOLD -> showSensitivitySettings = true
             "trackpad.add_word",
             "trackpad.add_word_full_width",
             "trackpad.swipe_to_delete",
             "trackpad.swipe_to_delete_provider",
             "trackpad.suggestion_swipe_directions",
-            "trackpad.swipe_down_deletes_word",
             "trackpad.phone_settings",
             SettingLinkIds.TRACKPAD_GESTURES_ENABLED,
             SettingLinkIds.TRACKPAD_PROVIDER,
@@ -172,6 +175,11 @@ fun TrackpadGestureSettingsScreen(
                     onSuggestionSwipeThresholdChange = { newValue ->
                         suggestionSwipeThreshold = newValue
                         SettingsManager.setTrackpadSuggestionSwipeThreshold(context, newValue)
+                    },
+                    sideSwipeThreshold = sideSwipeThreshold,
+                    onSideSwipeThresholdChange = { newValue ->
+                        sideSwipeThreshold = newValue
+                        SettingsManager.setTrackpadSideSwipeThreshold(context, newValue)
                     },
                     deleteSwipeThreshold = deleteSwipeThreshold,
                     onDeleteSwipeThresholdChange = { newValue ->
@@ -483,102 +491,7 @@ fun TrackpadGestureSettingsScreen(
                 }
             }
 
-            ExposedDropdownMenuBox(
-                expanded = swipeToDeleteProviderMenuExpanded,
-                onExpandedChange = { swipeToDeleteProviderMenuExpanded = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 4.dp)
-                    .settingRow("trackpad.swipe_to_delete_provider")
-            ) {
-                OutlinedTextField(
-                    value = swipeToDeleteProviderOptions.firstOrNull { it.first == swipeToDeleteProvider }?.second ?: swipeToDeleteProvider,
-                    onValueChange = {},
-                    readOnly = true,
-                    enabled = swipeToDelete,
-                    singleLine = true,
-                    label = { Text(stringResource(R.string.swipe_to_delete_provider_title)) },
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = swipeToDeleteProviderMenuExpanded) },
-                    colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
-                    modifier = Modifier
-                        .menuAnchor(MenuAnchorType.PrimaryNotEditable)
-                        .fillMaxWidth()
-                )
-                ExposedDropdownMenu(
-                    expanded = swipeToDeleteProviderMenuExpanded,
-                    onDismissRequest = { swipeToDeleteProviderMenuExpanded = false }
-                ) {
-                    swipeToDeleteProviderOptions.forEach { (value, label) ->
-                        DropdownMenuItem(
-                            text = { Text(label) },
-                            onClick = {
-                                swipeToDeleteProvider = value
-                                SettingsManager.setSwipeToDeleteProvider(context, value)
-                                swipeToDeleteProviderMenuExpanded = false
-                            },
-                            leadingIcon = {
-                                if (swipeToDeleteProvider == value) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Check,
-                                        contentDescription = null
-                                    )
-                                }
-                            },
-                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
-                        )
-                    }
-                }
-            }
-
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 72.dp)
-                    .settingRow("trackpad.swipe_to_delete")
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.Backspace,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = stringResource(R.string.swipe_to_delete_title),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Medium
-                        )
-                        Text(
-                            text = stringResource(R.string.swipe_to_delete_description),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                    Switch(
-                        checked = swipeToDelete,
-                        onCheckedChange = { enabled ->
-                            swipeToDelete = enabled
-                            SettingsManager.setSwipeToDelete(context, enabled)
-                        }
-                    )
-                }
-            }
-
-            if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice()) {
-                FluxActionRow(
-                    linkId = "trackpad.phone_settings",
-                    title = stringResource(R.string.phone_trackpad_settings_title),
-                    description = stringResource(R.string.phone_trackpad_settings_description),
-                    onClick = { PhoneTrackpadSettings.open(context) }
-                )
-            }
+            SettingsSectionDivider(stringResource(R.string.trackpad_section_swipes))
             FluxSwitchRow(
                 linkId = "trackpad.suggestion_swipe_directions",
                 title = stringResource(R.string.trackpad_swipe_directions_title),
@@ -587,18 +500,121 @@ fun TrackpadGestureSettingsScreen(
                 onCheckedChange = {
                     swipeDirections = it
                     SettingsManager.setTrackpadSuggestionSwipeDirections(context, it)
+                    // Left becomes a suggestion swipe: a left delete moves down instead
+                    if (it && swipeToDelete) {
+                        swipeToDelete = false
+                        SettingsManager.setSwipeToDelete(context, false)
+                        swipeDownDeletes = true
+                        SettingsManager.setTrackpadSwipeDownDeletesWord(context, true)
+                    }
                 }
             )
-            FluxSwitchRow(
-                linkId = "trackpad.swipe_down_deletes_word",
-                title = stringResource(R.string.trackpad_swipe_down_delete_title),
-                description = stringResource(R.string.trackpad_swipe_down_delete_description),
-                checked = swipeDownDeletes,
-                onCheckedChange = {
-                    swipeDownDeletes = it
-                    SettingsManager.setTrackpadSwipeDownDeletesWord(context, it)
-                }
+
+            // One choice for deleting a word with a swipe: off, left or down
+            val deleteSwipe = when {
+                swipeToDelete && !swipeDirections -> "left"
+                swipeDownDeletes -> "down"
+                else -> "off"
+            }
+            val deleteSwipeOptions = listOf(
+                "off" to stringResource(R.string.swipe_delete_off),
+                "left" to stringResource(if (swipeDirections) R.string.swipe_delete_left_taken else R.string.swipe_delete_left),
+                "down" to stringResource(R.string.swipe_delete_down)
             )
+            var deleteSwipeMenuExpanded by remember { mutableStateOf(false) }
+            ExposedDropdownMenuBox(
+                expanded = deleteSwipeMenuExpanded,
+                onExpandedChange = { deleteSwipeMenuExpanded = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .settingRow("trackpad.swipe_to_delete")
+            ) {
+                OutlinedTextField(
+                    value = deleteSwipeOptions.first { it.first == deleteSwipe }.second,
+                    onValueChange = {},
+                    readOnly = true,
+                    singleLine = true,
+                    label = { Text(stringResource(R.string.swipe_to_delete_title)) },
+                    supportingText = { Text(stringResource(R.string.swipe_to_delete_description)) },
+                    leadingIcon = { Icon(Icons.AutoMirrored.Filled.Backspace, contentDescription = null) },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = deleteSwipeMenuExpanded) },
+                    colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+                    modifier = Modifier
+                        .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                        .fillMaxWidth()
+                )
+                ExposedDropdownMenu(
+                    expanded = deleteSwipeMenuExpanded,
+                    onDismissRequest = { deleteSwipeMenuExpanded = false }
+                ) {
+                    deleteSwipeOptions.forEach { (value, label) ->
+                        DropdownMenuItem(
+                            text = { Text(label) },
+                            enabled = !(value == "left" && swipeDirections),
+                            onClick = {
+                                swipeToDelete = value == "left"
+                                swipeDownDeletes = value == "down"
+                                SettingsManager.setSwipeToDelete(context, swipeToDelete)
+                                SettingsManager.setTrackpadSwipeDownDeletesWord(context, swipeDownDeletes)
+                                deleteSwipeMenuExpanded = false
+                            },
+                            leadingIcon = {
+                                if (deleteSwipe == value) Icon(Icons.Filled.Check, contentDescription = null)
+                            },
+                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                        )
+                    }
+                }
+            }
+            // How a left swipe is read (only while a left swipe deletes)
+            if (deleteSwipe == "left") {
+                ExposedDropdownMenuBox(
+                    expanded = swipeToDeleteProviderMenuExpanded,
+                    onExpandedChange = { swipeToDeleteProviderMenuExpanded = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 4.dp)
+                        .settingRow("trackpad.swipe_to_delete_provider")
+                ) {
+                    OutlinedTextField(
+                        value = swipeToDeleteProviderOptions.firstOrNull { it.first == swipeToDeleteProvider }?.second ?: swipeToDeleteProvider,
+                        onValueChange = {},
+                        readOnly = true,
+                        singleLine = true,
+                        label = { Text(stringResource(R.string.swipe_to_delete_provider_title)) },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = swipeToDeleteProviderMenuExpanded) },
+                        colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+                        modifier = Modifier
+                            .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                            .fillMaxWidth()
+                    )
+                    ExposedDropdownMenu(
+                        expanded = swipeToDeleteProviderMenuExpanded,
+                        onDismissRequest = { swipeToDeleteProviderMenuExpanded = false }
+                    ) {
+                        swipeToDeleteProviderOptions.forEach { (value, label) ->
+                            DropdownMenuItem(
+                                text = { Text(label) },
+                                onClick = {
+                                    swipeToDeleteProvider = value
+                                    SettingsManager.setSwipeToDeleteProvider(context, value)
+                                    swipeToDeleteProviderMenuExpanded = false
+                                },
+                                leadingIcon = {
+                                    if (swipeToDeleteProvider == value) {
+                                        Icon(
+                                            imageVector = Icons.Filled.Check,
+                                            contentDescription = null
+                                        )
+                                    }
+                                },
+                                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                            )
+                        }
+                    }
+                }
+            }
 
             Surface(
                 modifier = Modifier
@@ -644,6 +660,16 @@ fun TrackpadGestureSettingsScreen(
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+            }
+
+            if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice()) {
+                SettingsSectionDivider(stringResource(R.string.trackpad_section_phone))
+                FluxActionRow(
+                    linkId = "trackpad.phone_settings",
+                    title = stringResource(R.string.phone_trackpad_settings_title),
+                    description = stringResource(R.string.phone_trackpad_settings_description),
+                    onClick = { PhoneTrackpadSettings.open(context) }
+                )
             }
 
             // Show Tutorial Button
@@ -749,6 +775,8 @@ fun TrackpadGestureSettingsScreen(
 private fun TrackpadSensitivitySettings(
     suggestionSwipeThreshold: Float,
     onSuggestionSwipeThresholdChange: (Float) -> Unit,
+    sideSwipeThreshold: Float,
+    onSideSwipeThresholdChange: (Float) -> Unit,
     deleteSwipeThreshold: Float,
     onDeleteSwipeThresholdChange: (Float) -> Unit
 ) {
@@ -763,6 +791,13 @@ private fun TrackpadSensitivitySettings(
             value = suggestionSwipeThreshold,
             linkId = SettingLinkIds.TRACKPAD_SUGGESTION_SWIPE_THRESHOLD,
             onValueChange = onSuggestionSwipeThresholdChange
+        )
+        TrackpadSensitivitySlider(
+            title = stringResource(R.string.trackpad_side_swipe_threshold_title),
+            description = stringResource(R.string.trackpad_side_swipe_threshold_description),
+            value = sideSwipeThreshold,
+            linkId = SettingLinkIds.TRACKPAD_SIDE_SWIPE_THRESHOLD,
+            onValueChange = onSideSwipeThresholdChange
         )
         TrackpadSensitivitySlider(
             title = stringResource(R.string.trackpad_delete_swipe_threshold_title),
