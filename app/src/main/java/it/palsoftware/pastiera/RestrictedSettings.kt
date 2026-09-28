@@ -28,9 +28,27 @@ object RestrictedSettings {
         return mode == AppOpsManager.MODE_ERRORED || mode == AppOpsManager.MODE_IGNORED
     }
 
-    /** App info, where ⋮ > Allow restricted settings lifts the block. */
+    /**
+     * How to allow restricted settings, step by step, with a button to App info (where ⋮ >
+     * Allow restricted settings lifts the block). Without a screen to show it on, a short hint.
+     */
     fun openAppInfo(context: Context) {
-        Toast.makeText(context, R.string.restricted_settings_toast, Toast.LENGTH_LONG).show()
+        val activity = generateSequence(context) { (it as? android.content.ContextWrapper)?.baseContext }
+            .firstOrNull { it is android.app.Activity } as? android.app.Activity
+        if (activity == null || activity.isFinishing) {
+            Toast.makeText(context, R.string.restricted_settings_toast, Toast.LENGTH_LONG).show()
+            launchAppInfo(context)
+            return
+        }
+        android.app.AlertDialog.Builder(activity)
+            .setTitle(R.string.restricted_settings_help_title)
+            .setMessage(R.string.restricted_settings_help_steps)
+            .setPositiveButton(R.string.restricted_settings_help_open) { _, _ -> launchAppInfo(activity) }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    private fun launchAppInfo(context: Context) {
         runCatching {
             context.startActivity(
                 Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", context.packageName, null))

@@ -57,6 +57,10 @@
   ],
   "improvements": [
     {
+      "text": "Restricted settings explained: switching on something Android blocks for apps installed from a file (one-time codes, the accessibility service) shows how to allow it step by step, with a button to App info. The tutorial's Extras page does too.",
+      "after": "202609280035"
+    },
+    {
       "text": "Recommended settings are now the whole configuration from Flux Keyboard's own Titan 2 Elite, sliders included: auto-correct off, GIFs and one-time codes on, colours from the wallpaper, and the built-in themes' key sizes. Only your languages and app lists are left as they are.",
       "after": "202609280033"
     },

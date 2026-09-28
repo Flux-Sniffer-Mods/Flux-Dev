@@ -57,7 +57,7 @@
     <string name="flux_tutorial_extras_on">On</string>
     <string name="flux_tutorial_extras_codes_title">One-time codes</string>
     <string name="flux_tutorial_extras_codes_text">Codes from your notifications, offered as a chip to fill in. Needs notification access.</string>
-    <string name="flux_tutorial_extras_codes_restricted">Codes from your notifications, offered as a chip to fill in. Android blocks notification access for apps installed from a file: the button opens App info, where ⋮ › Allow restricted settings lifts it.</string>
+    <string name="flux_tutorial_extras_codes_restricted">Codes from your notifications, offered as a chip to fill in. Android blocks notification access for apps installed from a file until you allow restricted settings: the button shows you how, step by step, and opens App info.</string>
     <string name="flux_tutorial_extras_codes_button">Turn on</string>
     <string name="flux_tutorial_extras_niagara_title">Niagara search as the quick launcher</string>
     <string name="flux_tutorial_extras_niagara_text">The quick launcher opens Niagara\'s search instead of the built-in one, and Back takes you back to your app.</string>
@@ -79,4 +79,6 @@
     <string name="flux_tutorial_personalise_bullet_colours">The keyboard can take its colours from your wallpaper, or a theme of your own.</string>
     <string name="flux_tutorial_personalise_bullet_menu">Choose the menu bar\'s buttons and their order.</string>
     <string name="flux_tutorial_personalise_button">Status LED colours</string>
+    <string name="flux_tutorial_extras_restricted_text">One-time codes and the keyboard\'s LEDs in hidden-keyboard apps need notification access or the accessibility service, which Android blocks for apps installed from a file until you allow restricted settings once.</string>
+    <string name="flux_tutorial_extras_restricted_button">Show me how</string>
 </resources>

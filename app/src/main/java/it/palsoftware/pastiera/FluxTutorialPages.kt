@@ -180,6 +180,16 @@ fun FluxTutorialExtrasPageContent(modifier: Modifier = Modifier) {
             androidx.compose.foundation.layout.Column(
                 verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(12.dp)
             ) {
+                // Installed from a file: some extras need Android's restricted settings allowed first
+                if (remember(refresh) { RestrictedSettings.blocked(context) }) {
+                    ExtraStep(
+                        title = stringResource(R.string.restricted_settings_help_title),
+                        text = stringResource(R.string.flux_tutorial_extras_restricted_text),
+                        button = stringResource(R.string.flux_tutorial_extras_restricted_button),
+                        enabled = true,
+                        onClick = { RestrictedSettings.openAppInfo(context) }
+                    )
+                }
                 ExtraStep(
                     title = stringResource(R.string.flux_tutorial_extras_codes_title),
                     text = stringResource(
