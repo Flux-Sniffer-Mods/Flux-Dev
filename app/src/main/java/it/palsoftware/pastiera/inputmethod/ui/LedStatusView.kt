@@ -172,6 +172,9 @@ class LedStatusView(
         railChrome()?.invalidate()
     }
 
+    /** How high the contoured LEDs rise up the corner buttons on the plain bar. */
+    private var railRiseFromBottom: Float? = null
+
     /** Each LED's current colour on the contoured rail. */
     private val railColors = mutableMapOf<ModifierLedSegment, Int>()
     private val railPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -516,8 +519,12 @@ class LedStatusView(
             T2eCornerGeometry.point(radius, bottom, Math.PI / 2 * step / CONTOUR_STEPS, calibration, inset)
         val leftArc = (0..CONTOUR_STEPS).map { point(left, it) }
         val rightArc = (CONTOUR_STEPS downTo 0).map { point(right, it).let { p -> T2eCornerGeometry.Point(width - p.x, p.y) } }
-        // Up the sides of the corner buttons to their top edge, when they reach above the curve
-        val top = contourGeometry?.buttonTopPx?.plus(stroke)
+        // Up the sides of the corner buttons to their top edge, when they reach above the curve.
+        // The same height on every page: the plain bar's, remembered as a rise from the bottom
+        val expanded = chrome.expandedSurfaceView?.visibility == View.VISIBLE
+        val measuredTop = contourGeometry?.buttonTopPx?.plus(stroke)
+        if (!expanded && measuredTop != null) railRiseFromBottom = bottom - measuredTop
+        val top = railRiseFromBottom?.let { bottom - it } ?: measuredTop
         val points = buildList {
             if (top != null && top < leftArc.first().y) add(T2eCornerGeometry.Point(leftArc.first().x, top))
             addAll(leftArc)

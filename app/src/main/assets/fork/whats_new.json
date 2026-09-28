@@ -57,6 +57,10 @@
   ],
   "improvements": [
     {
+      "text": "Contoured LEDs rise to the same height on every page: the height they have on the plain bar.",
+      "after": "202609280010"
+    },
+    {
       "text": "Titan 2 Elite: the display contour follows the screen's real corner, a near-circle of about 80 px, measured from Unihertz's own images. Tap Reset in Display contour calibration to use it if you saved your own.",
       "after": "202609272343"
     },
