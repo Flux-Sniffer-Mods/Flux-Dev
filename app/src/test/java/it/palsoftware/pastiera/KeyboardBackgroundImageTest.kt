@@ -45,4 +45,22 @@ class KeyboardBackgroundImageTest {
         val t = KeyboardBackgroundImage.recolour(theme, luminance = 0.9, autoColours = false, keyOpacityPercent = 40)
         assertEquals(theme.copy(background = Color.TRANSPARENT), t)
     }
+
+    @Test
+    fun framingMovesThePictureWithinWhatDoesNotFit() {
+        val matrix = android.graphics.Matrix()
+        val values = FloatArray(9)
+        // A 200 x 100 picture over a 100 x 100 bar: covering needs scale 1, 100 px spare across
+        KeyboardBackgroundImage.frame(matrix, 200, 100, 0f, 0f, 100f, 100f, KeyboardBackgroundImage.Framing(x = 0f, y = 1f))
+        matrix.getValues(values)
+        assertEquals(0f, values[android.graphics.Matrix.MTRANS_X], 0.01f)
+        KeyboardBackgroundImage.frame(matrix, 200, 100, 0f, 0f, 100f, 100f, KeyboardBackgroundImage.Framing(x = 1f, y = 1f))
+        matrix.getValues(values)
+        assertEquals(-100f, values[android.graphics.Matrix.MTRANS_X], 0.01f)
+        assertEquals(
+            KeyboardBackgroundImage.Framing(0.25f, 0.5f, 2f),
+            KeyboardBackgroundImage.Framing.decode(KeyboardBackgroundImage.Framing(0.25f, 0.5f, 2f).encode())
+        )
+        assertEquals(KeyboardBackgroundImage.Framing(), KeyboardBackgroundImage.Framing.decode("nonsense"))
+    }
 }

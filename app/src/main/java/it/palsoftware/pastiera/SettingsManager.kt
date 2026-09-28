@@ -77,6 +77,7 @@ object SettingsManager {
     private const val KEY_KEYBOARD_BACKGROUND_AUTO_COLOURS = "keyboard_background_auto_colours"
     private const val KEY_KEYBOARD_BACKGROUND_KEY_OPACITY = "keyboard_background_key_opacity"
     const val KEY_KEYBOARD_BACKGROUND_UPDATED = "keyboard_background_updated"
+    private const val KEY_KEYBOARD_BACKGROUND_FRAMING = "keyboard_background_framing"
     private const val KEY_ONE_TIME_CODES = "one_time_codes_enabled"
     private const val KEY_AUTO_SHIFT_FIELD_TYPES = "auto_shift_field_types"
     private const val KEY_SEARCH_BAR_WAITS_FOR_TYPING = "search_bar_waits_for_typing"
@@ -939,7 +940,8 @@ object SettingsManager {
     fun isKeyboardThemePreferenceKey(key: String?): Boolean {
         return key == KEY_KEYBOARD_THEME_HARDWARE || key == KEY_KEYBOARD_THEME_SOFTWARE ||
             key == KEY_KEYBOARD_WALLPAPER_COLOURS || key == KEY_KEYBOARD_BACKGROUND_AUTO_COLOURS ||
-            key == KEY_KEYBOARD_BACKGROUND_KEY_OPACITY || key == KEY_KEYBOARD_BACKGROUND_UPDATED
+            key == KEY_KEYBOARD_BACKGROUND_KEY_OPACITY || key == KEY_KEYBOARD_BACKGROUND_UPDATED ||
+            key == KEY_KEYBOARD_BACKGROUND_FRAMING
     }
 
     fun isModifierIndicatorPreferenceKey(key: String?): Boolean {
@@ -1140,6 +1142,14 @@ object SettingsManager {
 
     fun setKeyboardBackgroundKeyOpacity(context: Context, percent: Int) {
         getPreferences(context).edit().putInt(KEY_KEYBOARD_BACKGROUND_KEY_OPACITY, percent.coerceIn(0, 100)).apply()
+    }
+
+    /** Where the background picture sits behind the keyboard. */
+    fun getKeyboardBackgroundFraming(context: Context): KeyboardBackgroundImage.Framing =
+        KeyboardBackgroundImage.Framing.decode(getPreferences(context).getString(KEY_KEYBOARD_BACKGROUND_FRAMING, null))
+
+    fun setKeyboardBackgroundFraming(context: Context, framing: KeyboardBackgroundImage.Framing) {
+        getPreferences(context).edit().putString(KEY_KEYBOARD_BACKGROUND_FRAMING, framing.encode()).apply()
     }
 
     /** Tells the keyboard the picture changed. */

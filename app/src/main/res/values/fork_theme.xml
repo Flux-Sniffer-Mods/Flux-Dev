@@ -18,4 +18,8 @@
     <string name="punctuation_name_colon">Colon</string>
     <string name="punctuation_name_exclamation">Exclamation mark</string>
     <string name="punctuation_name_question">Question mark</string>
+    <string name="keyboard_background_position_title">Picture position</string>
+    <string name="keyboard_background_position_description">Drag the picture behind the bar to move it; the slider zooms in. Pages like SYM and emoji show more of it.</string>
+    <string name="keyboard_background_zoom_title">Zoom: %1$d%%</string>
+    <string name="keyboard_background_position_reset">Reset position</string>
 </resources>

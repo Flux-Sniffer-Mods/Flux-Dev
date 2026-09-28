@@ -57,6 +57,10 @@
   ],
   "improvements": [
     {
+      "text": "Background picture: a preview of the bar over your picture, where you drag the picture into place and zoom in; the keyboard frames it the same way. Reset position puts it back.",
+      "after": "202609280059"
+    },
+    {
       "text": "Titan 2 Elite: a saved display contour calibration starts again from the measured corner, so the corner buttons and LEDs follow the screen's real curve; your offset and shift settings stay.",
       "after": "202609280055"
     },

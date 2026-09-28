@@ -526,6 +526,8 @@ class StatusBarController(
                 backgroundImage != null && current?.bitmap !== backgroundImage ->
                     layout.background = KeyboardBackgroundImage.Drawable(backgroundImage)
             }
+            (layout.background as? KeyboardBackgroundImage.Drawable)?.framing =
+                SettingsManager.getKeyboardBackgroundFraming(context)
             layout.setBackgroundColor(activeColors.background)
         }
         val roundedCorners = SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context)

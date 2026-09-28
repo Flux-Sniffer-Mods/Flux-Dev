@@ -12,6 +12,13 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -63,6 +70,7 @@ fun KeyboardBackgroundImageSettings() {
             }
         }
         if (hasImage) {
+            KeyboardBackgroundFramingPreview(refreshKey = opacity to autoColours)
             Row(
                 modifier = Modifier.fillMaxWidth().settingRow(SettingLinkIds.KEYBOARD_BACKGROUND_AUTO_COLOURS),
                 verticalAlignment = Alignment.CenterVertically,
@@ -96,5 +104,90 @@ fun KeyboardBackgroundImageSettings() {
                 }
             }
         }
+    }
+}
+
+/**
+ * The bar over the picture, as the keyboard draws it: drag to move the picture, the slider zooms.
+ * Saved when a drag or the slider lets go.
+ */
+@Composable
+private fun KeyboardBackgroundFramingPreview(refreshKey: Any) {
+    val context = LocalContext.current
+    val pictureStamp = KeyboardBackgroundImage.file(context).lastModified()
+    val bitmap = remember(pictureStamp) { KeyboardBackgroundImage.bitmap(context) } ?: return
+    var framing by remember { mutableStateOf(SettingsManager.getKeyboardBackgroundFraming(context)) }
+    val theme = remember(refreshKey) {
+        SettingsManager.getEffectiveKeyboardTheme(context, SettingsManager.KeyboardThemeTarget.HARDWARE)
+    }
+    val matrix = remember { android.graphics.Matrix() }
+    val paint = remember { android.graphics.Paint(android.graphics.Paint.FILTER_BITMAP_FLAG) }
+    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+        Text(
+            stringResource(R.string.keyboard_background_position_title),
+            style = MaterialTheme.typography.bodyLarge
+        )
+        Text(
+            stringResource(R.string.keyboard_background_position_description),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        androidx.compose.foundation.Canvas(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+                .aspectRatio(4.6f)
+                .clip(androidx.compose.foundation.shape.RoundedCornerShape(12.dp))
+                .pointerInput(Unit) {
+                    detectDragGestures(
+                        onDragEnd = { SettingsManager.setKeyboardBackgroundFraming(context, framing) }
+                    ) { change, drag ->
+                        change.consume()
+                        val scale = maxOf(size.width.toFloat() / bitmap.width, size.height.toFloat() / bitmap.height) *
+                            framing.zoom
+                        val spareX = bitmap.width * scale - size.width
+                        val spareY = bitmap.height * scale - size.height
+                        framing = framing.copy(
+                            x = if (spareX > 0f) (framing.x - drag.x / spareX).coerceIn(0f, 1f) else framing.x,
+                            y = if (spareY > 0f) (framing.y - drag.y / spareY).coerceIn(0f, 1f) else framing.y
+                        )
+                    }
+                }
+        ) {
+            drawIntoCanvas { canvas ->
+                KeyboardBackgroundImage.frame(
+                    matrix, bitmap.width, bitmap.height, 0f, 0f, size.width, size.height, framing
+                )
+                canvas.nativeCanvas.drawBitmap(bitmap, matrix, paint)
+            }
+            // The bar's buttons as the keyboard shows them: two corner buttons, three suggestions
+            val gap = 3.dp.toPx()
+            val cell = (size.width - gap * 6) / 5f
+            val radius = androidx.compose.ui.geometry.CornerRadius(8.dp.toPx())
+            for (index in 0 until 5) {
+                val corner = index == 0 || index == 4
+                drawRoundRect(
+                    color = androidx.compose.ui.graphics.Color(if (corner) theme.specialKey else theme.normalKey),
+                    topLeft = androidx.compose.ui.geometry.Offset(gap + index * (cell + gap), gap * 2),
+                    size = androidx.compose.ui.geometry.Size(cell, size.height - gap * 4),
+                    cornerRadius = radius
+                )
+            }
+        }
+        Text(
+            stringResource(R.string.keyboard_background_zoom_title, (framing.zoom * 100).toInt()),
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(top = 8.dp)
+        )
+        Slider(
+            value = framing.zoom,
+            onValueChange = { framing = framing.copy(zoom = it) },
+            onValueChangeFinished = { SettingsManager.setKeyboardBackgroundFraming(context, framing) },
+            valueRange = 1f..KeyboardBackgroundImage.Framing.MAX_ZOOM
+        )
+        TextButton(onClick = {
+            framing = KeyboardBackgroundImage.Framing()
+            SettingsManager.setKeyboardBackgroundFraming(context, framing)
+        }) { Text(stringResource(R.string.keyboard_background_position_reset)) }
     }
 }

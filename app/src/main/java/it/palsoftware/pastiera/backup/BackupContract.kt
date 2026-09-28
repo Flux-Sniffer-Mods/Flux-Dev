@@ -343,6 +343,7 @@ internal object BackupPreferenceContract {
             "keyboard_theme_wallpaper_colours" to PreferenceValueType.BOOLEAN,
             "keyboard_background_auto_colours" to PreferenceValueType.BOOLEAN,
             "keyboard_background_key_opacity" to PreferenceValueType.INT,
+            "keyboard_background_framing" to PreferenceValueType.STRING,
             "one_time_codes_enabled" to PreferenceValueType.BOOLEAN,
             "auto_shift_field_types" to PreferenceValueType.STRING,
             "search_bar_waits_for_typing" to PreferenceValueType.BOOLEAN,

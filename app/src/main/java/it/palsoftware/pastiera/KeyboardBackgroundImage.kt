@@ -131,23 +131,56 @@ object KeyboardBackgroundImage {
     }
 
     /**
-     * The keyboard's background: the picture, cropped to fill and kept to the bottom edge, under
-     * the theme's background colour. A ColorDrawable, so code that recolours the background keeps
-     * the picture.
+     * Where the picture sits: [x] and [y] from 0 (left, top) to 1 (right, bottom) of the part
+     * that doesn't fit, and [zoom] from 1 (just covering) up.
+     */
+    data class Framing(val x: Float = 0.5f, val y: Float = 1f, val zoom: Float = 1f) {
+        fun encode() = "$x,$y,$zoom"
+
+        companion object {
+            const val MAX_ZOOM = 3f
+
+            fun decode(value: String?): Framing {
+                val parts = value?.split(',')?.mapNotNull { it.toFloatOrNull() } ?: return Framing()
+                if (parts.size != 3) return Framing()
+                return Framing(parts[0].coerceIn(0f, 1f), parts[1].coerceIn(0f, 1f), parts[2].coerceIn(1f, MAX_ZOOM))
+            }
+        }
+    }
+
+    /** Fits [bitmapWidth] x [bitmapHeight] over the destination rectangle by [framing]. */
+    fun frame(
+        matrix: Matrix, bitmapWidth: Int, bitmapHeight: Int,
+        left: Float, top: Float, width: Float, height: Float, framing: Framing
+    ) {
+        val scale = maxOf(width / bitmapWidth, height / bitmapHeight) * framing.zoom
+        matrix.setScale(scale, scale)
+        matrix.postTranslate(
+            left + (width - bitmapWidth * scale) * framing.x,
+            top + (height - bitmapHeight * scale) * framing.y
+        )
+    }
+
+    /**
+     * The keyboard's background: the picture, framed as chosen (centred and kept to the bottom
+     * edge unless moved), under the theme's background colour. A ColorDrawable, so code that
+     * recolours the background keeps the picture.
      */
     class Drawable(val bitmap: Bitmap) : ColorDrawable(Color.TRANSPARENT) {
         private val paint = Paint(Paint.FILTER_BITMAP_FLAG or Paint.ANTI_ALIAS_FLAG)
         private val matrix = Matrix()
+        var framing: Framing = Framing()
+            set(value) {
+                if (field == value) return
+                field = value
+                invalidateSelf()
+            }
 
         override fun draw(canvas: Canvas) {
             val b = bounds
             if (b.width() > 0 && b.height() > 0) {
-                val scale = maxOf(b.width().toFloat() / bitmap.width, b.height().toFloat() / bitmap.height)
-                matrix.setScale(scale, scale)
-                matrix.postTranslate(
-                    b.left + (b.width() - bitmap.width * scale) / 2f,
-                    b.bottom - bitmap.height * scale
-                )
+                frame(matrix, bitmap.width, bitmap.height, b.left.toFloat(), b.top.toFloat(),
+                    b.width().toFloat(), b.height().toFloat(), framing)
                 canvas.save()
                 canvas.clipRect(b)
                 canvas.drawBitmap(bitmap, matrix, paint)
