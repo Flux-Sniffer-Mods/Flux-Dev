@@ -14,8 +14,9 @@ object LedColors {
         SHIFT("shift", Color.rgb(79, 195, 247)),
         CTRL("ctrl", Color.rgb(255, 183, 77)),
         ALT("alt", Color.rgb(129, 199, 132)),
-        SYM("sym", Color.rgb(186, 104, 200)),
-        EMOJI("emoji", Color.rgb(255, 213, 79))
+        // A clear purple, well apart from the emoji LED's pink
+        SYM("sym", Color.rgb(149, 76, 255)),
+        EMOJI("emoji", Color.rgb(255, 105, 180))
     }
 
     enum class Level { OFF, ACTIVE, LOCKED }
