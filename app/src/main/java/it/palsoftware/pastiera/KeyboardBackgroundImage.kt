@@ -7,6 +7,9 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.BitmapShader
+import android.graphics.Shader
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import androidx.core.graphics.ColorUtils
@@ -187,6 +190,21 @@ object KeyboardBackgroundImage {
                 canvas.restore()
             }
             super.draw(canvas)
+        }
+
+        private val shaderPaint = Paint(Paint.FILTER_BITMAP_FLAG or Paint.ANTI_ALIAS_FLAG).apply {
+            shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        }
+        private val shaderMatrix = Matrix()
+
+        /** Fills [path] with the picture as framed in [bounds], with smooth (anti-aliased) edges */
+        fun fillPath(canvas: Canvas, path: Path) {
+            val b = bounds
+            if (b.width() <= 0 || b.height() <= 0) return
+            frame(shaderMatrix, bitmap.width, bitmap.height, b.left.toFloat(), b.top.toFloat(),
+                b.width().toFloat(), b.height().toFloat(), framing)
+            shaderPaint.shader.setLocalMatrix(shaderMatrix)
+            canvas.drawPath(path, shaderPaint)
         }
 
         override fun getOpacity(): Int = android.graphics.PixelFormat.OPAQUE

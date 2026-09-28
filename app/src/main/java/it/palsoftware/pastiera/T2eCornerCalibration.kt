@@ -6,12 +6,12 @@ import kotlin.math.*
 
 internal data class T2eCornerCalibration(
     // Fitted to Unihertz's front render: a near-circular corner of about 80 px on the
-    // 1080 x 1200 display, the radius Android reports
+    // 1080 x 1200 display, the radius Android reports, sitting exactly on the display edge
     val size: Float = 1.0f,
-    val offsetPx: Float = 2.25f,
+    val offsetPx: Float = 0f,
     val squircle: Float = 0f,
-    val shiftXPx: Float = -0.50f,
-    val shiftYPx: Float = -1.25f,
+    val shiftXPx: Float = 0f,
+    val shiftYPx: Float = 0f,
     /** Contoured LEDs: how far the LED rail sits inside the calibrated display edge (0: on the edge) */
     val ledOffsetPx: Float = 0f
 ) {
@@ -41,18 +41,18 @@ internal data class T2eCornerCalibration(
                 json.optDouble(key, fallback.toDouble()).toFloat().let {
                     if (it.isFinite()) it.coerceIn(range) else fallback
                 }
-            // The corner's size and shape are stored under new names since the measured corner
-            // (a circle at the reported radius): older saved shapes start again from it
+            // The corner's size, shape and placement are stored under new names since the measured
+            // corner (a circle at the reported radius, on the edge): older saved values start again from it
             T2eCornerCalibration(number("corner_size", defaults.size, 0.4f..1.8f),
-                number("offset_px", defaults.offsetPx, -16f..16f), number("corner_squircle", defaults.squircle, 0f..4f),
-                number("shift_x_px", defaults.shiftXPx, -16f..16f), number("shift_y_px", defaults.shiftYPx, -16f..16f),
+                number("edge_offset_px", defaults.offsetPx, -16f..16f), number("corner_squircle", defaults.squircle, 0f..4f),
+                number("edge_shift_x_px", defaults.shiftXPx, -16f..16f), number("edge_shift_y_px", defaults.shiftYPx, -16f..16f),
                 number("led_edge_offset_px", defaults.ledOffsetPx, 0f..32f))
         }.getOrDefault(T2eCornerCalibration())
     }
 
     fun save(context: Context) {
-        val json = org.json.JSONObject().put("corner_size", size).put("offset_px", offsetPx).put("corner_squircle", squircle)
-            .put("shift_x_px", shiftXPx).put("shift_y_px", shiftYPx).put("led_edge_offset_px", ledOffsetPx)
+        val json = org.json.JSONObject().put("corner_size", size).put("edge_offset_px", offsetPx).put("corner_squircle", squircle)
+            .put("edge_shift_x_px", shiftXPx).put("edge_shift_y_px", shiftYPx).put("led_edge_offset_px", ledOffsetPx)
         SettingsManager.getPreferences(context).edit().putString(KEY, json.toString()).apply()
     }
 }

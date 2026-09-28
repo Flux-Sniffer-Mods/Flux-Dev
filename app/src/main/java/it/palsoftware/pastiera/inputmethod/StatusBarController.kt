@@ -4289,35 +4289,27 @@ class StatusBarController(
                     Path.Direction.CW
                 )
             }
-            val bottomContour = it.palsoftware.pastiera.T2eCornerGeometry.bottomContourPath(
-                width.toFloat(), height.toFloat(), radii.first.toFloat(), radii.second.toFloat(),
-                calibration
-            )
-            cornerFillPaint.color = bottomFillColors.first
-            cornerFillPaint.style = Paint.Style.STROKE
-            cornerFillPaint.strokeWidth = 2f * resources.displayMetrics.density
-            cornerFillPaint.strokeCap = Paint.Cap.ROUND
-            canvas.drawPath(bottomContour, cornerFillPaint)
+            // Content draws unclipped, then the square corners outside the display curve are
+            // painted over with a smooth (anti-aliased) edge: a hard clip leaves stair-stepped
+            // pixels along the curve. Repainted every frame, so what was drawn there before
+            // (contoured LEDs, see-through keys) never stacks. The background picture where
+            // there is one, else the keyboard's colour; contoured LEDs draw over it afterwards.
+            super.draw(canvas)
+            val outside = Path().apply {
+                addRect(0f, 0f, width.toFloat(), height.toFloat(), Path.Direction.CW)
+                op(path, Path.Op.DIFFERENCE)
+            }
+            cornerFillPaint.isAntiAlias = true
             cornerFillPaint.style = Paint.Style.FILL
-            // The square corners outside the display curve, repainted every frame: otherwise what
-            // was drawn there before (the contoured LEDs, see-through keys) never clears and each
-            // frame stacks on the last. The background picture where there is one, else the
-            // keyboard's colour; contoured LEDs draw over it afterwards.
-            val cornerSave = canvas.save()
-            canvas.clipOutPath(path)
+            cornerFillPaint.color = bottomFillColors.first
             val picture = background as? it.palsoftware.pastiera.KeyboardBackgroundImage.Drawable
             if (picture != null) {
                 picture.setBounds(0, 0, width, height)
-                picture.draw(canvas)
+                picture.fillPath(canvas, outside)
             } else {
-                canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), cornerFillPaint)
+                canvas.drawPath(outside, cornerFillPaint)
             }
-            canvas.restoreToCount(cornerSave)
-
-            val contentSave = canvas.save()
-            canvas.clipPath(path)
-            super.draw(canvas)
-            canvas.restoreToCount(contentSave)
+            cornerFillPaint.isAntiAlias = false
             drawContourLeds(canvas)
         }
 
