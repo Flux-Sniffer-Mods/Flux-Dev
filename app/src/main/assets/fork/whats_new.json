@@ -4,6 +4,10 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "Password fields offer the password you just copied as ⎘ •••••••• (never the text itself), from a password manager too.",
+      "after": "202609262118"
+    },
+    {
       "text": "Edit keyboard layouts in the app: tap a key to change what it types, then save, restore, copy or export the layout.",
       "after": "202609261444"
     },
@@ -41,7 +45,35 @@
   ],
   "improvements": [
     {
-      "text": "Updates can offer dev builds too, or only full releases (Settings > Privacy & system); dev builds start on dev updates, full releases on releases.",
+      "text": "Recommended settings are a short list that suits everyone, with an Apply button that then offers to go through your choices (auto-correct, GIFs, colours) in the tutorial. Nothing personal from the old built-in configuration is applied any more.",
+      "after": "202609271150"
+    },
+    {
+      "text": "Developer options are on by default in dev builds and off in full releases, and the Dev builds switch lives there.",
+      "after": "202609271150"
+    },
+    {
+      "text": "Deleting a word with a trackpad swipe is one choice: off, swipe left or swipe down. Left isn't offered while swipe directions pick suggestions.",
+      "after": "202609271150"
+    },
+    {
+      "text": "Settings tidied: search options for the pickers have a page of their own, one-tap SYM is with the other modifiers, the emoji key LED is with the LED colours, and the quick launcher is called that everywhere.",
+      "after": "202609262118"
+    },
+    {
+      "text": "Trackpad sensitivity has its own slider for left and right suggestion swipes.",
+      "after": "202609262118"
+    },
+    {
+      "text": "The emoji key's LED is pink and SYM's a deeper purple by default.",
+      "after": "202609262118"
+    },
+    {
+      "text": "Shift + Backspace (Settings > Typing > Editing keys) deletes the character after the cursor on the Titan too: it now sees a held Shift.",
+      "after": "202609262118"
+    },
+    {
+      "text": "Updates can offer dev builds too, or only full releases (Settings > Privacy & system > Developer options); dev builds start on dev updates, full releases on releases.",
       "after": "202609262020"
     },
     {
@@ -112,7 +144,7 @@
     "Voice input keeps listening through pauses.",
     "Smart Alt and Ctrl, and incognito typing.",
     "Ctrl+Shift+Space switches language backwards; bold suggestions option.",
-    "The QuickLauncher opens from other apps and the app icon.",
+    "The quick launcher opens from other apps and the app icon.",
     "Pastiera Flux is now Flux Keyboard, at the Pastiera team's request: restore a backup from Pastiera Flux, then uninstall it."
   ],
   "upstreamTitle": "From the Pastiera team since 0.85",
@@ -133,6 +165,54 @@
   ],
   "bugFixes": [
     {
+      "text": "Passwords copied from a password manager no longer go into the clipboard history.",
+      "after": "202609262118"
+    },
+    {
+      "text": "Phone trackpad settings search for \"Keyboard gesture\", the page's exact name.",
+      "after": "202609262118"
+    },
+    {
+      "text": "Back cancels a tapped SYM or emoji key that's waiting for its one key, as it closes the symbols.",
+      "after": "202609262118"
+    },
+    {
+      "text": "GIF search no longer keeps every search's results forever: those unused for a week go.",
+      "after": "202609262118"
+    },
+    {
+      "text": "A notification that only mentions \"security\" (a security briefing, an update) is no longer taken for a one-time code.",
+      "after": "202609262118"
+    },
+    {
+      "text": "The paste chip no longer shows a broken character when the copied text is cut in the middle of an emoji.",
+      "after": "202609262118"
+    },
+    {
+      "text": "After an update with nothing new to tell, What's new no longer opens with every change since Pastiera 0.85.",
+      "after": "202609262101"
+    },
+    {
+      "text": "Updates never miss a release, however many dev builds there are: they read the list of releases in full.",
+      "after": "202609262101"
+    },
+    {
+      "text": "When a message has several numbers, the one next to \"code\" is offered as the one-time code, not an order or account number.",
+      "after": "202609262101"
+    },
+    {
+      "text": "Delivery and other notifications that only contain \"pin\" inside a word (\"shipping\", \"Pinterest\") are no longer mistaken for one-time codes.",
+      "after": "202609262058"
+    },
+    {
+      "text": "A one-time code you've typed isn't offered again when its message's notification updates.",
+      "after": "202609262030"
+    },
+    {
+      "text": "Updates set to full releases only still find the latest release after many dev builds.",
+      "after": "202609262030"
+    },
+    {
       "text": "Automatic Shift, auto-correct and replacements work in every text box again with exact typing for no-suggestion fields on.",
       "after": "202609261943"
     },
@@ -143,7 +223,7 @@
     "No automatic Shift in scripts without capitals, such as Thai.",
     "Letters on the emoji layer and symbols pages type their mappings."
   ],
-  "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-keyboard/FORK_CHANGES.md",
+  "docsUrl": "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md",
   "docsLabel": "Full Flux Keyboard changelog",
   "introSince": "What's new in Flux Keyboard since the version you had.",
   "releases": {

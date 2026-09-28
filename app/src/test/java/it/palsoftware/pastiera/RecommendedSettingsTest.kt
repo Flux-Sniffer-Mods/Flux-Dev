@@ -12,7 +12,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])
-class DefaultConfigTest {
+class RecommendedSettingsTest {
     private val context get() = RuntimeEnvironment.getApplication()
 
     @Before
@@ -21,26 +21,37 @@ class DefaultConfigTest {
     }
 
     @Test
-    fun theBundledConfigurationIsAppliedThroughTheRestore() {
-        assertTrue(DefaultConfig.apply(context))
-        assertTrue(SettingsManager.getPreferences(context).getBoolean(DefaultConfig.PREF_APPLIED, false))
-        // A few of its choices
+    fun theRecommendedSettingsAreApplied() {
+        assertTrue(RecommendedSettings.apply(context))
+        assertTrue(SettingsManager.getPreferences(context).getBoolean(RecommendedSettings.PREF_APPLIED, false))
         assertTrue(SettingsManager.getSmartAltOffAfterOpening(context))
         assertTrue(SettingsManager.getSmartCtrlOffAfterShortcut(context))
-        assertFalse(SettingsManager.getEmojiSuggestionsEnabled(context))
         assertTrue(SettingsManager.getLedIndividualColorsEnabled(context))
+        assertTrue(SettingsManager.getShiftBackspaceDelete(context))
+        // Matters of taste stay as they are: the tutorial's "Your choices" asks
+        assertTrue(SettingsManager.getEmojiSuggestionsEnabled(context))
+        assertFalse(SettingsManager.getGifsEnabled(context))
         // Extras that need a permission or another app start off: the tutorial sets them up
         assertEquals(listOf("bitpit.launcher"), SettingsManager.getHiddenKeyboardApps(context))
         assertFalse(SettingsManager.getOneTimeCodesEnabled(context))
         assertEquals(SettingsManager.QUICK_LAUNCHER_BEHAVIOR_PASTIERA, SettingsManager.getQuickLauncherBehavior(context))
-        // Letters on the emoji layer and symbols pages type their mappings, not a search
-        assertFalse(SettingsManager.getEmojiLayerTypeToSearch(context))
-        assertFalse(SettingsManager.getSymbolsTypeToSearch(context))
+    }
+
+    @Test
+    fun nothingPersonalIsRecommended() {
+        val keys = RecommendedSettings.values(titan2Elite = true).keys
+        listOf(
+            "app_enter_behavior_overrides", "sym_mappings_custom", "sym_mappings_page2_custom", "keyboard_theme_hardware",
+            "menu_bar_buttons", "launcher_shortcuts", "hidden_keyboard_apps", "led_color_shift", "auto_correct_enabled"
+        ).forEach { assertFalse(it, it in keys) }
+        // Titan 2 Elite extras only on that phone
+        assertFalse("trackpad_gestures_enabled" in RecommendedSettings.values(titan2Elite = false))
+        assertTrue("trackpad_gestures_enabled" in keys)
     }
 
     @Test
     fun unitTestsKeepPastierasOwnDefaults() {
-        assertFalse(DefaultConfig.applyIfFreshInstall(context))
+        assertFalse(RecommendedSettings.applyIfFreshInstall(context))
     }
 
     @Test
@@ -63,10 +74,10 @@ class DefaultConfigTest {
     @Test
     fun recommendedSettingsCountWhatDiffersThenMatchOnceApplied() {
         // A fresh start differs from the recommended configuration
-        assertTrue(DefaultConfig.differingSettings(context) > 0)
-        assertTrue(DefaultConfig.apply(context))
-        assertEquals(0, DefaultConfig.differingSettings(context))
-        SettingsManager.setEmojiLayerTypeToSearch(context, true)
-        assertEquals(1, DefaultConfig.differingSettings(context))
+        assertTrue(RecommendedSettings.differingSettings(context) > 0)
+        assertTrue(RecommendedSettings.apply(context))
+        assertEquals(0, RecommendedSettings.differingSettings(context))
+        SettingsManager.setSmartAltOffAfterOpening(context, false)
+        assertEquals(1, RecommendedSettings.differingSettings(context))
     }
 }

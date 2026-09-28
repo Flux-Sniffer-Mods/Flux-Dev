@@ -544,7 +544,7 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
     @Test
     fun autoCap_recommendedSettings_startEveryTextBoxWithShift() {
         val context = RuntimeEnvironment.getApplication()
-        assertTrue(it.palsoftware.pastiera.DefaultConfig.apply(context))
+        assertTrue(it.palsoftware.pastiera.RecommendedSettings.apply(context))
         val kinds = mapOf(
             "plain" to InputType.TYPE_CLASS_TEXT,
             "sentences" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES),
@@ -1232,6 +1232,77 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
         assertEquals(0, symLayout().currentSymPage())
     }
 
+    @Test
+    fun tappedSymOrEmojiKey_backCancelsItsOneKey() {
+        val context = RuntimeEnvironment.getApplication()
+        SettingsManager.setSymStickyTap(context, true)
+        SettingsManager.setEmojiStickyTap(context, true)
+        SettingsManager.setEmojiPickerKey(context, KeyEvent.KEYCODE_SHIFT_RIGHT)
+
+        tapSym(30_000L)
+        assertTrue(getField<Boolean>(service, "symSticky"))
+        assertTrue(pressKey(KeyEvent.KEYCODE_BACK, 30_100L).first)
+        assertFalse(getField<Boolean>(service, "symSticky"))
+        pressKey(KeyEvent.KEYCODE_A, 30_200L)
+        assertEquals(listOf("a"), recorder.committedTexts)
+
+        pressKey(KeyEvent.KEYCODE_SHIFT_RIGHT, 31_000L)
+        assertTrue(getField<Boolean>(service, "emojiSticky"))
+        pressKey(KeyEvent.KEYCODE_BACK, 31_100L)
+        assertFalse(getField<Boolean>(service, "emojiSticky"))
+        assertEquals(0, symLayout().currentSymPage())
+    }
+
+    @Test
+    fun tappedSymKey_typesOneSymbolThenLetters() {
+        SettingsManager.setSymStickyTap(RuntimeEnvironment.getApplication(), true)
+
+        tapSym(32_000L)
+        pressKey(KeyEvent.KEYCODE_A, 32_100L)
+        pressKey(KeyEvent.KEYCODE_A, 32_200L)
+
+        assertEquals(2, recorder.committedTexts.size)
+        assertTrue(recorder.committedTexts[0] != "a")
+        assertEquals("a", recorder.committedTexts[1])
+        assertEquals(0, symLayout().currentSymPage())
+    }
+
+    @Test
+    fun shiftHeldWithBackspace_deletesTheCharacterAfterTheCursor() {
+        SettingsManager.setShiftBackspaceDelete(RuntimeEnvironment.getApplication(), true)
+        recorder.textBeforeCursor = "abc"
+        val shiftMeta = KeyEvent.META_SHIFT_ON or KeyEvent.META_SHIFT_LEFT_ON
+        service.onKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT, 40_000L, 40_000L, shiftMeta))
+        val handled = service.onKeyDown(KeyEvent.KEYCODE_DEL, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL, 40_050L, 40_050L, shiftMeta))
+        service.onKeyUp(KeyEvent.KEYCODE_DEL, keyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL, 40_050L, 40_080L, shiftMeta))
+        service.onKeyUp(KeyEvent.KEYCODE_SHIFT_LEFT, keyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT, 40_000L, 40_100L))
+
+        assertTrue(handled)
+        assertEquals(listOf(1), recorder.forwardDeletes)
+        assertEquals("abc", recorder.textBeforeCursor)
+    }
+
+    @Test
+    fun shiftHeldWithBackspace_deletesBackwardsWhenTheSettingIsOff() {
+        SettingsManager.setShiftBackspaceDelete(RuntimeEnvironment.getApplication(), false)
+        recorder.textBeforeCursor = "abc"
+        val shiftMeta = KeyEvent.META_SHIFT_ON or KeyEvent.META_SHIFT_LEFT_ON
+        service.onKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT, 42_000L, 42_000L, shiftMeta))
+        service.onKeyDown(KeyEvent.KEYCODE_DEL, keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL, 42_050L, 42_050L, shiftMeta))
+
+        assertTrue(recorder.forwardDeletes.isEmpty())
+    }
+
+    @Test
+    fun backspaceAfterATappedShift_stillDeletesBackwards() {
+        SettingsManager.setShiftBackspaceDelete(RuntimeEnvironment.getApplication(), true)
+        recorder.textBeforeCursor = "abc"
+        tapShift(41_000L)
+        pressKey(KeyEvent.KEYCODE_DEL, 41_100L)
+
+        assertTrue(recorder.forwardDeletes.isEmpty())
+    }
+
     private fun pressKey(keyCode: Int, start: Long): Pair<Boolean, Boolean> {
         val down = service.onKeyDown(keyCode, keyEvent(KeyEvent.ACTION_DOWN, keyCode, start, start))
         val up = service.onKeyUp(keyCode, keyEvent(KeyEvent.ACTION_UP, keyCode, start, start + 30L))
@@ -1418,6 +1489,7 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
         val editorActions = mutableListOf<Int>()
         val contextMenuActions = mutableListOf<Int>()
         val deleteSurroundingTextCalls = mutableListOf<Pair<Int, Int>>()
+        val forwardDeletes = mutableListOf<Int>()
 
         fun asProxy(): InputConnection {
             return Proxy.newProxyInstance(
@@ -1431,6 +1503,10 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
                             committedTexts += text
                             textBeforeCursor += text
                         }
+                        true
+                    }
+                    "deleteSurroundingTextInCodePoints" -> {
+                        forwardDeletes += ((args?.getOrNull(1) as? Int) ?: 0)
                         true
                     }
                     "deleteSurroundingText" -> {

@@ -5,7 +5,12 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [33])
 class ForkUpdateReleaseTest {
 
     private fun release(tag: String, draft: Boolean = false) = GitHubRelease(
@@ -69,5 +74,23 @@ class ForkUpdateReleaseTest {
     fun aNewerBaseVersionWins() {
         val found = findNewerForkRelease(listOf(release("flux/v0.87-flux.202610010000")), "0.86-flux.202609260938")
         assertEquals("flux/v0.87-flux.202610010000", found?.tagName)
+    }
+
+    @Test
+    fun updatesReadTheReleaseTagsSoNoReleaseIsHiddenBehindOthers() {
+        assertTrue(forkReleasesApiUrl().endsWith("/git/matching-refs/tags/flux/v"))
+        val releases = forkReleasesFromTags(
+            listOf("refs/tags/flux/v0.91", "refs/tags/flux/v0.92", "refs/tags/flux/v0.93-flux.202609262047", "refs/tags/v0.90")
+        )
+        assertEquals(listOf("flux/v0.91", "flux/v0.92", "flux/v0.93-flux.202609262047"), releases.map { it.tagName })
+        val stable = requireNotNull(findNewerForkRelease(releases, "0.91", includeDev = false))
+        assertEquals("flux/v0.92", stable.tagName)
+        assertTrue(stable.downloadUrl!!.endsWith("/releases/download/flux/v0.92/flux-keyboard-0.92.apk"))
+        assertTrue(ForkUpdateInstaller.isTrustedApkUrl(stable.downloadUrl!!))
+        val dev = requireNotNull(findNewerForkRelease(releases, "0.92", includeDev = true))
+        assertEquals("flux/v0.93-flux.202609262047", dev.tagName)
+        assertTrue(dev.displayName, dev.displayName.startsWith("Flux Keyboard 0.93 dev · 26 "))
+        assertTrue(dev.displayName, dev.displayName.endsWith(" 2026, 20:47"))
+        assertTrue(dev.downloadUrl!!.endsWith("/flux-keyboard-0.93-flux.202609262047.apk"))
     }
 }
