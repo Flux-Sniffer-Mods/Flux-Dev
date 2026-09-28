@@ -54,7 +54,7 @@ body:
       options:
         - label: Physical keyboard input
         - label: Virtual keyboard input
-        - label: Hybrid/sliding keyboard behavior
+        - label: Hybrid/sliding keyboard behaviour
         - label: Layouts / key mappings
         - label: Modifier keys / Nav Mode / shortcuts
         - label: Suggestions / autocorrect / dictionaries

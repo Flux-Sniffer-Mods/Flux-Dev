@@ -197,6 +197,6 @@
     "Ctrl coverage is incomplete and contains only observed combinations from the export.",
     "No KEY_DOWN repeat=0 events with symPage != 0 were found in the parser pass.",
     "The observed base layer maps physical Y to y and physical Z to z, which differs from app/src/main/assets/common/layouts/qwertz.json.",
-    "The observed Titan 2 Device-SYM mapping matches app/src/main/assets/devices/titan2/device_sym_key_mappings.json for letter keys; Alt+Space is extra observed behavior."
+    "The observed Titan 2 Device-SYM mapping matches app/src/main/assets/devices/titan2/device_sym_key_mappings.json for letter keys; Alt+Space is extra observed behaviour."
   ]
 }

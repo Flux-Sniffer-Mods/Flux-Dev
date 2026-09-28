@@ -51,22 +51,29 @@ class UpdateCheckWorker(
         // Wait for the network response (or timeout).
         val awaitSuccess = latch.await(30, TimeUnit.SECONDS)
         val result = resultRef.get()
-        if (!awaitSuccess || !completedRef.get() || result == null || !result.successful) {
+        if (!awaitSuccess || !completedRef.get() || result == null) {
             // Network error or timeout: ask WorkManager to retry later.
             return Result.retry()
         }
 
-        if (result.hasAnnouncement) {
-            if (result.releaseTag != null && result.displayName != null) {
-                if (result.isForkUpdate) rememberAnnouncedForkRelease(context, result.releaseTag)
+        var announcement: UpdateCheckResult? = result
+        while (announcement != null) {
+            if (announcement.hasAnnouncement && announcement.displayName != null) {
+                if (announcement.isForkUpdate) announcement.releaseTag?.let { rememberAnnouncedForkRelease(context, it) }
                 NotificationHelper.showUpdateAvailableNotification(
                     context = context,
-                    displayName = result.displayName,
-                    releasePageUrl = result.releasePageUrl,
-                    isNightlyUpdate = result.isNightlyUpdate,
-                    isForkUpdate = result.isForkUpdate
+                    displayName = announcement.displayName,
+                    releasePageUrl = announcement.releasePageUrl,
+                    isNightlyUpdate = announcement.isNightlyUpdate,
+                    isPastieraStableUpdate = announcement.isPastieraStableUpdate,
+                    isForkUpdate = announcement.isForkUpdate
                 )
             }
+            announcement = announcement.followUpAnnouncement
+        }
+
+        if (!result.successful) {
+            return Result.retry()
         }
 
         return Result.success()

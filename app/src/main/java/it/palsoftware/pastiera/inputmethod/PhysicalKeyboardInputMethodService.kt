@@ -349,6 +349,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private var symSticky: Boolean = false
     private var emojiSticky: Boolean = false
     private var symChordUsedSinceKeyDown: Boolean = false
+    private var symPhysicallyPressed: Boolean = false
     private var nativeTrackpadGestureStart: NativeTrackpadGestureStart? = null
     private var nativeTrackpadLastX: Float = 0f
     private var nativeTrackpadLastY: Float = 0f
@@ -2464,6 +2465,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             } else if (key == "pastierina_mode_override") {
                 keyboardVisibilityController.syncStatusBarPresentationModeFromSettings()
             } else if (key == SettingsManager.KEY_TITAN2_ELITE_ROUNDED_CORNER_INSETS ||
+                key == SettingsManager.KEY_TITAN2_ELITE_FILL_CORNERS ||
                 key == it.palsoftware.pastiera.T2eCornerCalibration.KEY ||
                 key == SettingsManager.KEY_TITAN2_ELITE_TOP_CORNER_MULTIPLIER ||
                 key == SettingsManager.KEY_TITAN2_ELITE_MAX_ICON_SHRINK) {
@@ -3417,6 +3419,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         lastShiftTapUpTime = 0L
         lastAltTapUpTime = 0L
         modifierStateBeforeHold = null
+        symTogglePendingOnKeyUp = false
+        symChordUsedSinceKeyDown = false
+        symPhysicallyPressed = false
 
         modifierStateController.resetModifiers(
             preserveNavMode = preserveNavMode,
@@ -3528,6 +3533,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             symSticky = symSticky,
             emojiHeld = emojiPickerKeyUpPending != KeyEvent.KEYCODE_UNKNOWN,
             emojiSticky = emojiSticky,
+            symPhysicallyPressed = symPhysicallyPressed,
             clipboardCount = clipboardCount,
             variations = variationSnapshot.variations,
             suggestions = baseSuggestions,
@@ -5512,6 +5518,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (hasEditableField && keyCode == KEYCODE_SYM && event?.repeatCount == 0) {
             symTogglePendingOnKeyUp = true
             symChordUsedSinceKeyDown = false
+            symPhysicallyPressed = true
             updateStatusBarText() // SYM's LED shows it held
         }
 
@@ -6297,6 +6304,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             if (keyCode == KEYCODE_SYM) {
                 symTogglePendingOnKeyUp = false
                 symChordUsedSinceKeyDown = false
+                symPhysicallyPressed = false
             }
             return inputEventRouter.handleKeyUpWithNoEditableField(
                 keyCode = keyCode,
@@ -6453,6 +6461,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         
         // Toggle SYM layout on key release only when SYM was tapped alone.
         if (keyCode == KEYCODE_SYM) {
+            symPhysicallyPressed = false
             // Held past a tap without choosing a symbol: SYM just lets go
             val tapped = symTogglePendingOnKeyUp && !symChordUsedSinceKeyDown && !(event != null && isLongHold(event))
             symTogglePendingOnKeyUp = false

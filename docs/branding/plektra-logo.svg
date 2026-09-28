@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="265" height="265" viewBox="0 0 265 265" role="img" aria-labelledby="title desc">
+  <title id="title">Plektra framed icon, color</title>
+  <desc id="desc">Framed color derivation of the canonical open Plektra icon.</desc>
+
+  <defs>
+    <!-- A simplified, smooth interpretation of the open reference plectrum. -->
+    <path id="plectrum-shape" d="M 114 95 C 109 98 108 102 108 110 C 108 120 111 135 114 145 C 119 160.6 132 161.6 152 146 C 164 136 169.3 128 165 121 C 162 114 150 105 137 99 C 126 93 120 92 114 95 Z"/>
+
+    <!--
+      SwiftUI's continuous rounded rectangle at Apple's common 0.2237 icon
+      radius ratio, evaluated once at 53x53 and reused by all three keys.
+    -->
+    <path id="key-squircle-shape" d="M 95 196.5 V 204.876 C 95 210.095 95 212.704 94.112 215.513 C 92.996 218.580 90.580 220.996 87.513 222.112 C 84.704 223 82.095 223 76.876 223 H 60.124 C 54.905 223 52.296 223 49.487 222.112 C 46.420 220.996 44.004 218.580 42.888 215.513 C 42 212.704 42 210.095 42 204.876 V 188.124 C 42 182.905 42 180.296 42.888 177.487 C 44.004 174.420 46.420 172.004 49.487 170.888 C 52.296 170 54.905 170 60.124 170 H 76.876 C 82.095 170 84.704 170 87.513 170.888 C 90.580 172.004 92.996 174.420 94.112 177.487 C 95 180.296 95 182.905 95 188.124 Z"/>
+
+    <!--
+      One shared 42..223 field is cut by three transparent strings. The
+      plectrum clearance is an optical contour rather than a mechanical
+      stroke. Four regions that deliberately depart from the string grid are
+      removed here and restored below as organic optical masters.
+    -->
+    <mask id="string-field-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="265" height="265">
+      <rect width="265" height="265" fill="#000000"/>
+      <rect x="42" y="42" width="181" height="118" rx="12" fill="#FFFFFF"/>
+      <g id="string-cutouts" fill="#000000">
+        <path id="string-1" d="M -100 -54 L 400 446 L 400 417 L -100 -83 Z"/>
+        <path id="string-2" d="M -100 -131 L 400 369 L 400 340 L -100 -160 Z"/>
+        <path id="string-3" d="M -100 -199 L 400 301 L 400 272 L -100 -228 Z"/>
+      </g>
+      <!-- The generated upper-left interval is replaced by its optical master. -->
+      <path id="upper-left-replacement-cutout" d="M 23 41 H 73 L 153 121 H 103 Z" fill="#000000"/>
+      <path id="upper-right-replacement-cutout" d="M 165 38 H 227 V 100 H 165 Z" fill="#000000"/>
+      <path id="middle-band-replacement-cutout" d="M -100 -159 L 400 341 L 400 300 L -100 -200 Z" fill="#000000"/>
+      <path id="lower-left-replacement-cutout" d="M 38 78 H 108 V 160 H 38 Z" fill="#000000"/>
+      <path id="lower-triangle-replacement-cutout" d="M 150 125 H 206 V 160 H 150 Z" fill="#000000"/>
+      <use href="#plectrum-shape" fill="#000000" stroke="#000000" stroke-width="28" stroke-linejoin="round"/>
+    </mask>
+  </defs>
+
+  <defs>
+  <g id="open-dark-shapes" fill="#000000">
+
+  <!--
+    The three transparent strings are 29 units wide in x-y coordinates. Their
+    69-unit pitch leaves equal 40-unit brown intervals between them.
+  -->
+  <rect id="string-field" width="265" height="265" mask="url(#string-field-mask)"/>
+
+  <!--
+    Optical correction from the reference: 48-unit interval, optical r12 outer
+    cap, calculated r4 upper shoulder, r4 lower outer tip and r3 inner cap.
+    Both long edges remain exact 45° lines.
+  -->
+  <path id="upper-left-optical" d="M 54 42 H 71.343 A 4 4 0 0 1 74.172 43.172 L 107 76 C 109.5 78.5 110 82.8 108.4 84 C 104.4 86.2 101.2 89.2 99.3 93 C 96.5 98.2 95.4 103 95.155 107.327 A 2 2 0 0 1 91.741 108.741 L 43.172 60.172 A 4 4 0 0 1 42 57.343 V 54 C 42 50.545 42 48.817 42.588 46.957 C 43.327 44.927 44.927 43.327 46.957 42.588 C 48.817 42 50.545 42 54 42 Z"/>
+
+  <!--
+    Organic corrections at the plectrum clearance; all long runs remain 45°.
+    The r2 circular corners use calculated tangent distances: 4.828 units at
+    45° corners and 0.828 units at 135° corners. Their diagonal coordinate
+    offsets are 3.414 and 0.586 units respectively. A curvature-free raccord
+    leaves the lower 45° edge before the contour follows the 12.875-unit
+    optical offset of the plectrum. Its terminal x-y=64 tangent points at the
+    middle-right cap, while y=109 leaves the shared ten-unit vertical gap
+    above that element. The parallelogram spans x-y=56 through x-y=104,
+    leaving 25-unit gaps on both diagonal sides.
+  -->
+  <g id="plectrum-optical-terminations">
+    <path id="upper-right-optical" d="M 175.828 42 H 211 C 214.455 42 216.183 42 218.043 42.588 C 220.073 43.327 221.673 44.927 222.412 46.957 C 223 48.817 223 50.545 223 54 V 89.172 A 2 2 0 0 1 219.586 90.586 L 174.414 45.414 A 2 2 0 0 1 175.828 42 Z"/>
+    <path id="upper-diagonal-optical" d="M 102.828 42 H 145.172 A 2 2 0 0 1 146.586 42.586 L 209.586 105.586 A 2 2 0 0 1 208.172 109 H 174.657 A 4 4 0 0 1 171.828 107.828 L 169.059 105.059 C 166.785 102.785 164.272 100.66 161.559 98.627 C 158.898 96.632 156.046 94.731 153.053 92.939 C 142.794 86.794 142.794 86.794 136 80 L 101.414 45.414 A 2 2 0 0 1 102.828 42 Z"/>
+    <path id="lower-left-optical" d="M 42 90.036 A 2.5 2.5 0 0 1 46.268 88.268 L 98.5 140.5 C 100.5 142.5 104.8 147 104.8 152.5 C 104.8 157 102 160 97 160 H 54 C 50.545 160 48.817 160 46.957 159.412 C 44.927 158.673 43.327 157.073 42.588 155.043 C 42 153.183 42 151.455 42 148 Z"/>
+    <!--
+      The two facing edges are exact parallel 45-degree lines. Their supports
+      x-y=56.84 and x-y=37.748116908 leave a 13.5-unit normal gap. The upper
+      r3 circle and the lower calculated r4.356 circle use their tangent
+      points; the latter reaches exactly y=160. The lower organic flank has
+      one convex raccord and therefore no counter-curve or fin.
+    -->
+    <path id="middle-right-optical" d="M 183.083 119 H 211 C 214.455 119 216.183 119 218.043 119.588 C 220.073 120.327 221.673 121.927 222.412 123.957 C 223 125.817 223 127.545 223 131 V 155.644 A 4.356 4.356 0 0 1 215.564 158.724 L 180.961 124.121 A 3 3 0 0 1 183.083 119 Z"/>
+    <path id="lower-triangle-optical" d="M 178.8 141.052 L 192.627 154.879 A 3 3 0 0 1 190.505 160 H 166 C 162 160 159 159 159 157 C 159 155 160.9 154.4 162.4 153.1 C 167.2 149.2 171.1 145 173.9 140.2 C 175 138.314 176.8 139.052 178.8 141.052 Z"/>
+  </g>
+
+  <g id="keys">
+    <use id="key-left" href="#key-squircle-shape"/>
+    <use id="key-center" href="#key-squircle-shape" transform="translate(64 0)"/>
+    <use id="key-right" href="#key-squircle-shape" transform="translate(128 0)"/>
+  </g>
+  </g>
+
+    <mask id="framed-panel-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="265" height="265" style="mask-type:luminance">
+      <rect width="265" height="265" fill="#000000"/>
+      <path fill="#FFFFFF" d="M 61 7 H 204 C 233.823 7 258 31.177 258 61 V 204 C 258 233.823 233.823 258 204 258 H 61 C 31.177 258 7 233.823 7 204 V 61 C 7 31.177 31.177 7 61 7 Z"/>
+      <use href="#open-dark-shapes"/>
+      <use href="#plectrum-shape" fill="#000000"/>
+    </mask>
+  </defs>
+
+  <path id="framed-panel-background" fill="#FFFFFF" d="M 61 7 H 204 C 233.823 7 258 31.177 258 61 V 204 C 258 233.823 233.823 258 204 258 H 61 C 31.177 258 7 233.823 7 204 V 61 C 7 31.177 31.177 7 61 7 Z"/>
+  <rect id="framed-panel" width="265" height="265" fill="#332515" mask="url(#framed-panel-mask)"/>
+  <use id="plectrum" href="#plectrum-shape" fill="#FC7A0F"/>
+</svg>

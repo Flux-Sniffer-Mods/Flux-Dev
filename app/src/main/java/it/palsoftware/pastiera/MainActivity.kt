@@ -203,10 +203,7 @@ class MainActivity : LocalizedComponentActivity() {
                 SettingsManager.markWhatsNewSeen(this, BuildConfig.VERSION_NAME)
             }
         }
-        if (
-            BuildConfig.RELEASE_CHANNEL != "nightly" &&
-            SettingsManager.shouldShowWhatsNew(this, BuildConfig.VERSION_NAME)
-        ) {
+        if (SettingsManager.shouldShowWhatsNew(this, BuildConfig.VERSION_NAME)) {
             val intent = Intent(this, TutorialActivity::class.java).apply {
                 putExtra(TutorialActivity.EXTRA_UPDATE_TUTORIAL, true)
             }

@@ -435,11 +435,12 @@ private fun SettingsMainScreen(
                             contentDescription = stringResource(R.string.settings_back_content_description)
                         )
                     }
-                    Text(
-                        text = stringResource(R.string.settings_title),
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.padding(start = 8.dp)
+                    SettingsSearchField(
+                        value = searchQuery,
+                        onValueChange = { searchQuery = it },
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 8.dp)
                     )
                 }
             }
@@ -452,13 +453,6 @@ private fun SettingsMainScreen(
                 .consumeWindowInsets(paddingValues)
                 .imePadding()
         ) {
-            SettingsSearchField(
-                value = searchQuery,
-                onValueChange = { searchQuery = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-            )
             if (searchQuery.isNotBlank()) {
                 Column(
                     modifier = Modifier

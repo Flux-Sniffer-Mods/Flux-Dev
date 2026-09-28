@@ -1,6 +1,6 @@
 # Flux Keyboard changelog
 
-Changes since **Pastiera 0.85**, the last official Pastiera release (May 2026): first what Flux Keyboard adds, then [what the Pastiera team has built since](#from-the-pastiera-team-since-085), which Flux Keyboard includes.
+Flux Keyboard is up to date with **Pastiera 0.86** (September 2026), Pastiera's final feature release; Pastiera keeps receiving security fixes, and its development continues as [Plektra](https://github.com/pkb-rocks/plektra). This page lists first what Flux Keyboard adds, then [what the Pastiera team built between 0.85 and 0.86](#from-the-pastiera-team-085-to-086), which Flux Keyboard includes. New Pastiera changes are merged into the dev builds as they land, so Flux Keyboard is never behind Pastiera.
 
 Flux Keyboard is an unofficial fork of [Pastiera](https://github.com/palsoftware/pastiera), the physical-keyboard input method created by Andrea Palumbo (PalSoftware) and developed by Andrea Palumbo, Patrick Zauner and the Pastiera contributors. All credit for Pastiera itself goes to them; this page lists only what the fork changes. Flux Keyboard is not affiliated with or endorsed by the Pastiera team, and like Pastiera it is licensed under the GNU GPL v3.
 
@@ -88,9 +88,9 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 - The pencil on the symbol panels edits that layer's mapping; holding it on pages that have them edits the variations.
 - Dev's choice static variations by default.
 
-## From the Pastiera team since 0.85
+## From the Pastiera team: 0.85 to 0.86
 
-Flux Keyboard is built on Pastiera's main branch (September 2026), so it also includes what the Pastiera team has added since their 0.85 release. That work is theirs:
+Flux Keyboard includes everything the Pastiera team built for Pastiera 0.86 since their 0.85 release. That work is theirs:
 
 - **Clicks Power Keyboard** support: controls, firmware status, and SYM profiles for Razr and Pixel.
 - An **on-screen keyboard mode** based on AOSP, with themes, a number row, layout styles and long-press layers.
@@ -107,6 +107,11 @@ Flux Keyboard is built on Pastiera's main branch (September 2026), so it also in
 - **Greek translation**, and configurable status buttons for the compact mode (Pastierina, called Solderina here).
 - Clipboard history **hidden while the phone is locked**.
 - **Safer backups** (themes and typing sounds included) and many fixes: suggestions in Telegram, emoji search, Firefox accents, Ctrl shortcuts in number fields and more.
+- **Contour LEDs** on the Titan 2 Elite: the modifier LEDs run as rails along the rounded corner buttons. In Flux Keyboard they show when the bar isn't lifted and the outer buttons are rounded; the lifted bar and straight buttons keep Flux Keyboard's LED band. Pastiera's "Fill lower display corners" is the same switch as Flux Keyboard's **Fill corners**.
+- The menu bar shows **SYM while it is held**, and the navigation bar under the keyboard takes the keyboard's colour.
+- A **software bill of materials** (CycloneDX) in release builds, exported from About.
+
+Pastiera 0.86's hand-over to Plektra (its welcome page, update checks and About notices) doesn't apply to Flux Keyboard, which updates from its own releases.
 
 ## Upstream issues addressed
 
