@@ -265,6 +265,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Contoured LEDs: the bar keeps room above them, so the menu bar's buttons are no longer cut off at the top.",
+      "after": "202609280018"
+    },
+    {
       "text": "Contoured LEDs work in Solderina too, instead of falling back to a thin line cut off in the corners.",
       "after": "202609272327"
     },

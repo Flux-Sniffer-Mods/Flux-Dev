@@ -4388,6 +4388,17 @@ class StatusBarController(
                 invalidateTree(this)
             }
         var onContourGeometryChanged: ((LedStatusView.ContourGeometry?) -> Unit)? = null
+        /**
+         * Contoured LEDs: the band the bar's row keeps clear above them, so its buttons fit
+         * above the LEDs instead of being pushed up out of the keyboard.
+         */
+        private fun contourRowInsetPx(): Int {
+            val calibration = it.palsoftware.pastiera.T2eCornerCalibration.read(context)
+            return kotlin.math.ceil(
+                calibration.offsetPx + LedStatusView.contourButtonInsetPx(context) - calibration.shiftYPx
+            ).toInt().coerceAtLeast(0)
+        }
+
         /** Draws the contoured LEDs after everything else, so nothing covers them. */
         var contourLedOverlay: ((Canvas) -> Unit)? = null
 
@@ -4470,7 +4481,7 @@ class StatusBarController(
             val stripTop = (resources.displayMetrics.density).toInt()
             // The LED surface draws first; overlap its empty center with the row.
             val requestedRowHeight = params.height.coerceAtLeast(0)
-            val bottomInset = if (contourIntegratedIndicators) 0 else
+            val bottomInset = if (contourIntegratedIndicators) contourRowInsetPx() else
                 (LedStatusView.MERGED_LED_ZONE_HEIGHT_DP * resources.displayMetrics.density).toInt()
             // Lift: a taller LED surface raises the row by the same amount; onLayout keeps the
             // row's bottom that far above the LEDs, leaving them a clear band underneath.
@@ -4510,7 +4521,7 @@ class StatusBarController(
             // Anchor its actual bottom to the inner LED contour after layout.
             // The straight lower indicators occupy only the lower LED row;
             // their top edge is closer to the bottom than the two-row side arcs.
-            val bottomInset = if (contourIntegratedIndicators) 0 else
+            val bottomInset = if (contourIntegratedIndicators) contourRowInsetPx() else
                 (LedStatusView.MERGED_LED_ZONE_HEIGHT_DP * resources.displayMetrics.density).toInt()
             surfaceView?.let { surface ->
                 val targetBottom = surface.bottom - bottomInset - nestedRowLiftPx

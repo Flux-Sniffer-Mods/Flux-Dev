@@ -118,7 +118,7 @@ class NestedStatusBarGeometryTest {
     }
 
     @Test
-    fun contourIntegratedIndicatorsLetTheRegularRowUseTheFullCenterHeight() {
+    fun contourIntegratedIndicatorsKeepTheRowJustAboveTheLeds() {
         val context = RuntimeEnvironment.getApplication()
         val chrome = StatusBarController.ImeChromeLayout(context).apply {
             orientation = LinearLayout.VERTICAL
@@ -140,7 +140,9 @@ class NestedStatusBarGeometryTest {
         )
         chrome.layout(0, 0, chrome.measuredWidth, chrome.measuredHeight)
 
-        assertEquals(indicators.bottom, row.bottom)
+        // The row stops just above the contoured LEDs: the rail's band stays clear below it
+        assertTrue(row.bottom < indicators.bottom)
+        assertTrue(indicators.bottom - row.bottom <= 12)
     }
 
     @Test
