@@ -30,11 +30,12 @@ class HiddenKeyboardAppsTest {
     }
 
     @Test
-    fun onlyNiagaraByDefault() {
-        // Niagara Launcher's search reads keys itself, so Pastiera stays hidden there by default
-        assertEquals(listOf("bitpit.launcher"), SettingsManager.getHiddenKeyboardApps(context))
+    fun niagaraAndTermuxX11ByDefault() {
+        // Niagara Launcher's search and Termux:X11 read keys themselves, so the keyboard stays hidden
+        assertEquals(listOf("bitpit.launcher", "com.termux.x11"), SettingsManager.getHiddenKeyboardApps(context))
         assertTrue(SettingsManager.isKeyboardHiddenForApp(context, "bitpit.launcher"))
-        assertFalse(SettingsManager.isKeyboardHiddenForApp(context, "com.termux.x11"))
+        assertTrue(SettingsManager.isKeyboardHiddenForApp(context, "com.termux.x11"))
+        assertFalse(SettingsManager.isKeyboardHiddenForApp(context, "com.termux"))
     }
 
     @Test

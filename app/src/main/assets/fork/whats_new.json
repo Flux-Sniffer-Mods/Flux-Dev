@@ -57,6 +57,10 @@
   ],
   "improvements": [
     {
+      "text": "Termux:X11 keeps the keyboard hidden by default, like Niagara Launcher.",
+      "after": "202609280018"
+    },
+    {
       "text": "Recommended settings updated: Ctrl+Space switches layout (not Alt+Shift), no automatic Shift in search fields, punctuation spacing for . , ; : ! ?, and on the Titan 2 Elite contoured LEDs and the lightest trackpad flick.",
       "after": "202609280010"
     },

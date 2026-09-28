@@ -5697,7 +5697,8 @@ object SettingsManager {
     fun getHiddenKeyboardApps(context: Context): List<String> =
         parsePackageList(getPreferences(context).getString(KEY_HIDDEN_KEYBOARD_APPS, DEFAULT_HIDDEN_KEYBOARD_APPS) ?: "")
 
-    const val DEFAULT_HIDDEN_KEYBOARD_APPS = "bitpit.launcher"
+    // Niagara Launcher and Termux:X11 take the keys without the keyboard on screen
+    const val DEFAULT_HIDDEN_KEYBOARD_APPS = "bitpit.launcher\ncom.termux.x11"
 
     fun setHiddenKeyboardApps(context: Context, packages: Collection<String>) {
         val clean = packages.joinToString("\n").let(::parsePackageList)

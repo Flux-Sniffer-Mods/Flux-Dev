@@ -32,7 +32,7 @@ class RecommendedSettingsTest {
         assertTrue(SettingsManager.getEmojiSuggestionsEnabled(context))
         assertFalse(SettingsManager.getGifsEnabled(context))
         // Extras that need a permission or another app start off: the tutorial sets them up
-        assertEquals(listOf("bitpit.launcher"), SettingsManager.getHiddenKeyboardApps(context))
+        assertEquals(listOf("bitpit.launcher", "com.termux.x11"), SettingsManager.getHiddenKeyboardApps(context))
         assertFalse(SettingsManager.getOneTimeCodesEnabled(context))
         assertEquals(SettingsManager.QUICK_LAUNCHER_BEHAVIOR_PASTIERA, SettingsManager.getQuickLauncherBehavior(context))
     }
@@ -68,7 +68,7 @@ class RecommendedSettingsTest {
 
     @Test
     fun niagaraIsHiddenByDefault() {
-        assertEquals(listOf("bitpit.launcher"), SettingsManager.getHiddenKeyboardApps(context))
+        assertEquals(listOf("bitpit.launcher", "com.termux.x11"), SettingsManager.getHiddenKeyboardApps(context))
     }
 
     @Test
