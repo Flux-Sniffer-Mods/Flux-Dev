@@ -829,6 +829,14 @@ object SettingsManager {
         statusBarButton = 0xFFAFB6C2.toInt(),
         keyCornerRadiusRatio = 0.118f,
         chromeCornerRadiusRatio = 0.09f,
+        // Sizes from Flux Keyboard's own Titan 2 Elite configuration
+        keyHeightScale = 1.259f,
+        numberRowHeightScale = 0.971f,
+        keyWidthScale = 0.941f,
+        rowGapScale = 1.05f,
+        showLeds = false,
+        suggestionsHeightScale = 0.9f,
+        variationsHeightScale = 0.88f,
         keyPopupStyle = KEYBOARD_THEME_POPUP_STYLE_CLASSIC
     )
 
@@ -850,6 +858,14 @@ object SettingsManager {
         statusBarButton = 0xFF2C2C2E.toInt(),
         keyCornerRadiusRatio = 0.118f,
         chromeCornerRadiusRatio = 0.09f,
+        // Sizes from Flux Keyboard's own Titan 2 Elite configuration
+        keyHeightScale = 1.259f,
+        numberRowHeightScale = 0.971f,
+        keyWidthScale = 0.941f,
+        rowGapScale = 1.05f,
+        showLeds = false,
+        suggestionsHeightScale = 0.9f,
+        variationsHeightScale = 0.88f,
         keyPopupStyle = KEYBOARD_THEME_POPUP_STYLE_CLASSIC
     )
 

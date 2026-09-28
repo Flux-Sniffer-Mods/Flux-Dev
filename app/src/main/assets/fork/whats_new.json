@@ -57,6 +57,10 @@
   ],
   "improvements": [
     {
+      "text": "Recommended settings are now the whole configuration from Flux Keyboard's own Titan 2 Elite, sliders included: auto-correct off, GIFs and one-time codes on, colours from the wallpaper, and the built-in themes' key sizes. Only your languages and app lists are left as they are.",
+      "after": "202609280033"
+    },
+    {
       "text": "Enter sends in every app by default, with Shift+Enter for a new line (email apps keep Enter for a new line and Ctrl+Enter to send). The new alternative: Enter for a new line, Shift+Enter sends.",
       "after": "202609280023"
     },

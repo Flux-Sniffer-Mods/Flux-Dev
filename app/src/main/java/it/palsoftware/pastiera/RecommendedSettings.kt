@@ -4,67 +4,64 @@ import android.content.Context
 import it.palsoftware.pastiera.inputmethod.DeviceSpecific
 
 /**
- * The recommended settings: a short list of settings that suit nearly everyone, chosen from
- * a configuration made on a Titan 2 Elite, plus a few more on that phone. Applied on a fresh
- * install and from Privacy & system > Backup & restore. Anything that's a matter of taste
- * (auto-correct, GIFs, colours, what the emoji key opens) or needs a permission is left to the
- * tutorial's "Your choices" and "Extras" pages instead.
+ * The recommended settings: every setting from the configuration made on Flux Keyboard's own
+ * Titan 2 Elite (its trackpad, LED and bar settings only on that phone). Applied on a fresh
+ * install, offered after updates, and from Privacy & system > Backup & restore. Only what's
+ * personal is left out: languages, app lists, per-app Enter entries and launcher shortcuts.
  */
 object RecommendedSettings {
     const val PREF_APPLIED = "recommended_settings_applied"
 
-    /** For everyone. */
+    /** For everyone: the configuration from Flux Keyboard's own Titan 2 Elite, setting by setting. */
     private val EVERYWHERE: Map<String, Any> = mapOf(
-        // No automatic capitals in fields an app marks as restricted (codes, usernames)
+        "alt_shift_layout_switch" to true,
+        "app_enter_behavior_preset" to "enter_send_shift_newline",
+        "auto_capitalize_respect_manual_shift_off" to false,
         "auto_capitalize_restricted_fields" to true,
-        // Exact typing also where an app asks for no suggestions (SSH clients, code editors)
-        "exact_typing_no_suggestions" to true,
-        // Suggestions allow for neighbouring keys on the keyboard
-        "use_keyboard_proximity" to true,
-        // Shift + Backspace deletes forwards
-        "shift_backspace_delete" to true,
-        // Alt after an opening bracket, and Ctrl after one shortcut, switch themselves off
-        "smart_alt_off_after_opening" to true,
-        "smart_ctrl_off_after_shortcut" to true,
-        "quick_launcher_pill_mode" to true,
-        "led_individual_colors" to true,
-        "led_locked_animation" to true,
-        // :shortcodes: expand with Enter, or with Space on an exact match
+        "auto_correct_enabled" to false,
+        "auto_shift_field_types" to "addresses,names,search,text",
+        "auto_space_punctuation" to ".,;:!?",
+        "ctrl_space_layout_switch" to true,
+        "double_space_to_period" to false,
+        "emoji_key_opens_layer" to true,
+        "emoji_suggestions_enabled" to false,
         "emoji_symbols_accept_with_enter" to true,
         "emoji_symbols_exact_on_space" to true,
-        // Ctrl+Space switches layout (Alt+Shift doesn't); automatic Shift in text, names and
-        // addresses, not search
-        "alt_shift_layout_switch" to false,
-        "ctrl_space_layout_switch" to true,
-        "auto_shift_field_types" to "addresses,names,text",
-        "auto_capitalize_respect_manual_shift_off" to false,
-        // No space before . , ; : ! ? and one after, before the next word
-        "auto_space_punctuation" to ".,;:!?",
+        "exact_typing_no_suggestions" to true,
+        "gifs_enabled" to true,
+        "keyboard_theme_wallpaper_colours" to true,
+        "led_individual_colors" to true,
+        "led_locked_animation" to true,
+        "one_time_codes_enabled" to true,
+        "quick_launcher_behavior" to "pastiera",
+        "quick_launcher_pill_mode" to true,
+        "search_bar_waits_for_typing" to true,
+        "shift_backspace_delete" to true,
+        "show_add_word_suggestion" to false,
+        "smart_alt_off_after_opening" to true,
+        "smart_ctrl_off_after_shortcut" to true,
         "space_after_punctuation" to ".,;:!?",
-        // New words are added on purpose (Ctrl+Shift+D), not from a chip in the suggestions
-        "show_add_word_suggestion" to false
+        "use_keyboard_proximity" to true
     )
 
-    /** On the Titan 2 Elite: its trackpad swipes and the compact bar fitted to its screen. */
+    /** On the Titan 2 Elite: its trackpad swipes, contoured LEDs and the compact bar. */
     private val TITAN_2_ELITE: Map<String, Any> = mapOf(
-        "trackpad_gestures_enabled" to true,
-        "trackpad_provider" to SettingsManager.TRACKPAD_PROVIDER_NATIVE_IME,
-        "trackpad_suggestion_swipe_directions" to true,
-        "trackpad_swipe_down_deletes_word" to true,
-        "swipe_to_delete" to false,
-        // Swipes pick the suggestions, so no Ctrl shortcuts for them, and no adding words by gesture
-        "suggestion_keys" to "off",
-        "trackpad_gesture_add_word_enabled" to false,
-        "trackpad_gesture_add_word_full_width_enabled" to false,
-        // The lightest flick
-        "trackpad_suggestion_swipe_threshold" to 40f,
-        "trackpad_side_swipe_threshold" to 40f,
-        "trackpad_delete_swipe_threshold" to 40f,
-        // Contoured LEDs round the display's corners
-        "titan2_elite_contour_leds" to true,
         "pastierina_mode_override" to "pastierina",
         "pastierina_status_bar_slots_left" to "[\"microphone\"]",
-        "pastierina_status_bar_slots_right" to "[\"hamburger\"]"
+        "pastierina_status_bar_slots_right" to "[\"hamburger\"]",
+        "suggestion_keys" to "off",
+        "swipe_to_delete" to false,
+        "titan2_elite_contour_leds" to true,
+        "titan2_elite_rounded_corner_insets" to true,
+        "trackpad_delete_swipe_threshold" to 40f,
+        "trackpad_gesture_add_word_enabled" to false,
+        "trackpad_gesture_add_word_full_width_enabled" to false,
+        "trackpad_gestures_enabled" to true,
+        "trackpad_provider" to "native_ime",
+        "trackpad_side_swipe_threshold" to 40f,
+        "trackpad_suggestion_swipe_directions" to true,
+        "trackpad_suggestion_swipe_threshold" to 40f,
+        "trackpad_swipe_down_deletes_word" to true
     )
 
     internal fun values(titan2Elite: Boolean): Map<String, Any> =
