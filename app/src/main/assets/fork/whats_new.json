@@ -57,6 +57,10 @@
   ],
   "improvements": [
     {
+      "text": "Titan 2 Elite: a saved display contour calibration starts again from the measured corner, so the corner buttons and LEDs follow the screen's real curve; your offset and shift settings stay.",
+      "after": "202609280055"
+    },
+    {
       "text": "Note-taking and writing apps (Keep, Obsidian, Notion, OneNote, Docs and others, plus any app Android lists as productivity) keep Enter for a new line, like email apps; Ctrl+Enter does the app's own action, and sends an email.",
       "after": "202609280039"
     },

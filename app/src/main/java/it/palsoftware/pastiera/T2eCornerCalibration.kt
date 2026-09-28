@@ -41,15 +41,17 @@ internal data class T2eCornerCalibration(
                 json.optDouble(key, fallback.toDouble()).toFloat().let {
                     if (it.isFinite()) it.coerceIn(range) else fallback
                 }
-            T2eCornerCalibration(number("size", defaults.size, 0.4f..1.8f),
-                number("offset_px", defaults.offsetPx, -16f..16f), number("squircle", defaults.squircle, 0f..4f),
+            // The corner's size and shape are stored under new names since the measured corner
+            // (a circle at the reported radius): older saved shapes start again from it
+            T2eCornerCalibration(number("corner_size", defaults.size, 0.4f..1.8f),
+                number("offset_px", defaults.offsetPx, -16f..16f), number("corner_squircle", defaults.squircle, 0f..4f),
                 number("shift_x_px", defaults.shiftXPx, -16f..16f), number("shift_y_px", defaults.shiftYPx, -16f..16f),
                 number("led_edge_offset_px", defaults.ledOffsetPx, 0f..32f))
         }.getOrDefault(T2eCornerCalibration())
     }
 
     fun save(context: Context) {
-        val json = org.json.JSONObject().put("size", size).put("offset_px", offsetPx).put("squircle", squircle)
+        val json = org.json.JSONObject().put("corner_size", size).put("offset_px", offsetPx).put("corner_squircle", squircle)
             .put("shift_x_px", shiftXPx).put("shift_y_px", shiftYPx).put("led_edge_offset_px", ledOffsetPx)
         SettingsManager.getPreferences(context).edit().putString(KEY, json.toString()).apply()
     }
