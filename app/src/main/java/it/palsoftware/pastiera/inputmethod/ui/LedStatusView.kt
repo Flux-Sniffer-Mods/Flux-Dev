@@ -194,6 +194,18 @@ class LedStatusView(
         if (container?.isShown != true) return
         val rail = railPath(inChrome = true) ?: return
         val chrome = railChrome() ?: return
+        val radii = bottomCornerRadiiPx ?: return
+        // Each LED also fills outward, down to the bottom edge and, in the corners, sideways into
+        // the square corners, over whatever is there: everything inside the rail stays as it is
+        val calibration = T2eCornerCalibration.read(context)
+        val stroke = CONTOUR_LED_STROKE_DP * context.resources.displayMetrics.density
+        val inner = T2eCornerGeometry.path(
+            chrome.width.toFloat(), chrome.height.toFloat(), radii.first.toFloat(), radii.second.toFloat(),
+            calibration, calibration.ledOffsetPx + stroke
+        )
+        val outward = maxOf(radii.first, radii.second) * calibration.size + calibration.offsetPx + stroke
+        val save = canvas.save()
+        canvas.clipOutPath(inner)
         layout.segments.forEach { segment ->
             val color = railColors[segment] ?: return@forEach
             railPaint.shader = null
@@ -201,8 +213,9 @@ class LedStatusView(
             if (lockAnimator != null && statePriority[segment.state] == 2) {
                 railPaint.shader = lockShader(color, chrome.width.toFloat())
             }
-            drawRailSegment(canvas, rail, segment, railPaint)
+            drawRailSegment(canvas, rail, segment, railPaint, extraWidth = 2f * outward)
         }
+        canvas.restoreToCount(save)
     }
 
     /** The gradient a locked LED sweeps: its colour, a more intense version, and back. */
@@ -475,7 +488,8 @@ class LedStatusView(
      * inside it, from the top of the left corner button, along the bottom, to the top of the right
      * one. Each LED lights its share in physical order: a quarter with four LEDs, a fifth with five.
      */
-    private fun drawRailSegment(canvas: Canvas, rail: Path, segment: ModifierLedSegment, paint: Paint) {
+    private fun drawRailSegment(canvas: Canvas, rail: Path, segment: ModifierLedSegment, paint: Paint,
+                                extraWidth: Float = 0f) {
         val order = layout.segments.sortedBy { it.x }
         val index = order.indexOf(segment).takeIf { it >= 0 } ?: return
         val density = context.resources.displayMetrics.density
@@ -490,8 +504,9 @@ class LedStatusView(
         val piece = Path()
         measure.getSegment(start, end, piece, true)
         paint.style = Paint.Style.STROKE
-        paint.strokeWidth = stroke
-        paint.strokeCap = Paint.Cap.ROUND
+        paint.strokeWidth = stroke + extraWidth
+        // Widened outward: square ends, which fan apart round the convex corners and never overlap
+        paint.strokeCap = if (extraWidth > 0f) Paint.Cap.BUTT else Paint.Cap.ROUND
         paint.strokeJoin = Paint.Join.ROUND
         canvas.drawPath(piece, paint)
     }
