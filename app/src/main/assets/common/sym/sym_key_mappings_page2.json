@@ -1,6 +1,5 @@
 {
   "mappings": {
-    "KEYCODE_Q": "~",
     "KEYCODE_W": "`",
     "KEYCODE_E": "{",
     "KEYCODE_R": "}",
@@ -10,6 +9,7 @@
     "KEYCODE_I": ">",
     "KEYCODE_O": "°",
     "KEYCODE_P": "%",
+    "KEYCODE_A": "~",
     "KEYCODE_S": "=",
     "KEYCODE_D": ";",
     "KEYCODE_F": "±",
