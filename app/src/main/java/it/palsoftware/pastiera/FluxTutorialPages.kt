@@ -42,7 +42,7 @@ private fun openTutorialSetting(context: Context, id: String) {
             .putExtra(SymCustomizationActivity.EXTRA_SETTING_ID, visible.id)
     } else {
         Intent(context, SettingsActivity::class.java)
-            .setData(android.net.Uri.parse("pastiera://setting/${visible.id}"))
+            .setData(android.net.Uri.parse("fluxkeyboard://setting/${visible.id}"))
     }
     context.startActivity(intent)
 }
@@ -113,6 +113,7 @@ fun FluxTutorialTypingPageContent(modifier: Modifier = Modifier) {
             stringResource(R.string.flux_tutorial_typing_bullet_undo),
             stringResource(R.string.flux_tutorial_typing_bullet_paste),
             stringResource(R.string.flux_tutorial_typing_bullet_spell),
+            stringResource(R.string.flux_tutorial_typing_bullet_punctuation),
             stringResource(R.string.flux_tutorial_typing_bullet_shift),
             stringResource(R.string.flux_tutorial_typing_bullet_language)
         ),
@@ -136,7 +137,8 @@ fun FluxTutorialAppsPageContent(modifier: Modifier = Modifier) {
             stringResource(R.string.flux_tutorial_apps_bullet_exact),
             stringResource(R.string.flux_tutorial_apps_bullet_terminal),
             stringResource(R.string.flux_tutorial_apps_bullet_launcher),
-            stringResource(R.string.flux_tutorial_apps_bullet_search)
+            stringResource(R.string.flux_tutorial_apps_bullet_search),
+            stringResource(R.string.flux_tutorial_apps_bullet_updates)
         ),
         buttonText = stringResource(R.string.flux_tutorial_apps_button),
         onButtonClick = { openTutorialSetting(context, "main.app_shortcuts") },
@@ -180,6 +182,16 @@ fun FluxTutorialExtrasPageContent(modifier: Modifier = Modifier) {
             androidx.compose.foundation.layout.Column(
                 verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(12.dp)
             ) {
+                // Installed from a file: some extras need Android's restricted settings allowed first
+                if (remember(refresh) { RestrictedSettings.blocked(context) }) {
+                    ExtraStep(
+                        title = stringResource(R.string.restricted_settings_help_title),
+                        text = stringResource(R.string.flux_tutorial_extras_restricted_text),
+                        button = stringResource(R.string.flux_tutorial_extras_restricted_button),
+                        enabled = true,
+                        onClick = { RestrictedSettings.openAppInfo(context) }
+                    )
+                }
                 ExtraStep(
                     title = stringResource(R.string.flux_tutorial_extras_codes_title),
                     text = stringResource(
@@ -198,10 +210,18 @@ fun FluxTutorialExtrasPageContent(modifier: Modifier = Modifier) {
                     ExtraStep(
                         title = stringResource(R.string.flux_tutorial_extras_niagara_title),
                         text = stringResource(R.string.flux_tutorial_extras_niagara_text),
-                        button = stringResource(if (niagaraOn) R.string.flux_tutorial_extras_on else R.string.flux_tutorial_extras_niagara_button),
-                        enabled = !niagaraOn,
+                        // Switches both ways: Niagara's search, or back to the built-in quick launcher
+                        button = stringResource(
+                            if (niagaraOn) R.string.flux_tutorial_extras_niagara_off_button
+                            else R.string.flux_tutorial_extras_niagara_button
+                        ),
+                        enabled = true,
                         onClick = {
-                            SettingsManager.setQuickLauncherBehavior(context, SettingsManager.QUICK_LAUNCHER_BEHAVIOR_NIAGARA)
+                            SettingsManager.setQuickLauncherBehavior(
+                                context,
+                                if (niagaraOn) SettingsManager.QUICK_LAUNCHER_BEHAVIOR_PASTIERA
+                                else SettingsManager.QUICK_LAUNCHER_BEHAVIOR_NIAGARA
+                            )
                             refresh++
                         }
                     )
@@ -238,7 +258,7 @@ private fun ExtraStep(title: String, text: String, button: String?, enabled: Boo
     }
 }
 
-/** Making the keyboard yours: layouts, LEDs, colours and the menu bar. */
+/** Making the keyboard yours: layouts, LEDs, colours, pictures and the menu bar. */
 @Composable
 fun FluxTutorialPersonalisePageContent(modifier: Modifier = Modifier) {
     val context = LocalContext.current
@@ -247,12 +267,13 @@ fun FluxTutorialPersonalisePageContent(modifier: Modifier = Modifier) {
         description = stringResource(R.string.flux_tutorial_personalise_description),
         icon = Icons.Filled.Palette,
         tint = MaterialTheme.colorScheme.tertiary,
-        bullets = listOf(
-            stringResource(R.string.flux_tutorial_personalise_bullet_layouts),
-            stringResource(R.string.flux_tutorial_personalise_bullet_leds),
-            stringResource(R.string.flux_tutorial_personalise_bullet_colours),
-            stringResource(R.string.flux_tutorial_personalise_bullet_menu)
-        ),
+        bullets = buildList {
+            add(stringResource(R.string.flux_tutorial_personalise_bullet_layouts))
+            add(stringResource(R.string.flux_tutorial_personalise_bullet_leds))
+            if (DeviceSpecific.isTitan2EliteDevice()) add(stringResource(R.string.flux_tutorial_personalise_bullet_contour))
+            add(stringResource(R.string.flux_tutorial_personalise_bullet_colours))
+            add(stringResource(R.string.flux_tutorial_personalise_bullet_menu))
+        },
         buttonText = stringResource(R.string.flux_tutorial_personalise_button),
         onButtonClick = { openTutorialSetting(context, "led_colors.individual") },
         modifier = modifier

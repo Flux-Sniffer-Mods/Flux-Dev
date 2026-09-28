@@ -150,14 +150,14 @@ fun SettingsScreen(
         val target = route.toSettingsPage()
         if (currentEntry != target) {
             context.startActivity(Intent(context, SettingsActivity::class.java).apply {
-                data = android.net.Uri.parse("pastiera://setting/${visibleEntry.id}")
+                data = android.net.Uri.parse("fluxkeyboard://setting/${visibleEntry.id}")
             })
             return
         }
         highlightSettingId = visibleEntry.id
     }
 
-    // Deep link (pastiera://setting/<id>) arriving via intent or onNewIntent
+    // Deep link (fluxkeyboard://setting/<id>) arriving via intent or onNewIntent
     LaunchedEffect(settingLinkRequest?.serial) {
         val request = settingLinkRequest ?: return@LaunchedEffect
         val entry = SettingLinkRegistry.byId(request.id)
@@ -205,7 +205,7 @@ fun SettingsScreen(
                     context = context,
                     onOpenSettingEntry = { target ->
                         context.startActivity(Intent(context, SettingsActivity::class.java).apply {
-                            data = android.net.Uri.parse("pastiera://setting/${target.id}")
+                            data = android.net.Uri.parse("fluxkeyboard://setting/${target.id}")
                         })
                     },
                     onNavigate = { destination -> navigateTo(destination) },
@@ -528,13 +528,6 @@ private fun SettingsMainScreen(
                         description = stringResource(R.string.settings_look_sound_description),
                         linkId = SettingLinkIds.MAIN_LOOK_SOUND,
                         onClick = { onNavigate(SettingsDestination.LookSound) }
-                    )
-                    SettingsCategoryRow(
-                        icon = Icons.Filled.TouchApp,
-                        title = stringResource(R.string.settings_trackpad_gestures_title),
-                        description = stringResource(R.string.settings_trackpad_gestures_description),
-                        linkId = SettingLinkIds.ADVANCED_TRACKPAD_GESTURES,
-                        onClick = { onNavigate(SettingsDestination.TrackpadGestures) }
                     )
                     SettingsCategoryRow(
                         icon = Icons.Filled.Shield,

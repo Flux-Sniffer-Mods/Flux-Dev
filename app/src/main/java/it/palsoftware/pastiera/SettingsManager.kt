@@ -74,6 +74,10 @@ object SettingsManager {
     private const val KEY_PASTE_SUGGESTION_PASSWORD_FIELDS = "paste_suggestion_password_fields"
     private const val KEY_LANGUAGE_PER_APP = "language_per_app_enabled"
     private const val KEY_KEYBOARD_WALLPAPER_COLOURS = "keyboard_theme_wallpaper_colours"
+    private const val KEY_KEYBOARD_BACKGROUND_AUTO_COLOURS = "keyboard_background_auto_colours"
+    private const val KEY_KEYBOARD_BACKGROUND_KEY_OPACITY = "keyboard_background_key_opacity"
+    const val KEY_KEYBOARD_BACKGROUND_UPDATED = "keyboard_background_updated"
+    private const val KEY_KEYBOARD_BACKGROUND_FRAMING = "keyboard_background_framing"
     private const val KEY_ONE_TIME_CODES = "one_time_codes_enabled"
     private const val KEY_AUTO_SHIFT_FIELD_TYPES = "auto_shift_field_types"
     private const val KEY_SEARCH_BAR_WAITS_FOR_TYPING = "search_bar_waits_for_typing"
@@ -222,6 +226,8 @@ object SettingsManager {
     private const val KEY_TRACKPAD_PROVIDER = "trackpad_provider" // shizuku | native_ime
     private const val KEY_TRACKPAD_SHIZUKU_DEVICE = "trackpad_shizuku_device"
     private const val KEY_SHIFT_BACKSPACE_DELETE = "shift_backspace_delete" // Shift + Backspace performs forward delete
+    const val KEY_SHOW_ADD_WORD_SUGGESTION = "show_add_word_suggestion" // Offer "add to dictionary" in the suggestions
+    const val KEY_ADD_LAST_WORD_SHORTCUT = "add_last_word_shortcut" // Ctrl + Shift + D adds the last word to the dictionary
     private const val KEY_ALT_BACKSPACE_DELETE = "alt_backspace_delete" // Alt + Backspace performs forward delete
     private const val KEY_BACKSPACE_AT_START_DELETE = "backspace_at_start_delete" // Backspace at line start performs forward delete
     private const val KEY_PASTIERINA_MODE_OVERRIDE = "pastierina_mode_override" // pastierina | full_status_bar
@@ -242,7 +248,7 @@ object SettingsManager {
     const val KEY_TITAN2_ELITE_FILL_CORNERS = "titan2_elite_fill_corners"
     const val KEY_TITAN2_ELITE_STRAIGHT_OUTER_BUTTONS = "titan2_elite_straight_outer_buttons"
     const val KEY_TITAN2_ELITE_STATUS_BAR_LIFT = "titan2_elite_status_bar_lift_dp"
-    const val TITAN2_ELITE_STATUS_BAR_LIFT_MAX_DP = 16
+    const val KEY_TITAN2_ELITE_CONTOUR_LEDS = "titan2_elite_contour_leds"
     const val TITAN2_ELITE_DEFAULT_LIFT_DP = 5
     private const val KEY_ACCESSIBILITY_LIVE_ANNOUNCEMENTS_ENABLED = "accessibility_live_announcements_enabled" // Whether status bar accessibility live announcements are enabled
     private const val KEY_ACCESSIBILITY_READ_SECOND_ROW_ENABLED = "accessibility_read_second_row_enabled" // Whether TalkBack should read quick settings/variations row
@@ -326,12 +332,14 @@ object SettingsManager {
     const val ENTER_BEHAVIOR_PRESET_ENTER_SEND_SHIFT_NEWLINE = "enter_send_shift_newline"
     const val ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_CTRL_SEND = "enter_newline_ctrl_send"
     const val ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_ONLY = "enter_newline_only"
+    const val ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND = "enter_newline_shift_send"
     const val ENTER_BEHAVIOR_PRESET_CUSTOM = "custom"
 
     const val ENTER_BEHAVIOR_APP_DEFAULT = "app_default"
     const val ENTER_BEHAVIOR_ENTER_NEWLINE = "enter_newline"
     const val ENTER_BEHAVIOR_ENTER_SEND_SHIFT_NEWLINE = "enter_send_shift_newline"
     const val ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND = "enter_newline_ctrl_send"
+    const val ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND = "enter_newline_shift_send"
 
     const val ENTER_SEND_STRATEGY_AUTO = "auto"
     const val ENTER_SEND_STRATEGY_EDITOR_ACTION = "editor_action"
@@ -450,7 +458,16 @@ object SettingsManager {
     private const val DEFAULT_OVERLAPPING_KEYS_ENABLED = false
     private const val DEFAULT_EMOJI_PICKER_EXPANDED_HEIGHT = true
     private const val DEFAULT_EMOJI_PICKER_KEY = KeyEvent.KEYCODE_SHIFT_RIGHT // fork default
-    private val DEFAULT_SYM_PAGES_CONFIG = SymPagesConfig()
+    // Until chosen: only the symbols layer, first; the emoji and device layers are opt-in
+    private val DEFAULT_SYM_PAGES_CONFIG = SymPagesConfig(
+        deviceEnabled = false,
+        emojiEnabled = false,
+        symbolsEnabled = true,
+        symPageOrder = listOf(
+            SymPagesConfig.PAGE_SYMBOLS, SymPagesConfig.PAGE_EMOJI, SymPagesConfig.PAGE_DEVICE,
+            SymPagesConfig.PAGE_CLIPBOARD, SymPagesConfig.PAGE_EMOJI_PICKER
+        )
+    )
     private const val SYM_PAGES_SCHEMA_VERSION = 2
     private const val DEFAULT_STATIC_VARIATION_BAR_MODE = false
     private const val DEFAULT_STATIC_VARIATION_BAR_BASE_LAYER_ENABLED = false
@@ -472,8 +489,8 @@ object SettingsManager {
     private const val DEFAULT_TRACKPAD_GESTURE_ADD_WORD_ENABLED = true
     private const val DEFAULT_TRACKPAD_GESTURE_ADD_WORD_FULL_WIDTH_ENABLED = true
     private const val DEFAULT_TRACKPAD_SWIPE_THRESHOLD = 500f
-    private const val TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD = 230f
-    private const val MIN_TRACKPAD_SWIPE_THRESHOLD = 120f
+    private const val TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD = 40f
+    private const val MIN_TRACKPAD_SWIPE_THRESHOLD = 40f
     private const val MAX_TRACKPAD_SWIPE_THRESHOLD = 750f
     const val TRACKPAD_PROVIDER_SHIZUKU = "shizuku"
     const val TRACKPAD_PROVIDER_NATIVE_IME = "native_ime"
@@ -795,23 +812,65 @@ object SettingsManager {
             ?: defaultValue
     }
 
-    fun defaultKeyboardTheme(): KeyboardThemeSettings =
-        KeyboardThemeSettings(
-            background = 0xFFF2F2F2.toInt(),
-            divider = 0xFFB8B8B8.toInt(),
-            normalKey = 0xFFFAFAFA.toInt(),
-            specialKey = 0xFFDDDDDD.toInt(),
-            textAndIcons = 0xFF111111.toInt(),
-            ledInactive = 0xFFB0B0B0.toInt(),
-            ledActive = 0xFF555555.toInt(),
-            ledLocked = 0xFF111111.toInt(),
-            accent = 0xFF3F8C96.toInt(),
-            cursorSwipe = 0xFF3F8C96.toInt(),
-            keyPopup = 0xFFDDDDDD.toInt(),
-            keyPopupSelected = 0xFF3F8C96.toInt(),
-            suggestion = 0xFFFAFAFA.toInt(),
-            statusBarButton = 0xFFDDDDDD.toInt()
-        )
+    /** Classic Cloud: the light built-in theme, and the default for a fixed theme. */
+    private val CLASSIC_CLOUD = KeyboardThemeSettings(
+        background = 0xFFCCD2DC.toInt(),
+        divider = 0xFF9EA5AF.toInt(),
+        normalKey = 0xFFFFFFFF.toInt(),
+        specialKey = 0xFFAFB6C2.toInt(),
+        textAndIcons = 0xFF000000.toInt(),
+        ledInactive = 0xFFAEB5C0.toInt(),
+        ledActive = 0xFF007AFF.toInt(),
+        ledLocked = 0xFFFF9500.toInt(),
+        accent = 0xFF007AFF.toInt(),
+        cursorSwipe = 0xFF007AFF.toInt(),
+        keyPopup = 0xFFFFFFFF.toInt(),
+        keyPopupSelected = 0xFF007AFF.toInt(),
+        suggestion = 0xFFCCD2DC.toInt(),
+        statusBarButton = 0xFFAFB6C2.toInt(),
+        keyCornerRadiusRatio = 0.118f,
+        chromeCornerRadiusRatio = 0.09f,
+        // Sizes from Flux Keyboard's own Titan 2 Elite configuration
+        keyHeightScale = 1.259f,
+        numberRowHeightScale = 0.971f,
+        keyWidthScale = 0.941f,
+        rowGapScale = 1.05f,
+        showLeds = false,
+        suggestionsHeightScale = 0.9f,
+        variationsHeightScale = 0.88f,
+        keyPopupStyle = KEYBOARD_THEME_POPUP_STYLE_CLASSIC
+    )
+
+    /** Classic Midnight: the dark built-in theme. */
+    private val CLASSIC_MIDNIGHT = KeyboardThemeSettings(
+        background = 0xFF1C1C1E.toInt(),
+        divider = 0xFF4A4A4D.toInt(),
+        normalKey = 0xFF3A3A3C.toInt(),
+        specialKey = 0xFF2C2C2E.toInt(),
+        textAndIcons = 0xFFFFFFFF.toInt(),
+        ledInactive = 0xFF404044.toInt(),
+        ledActive = 0xFF0A84FF.toInt(),
+        ledLocked = 0xFFFF9F0A.toInt(),
+        accent = 0xFF0A84FF.toInt(),
+        cursorSwipe = 0xFF0A84FF.toInt(),
+        keyPopup = 0xFF3A3A3C.toInt(),
+        keyPopupSelected = 0xFF0A84FF.toInt(),
+        suggestion = 0xFF202124.toInt(),
+        statusBarButton = 0xFF2C2C2E.toInt(),
+        keyCornerRadiusRatio = 0.118f,
+        chromeCornerRadiusRatio = 0.09f,
+        // Sizes from Flux Keyboard's own Titan 2 Elite configuration
+        keyHeightScale = 1.259f,
+        numberRowHeightScale = 0.971f,
+        keyWidthScale = 0.941f,
+        rowGapScale = 1.05f,
+        showLeds = false,
+        suggestionsHeightScale = 0.9f,
+        variationsHeightScale = 0.88f,
+        keyPopupStyle = KEYBOARD_THEME_POPUP_STYLE_CLASSIC
+    )
+
+    fun defaultKeyboardTheme(): KeyboardThemeSettings = CLASSIC_CLOUD
 
     private fun defaultKeyboardTheme(target: KeyboardThemeTarget): KeyboardThemeSettings =
         when (target) {
@@ -829,46 +888,9 @@ object SettingsManager {
             )
         }
 
+    /** Following the system: Classic Midnight in dark mode, Classic Cloud in light mode. */
     private fun defaultSystemKeyboardTheme(target: KeyboardThemeTarget, dark: Boolean): KeyboardThemeSettings {
-        val base = if (dark) {
-            KeyboardThemeSettings(
-                background = 0xFF000000.toInt(),
-                divider = 0xFF2C3136.toInt(),
-                normalKey = 0xFF15191D.toInt(),
-                specialKey = 0xFF2B3138.toInt(),
-                textAndIcons = 0xFFEFEFEF.toInt(),
-                ledInactive = 0xFF303030.toInt(),
-                ledActive = 0xFF6496FF.toInt(),
-                ledLocked = 0xFFF76300.toInt(),
-                accent = 0xFF6496FF.toInt(),
-                cursorSwipe = 0xFF6496FF.toInt(),
-                keyPopup = 0xFF2B3138.toInt(),
-                keyPopupSelected = 0xFF6496FF.toInt(),
-                suggestion = 0xFF15191D.toInt(),
-                statusBarButton = 0xFF2B3138.toInt(),
-                keyCornerRadiusRatio = 0.10f,
-                chromeCornerRadiusRatio = 0.10f
-            )
-        } else {
-            KeyboardThemeSettings(
-                background = 0xFFF8FAFC.toInt(),
-                divider = 0xFFC7CDD4.toInt(),
-                normalKey = 0xFFFFFFFF.toInt(),
-                specialKey = 0xFFE0E6EE.toInt(),
-                textAndIcons = 0xFF171A1F.toInt(),
-                ledInactive = 0xFFD1D5DB.toInt(),
-                ledActive = 0xFF276EF1.toInt(),
-                ledLocked = 0xFFD65A00.toInt(),
-                accent = 0xFF276EF1.toInt(),
-                cursorSwipe = 0xFF276EF1.toInt(),
-                keyPopup = 0xFFE0E6EE.toInt(),
-                keyPopupSelected = 0xFF276EF1.toInt(),
-                suggestion = 0xFFFFFFFF.toInt(),
-                statusBarButton = 0xFFE0E6EE.toInt(),
-                keyCornerRadiusRatio = 0.10f,
-                chromeCornerRadiusRatio = 0.10f
-            )
-        }
+        val base = if (dark) CLASSIC_MIDNIGHT else CLASSIC_CLOUD
         return when (target) {
             KeyboardThemeTarget.HARDWARE -> base
             KeyboardThemeTarget.SOFTWARE -> base.copy(
@@ -916,7 +938,10 @@ object SettingsManager {
         }
 
     fun isKeyboardThemePreferenceKey(key: String?): Boolean {
-        return key == KEY_KEYBOARD_THEME_HARDWARE || key == KEY_KEYBOARD_THEME_SOFTWARE
+        return key == KEY_KEYBOARD_THEME_HARDWARE || key == KEY_KEYBOARD_THEME_SOFTWARE ||
+            key == KEY_KEYBOARD_WALLPAPER_COLOURS || key == KEY_KEYBOARD_BACKGROUND_AUTO_COLOURS ||
+            key == KEY_KEYBOARD_BACKGROUND_KEY_OPACITY || key == KEY_KEYBOARD_BACKGROUND_UPDATED ||
+            key == KEY_KEYBOARD_BACKGROUND_FRAMING
     }
 
     fun isModifierIndicatorPreferenceKey(key: String?): Boolean {
@@ -987,7 +1012,8 @@ object SettingsManager {
     fun getKeyboardThemeAssignmentMode(context: Context, target: KeyboardThemeTarget): String {
         val stored = getPreferences(context).getString(
             keyboardThemeAssignmentModeKeyForTarget(target),
-            KEYBOARD_THEME_ASSIGNMENT_MODE_FIXED
+            // Until chosen, the keyboard follows the system's dark or light mode
+            KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM
         )
         return if (stored == KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM) {
             KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM
@@ -1044,12 +1070,47 @@ object SettingsManager {
         return getEffectiveKeyboardTheme(context, target, locale = null, layout = null)
     }
 
+    private const val KEY_REMOVED_THEMES_MIGRATED = "removed_builtin_themes_migrated"
+
+    /**
+     * Once: a keyboard still coloured like a built-in theme that's gone (Flux Dark, Nord…) moves
+     * to the system-matched classic theme. Themes are saved as colours, so they're recognised by
+     * their colours; your own and your saved themes stay.
+     */
+    fun migrateRemovedBuiltInThemes(context: Context) {
+        val prefs = getPreferences(context)
+        if (prefs.getBoolean(KEY_REMOVED_THEMES_MIGRATED, false)) return
+        val removed = removedBuiltInThemes()
+        fun wasBuiltIn(key: String): Boolean {
+            val stored = prefs.getString(key, null) ?: return false
+            val json = runCatching { JSONObject(stored) }.getOrNull() ?: return false
+            return removed.any { preset ->
+                json.optInt("background") == preset.background &&
+                    json.optInt("normal_key") == preset.normalKey &&
+                    json.optInt("text_and_icons") == preset.textAndIcons &&
+                    json.optInt("accent") == preset.accent
+            }
+        }
+        val editor = prefs.edit()
+        KeyboardThemeTarget.values().forEach { target ->
+            if (wasBuiltIn(keyboardThemeKeyForTarget(target))) {
+                editor.remove(keyboardThemeKeyForTarget(target))
+                editor.putString(keyboardThemeAssignmentModeKeyForTarget(target), KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM)
+            }
+            listOf(keyboardThemeDarkKeyForTarget(target), keyboardThemeLightKeyForTarget(target)).forEach { key ->
+                if (wasBuiltIn(key)) editor.remove(key)
+            }
+        }
+        editor.putBoolean(KEY_REMOVED_THEMES_MIGRATED, true).apply()
+    }
+
     fun getEffectiveKeyboardTheme(
         context: Context,
         target: KeyboardThemeTarget,
         locale: String?,
         layout: String?
     ): KeyboardThemeSettings {
+        migrateRemovedBuiltInThemes(context)
         val theme = findKeyboardThemeLayoutOverride(context, target, locale, layout)?.theme
             ?: if (getKeyboardThemeAssignmentMode(context, target) == KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM) {
                 getKeyboardThemeSystemSlot(context, target, dark = isSystemDarkTheme(context))
@@ -1057,7 +1118,43 @@ object SettingsManager {
                 getKeyboardTheme(context, target)
             }
         // Flux Keyboard: colours from the wallpaper, over whichever theme applies
-        return if (getKeyboardWallpaperColours(context)) WallpaperKeyboardColours.recolour(context, theme) else theme
+        val coloured = if (getKeyboardWallpaperColours(context)) WallpaperKeyboardColours.recolour(context, theme) else theme
+        // Flux Keyboard: a picture behind the keyboard, keys shaded against it
+        val luminance = KeyboardBackgroundImage.luminance(context) ?: return coloured
+        return KeyboardBackgroundImage.recolour(
+            coloured, luminance, getKeyboardBackgroundAutoColours(context), getKeyboardBackgroundKeyOpacity(context)
+        )
+    }
+
+    /** Over a background picture: keys see-through and shaded against it. */
+    fun getKeyboardBackgroundAutoColours(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_KEYBOARD_BACKGROUND_AUTO_COLOURS, true)
+
+    fun setKeyboardBackgroundAutoColours(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_KEYBOARD_BACKGROUND_AUTO_COLOURS, enabled).apply()
+    }
+
+    const val KEYBOARD_BACKGROUND_KEY_OPACITY_DEFAULT = 35
+
+    /** How solid the keys are over a background picture, in percent. */
+    fun getKeyboardBackgroundKeyOpacity(context: Context): Int =
+        getPreferences(context).getInt(KEY_KEYBOARD_BACKGROUND_KEY_OPACITY, KEYBOARD_BACKGROUND_KEY_OPACITY_DEFAULT).coerceIn(0, 100)
+
+    fun setKeyboardBackgroundKeyOpacity(context: Context, percent: Int) {
+        getPreferences(context).edit().putInt(KEY_KEYBOARD_BACKGROUND_KEY_OPACITY, percent.coerceIn(0, 100)).apply()
+    }
+
+    /** Where the background picture sits behind the keyboard. */
+    fun getKeyboardBackgroundFraming(context: Context): KeyboardBackgroundImage.Framing =
+        KeyboardBackgroundImage.Framing.decode(getPreferences(context).getString(KEY_KEYBOARD_BACKGROUND_FRAMING, null))
+
+    fun setKeyboardBackgroundFraming(context: Context, framing: KeyboardBackgroundImage.Framing) {
+        getPreferences(context).edit().putString(KEY_KEYBOARD_BACKGROUND_FRAMING, framing.encode()).apply()
+    }
+
+    /** Tells the keyboard the picture changed. */
+    fun touchKeyboardBackgroundImage(context: Context) {
+        getPreferences(context).edit().putLong(KEY_KEYBOARD_BACKGROUND_UPDATED, System.currentTimeMillis()).apply()
     }
 
     /** Keyboard colours from the wallpaper (Material You, Android 12+). */
@@ -1545,41 +1642,38 @@ object SettingsManager {
             .apply()
     }
 
-    /** Paint the keyboard background into the display's rounded corners instead of clipping to them. */
-    /** On by default on a Titan 2 Elite, like the rounded status bar. */
+    /**
+     * Paint the keyboard background into the display's rounded corners instead of clipping to them.
+     * On by default on a Titan 2 Elite. Off while the LEDs are contoured: the rail runs along the
+     * display curve, which a filled corner would cover.
+     */
     fun getTitan2EliteFillCorners(context: Context): Boolean =
-        getPreferences(context).getBoolean(KEY_TITAN2_ELITE_FILL_CORNERS, DeviceSpecific.isTitan2EliteDevice())
+        !getTitan2EliteContourLeds(context) &&
+            getPreferences(context).getBoolean(KEY_TITAN2_ELITE_FILL_CORNERS, DeviceSpecific.isTitan2EliteDevice())
 
     fun setTitan2EliteFillCorners(context: Context, enabled: Boolean) {
         getPreferences(context).edit().putBoolean(KEY_TITAN2_ELITE_FILL_CORNERS, enabled).apply()
     }
 
     /**
-     * Rounded corners for sizing and spacing only: the outer bar buttons are plain buttons
-     * reaching straight down into the corners instead of shapes following the display curve.
+     * Titan 2 Elite corner style. Contoured LEDs (true): the outer
+     * buttons follow the display curve and one LED rail runs round it beneath them. Straight
+     * buttons (false, the default): the outer buttons reach straight down into the corners, and the bar is
+     * lifted [TITAN2_ELITE_DEFAULT_LIFT_DP] above the LEDs running along the corners.
      */
-    /** On by default on a Titan 2 Elite. */
-    fun getTitan2EliteStraightOuterButtons(context: Context): Boolean =
-        getPreferences(context).getBoolean(KEY_TITAN2_ELITE_STRAIGHT_OUTER_BUTTONS, DeviceSpecific.isTitan2EliteDevice())
+    fun getTitan2EliteContourLeds(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_TITAN2_ELITE_CONTOUR_LEDS, false)
 
-    fun setTitan2EliteStraightOuterButtons(context: Context, enabled: Boolean) {
-        getPreferences(context).edit().putBoolean(KEY_TITAN2_ELITE_STRAIGHT_OUTER_BUTTONS, enabled).apply()
+    fun setTitan2EliteContourLeds(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_TITAN2_ELITE_CONTOUR_LEDS, enabled).apply()
     }
 
-    /** How far the status bar sits above the modifier LEDs, in dp (0 = LEDs hug the bar). */
-    /** A Titan 2 Elite starts with the bar lifted by [TITAN2_ELITE_DEFAULT_LIFT_DP]; other phones at 0. */
+    /** Straight outer buttons: the corner style that isn't contoured LEDs. */
+    fun getTitan2EliteStraightOuterButtons(context: Context): Boolean = !getTitan2EliteContourLeds(context)
+
+    /** How far the status bar sits above the modifier LEDs, in dp: fixed with straight buttons, none when contoured. */
     fun getTitan2EliteStatusBarLiftDp(context: Context): Int =
-        getPreferences(context).getInt(
-            KEY_TITAN2_ELITE_STATUS_BAR_LIFT,
-            if (DeviceSpecific.isTitan2EliteDevice()) TITAN2_ELITE_DEFAULT_LIFT_DP else 0
-        )
-            .coerceIn(0, TITAN2_ELITE_STATUS_BAR_LIFT_MAX_DP)
-
-    fun setTitan2EliteStatusBarLiftDp(context: Context, dp: Int) {
-        getPreferences(context).edit()
-            .putInt(KEY_TITAN2_ELITE_STATUS_BAR_LIFT, dp.coerceIn(0, TITAN2_ELITE_STATUS_BAR_LIFT_MAX_DP))
-            .apply()
-    }
+        if (getTitan2EliteContourLeds(context)) 0 else TITAN2_ELITE_DEFAULT_LIFT_DP
 
     fun getTitan2EliteStatusBarLiftPx(context: Context): Int =
         Math.round(getTitan2EliteStatusBarLiftDp(context) * context.resources.displayMetrics.density)
@@ -2155,6 +2249,17 @@ object SettingsManager {
         )
     }
 
+    /**
+     * Flux Keyboard: "Space after comma" is Punctuation spacing's comma row now. Turned on, it
+     * moves there (no space before a comma, one after) and switches itself off.
+     */
+    fun foldCommaSpaceIntoPunctuationSpacing(context: Context) {
+        if (!getCommaSpace(context)) return
+        setAutoSpacePunctuation(context, getAutoSpacePunctuation(context) + ",")
+        setSpaceAfterPunctuation(context, getSpaceAfterPunctuation(context) + ",")
+        setCommaSpace(context, false)
+    }
+
     fun setCommaSpace(context: Context, enabled: Boolean) {
         getPreferences(context).edit()
             .putBoolean(KEY_COMMA_SPACE, enabled)
@@ -2682,6 +2787,22 @@ object SettingsManager {
     /**
      * Returns whether Shift+Backspace performs forward delete.
      */
+    /** Whether the suggestions offer to add an unknown word to the dictionary (on by default). */
+    fun getShowAddWordSuggestion(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_SHOW_ADD_WORD_SUGGESTION, true)
+
+    fun setShowAddWordSuggestion(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_SHOW_ADD_WORD_SUGGESTION, enabled).apply()
+    }
+
+    /** Whether Ctrl + Shift + D adds the last word typed to the dictionary (on by default). */
+    fun getAddLastWordShortcut(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_ADD_LAST_WORD_SHORTCUT, true)
+
+    fun setAddLastWordShortcut(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_ADD_LAST_WORD_SHORTCUT, enabled).apply()
+    }
+
     fun getShiftBackspaceDelete(context: Context): Boolean {
         return getPreferences(context).getBoolean(KEY_SHIFT_BACKSPACE_DELETE, DEFAULT_SHIFT_BACKSPACE_DELETE)
     }
@@ -2937,10 +3058,15 @@ object SettingsManager {
     }
 
     /** Keys that pick a suggestion (an [it.palsoftware.pastiera.inputmethod.SuggestionKeys] option). */
+    /** Until chosen: Ctrl+Shift+Q/W/E, or off while trackpad swipes pick the suggestions. */
     fun getSuggestionKeys(context: Context): String =
         getPreferences(context).getString(KEY_SUGGESTION_KEYS, null)
             ?.takeIf { option -> option in it.palsoftware.pastiera.inputmethod.SuggestionKeys.OPTIONS }
-            ?: it.palsoftware.pastiera.inputmethod.SuggestionKeys.CTRL_SHIFT_QWE
+            ?: if (getTrackpadGesturesEnabled(context) && getTrackpadSuggestionSwipeDirections(context)) {
+                it.palsoftware.pastiera.inputmethod.SuggestionKeys.OFF
+            } else {
+                it.palsoftware.pastiera.inputmethod.SuggestionKeys.CTRL_SHIFT_QWE
+            }
 
     fun setSuggestionKeys(context: Context, option: String) {
         getPreferences(context).edit().putString(KEY_SUGGESTION_KEYS, option).apply()
@@ -4230,9 +4356,9 @@ object SettingsManager {
         return listOf(
             CommandSourceVisibility(CommandSourceId.Apps.storageValue, quickLauncherEnabled = true),
             CommandSourceVisibility(CommandSourceId.Pastiera.storageValue, quickLauncherEnabled = true),
-            CommandSourceVisibility(CommandSourceId.AppActions.storageValue, quickLauncherEnabled = false),
-            CommandSourceVisibility(CommandSourceId.DeviceControl.storageValue, quickLauncherEnabled = false),
-            CommandSourceVisibility(CommandSourceId.NavActions.storageValue, quickLauncherEnabled = false)
+            CommandSourceVisibility(CommandSourceId.AppActions.storageValue, quickLauncherEnabled = true),
+            CommandSourceVisibility(CommandSourceId.DeviceControl.storageValue, quickLauncherEnabled = true),
+            CommandSourceVisibility(CommandSourceId.NavActions.storageValue, quickLauncherEnabled = true)
         )
     }
 
@@ -5599,7 +5725,8 @@ object SettingsManager {
     fun getHiddenKeyboardApps(context: Context): List<String> =
         parsePackageList(getPreferences(context).getString(KEY_HIDDEN_KEYBOARD_APPS, DEFAULT_HIDDEN_KEYBOARD_APPS) ?: "")
 
-    const val DEFAULT_HIDDEN_KEYBOARD_APPS = "bitpit.launcher"
+    // Niagara Launcher and Termux:X11 take the keys without the keyboard on screen
+    const val DEFAULT_HIDDEN_KEYBOARD_APPS = "bitpit.launcher\ncom.termux.x11"
 
     fun setHiddenKeyboardApps(context: Context, packages: Collection<String>) {
         val clean = packages.joinToString("\n").let(::parsePackageList)
@@ -5627,9 +5754,9 @@ object SettingsManager {
         getPreferences(context).edit().putBoolean(KEY_TERMINAL_MODE_HIDE_KEYBOARD, enabled).apply()
     }
 
-    /** What the emoji key does in terminal mode, a TerminalMode.EmojiKeyAction id. */
+    /** What the emoji key does in terminal mode, a TerminalMode.EmojiKeyAction id (Alt until chosen). */
     fun getTerminalModeEmojiKeyAction(context: Context): String =
-        getPreferences(context).getString(KEY_TERMINAL_MODE_EMOJI_KEY, "emoji_picker") ?: "emoji_picker"
+        getPreferences(context).getString(KEY_TERMINAL_MODE_EMOJI_KEY, "alt") ?: "alt"
 
     fun setTerminalModeEmojiKeyAction(context: Context, id: String) {
         getPreferences(context).edit().putString(KEY_TERMINAL_MODE_EMOJI_KEY, id).apply()
@@ -5843,7 +5970,7 @@ object SettingsManager {
      * the emoji and GIF picker's search: A unless changed (KEYCODE_UNKNOWN = off).
      */
     fun getSearchKey(context: Context): Int {
-        val keyCode = getPreferences(context).getInt(KEY_SEARCH_KEY, KeyEvent.KEYCODE_A)
+        val keyCode = getPreferences(context).getInt(KEY_SEARCH_KEY, KeyEvent.KEYCODE_Q)
         return if (keyCode in EMOJI_LAYER_KEYS) keyCode else KeyEvent.KEYCODE_UNKNOWN
     }
 
@@ -5967,7 +6094,7 @@ object SettingsManager {
 
     /** The emoji layer key that shows recent emoji instead of its own: Q unless changed (KEYCODE_UNKNOWN = off). */
     fun getEmojiLayerRecentsKey(context: Context): Int {
-        val keyCode = getPreferences(context).getInt(KEY_EMOJI_LAYER_RECENTS_KEY, KeyEvent.KEYCODE_Q)
+        val keyCode = getPreferences(context).getInt(KEY_EMOJI_LAYER_RECENTS_KEY, KeyEvent.KEYCODE_A)
         return if (keyCode in EMOJI_LAYER_KEYS) keyCode else KeyEvent.KEYCODE_UNKNOWN
     }
 
@@ -6187,7 +6314,7 @@ object SettingsManager {
     /**
      * How far a trackpad swipe goes until set. The Titan 2 Elite's touch layer is about 750
      * points tall and a natural flick covers about 300, so 500 (two thirds of it) missed most
-     * swipes there; 230 suits it.
+     * swipes there; 120, less than one key, catches a flick across a single key.
      */
     private fun defaultTrackpadSwipeThreshold(): Float =
         if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice()) TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD
@@ -6210,7 +6337,7 @@ object SettingsManager {
 
     /**
      * How far a left or right swipe goes to take the left or right suggestion (Swipe
-     * directions). Until set: 230 on the Titan 2 Elite, elsewhere 60% of the suggestion swipe.
+     * directions). Until set: 120 on the Titan 2 Elite, elsewhere 60% of the suggestion swipe.
      */
     fun getTrackpadSideSwipeThreshold(context: Context): Float {
         val prefs = getPreferences(context)
@@ -6720,9 +6847,38 @@ object SettingsManager {
         STATUS_BAR_BUTTON_SETTINGS
     )
 
+    /**
+     * Until chosen, the menu bar leaves out the symbols, emoji and GIF buttons (the SYM and emoji
+     * keys open those), Solderina and keyboard mode; and the language button while only one
+     * input language is on.
+     */
+    private val MENU_BAR_OFF_BY_DEFAULT = setOf(
+        STATUS_BAR_BUTTON_SYMBOLS,
+        STATUS_BAR_BUTTON_EMOJI,
+        STATUS_BAR_BUTTON_GIF,
+        STATUS_BAR_BUTTON_MINIMAL_UI,
+        STATUS_BAR_BUTTON_SOFTWARE_KEYBOARD_MODE
+    )
+
+    fun defaultMenuBarButtons(context: Context): List<String> =
+        MENU_BAR_BUTTON_OPTIONS.filter { button ->
+            button !in MENU_BAR_OFF_BY_DEFAULT &&
+                !(button == STATUS_BAR_BUTTON_LANGUAGE && hasSingleInputLanguage(context))
+        }
+
+    /** Whether only one input language is on for this keyboard (false when it can't tell). */
+    fun hasSingleInputLanguage(context: Context): Boolean = runCatching {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE)
+            as? android.view.inputmethod.InputMethodManager ?: return false
+        val ime = imm.enabledInputMethodList.firstOrNull { it.packageName == context.packageName }
+            ?: return false
+        imm.getEnabledInputMethodSubtypeList(ime, true).size <= 1
+    }.getOrDefault(false)
+
     /** The menu bar's buttons, in order (its close button always comes first). */
     fun getMenuBarButtons(context: Context): List<String> {
-        val stored = getPreferences(context).getString(KEY_MENU_BAR_BUTTONS, null) ?: return MENU_BAR_BUTTON_OPTIONS
+        val stored = getPreferences(context).getString(KEY_MENU_BAR_BUTTONS, null)
+            ?: return defaultMenuBarButtons(context)
         return stored.split(',').map { it.trim() }.filter { it in MENU_BAR_BUTTON_OPTIONS }.distinct()
     }
 
@@ -7125,6 +7281,7 @@ object SettingsManager {
             ENTER_BEHAVIOR_PRESET_APP_DEFAULT,
             ENTER_BEHAVIOR_PRESET_ENTER_SEND_SHIFT_NEWLINE,
             ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_CTRL_SEND,
+            ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND,
             ENTER_BEHAVIOR_PRESET_CUSTOM -> preset
             else -> ENTER_BEHAVIOR_PRESET_APP_DEFAULT
         }
@@ -7135,7 +7292,8 @@ object SettingsManager {
             ENTER_BEHAVIOR_APP_DEFAULT,
             ENTER_BEHAVIOR_ENTER_NEWLINE,
             ENTER_BEHAVIOR_ENTER_SEND_SHIFT_NEWLINE,
-            ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND -> behavior
+            ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND,
+            ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND -> behavior
             else -> ENTER_BEHAVIOR_APP_DEFAULT
         }
     }

@@ -9,6 +9,7 @@ internal fun fluxSettingEntries(): List<SettingEntry> {
     val hidden = SettingRoute(SettingsDestination.FluxHiddenApps)
     val desktop = SettingRoute(SettingsDestination.FluxLinuxDesktop)
     val offline = SettingRoute(SettingsDestination.FluxOffline)
+    val autoCorrection = SettingRoute(SettingsDestination.AutoCorrection)
     val onTitan: (Context) -> Boolean = ::fluxTitanScreenAvailable
     return listOf(
         // Main screen rows
@@ -24,6 +25,11 @@ internal fun fluxSettingEntries(): List<SettingEntry> {
             summaryRes = R.string.flux_offline_description, route = offline),
         SettingEntry("offline.enabled", R.string.flux_offline_switch_title,
             summaryRes = R.string.flux_offline_switch_description, route = offline),
+        // Suggestions: adding words to the dictionary
+        SettingEntry("auto_correction.show_add_word", R.string.show_add_word_suggestion_title,
+            summaryRes = R.string.show_add_word_suggestion_description, route = autoCorrection),
+        SettingEntry("auto_correction.add_last_word_shortcut", R.string.add_last_word_shortcut_title,
+            summaryRes = R.string.add_last_word_shortcut_description, route = autoCorrection),
         // Emoji & GIFs
         SettingEntry("flux_emoji.picker_key", R.string.emoji_picker_key_title, route = emoji),
         SettingEntry("flux_emoji.key_target", R.string.emoji_key_target_title, route = emoji),
@@ -60,13 +66,11 @@ internal fun fluxSettingEntries(): List<SettingEntry> {
             summaryRes = R.string.flux_enter_symbol_description, route = emoji),
         SettingEntry("flux_emoji.enter_gif", R.string.flux_enter_gif_title,
             summaryRes = R.string.flux_enter_gif_description, route = emoji),
-        // Titan 2 Elite screen (its corner calibration row is advanced.corner_calibration)
+        // Titan 2 Elite screen (display contour calibration is in Developer options)
         SettingEntry("titan_screen.fill_corners", R.string.titan2_elite_fill_corners_title,
             summaryRes = R.string.titan2_elite_fill_corners_description, route = titan, availabilityCheck = onTitan),
-        SettingEntry("titan_screen.straight_outer_buttons", R.string.titan2_elite_straight_outer_buttons_title,
-            summaryRes = R.string.titan2_elite_straight_outer_buttons_description, route = titan, availabilityCheck = onTitan),
-        SettingEntry("titan_screen.status_bar_lift", R.string.titan2_elite_status_bar_lift_title,
-            summaryRes = R.string.titan2_elite_status_bar_lift_description, route = titan, availabilityCheck = onTitan),
+        SettingEntry("titan_screen.corner_style", R.string.titan2_elite_corner_style_title,
+            summaryRes = R.string.titan2_elite_corner_style_description, route = titan, availabilityCheck = onTitan),
         // Hidden keyboard apps
         SettingEntry("hidden_apps.apps", R.string.hidden_keyboard_apps_title,
             summaryRes = R.string.hidden_keyboard_apps_description, route = hidden),

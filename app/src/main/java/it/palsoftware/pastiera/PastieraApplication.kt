@@ -16,6 +16,7 @@ class PastieraApplication : Application() {
         // A fresh install starts from the default configuration, before anything writes settings
         RecommendedSettings.applyIfFreshInstall(this)
         OfflineMode.load(this)
+        AppEnterStandards.installSystemCategoryLookup(this)
         it.palsoftware.pastiera.update.clearStaleForkUpdateNotice(this)
         SettingsManager.initializeAltShiftLayoutSwitchDefault(this)
         SettingsManager.enforceTitan2EliteRoundedCornersOnce(this)

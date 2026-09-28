@@ -56,7 +56,6 @@ import androidx.compose.ui.unit.dp
 import it.palsoftware.pastiera.ui.theme.PastieraTheme
 import it.palsoftware.pastiera.BuildConfig
 import it.palsoftware.pastiera.update.checkForUpdate
-import it.palsoftware.pastiera.update.fetchReleaseNotesForVersion
 import it.palsoftware.pastiera.update.ReleaseNotesSummary
 import it.palsoftware.pastiera.update.showUpdateDialog
 import it.palsoftware.pastiera.update.shouldUseGithubUpdateChecks
@@ -217,18 +216,7 @@ fun TutorialScreen(
         mutableStateOf(bundledNotes ?: ReleaseNotesSummary.fallback(BuildConfig.VERSION_NAME, releaseNotesLanguageTag))
     }
 
-    LaunchedEffect(updateTutorial) {
-        if (updateTutorial && bundledNotes == null) {
-            fetchReleaseNotesForVersion(
-                version = BuildConfig.VERSION_NAME,
-                languageTag = releaseNotesLanguageTag
-            ) { summary ->
-                if (summary != null && summary.highlights.isNotEmpty()) {
-                    releaseNotes = summary
-                }
-            }
-        }
-    }
+    // Flux Keyboard's notes are bundled; Pastiera's website notes describe Pastiera, not this app
 
     // Check IME status
     var isPastieraEnabled by remember { mutableStateOf(false) }
@@ -622,6 +610,14 @@ fun TutorialScreen(
                                 contentDescription = stringResource(R.string.tutorial_next),
                                 modifier = Modifier.size(16.dp)
                             )
+                        }
+                    } else if (configureOnly) {
+                        // After applying the recommended settings: Make it yours ends the setup
+                        Button(
+                            onClick = onComplete,
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            Text(stringResource(R.string.whats_new_done), style = MaterialTheme.typography.bodyMedium)
                         }
                     }
                 }

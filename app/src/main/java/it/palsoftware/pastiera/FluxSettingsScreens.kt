@@ -985,9 +985,42 @@ fun FluxTitanScreenSettingsScreen(modifier: Modifier = Modifier, onBack: () -> U
         if (DeviceSpecific.isTitan2EliteDevice() || roundedCorners) {
             SettingsSectionDivider(stringResource(R.string.titan2_elite_section_screen))
 
+            var contourLeds by remember {
+                mutableStateOf(SettingsManager.getTitan2EliteContourLeds(context))
+            }
             var fillCorners by remember {
                 mutableStateOf(SettingsManager.getTitan2EliteFillCorners(context))
             }
+            Surface(modifier = Modifier.fillMaxWidth().settingRow("titan_screen.corner_style")) {
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(stringResource(R.string.titan2_elite_corner_style_title),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Medium)
+                    Text(stringResource(R.string.titan2_elite_corner_style_description),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        listOf(
+                            true to R.string.titan2_elite_corner_style_contoured,
+                            false to R.string.titan2_elite_corner_style_straight
+                        ).forEach { (contoured, label) ->
+                            FilterChip(
+                                selected = contourLeds == contoured,
+                                onClick = {
+                                    contourLeds = contoured
+                                    SettingsManager.setTitan2EliteContourLeds(context, contoured)
+                                    fillCorners = SettingsManager.getTitan2EliteFillCorners(context)
+                                },
+                                label = { Text(stringResource(label)) }
+                            )
+                        }
+                    }
+                }
+            }
+
             Surface(modifier = Modifier.fillMaxWidth().settingRow("titan_screen.fill_corners")) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -1004,9 +1037,15 @@ fun FluxTitanScreenSettingsScreen(modifier: Modifier = Modifier, onBack: () -> U
                         Text(stringResource(R.string.titan2_elite_fill_corners_description),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        if (contourLeds) {
+                            Text(stringResource(R.string.titan2_elite_off_with_contour_leds),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.primary)
+                        }
                     }
                     Switch(
                         checked = fillCorners,
+                        enabled = !contourLeds,
                         onCheckedChange = { enabled ->
                             fillCorners = enabled
                             SettingsManager.setTitan2EliteFillCorners(context, enabled)
@@ -1014,83 +1053,6 @@ fun FluxTitanScreenSettingsScreen(modifier: Modifier = Modifier, onBack: () -> U
                     )
                 }
             }
-
-            var straightOuterButtons by remember {
-                mutableStateOf(SettingsManager.getTitan2EliteStraightOuterButtons(context))
-            }
-            Surface(modifier = Modifier.fillMaxWidth().settingRow("titan_screen.straight_outer_buttons")) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Text(stringResource(R.string.titan2_elite_straight_outer_buttons_title),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Medium)
-                        Text(stringResource(R.string.titan2_elite_straight_outer_buttons_description),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
-                    Switch(
-                        checked = straightOuterButtons,
-                        onCheckedChange = { enabled ->
-                            straightOuterButtons = enabled
-                            SettingsManager.setTitan2EliteStraightOuterButtons(context, enabled)
-                        }
-                    )
-                }
-            }
-
-            var statusBarLiftDp by remember {
-                mutableStateOf(SettingsManager.getTitan2EliteStatusBarLiftDp(context).toFloat())
-            }
-            Surface(modifier = Modifier.fillMaxWidth().settingRow("titan_screen.status_bar_lift")) {
-                Column(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Text(stringResource(R.string.titan2_elite_status_bar_lift_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Medium)
-                    Text(stringResource(R.string.titan2_elite_status_bar_lift_description),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Slider(
-                            value = statusBarLiftDp,
-                            onValueChange = { statusBarLiftDp = kotlin.math.round(it) },
-                            onValueChangeFinished = {
-                                SettingsManager.setTitan2EliteStatusBarLiftDp(
-                                    context, statusBarLiftDp.toInt()
-                                )
-                            },
-                            valueRange = 0f..SettingsManager.TITAN2_ELITE_STATUS_BAR_LIFT_MAX_DP.toFloat(),
-                            steps = SettingsManager.TITAN2_ELITE_STATUS_BAR_LIFT_MAX_DP - 1,
-                            modifier = Modifier.weight(1f)
-                        )
-                        Text(stringResource(
-                            R.string.titan2_elite_status_bar_lift_value,
-                            statusBarLiftDp.toInt()
-                        ))
-                    }
-                }
-            }
-        }
-        if (SettingsManager.getDeveloperOptionsEnabled(context)) {
-            SettingsSectionDivider(stringResource(R.string.titan2_elite_section_calibration))
-            FluxActionRow(
-                linkId = "advanced.corner_calibration",
-                title = stringResource(R.string.corner_calibration_title),
-                description = stringResource(R.string.corner_calibration_description),
-                onClick = { context.startActivity(android.content.Intent(context, CornerCalibrationActivity::class.java)) }
-            )
         }
     }
 }

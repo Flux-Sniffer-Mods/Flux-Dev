@@ -250,6 +250,9 @@ class MainActivity : LocalizedComponentActivity() {
                             .height(statusBarHeight)
                             .background(overlayColor)
                     )
+
+                    // After an update: recommended settings that differ, from X to Y
+                    RecommendedSettingsUpdatePrompt(BuildConfig.VERSION_NAME)
                 }
             }
         }

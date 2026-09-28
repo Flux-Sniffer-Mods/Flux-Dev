@@ -6,7 +6,7 @@ import java.text.Normalizer
 
 /**
  * Stable identifiers for addressable settings entries. They are the path segment
- * of deep links (`pastiera://setting/<id>`) and must never change once shipped.
+ * of deep links (`fluxkeyboard://setting/<id>`) and must never change once shipped.
  */
 object SettingLinkIds {
     // Main screen navigation rows
@@ -190,6 +190,9 @@ object SettingLinkIds {
     const val KEYBOARD_THEME_TOGGLE_CHARACTER_PICKER = "keyboard_theme.toggle_character_picker"
     const val KEYBOARD_THEME_LED_COLORS = "keyboard_theme.led_colors"
     const val KEYBOARD_THEME_WALLPAPER_COLOURS = "keyboard_theme.wallpaper_colours"
+    const val KEYBOARD_BACKGROUND_IMAGE = "keyboard_theme.background_image"
+    const val KEYBOARD_BACKGROUND_AUTO_COLOURS = "keyboard_theme.background_auto_colours"
+    const val KEYBOARD_BACKGROUND_KEY_OPACITY = "keyboard_theme.background_key_opacity"
 
     // Modifier indicator chips (rendered on the modifiers screen)
     const val MODIFIERS_INDICATOR_BOTTOM_STRIP = "modifiers.indicator_bottom_strip"
@@ -261,11 +264,9 @@ data class SettingEntry(
  */
 object SettingLinkRegistry {
 
-    const val LINK_SCHEME = "pastiera"
+    // Flux Keyboard's own scheme: a link opens the setting in this app, never a website or Pastiera
+    const val LINK_SCHEME = "fluxkeyboard"
     const val LINK_HOST = "setting"
-    const val WEB_LINK_HOST = "pastiera.eu"
-    const val ALTERNATE_WEB_LINK_HOST = "pkb.rocks"
-    const val WEB_LINK_PATH_PREFIX = "/settings/"
     private val settingIdPattern = Regex("^[a-z0-9_]+(\\.[a-z0-9_]+)+$")
 
     private fun entry(
@@ -425,12 +426,6 @@ object SettingLinkRegistry {
         entry(
             SettingLinkIds.TEXT_INPUT_AUTO_SPACE_PUNCTUATION,
             R.string.auto_space_punctuation_title,
-            destination = SettingsDestination.TextInput
-        ),
-        entry(
-            SettingLinkIds.TEXT_INPUT_COMMA_SPACE,
-            R.string.comma_space_title,
-            R.string.comma_space_description,
             destination = SettingsDestination.TextInput
         ),
         entry(
@@ -599,6 +594,7 @@ object SettingLinkRegistry {
         entry(
             SettingLinkIds.AUTO_CORRECTION_ACCENT_MATCHING,
             R.string.auto_correct_accent_matching_title,
+            R.string.auto_correct_accent_matching_description,
             destination = SettingsDestination.AutoCorrection
         ),
         entry(
@@ -1062,7 +1058,7 @@ object SettingLinkRegistry {
         return candidate
     }
 
-    fun buildLink(id: String): String = "https://$WEB_LINK_HOST$WEB_LINK_PATH_PREFIX$id"
+    fun buildLink(id: String): String = "$LINK_SCHEME://$LINK_HOST/$id"
 
     /**
      * Markdown link used for sharing. With [withDescription] the localized
@@ -1083,9 +1079,6 @@ object SettingLinkRegistry {
         val id = when {
             scheme == LINK_SCHEME && host == LINK_HOST ->
                 path?.trim()?.removePrefix("/")
-            scheme == "https" && (host == WEB_LINK_HOST || host == ALTERNATE_WEB_LINK_HOST) ->
-                path?.takeIf { it.startsWith(WEB_LINK_PATH_PREFIX) }
-                    ?.removePrefix(WEB_LINK_PATH_PREFIX)
             else -> null
         }
         return id?.takeIf(settingIdPattern::matches)

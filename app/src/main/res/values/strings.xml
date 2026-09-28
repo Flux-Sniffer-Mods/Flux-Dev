@@ -38,7 +38,7 @@
     <string name="auto_capitalize_description">Capitalize the first letter when starting in an empty text field.</string>
     <string name="auto_capitalize_respect_manual_shift_off_title">Respect manual Shift off</string>
     <string name="auto_capitalize_respect_manual_shift_off_description">Keep automatic Shift off while you remain in the same text field.</string>
-    <string name="auto_capitalize_restricted_fields_title">Automatic Shift in</string>
+    <string name="auto_capitalize_restricted_fields_title">Automatic Shift</string>
     <string name="auto_capitalize_restricted_fields_description">Choose which kinds of text field start with Shift. Password fields never do.</string>
 
     <!-- Auto Capitalize After Period Section -->
@@ -63,13 +63,13 @@
     <string name="auto_space_punctuation_title">Punctuation spacing</string>
     <string name="auto_space_punctuation_selected">Selected:</string>
     <string name="auto_space_punctuation_none_selected">none</string>
-    <string name="auto_space_punctuation_dialog_instruction">Choose whether Pastiera removes its own auto-space before each character and inserts a deferred space before following text.</string>
-    <string name="auto_space_punctuation_character_column">Character</string>
-    <string name="auto_space_punctuation_before_column">Remove before</string>
-    <string name="auto_space_punctuation_after_column">Before next text</string>
+    <string name="auto_space_punctuation_dialog_instruction">When you type one of these after a word, Flux Keyboard tidies the spaces around it: no space before it, and one after it once you carry on typing.</string>
+    <string name="auto_space_punctuation_character_column">Mark</string>
+    <string name="auto_space_punctuation_before_column">No space before</string>
+    <string name="auto_space_punctuation_after_column">Space after</string>
     <string name="auto_space_punctuation_help_action">Explain punctuation spacing</string>
     <string name="auto_space_punctuation_help_title">How punctuation spacing works</string>
-    <string name="auto_space_punctuation_help_text">“Remove before” removes only a space automatically inserted by Pastiera, not one you typed manually.\n\n“Before next text” defers the space until more text is typed. Enter or Send therefore leaves no trailing space.</string>
+    <string name="auto_space_punctuation_help_text">No space before: “word ,” becomes “word,”. Only a space Flux Keyboard added itself is removed, never one you typed.\n\nSpace after: a space follows the mark, but only once you type the next word, so sending a message or pressing Enter never leaves a space at the end.</string>
     <string name="auto_space_punctuation_choose">Selected:</string>
     <string name="auto_space_punctuation_choose_off">Off</string>
     <string name="auto_space_punctuation_reset">Reset</string>
@@ -235,6 +235,7 @@
     <string name="auto_correct_language_already_exists">This substitution already exists</string>
     <string name="auto_correct_suggestions_toggle_title">Suggestions while typing</string>
     <string name="auto_correct_accent_matching_title">Accent &amp; spelling marks</string>
+    <string name="auto_correct_accent_matching_description">Suggestions and corrections treat letters with and without accents as the same letter, so typing \"cafe\" can offer \"café\", \"resume\" can offer \"résumé\", and \"uber\" can offer \"über\". Off, only words spelled with exactly the marks you typed are offered.</string>
     <string name="auto_correct_auto_replace_title">Automatic correction</string>
     <string name="auto_correct_auto_replace_description">Use dictionary suggestions to fix likely typos when pressing Space or Enter.</string>
     <string name="auto_correct_max_distance_title">Maximum correction distance</string>
@@ -1544,6 +1545,7 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="trackpad_gestures_enabled_description">Swipe up on trackpad to accept word suggestions</string>
     <string name="trackpad_gesture_add_word_title">Add words with gestures</string>
     <string name="trackpad_gesture_add_word_description">Allow the suggestion gesture to activate the dictionary add button.</string>
+    <string name="trackpad_gesture_add_word_needs_dictionary">Needs suggestions on (Suggestions &amp; auto-correction).</string>
     <string name="trackpad_gesture_add_word_full_width_title">Full-width add-word swipe</string>
     <string name="trackpad_gesture_add_word_full_width_description">When only the add-word button is shown, allow any trackpad third to add it.</string>
     <string name="trackpad_gestures_show_tutorial">Show Tutorial</string>
@@ -1726,7 +1728,7 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="kw_main_custom_input_styles">keyboard layout, layouts, input styles, languages, per language</string>
     <string name="kw_main_text_input">typing, text, punctuation, quotes, spacing, capitalization</string>
     <string name="kw_main_auto_correction">correction, autocorrect, spelling, suggestions, replacements, dictionaries</string>
-    <string name="kw_main_keyboard_theme">theme, themes, colors, dark, light, presets, hardware keyboard, on-screen keyboard, Flux Dark, Flux Light, Cloud Tap, Moon Tap, Classic Cloud, Classic Midnight</string>
+    <string name="kw_main_keyboard_theme">theme, themes, colors, colours, dark, light, system, presets, hardware keyboard, on-screen keyboard, Classic Cloud, Classic Midnight</string>
     <string name="kw_main_app_language">language, app language, locale, translation</string>
     <string name="kw_main_customization">customize, customization, appearance</string>
     <string name="kw_main_advanced">advanced, backup, restore, debug, expert</string>
@@ -1776,6 +1778,18 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="titan2_elite_status_bar_lift_title">Lift the status bar above the LEDs</string>
     <string name="titan2_elite_status_bar_lift_description">Raise the status bar so the modifier LEDs run in a clear band underneath it, following the display’s corners. 0 keeps the LEDs wrapped around the bar.</string>
     <string name="titan2_elite_status_bar_lift_value">%1$d dp</string>
+    <string name="titan2_elite_corner_style_title">Corner style</string>
+    <string name="show_add_word_suggestion_title">Offer to add new words</string>
+    <string name="show_add_word_suggestion_description">Show an “add to dictionary” suggestion when you type a word the dictionary doesn’t know. Off, you can still add words with Ctrl + Shift + D or from the dictionary settings.</string>
+    <string name="add_last_word_shortcut_title">Ctrl + Shift + D adds the last word</string>
+    <string name="add_last_word_shortcut_description">Adds the word before the cursor to your dictionary, so it’s suggested and never auto-corrected.</string>
+    <string name="add_last_word_added">Added “%1$s” to the dictionary</string>
+    <string name="add_last_word_known">“%1$s” is already in the dictionary</string>
+    <string name="add_last_word_none">No word before the cursor to add</string>
+    <string name="titan2_elite_corner_style_description">Contoured LEDs: the corner buttons follow the display’s curve, with one LED rail running round it beneath them, each LED lighting its share. Straight buttons: the corner buttons reach straight down into the corners, and the bar sits a little above the LEDs.</string>
+    <string name="titan2_elite_corner_style_contoured">Contoured LEDs</string>
+    <string name="titan2_elite_corner_style_straight">Straight buttons</string>
+    <string name="titan2_elite_off_with_contour_leds">Off with contoured LEDs, which run along the display’s curve.</string>
     <string name="hidden_keyboard_apps_title">Hide keyboard in these apps</string>
     <string name="hidden_keyboard_apps_description">Pastiera stays out of sight in the apps you list and leaves every key to them. Useful for Termux:X11 desktops.</string>
     <string name="hidden_keyboard_apps_search">Search apps</string>
@@ -1861,9 +1875,9 @@ Each key can be configured as Keycode, Action, Native Ctrl, or None. Use overrid
     <string name="flux_focus_picker_description">The emoji picker opens with its search taking your typing. Off: tap the search first.</string>
     <string name="flux_focus_gif_title">GIFs: type to search</string>
     <string name="flux_focus_gif_description">GIF search opens with its search taking your typing. Off: tap the search first.</string>
-    <string name="flux_type_to_search_layer_title">Emoji layer: letters search</string>
+    <string name="flux_type_to_search_layer_title">Emoji layer: type to search</string>
     <string name="flux_type_to_search_layer_description">A letter key on the emoji layer starts emoji search with that letter, instead of typing its emoji. Tapping an emoji on screen still types it.</string>
-    <string name="flux_type_to_search_symbols_title">Symbols pages: letters search</string>
+    <string name="flux_type_to_search_symbols_title">Symbols pages: type to search</string>
     <string name="flux_type_to_search_symbols_description">A letter key on a symbols page starts symbol search with that letter, instead of typing its symbol. Tapping a symbol on screen still types it.</string>
     <string name="gif_section_favourites">Favourites</string>
     <string name="gif_section_recent">Recent</string>
