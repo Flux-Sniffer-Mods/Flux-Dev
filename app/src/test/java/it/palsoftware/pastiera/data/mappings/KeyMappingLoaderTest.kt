@@ -128,8 +128,9 @@ class KeyMappingLoaderTest {
 
         val mappings = KeyMappingLoader.loadSymKeyMappingsPage2(context.assets)
 
-        // Off the search key (A): the second and third rows moved along one key
-        assertEquals(null, mappings[KeyEvent.KEYCODE_A])
+        // Off the search key (Q): ~ on A, the second and third rows moved along one key
+        assertEquals(null, mappings[KeyEvent.KEYCODE_Q])
+        assertEquals("~", mappings[KeyEvent.KEYCODE_A])
         assertEquals("=", mappings[KeyEvent.KEYCODE_S])
         assertEquals(";", mappings[KeyEvent.KEYCODE_D])
         assertEquals("–", mappings[KeyEvent.KEYCODE_G])

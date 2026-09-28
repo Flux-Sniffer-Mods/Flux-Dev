@@ -28,12 +28,12 @@ class RecommendedSettingsTest {
         assertTrue(SettingsManager.getSmartCtrlOffAfterShortcut(context))
         assertTrue(SettingsManager.getLedIndividualColorsEnabled(context))
         assertTrue(SettingsManager.getShiftBackspaceDelete(context))
-        // Matters of taste stay as they are: the tutorial's "Your choices" asks
-        assertTrue(SettingsManager.getEmojiSuggestionsEnabled(context))
-        assertFalse(SettingsManager.getGifsEnabled(context))
-        // Extras that need a permission or another app start off: the tutorial sets them up
-        assertEquals(listOf("bitpit.launcher"), SettingsManager.getHiddenKeyboardApps(context))
-        assertFalse(SettingsManager.getOneTimeCodesEnabled(context))
+        // The whole configuration from Flux Keyboard's Titan 2 Elite, matters of taste included
+        assertFalse(SettingsManager.getEmojiSuggestionsEnabled(context))
+        assertTrue(SettingsManager.getGifsEnabled(context))
+        assertTrue(SettingsManager.getOneTimeCodesEnabled(context))
+        // App lists aren't part of it: those stay at their defaults
+        assertEquals(listOf("bitpit.launcher", "com.termux.x11"), SettingsManager.getHiddenKeyboardApps(context))
         assertEquals(SettingsManager.QUICK_LAUNCHER_BEHAVIOR_PASTIERA, SettingsManager.getQuickLauncherBehavior(context))
     }
 
@@ -42,7 +42,8 @@ class RecommendedSettingsTest {
         val keys = RecommendedSettings.values(titan2Elite = true).keys
         listOf(
             "app_enter_behavior_overrides", "sym_mappings_custom", "sym_mappings_page2_custom", "keyboard_theme_hardware",
-            "menu_bar_buttons", "launcher_shortcuts", "hidden_keyboard_apps", "led_color_shift", "auto_correct_enabled"
+            "menu_bar_buttons", "launcher_shortcuts", "hidden_keyboard_apps", "led_color_shift",
+            "auto_correct_enabled_languages"
         ).forEach { assertFalse(it, it in keys) }
         // Titan 2 Elite extras only on that phone
         assertFalse("trackpad_gestures_enabled" in RecommendedSettings.values(titan2Elite = false))
@@ -68,7 +69,7 @@ class RecommendedSettingsTest {
 
     @Test
     fun niagaraIsHiddenByDefault() {
-        assertEquals(listOf("bitpit.launcher"), SettingsManager.getHiddenKeyboardApps(context))
+        assertEquals(listOf("bitpit.launcher", "com.termux.x11"), SettingsManager.getHiddenKeyboardApps(context))
     }
 
     @Test
@@ -79,5 +80,32 @@ class RecommendedSettingsTest {
         assertEquals(0, RecommendedSettings.differingSettings(context))
         SettingsManager.setSmartAltOffAfterOpening(context, false)
         assertEquals(1, RecommendedSettings.differingSettings(context))
+    }
+
+    @Test
+    fun everyRecommendedSettingHasAName() {
+        RecommendedSettings.values(titan2Elite = true).keys.forEach { key ->
+            val id = context.resources.getIdentifier("recommended_label_$key", "string", context.packageName)
+            assertTrue("No label for $key", id != 0)
+        }
+    }
+
+    @Test
+    fun afterAnUpdateTheDifferencesAreOfferedOncePerVersion() {
+        SettingsManager.getPreferences(context).edit().putBoolean("shift_backspace_delete", false).commit()
+        val change = RecommendedSettings.changes(context).first { it.key == "shift_backspace_delete" }
+        assertEquals(false, change.from)
+        assertEquals(true, change.to)
+        assertEquals("Shift + Backspace deletes forwards", recommendedLabel(context, change.key))
+        assertEquals("off", recommendedValue(context, change.key, change.from))
+        assertTrue(RecommendedSettings.shouldOfferAfterUpdate(context, "0.93"))
+
+        RecommendedSettings.markOffered(context, "0.93")
+        assertFalse(RecommendedSettings.shouldOfferAfterUpdate(context, "0.93"))
+        assertTrue(RecommendedSettings.shouldOfferAfterUpdate(context, "0.94"))
+
+        RecommendedSettings.apply(context)
+        assertTrue(RecommendedSettings.changes(context).isEmpty())
+        assertFalse(RecommendedSettings.shouldOfferAfterUpdate(context, "0.94"))
     }
 }

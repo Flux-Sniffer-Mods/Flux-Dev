@@ -68,30 +68,31 @@ class EmojiKeyScreensTest {
 
     @Test
     fun recentsKeyShowsRecentEmojiOnTheOtherKeys() {
-        SettingsManager.setEmojiLayerRecentsKey(context, KeyEvent.KEYCODE_Q)
+        SettingsManager.setEmojiLayerRecentsKey(context, KeyEvent.KEYCODE_A)
         RecentEmojiManager.addRecentEmoji(context, "🙂")
         RecentEmojiManager.addRecentEmoji(context, "🎉")
         controller.toggleEmojiKeyPage(layer = true)
-        assertEquals(SymLayoutController.RECENTS_KEY_LABEL, controller.currentSymMappings()!![KeyEvent.KEYCODE_Q])
+        assertEquals(SymLayoutController.RECENTS_KEY_LABEL, controller.currentSymMappings()!![KeyEvent.KEYCODE_A])
 
         assertTrue(controller.toggleEmojiLayerRecents())
 
         val shown = controller.currentSymMappings()!!
-        assertEquals(SymLayoutController.RECENTS_BACK_LABEL, shown[KeyEvent.KEYCODE_Q])
-        assertEquals("🎉", shown[KeyEvent.KEYCODE_W])
-        assertEquals("🙂", shown[KeyEvent.KEYCODE_E])
-        assertNull(shown[KeyEvent.KEYCODE_R])
+        assertEquals(SymLayoutController.RECENTS_BACK_LABEL, shown[KeyEvent.KEYCODE_A])
+        // From Q, which holds the search key until recents show
+        assertEquals("🎉", shown[KeyEvent.KEYCODE_Q])
+        assertEquals("🙂", shown[KeyEvent.KEYCODE_W])
+        assertNull(shown[KeyEvent.KEYCODE_E])
     }
 
     @Test
     fun pressingTheRecentsKeyTogglesInsteadOfTyping() {
-        SettingsManager.setEmojiLayerRecentsKey(context, KeyEvent.KEYCODE_Q)
+        SettingsManager.setEmojiLayerRecentsKey(context, KeyEvent.KEYCODE_A)
         controller.toggleEmojiKeyPage(layer = true)
         var updates = 0
 
         val result = controller.handleKeyWhenActive(
-            KeyEvent.KEYCODE_Q,
-            KeyEvent(0L, 0L, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_Q, 0),
+            KeyEvent.KEYCODE_A,
+            KeyEvent(0L, 0L, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_A, 0),
             null,
             ctrlLatchActive = false,
             altLatchActive = false,
@@ -104,10 +105,10 @@ class EmojiKeyScreensTest {
     }
 
     @Test
-    fun recentsKeyIsQByDefaultAndMustBeAnEmojiLayerKey() {
-        assertEquals(KeyEvent.KEYCODE_Q, SettingsManager.getEmojiLayerRecentsKey(context))
+    fun recentsKeyIsAByDefaultAndMustBeAnEmojiLayerKey() {
+        assertEquals(KeyEvent.KEYCODE_A, SettingsManager.getEmojiLayerRecentsKey(context))
         assertFalse(SettingsManager.setEmojiLayerRecentsKey(context, KeyEvent.KEYCODE_SPACE))
-        assertEquals(KeyEvent.KEYCODE_Q, SettingsManager.getEmojiLayerRecentsKey(context))
+        assertEquals(KeyEvent.KEYCODE_A, SettingsManager.getEmojiLayerRecentsKey(context))
         assertTrue(SettingsManager.setEmojiLayerRecentsKey(context, KeyEvent.KEYCODE_M))
         assertEquals(KeyEvent.KEYCODE_M, SettingsManager.getEmojiLayerRecentsKey(context))
     }
@@ -172,7 +173,7 @@ class EmojiKeyScreensTest {
         SettingsManager.setGifsEnabled(context, true)
         // Defaults: Recents Q, GIF P
         assertFalse(SettingsManager.setEmojiLayerRecentsKey(context, KeyEvent.KEYCODE_P))
-        assertFalse(SettingsManager.setEmojiLayerGifKey(context, KeyEvent.KEYCODE_Q))
+        assertFalse(SettingsManager.setEmojiLayerGifKey(context, KeyEvent.KEYCODE_A))
         assertTrue(SettingsManager.setEmojiLayerGifKey(context, KeyEvent.KEYCODE_L))
         assertEquals(KeyEvent.KEYCODE_L, SettingsManager.getEmojiLayerGifKey(context))
     }
@@ -219,7 +220,7 @@ class EmojiKeyScreensTest {
     @Test
     fun withRecentsShownTheGifKeyHoldsARecentEmoji() {
         SettingsManager.setGifsEnabled(context, true)
-        SettingsManager.setEmojiLayerRecentsKey(context, KeyEvent.KEYCODE_Q)
+        SettingsManager.setEmojiLayerRecentsKey(context, KeyEvent.KEYCODE_A)
         val recent = listOf("😀", "😂", "😍", "😎", "👍", "🙏", "🎉", "🔥", "❤", "😢")
         recent.forEach { RecentEmojiManager.addRecentEmoji(context, it) }
         var gifRequests = 0
@@ -229,8 +230,8 @@ class EmojiKeyScreensTest {
 
         assertTrue(controller.toggleEmojiLayerRecents())
 
-        // P is the ninth key after Q: the ninth most recent emoji, not GIF
-        assertEquals(recent.reversed()[8], controller.currentSymMappings()!![KeyEvent.KEYCODE_P])
+        // P is the tenth key from Q: the tenth most recent emoji, not GIF
+        assertEquals(recent.reversed()[9], controller.currentSymMappings()!![KeyEvent.KEYCODE_P])
         controller.handleKeyWhenActive(
             KeyEvent.KEYCODE_P,
             KeyEvent(0L, 0L, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_P, 0),
@@ -243,11 +244,11 @@ class EmojiKeyScreensTest {
     }
 
     @Test
-    fun searchKeyIsAAndShowsItsLabelOnTheLayer() {
-        assertEquals(KeyEvent.KEYCODE_A, SettingsManager.getSearchKey(context))
+    fun searchKeyIsQAndShowsItsLabelOnTheLayer() {
+        assertEquals(KeyEvent.KEYCODE_Q, SettingsManager.getSearchKey(context))
         controller.toggleEmojiKeyPage(layer = true)
 
-        assertEquals(SymLayoutController.SEARCH_KEY_LABEL, controller.currentSymMappings()!![KeyEvent.KEYCODE_A])
+        assertEquals(SymLayoutController.SEARCH_KEY_LABEL, controller.currentSymMappings()!![KeyEvent.KEYCODE_Q])
     }
 
     @Test
@@ -257,8 +258,8 @@ class EmojiKeyScreensTest {
         controller.toggleEmojiKeyPage(layer = true)
 
         val result = controller.handleKeyWhenActive(
-            KeyEvent.KEYCODE_A,
-            KeyEvent(0L, 0L, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_A, 0),
+            KeyEvent.KEYCODE_Q,
+            KeyEvent(0L, 0L, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_Q, 0),
             null,
             ctrlLatchActive = false,
             altLatchActive = false,
@@ -272,11 +273,11 @@ class EmojiKeyScreensTest {
     @Test
     fun searchKeyNeverSharesALetterWithRecentsOrGif() {
         SettingsManager.setGifsEnabled(context, true)
-        // Defaults: Recents Q, GIF P, search A
-        assertFalse(SettingsManager.setSearchKey(context, KeyEvent.KEYCODE_Q))
+        // Defaults: Recents A, GIF P, search Q
+        assertFalse(SettingsManager.setSearchKey(context, KeyEvent.KEYCODE_A))
         assertFalse(SettingsManager.setSearchKey(context, KeyEvent.KEYCODE_P))
-        assertFalse(SettingsManager.setEmojiLayerRecentsKey(context, KeyEvent.KEYCODE_A))
-        assertFalse(SettingsManager.setEmojiLayerGifKey(context, KeyEvent.KEYCODE_A))
+        assertFalse(SettingsManager.setEmojiLayerRecentsKey(context, KeyEvent.KEYCODE_Q))
+        assertFalse(SettingsManager.setEmojiLayerGifKey(context, KeyEvent.KEYCODE_Q))
         assertTrue(SettingsManager.setSearchKey(context, KeyEvent.KEYCODE_S))
         assertEquals(KeyEvent.KEYCODE_S, SettingsManager.getSearchKey(context))
     }

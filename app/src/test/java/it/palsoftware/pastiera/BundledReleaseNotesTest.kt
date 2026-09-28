@@ -42,7 +42,7 @@ class BundledReleaseNotesTest {
     @Test
     fun notesSayWhatTheyCoverAndKeepThePastieraTeamsWorkApart() {
         val notes = assertNotNullAndGet(bundledReleaseNotes(RuntimeEnvironment.getApplication(), "0.86-flux.1"))
-        assertTrue(notes.intro.orEmpty().contains("Pastiera 0.85"))
+        assertTrue(notes.intro.orEmpty().contains("Pastiera 0.86"))
         assertEquals("Added by Flux Keyboard", notes.sectionTitle)
         assertTrue(notes.upstreamTitle.orEmpty().startsWith("From the Pastiera team"))
         assertTrue(notes.upstreamChanges.size >= 5)

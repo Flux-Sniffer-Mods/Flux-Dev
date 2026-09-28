@@ -4,6 +4,18 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "Background picture: put your own picture behind the keyboard (Keyboard theme). With Auto colours on, the keys go see-through and are shaded against it, dark over a bright picture and light over a dark one, with text in whichever of black or white reads better; Key opacity sets how solid they are. The picture is kept in backups.",
+      "after": "202609271714"
+    },
+    {
+      "text": "After an update, Flux Keyboard offers any recommended settings that differ from yours, listing each one from what you have to what's recommended, with Apply all or Keep mine. Looks are never touched.",
+      "after": "202609271701"
+    },
+    {
+      "text": "Ctrl + Shift + D adds the last word you typed to the dictionary, and the suggestions' “add to dictionary” can be switched off (Auto-correction > Dictionary).",
+      "after": "202609271321"
+    },
+    {
       "text": "Password fields offer the password you just copied as ⎘ •••••••• (never the text itself), from a password manager too.",
       "after": "202609262118"
     },
@@ -44,6 +56,142 @@
     "Pick suggestions with Ctrl+Shift+Q, W or E (Right Shift too); Backspace undoes an auto-replace."
   ],
   "improvements": [
+    {
+      "text": "Release notes link to Flux Keyboard's own changelog, and What's new never fetches Pastiera's website notes",
+      "after": "202609281628"
+    },
+    {
+      "text": "Setting links (hold a setting) are Flux Keyboard's own, fluxkeyboard://setting/…: they open the setting in the app and no longer point at Pastiera's website",
+      "after": "202609281628"
+    },
+    {
+      "text": "Straight corner buttons reach down to the bottom edge and out to the side on every page",
+      "after": "202609281628"
+    },
+    {
+      "text": "Straight LEDs are the default and the recommended style on every phone; contoured LEDs stay an option on the Titan 2 Elite",
+      "after": "202609281624"
+    },
+    {
+      "text": "Contoured LEDs rise the same height up the display's sides on every page",
+      "after": "202609281623"
+    },
+    {
+      "text": "Contoured LEDs: the corner buttons on every page (symbol pages, emoji picker, close button) follow the display corners with the same gap inside the LEDs",
+      "after": "202609281606"
+    },
+    {
+      "text": "Contoured LEDs, lit and unlit, draw on every page (symbols, emoji, menu bar) at the same height, and the corner buttons follow a new calibration straight away",
+      "after": "202609281603"
+    },
+    {
+      "text": "Titan 2 Elite display corners default to a shape calibrated on the phone itself: 105 % of the reported curve, slightly squarer, 0.75 px inside the edge",
+      "after": "202609281600"
+    },
+    {
+      "text": "After applying the recommended settings, Make it yours ends with a Done button",
+      "after": "202609280232"
+    },
+    {
+      "text": "Background picture: rotate it a quarter turn at a time",
+      "after": "202609280229"
+    },
+    {
+      "text": "Phone trackpad settings open the Scroll assistant page directly: the mode suggestion swipes and flicks need",
+      "after": "202609280229"
+    },
+    {
+      "text": "Trackpad suggestion swipes: sliding from one key onto the next picks a suggestion, from anywhere on the keys, even slowly",
+      "after": "202609280229"
+    },
+    {
+      "text": "Contoured LEDs: unlit LEDs draw over everything too, filling the corners like lit ones",
+      "after": "202609280138"
+    },
+    {
+      "text": "The intro tutorial covers what's new: Enter per app, background pictures, contoured LEDs, punctuation spacing, hidden-keyboard apps and in-app updates",
+      "after": "202609280124"
+    },
+    {
+      "text": "Background picture: a preview of the bar over your picture, where you drag the picture into place and zoom in; the keyboard frames it the same way. Reset position puts it back.",
+      "after": "202609280059"
+    },
+    {
+      "text": "Note-taking and writing apps (Keep, Obsidian, Notion, OneNote, Docs and others, plus any app Android lists as productivity) keep Enter for a new line, like email apps; Ctrl+Enter does the app's own action, and sends an email.",
+      "after": "202609280039"
+    },
+    {
+      "text": "Restricted settings explained: switching on something Android blocks for apps installed from a file (one-time codes, the accessibility service) shows how to allow it step by step, with a button to App info. The tutorial's Extras page does too.",
+      "after": "202609280035"
+    },
+    {
+      "text": "Recommended settings are now the whole configuration from Flux Keyboard's own Titan 2 Elite, sliders included: auto-correct off, GIFs and one-time codes on, colours from the wallpaper, and the built-in themes' key sizes. Only your languages and app lists are left as they are.",
+      "after": "202609280033"
+    },
+    {
+      "text": "Enter sends in every app by default, with Shift+Enter for a new line (email apps keep Enter for a new line and Ctrl+Enter to send). The new alternative: Enter for a new line, Shift+Enter sends.",
+      "after": "202609280023"
+    },
+    {
+      "text": "Termux:X11 keeps the keyboard hidden by default, like Niagara Launcher.",
+      "after": "202609280018"
+    },
+    {
+      "text": "Recommended settings updated: Ctrl+Space switches layout (not Alt+Shift), no automatic Shift in search fields, punctuation spacing for . , ; : ! ?, and on the Titan 2 Elite contoured LEDs and the lightest trackpad flick.",
+      "after": "202609280010"
+    },
+    {
+      "text": "Enter per app: every chat and email app you have gets its own entry, set to its category (including apps outside the built-in list, by Android's own app category), so each one is there to change.",
+      "after": "202609280010"
+    },
+    {
+      "text": "Punctuation spacing explains itself: each mark is named, with No space before and Space after columns. Space after comma is gone, since the comma's row does it (if it was on, it moves there).",
+      "after": "202609280010"
+    },
+    {
+      "text": "Contoured LEDs on every screen: SYM and emoji pages and the clipboard too.",
+      "after": "202609272343"
+    },
+    {
+      "text": "Terminal apps: no microphone button on the bar or in the menu.",
+      "after": "202609271754"
+    },
+    {
+      "text": "The keyboard follows your phone's dark and light mode with Pastiera's Classic Midnight and Classic Cloud themes, now its only built-in ones; a keyboard still coloured like one of the old ones moves to them. Your own and saved themes stay.",
+      "after": "202609271706"
+    },
+    {
+      "text": "Trackpad & gestures moved into Suggestions & auto-correction, with its sensitivity sliders on the same page. Adding words by gesture greys out while suggestions are off, the sliders show only with a trackpad, they go much lower, and a flick across one key is enough by default on the Titan 2 Elite. Ctrl+Shift+Q/W/E starts off when trackpad swipes pick suggestions.",
+      "after": "202609271657"
+    },
+    {
+      "text": "Settings: \"Type to search\" on the emoji and symbols layers, \"Automatic Shift\", a description of what accent & spelling marks do, and the tutorial's Niagara step switches back to the built-in quick launcher too.",
+      "after": "202609271652"
+    },
+    {
+      "text": "The menu bar starts with the everyday buttons: symbols, emoji, GIF, Solderina and keyboard mode are opt-in, and the language button stays hidden while only one language is on.",
+      "after": "202609271649"
+    },
+    {
+      "text": "The quick launcher finds app actions, device controls and navigation actions by default, and in terminal mode the emoji key is Alt until you choose otherwise.",
+      "after": "202609271647"
+    },
+    {
+      "text": "Symbols is the only SYM layer until you turn on others: the emoji and device layers start off, and the search key moves to Q with Recents on A.",
+      "after": "202609271645"
+    },
+    {
+      "text": "Titan 2 Elite: straight corner buttons with filled corners and the 5 dp lift are the default again, contoured LEDs an option, and the LEDs always draw above the bar so the corner buttons never cover them.",
+      "after": "202609271633"
+    },
+    {
+      "text": "Titan 2 Elite: one Corner style choice, Contoured LEDs or Straight buttons (which lift the bar a fixed 5 dp). Fill corners switches itself off with contoured LEDs.",
+      "after": "202609271321"
+    },
+    {
+      "text": "Display contour calibration is in English, lives in Developer options, and sets how far inside the display edge the LED rail runs.",
+      "after": "202609271321"
+    },
     {
       "text": "Recommended settings are a short list that suits everyone, with an Apply button that then offers to go through your choices (auto-correct, GIFs, colours) in the tutorial. Nothing personal from the old built-in configuration is applied any more.",
       "after": "202609271150"
@@ -154,7 +302,7 @@
       "after": "202609271253"
     },
     {
-      "text": "Titan 2 Elite: with the bar not lifted and rounded outer buttons, the modifier LEDs can run as rails along the corner buttons (Pastiera 0.86's contour LEDs).",
+      "text": "Titan 2 Elite: contour LEDs, now Flux Keyboard's default corner style. One LED rail follows the calibrated display curve under the rounded corner buttons, each LED lighting a quarter (or a fifth with the emoji LED).",
       "after": "202609271253"
     },
     {
@@ -180,6 +328,50 @@
     "Safer backups (themes and typing sounds included) and many fixes, from Telegram suggestions to Firefox accents."
   ],
   "bugFixes": [
+    {
+      "text": "Straight corner buttons on the symbol and emoji pages reach the sides and bottom too, instead of being rounded off",
+      "after": "202609281628"
+    },
+    {
+      "text": "Backups include the Titan 2 Elite display corner calibration",
+      "after": "202609281558"
+    },
+    {
+      "text": "No automatic space after full stops and other punctuation in email, sign-in, web address and password fields",
+      "after": "202609280231"
+    },
+    {
+      "text": "Symbols layer: ~ is on A, instead of hiding under the search key on Q and leaving A empty.",
+      "after": "202609272310"
+    },
+    {
+      "text": "Titan 2 Elite with rounded buttons: the square corners outside the display's curve are filled with the keyboard's colour instead of showing the app behind it (as in screenshots); not with contoured LEDs.",
+      "after": "202609272015"
+    },
+    {
+      "text": "Updates: allowing Flux Keyboard to install apps no longer loses the update. It downloads first, and installs when you come back from Android's switch.",
+      "after": "202609271754"
+    },
+    {
+      "text": "Enter per app's chat standard works in chat apps whose message box asks Android to keep Enter as a new line (Instagram, Snapchat and most others).",
+      "after": "202609271654"
+    },
+    {
+      "text": "The spell checker no longer underlines part of a word with an apostrophe (\"couldn't\", \"it's\", \"Sam's\"), and typing \"i'm\", \"i've\", \"i'd\" or \"i'll\" corrects to I'm, I've, I'd and I'll.",
+      "after": "202609271652"
+    },
+    {
+      "text": "The clipboard button keeps its place in the menu bar when it shows a count; the count floats in its corner.",
+      "after": "202609271638"
+    },
+    {
+      "text": "A locked Ctrl lets go once an app shortcut has run, so the next key types normally (Nav Mode's Ctrl stays).",
+      "after": "202609271637"
+    },
+    {
+      "text": "Automatic Shift works at the start of a new note in Keep, a new chat message, and WhatsApp's box after sending, where the field wasn't readable yet when it opened.",
+      "after": "202609271636"
+    },
     {
       "text": "Passwords copied from a password manager no longer go into the clipboard history.",
       "after": "202609262118"
@@ -244,6 +436,7 @@
   "introSince": "What's new in Flux Keyboard since the version you had.",
   "releases": {
     "0.91": "202609262020",
-    "0.92": "202609262030"
+    "0.92": "202609262030",
+    "0.93": "202609281629"
   }
 }

@@ -148,8 +148,8 @@ class SettingsLayoutTest {
             assertTrue(id, entry.isAvailable(context))
             assertEquals(id, SettingsDestination.Developer, entry.route.destination)
         }
-        // Corner calibration also needs developer options, and sits with the other Titan 2 Elite settings
-        assertEquals(SettingsDestination.FluxTitanScreen, route("advanced.corner_calibration").destination)
+        // Display contour calibration also needs developer options, and lives in them
+        assertEquals(SettingsDestination.Developer, route("advanced.corner_calibration").destination)
         listOf("status_bar.rounded_corners", "status_bar.top_corner", "status_bar.max_icon_shrink").forEach { id ->
             assertEquals(id, SettingsDestination.FluxTitanScreen, route(id).destination)
         }

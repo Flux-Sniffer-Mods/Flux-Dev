@@ -30,7 +30,29 @@ class DeferredPunctuationSpaceTrackerTest {
             .commit()
         SettingsManager.setSpaceAfterPunctuation(context, "?!")
         DeferredPunctuationSpaceTracker.clear()
+        DeferredPunctuationSpaceTracker.startField(null)
         inputConnection = FakeInputConnection(context)
+    }
+
+    @Test
+    fun noSpacesInEmailAndSignInFields() {
+        fun field(type: Int, hint: String? = null) = android.view.inputmethod.EditorInfo().apply {
+            inputType = type
+            hintText = hint
+        }
+        val text = android.text.InputType.TYPE_CLASS_TEXT
+        assertTrue(DeferredPunctuationSpaceTracker.appliesTo(field(text)))
+        assertFalse(DeferredPunctuationSpaceTracker.appliesTo(
+            field(text or android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)))
+        assertFalse(DeferredPunctuationSpaceTracker.appliesTo(
+            field(text or android.text.InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS)))
+        assertFalse(DeferredPunctuationSpaceTracker.appliesTo(field(text, "Email or phone")))
+        assertFalse(DeferredPunctuationSpaceTracker.appliesTo(field(android.text.InputType.TYPE_CLASS_NUMBER)))
+
+        DeferredPunctuationSpaceTracker.startField(field(text or android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS))
+        commit("?")
+        commit("a")
+        assertEquals("?a", inputConnection.text)
     }
 
     @Test
