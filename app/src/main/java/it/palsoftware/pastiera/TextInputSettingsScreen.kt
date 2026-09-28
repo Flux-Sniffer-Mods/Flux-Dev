@@ -96,9 +96,7 @@ fun TextInputSettingsScreen(
         mutableStateOf(SettingsManager.getFrenchPunctuationOnlyFrenchLayouts(context))
     }
 
-    var commaSpace by remember {
-        mutableStateOf(SettingsManager.getCommaSpace(context))
-    }
+    remember { SettingsManager.foldCommaSpaceIntoPunctuationSpacing(context) }
 
     var autoSpacePunctuation by remember {
         mutableStateOf(SettingsManager.getAutoSpacePunctuation(context))
@@ -186,12 +184,14 @@ fun TextInputSettingsScreen(
                         Text(
                             text = stringResource(R.string.auto_space_punctuation_before_column),
                             style = MaterialTheme.typography.labelMedium,
-                            modifier = Modifier.width(72.dp)
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                            modifier = Modifier.width(80.dp)
                         )
                         Text(
                             text = stringResource(R.string.auto_space_punctuation_after_column),
                             style = MaterialTheme.typography.labelMedium,
-                            modifier = Modifier.width(72.dp)
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                            modifier = Modifier.width(80.dp)
                         )
                     }
                     Column {
@@ -203,11 +203,23 @@ fun TextInputSettingsScreen(
                                     .padding(horizontal = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
-                                Text(
-                                    text = autoSpacePunctuationLabel(punctuation),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    modifier = Modifier.weight(1f)
-                                )
+                                Row(
+                                    modifier = Modifier.weight(1f),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = autoSpacePunctuationLabel(punctuation),
+                                        style = MaterialTheme.typography.titleLarge,
+                                        modifier = Modifier.width(28.dp)
+                                    )
+                                    autoSpacePunctuationName(punctuation)?.let { name ->
+                                        Text(
+                                            text = stringResource(name),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
                                 Checkbox(
                                     checked = punctuation in autoSpacePunctuation,
                                     onCheckedChange = { checked ->
@@ -218,7 +230,7 @@ fun TextInputSettingsScreen(
                                         }
                                         SettingsManager.setAutoSpacePunctuation(context, autoSpacePunctuation)
                                     },
-                                    modifier = Modifier.width(72.dp)
+                                    modifier = Modifier.width(80.dp)
                                 )
                                 Checkbox(
                                     checked = punctuation in spaceAfterPunctuation,
@@ -230,7 +242,7 @@ fun TextInputSettingsScreen(
                                         }
                                         SettingsManager.setSpaceAfterPunctuation(context, spaceAfterPunctuation)
                                     },
-                                    modifier = Modifier.width(72.dp)
+                                    modifier = Modifier.width(80.dp)
                                 )
                             }
                         }
@@ -371,16 +383,6 @@ fun TextInputSettingsScreen(
                 ),
                 linkId = SettingLinkIds.TEXT_INPUT_AUTO_SPACE_PUNCTUATION,
                 onClick = { autoSpacePunctuationDialogVisible = true }
-            )
-            SettingsSwitchRow(
-                title = stringResource(R.string.comma_space_title),
-                description = stringResource(R.string.comma_space_description),
-                checked = commaSpace,
-                linkId = SettingLinkIds.TEXT_INPUT_COMMA_SPACE,
-                onCheckedChange = { enabled ->
-                    commaSpace = enabled
-                    SettingsManager.setCommaSpace(context, enabled)
-                }
             )
             SettingsSwitchRow(
                 title = stringResource(R.string.french_punctuation_spacing_title),
@@ -835,6 +837,9 @@ private fun autoSpacePunctuationSummary(
     afterLabel: String,
     offLabel: String
 ): String {
+    if (beforePunctuation.isNotEmpty() && beforePunctuation == afterPunctuation) {
+        return "$beforeLabel, $afterLabel: ${beforePunctuation.map(::autoSpacePunctuationLabel).joinToString(" ")}"
+    }
     val parts = buildList {
         beforePunctuation.takeIf { it.isNotEmpty() }?.let {
             add("$beforeLabel: ${it.map(::autoSpacePunctuationLabel).joinToString(" ")}")
@@ -844,6 +849,16 @@ private fun autoSpacePunctuationSummary(
         }
     }
     return parts.joinToString(" · ").ifEmpty { offLabel }
+}
+
+private fun autoSpacePunctuationName(punctuation: Char): Int? = when (punctuation) {
+    '.' -> R.string.punctuation_name_full_stop
+    ',' -> R.string.punctuation_name_comma
+    ';' -> R.string.punctuation_name_semicolon
+    ':' -> R.string.punctuation_name_colon
+    '!' -> R.string.punctuation_name_exclamation
+    '?' -> R.string.punctuation_name_question
+    else -> null
 }
 
 internal fun autoSpacePunctuationLabel(punctuation: Char): String {

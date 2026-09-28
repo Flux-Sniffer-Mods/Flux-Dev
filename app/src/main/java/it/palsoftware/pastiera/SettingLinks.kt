@@ -431,12 +431,6 @@ object SettingLinkRegistry {
             destination = SettingsDestination.TextInput
         ),
         entry(
-            SettingLinkIds.TEXT_INPUT_COMMA_SPACE,
-            R.string.comma_space_title,
-            R.string.comma_space_description,
-            destination = SettingsDestination.TextInput
-        ),
-        entry(
             SettingLinkIds.TEXT_INPUT_FRENCH_PUNCTUATION_SPACING,
             R.string.french_punctuation_spacing_title,
             R.string.french_punctuation_spacing_description,

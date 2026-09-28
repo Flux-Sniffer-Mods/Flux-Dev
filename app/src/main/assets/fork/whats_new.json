@@ -57,6 +57,10 @@
   ],
   "improvements": [
     {
+      "text": "Punctuation spacing explains itself: each mark is named, with No space before and Space after columns. Space after comma is gone, since the comma's row does it (if it was on, it moves there).",
+      "after": "202609280010"
+    },
+    {
       "text": "Contoured LEDs rise to the same height on every page: the height they have on the plain bar.",
       "after": "202609280010"
     },

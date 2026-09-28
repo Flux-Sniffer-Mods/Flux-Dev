@@ -12,4 +12,10 @@
     <string name="keyboard_background_auto_colours_description">See-through keys shaded against the picture: dark keys over a bright picture, light keys over a dark one, with text to match.</string>
     <string name="keyboard_background_key_opacity_title">Key opacity: %1$d%%</string>
     <string name="keyboard_background_key_opacity_search">Key opacity</string>
+    <string name="punctuation_name_full_stop">Full stop</string>
+    <string name="punctuation_name_comma">Comma</string>
+    <string name="punctuation_name_semicolon">Semicolon</string>
+    <string name="punctuation_name_colon">Colon</string>
+    <string name="punctuation_name_exclamation">Exclamation mark</string>
+    <string name="punctuation_name_question">Question mark</string>
 </resources>

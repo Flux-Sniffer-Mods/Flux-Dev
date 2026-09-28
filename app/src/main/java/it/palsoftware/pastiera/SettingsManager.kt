@@ -486,7 +486,7 @@ object SettingsManager {
     private const val DEFAULT_TRACKPAD_GESTURE_ADD_WORD_ENABLED = true
     private const val DEFAULT_TRACKPAD_GESTURE_ADD_WORD_FULL_WIDTH_ENABLED = true
     private const val DEFAULT_TRACKPAD_SWIPE_THRESHOLD = 500f
-    private const val TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD = 120f
+    private const val TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD = 40f
     private const val MIN_TRACKPAD_SWIPE_THRESHOLD = 40f
     private const val MAX_TRACKPAD_SWIPE_THRESHOLD = 750f
     const val TRACKPAD_PROVIDER_SHIZUKU = "shizuku"
@@ -2219,6 +2219,17 @@ object SettingsManager {
             KEY_COMMA_SPACE,
             DEFAULT_COMMA_SPACE
         )
+    }
+
+    /**
+     * Flux Keyboard: "Space after comma" is Punctuation spacing's comma row now. Turned on, it
+     * moves there (no space before a comma, one after) and switches itself off.
+     */
+    fun foldCommaSpaceIntoPunctuationSpacing(context: Context) {
+        if (!getCommaSpace(context)) return
+        setAutoSpacePunctuation(context, getAutoSpacePunctuation(context) + ",")
+        setSpaceAfterPunctuation(context, getSpaceAfterPunctuation(context) + ",")
+        setCommaSpace(context, false)
     }
 
     fun setCommaSpace(context: Context, enabled: Boolean) {
