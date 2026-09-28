@@ -36,4 +36,9 @@
     <string name="recommended_label_pastierina_mode_override">Status bar</string>
     <string name="recommended_label_pastierina_status_bar_slots_left">Compact bar, left button</string>
     <string name="recommended_label_pastierina_status_bar_slots_right">Compact bar, right button</string>
+    <string name="recommended_label_ctrl_space_layout_switch">Ctrl+Space switches layout</string>
+    <string name="recommended_label_auto_capitalize_respect_manual_shift_off">Automatic capitals respect Shift turned off</string>
+    <string name="recommended_label_auto_space_punctuation">Punctuation: no space before</string>
+    <string name="recommended_label_space_after_punctuation">Punctuation: space after</string>
+    <string name="recommended_label_titan2_elite_contour_leds">Contoured LEDs</string>
 </resources>

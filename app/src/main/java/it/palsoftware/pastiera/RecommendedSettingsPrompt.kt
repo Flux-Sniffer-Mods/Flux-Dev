@@ -88,6 +88,8 @@ internal fun recommendedValue(context: Context, key: String, value: Any?): Strin
             "ctrl_digits" -> "Ctrl+1/2/3"
             else -> "Ctrl+Shift+Q/W/E"
         }
+        key.endsWith("_punctuation") -> value.toCharArray().joinToString(" ")
+            .ifEmpty { context.getString(R.string.recommended_value_off) }
         key == "trackpad_provider" -> if (value == SettingsManager.TRACKPAD_PROVIDER_SHIZUKU) "Shizuku" else "Android"
         value.startsWith("[") -> value.trim('[', ']').replace("\"", "").replace(",", ", ")
         else -> value.replace(",", ", ")

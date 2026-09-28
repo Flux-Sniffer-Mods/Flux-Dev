@@ -32,9 +32,15 @@ object RecommendedSettings {
         // :shortcodes: expand with Enter, or with Space on an exact match
         "emoji_symbols_accept_with_enter" to true,
         "emoji_symbols_exact_on_space" to true,
-        // Alt+Shift switches layout; automatic Shift in text, names, addresses and search
-        "alt_shift_layout_switch" to true,
-        "auto_shift_field_types" to "addresses,names,search,text",
+        // Ctrl+Space switches layout (Alt+Shift doesn't); automatic Shift in text, names and
+        // addresses, not search
+        "alt_shift_layout_switch" to false,
+        "ctrl_space_layout_switch" to true,
+        "auto_shift_field_types" to "addresses,names,text",
+        "auto_capitalize_respect_manual_shift_off" to false,
+        // No space before . , ; : ! ? and one after, before the next word
+        "auto_space_punctuation" to ".,;:!?",
+        "space_after_punctuation" to ".,;:!?",
         // New words are added on purpose (Ctrl+Shift+D), not from a chip in the suggestions
         "show_add_word_suggestion" to false
     )
@@ -50,10 +56,12 @@ object RecommendedSettings {
         "suggestion_keys" to "off",
         "trackpad_gesture_add_word_enabled" to false,
         "trackpad_gesture_add_word_full_width_enabled" to false,
-        // A flick across one key
-        "trackpad_suggestion_swipe_threshold" to 120f,
-        "trackpad_side_swipe_threshold" to 120f,
-        "trackpad_delete_swipe_threshold" to 120f,
+        // The lightest flick
+        "trackpad_suggestion_swipe_threshold" to 40f,
+        "trackpad_side_swipe_threshold" to 40f,
+        "trackpad_delete_swipe_threshold" to 40f,
+        // Contoured LEDs round the display's corners
+        "titan2_elite_contour_leds" to true,
         "pastierina_mode_override" to "pastierina",
         "pastierina_status_bar_slots_left" to "[\"microphone\"]",
         "pastierina_status_bar_slots_right" to "[\"hamburger\"]"

@@ -57,6 +57,10 @@
   ],
   "improvements": [
     {
+      "text": "Recommended settings updated: Ctrl+Space switches layout (not Alt+Shift), no automatic Shift in search fields, punctuation spacing for . , ; : ! ?, and on the Titan 2 Elite contoured LEDs and the lightest trackpad flick.",
+      "after": "202609280010"
+    },
+    {
       "text": "Enter per app: every chat and email app you have gets its own entry, set to its category (including apps outside the built-in list, by Android's own app category), so each one is there to change.",
       "after": "202609280010"
     },
