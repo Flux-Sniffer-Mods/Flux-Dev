@@ -105,7 +105,8 @@ object KeyboardBackgroundImage {
         val normal = tint(alpha)
         val special = tint(alpha + 40)
         // Text in black or white, whichever reads better on the key as it's seen over the picture
-        val seen = ColorUtils.blendARGB(greyOfLuminance(luminance), shade, alpha / 255f)
+        // Opaque for the contrast check: the blend's alpha rounds to 254, which it refuses
+        val seen = ColorUtils.blendARGB(greyOfLuminance(luminance), shade, alpha / 255f) or 0xFF000000.toInt()
         val text = if (ColorUtils.calculateContrast(Color.BLACK, seen) >= ColorUtils.calculateContrast(Color.WHITE, seen)) {
             Color.BLACK
         } else Color.WHITE

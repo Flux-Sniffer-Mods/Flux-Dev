@@ -281,6 +281,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Choosing a background picture no longer crashes Flux Keyboard.",
+      "after": "202609280037"
+    },
+    {
       "text": "Contoured LEDs: the bar keeps room above them, so the menu bar's buttons are no longer cut off at the top.",
       "after": "202609280018"
     },
