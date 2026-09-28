@@ -22,7 +22,9 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 
 ## Typing
 
-- **Spell checker**: Flux Keyboard as Android's spell checker, underlining typos in any app.
+- **Ctrl + Shift + D adds the last word** you typed to the dictionary (Auto-correction > Dictionary, on by default), and the suggestions' **“add to dictionary”** chip can be switched off.
+- **Spell checker**: Flux Keyboard as Android's spell checker, underlining typos in any app, and reading words with apostrophes (couldn't, I'm) whole.
+- **No automatic spaces after punctuation** in email, sign-in, web address and password fields, and a clearer punctuation spacing dialog: each mark named, with No space before and Space after columns.
 - **Inline autofill**: password manager chips in the suggestion bar.
 - **One-time codes**: a code from a notification (sign-in, bank, delivery) is offered as a chip in the next text field for three minutes, and not again once typed. The code is the number next to a word like "code" or "PIN" (whole words: "shipping" and "security briefing" don't count), so order and account numbers aren't mistaken for it. Off until you give it notification access.
 - **Pick suggestions from the keyboard**: Ctrl+Shift+Q, W or E takes the left, middle or right suggestion (Ctrl+1/2/3 on keyboards with a number row). Either Shift works, including Right Shift while it's the emoji key.
@@ -54,28 +56,34 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 - **Niagara search as the quick launcher** (option): Back, the key or the gesture, before opening anything returns to the app you opened it from, and on Niagara's home screen the built-in quick launcher opens instead.
 - **Search bars wait for typing** (option): when an app opens with its search bar focused, the keyboard bar stays hidden until you type or tap the bar.
 - **Terminal mode**: Termux gets the keyboard's Alt and SYM, a real Ctrl, a hidden keyboard and a choice of what the emoji key sends, including Alt.
-- **Enter per app** gets standards by app category (chat apps use your messaging preset, email apps send with Ctrl+Enter), next to App shortcuts.
-- **Hidden-keyboard apps** (Niagara Launcher by default; Termux:X11 and others from the tutorial), with LEDs and panels per app. SYM chords reach the keyboard there, so SYM + Space opens the quick launcher instead of the symbols panel.
+- Pastiera's **Enter per app** gets standards by app category: chat apps send with Enter (Shift + Enter for a new line), email and note apps keep Enter for new lines and send with Ctrl + Enter, and every installed chat, email and notes app is listed to change.
+- **Terminal apps** get no microphone button.
+- **Hidden-keyboard apps** (Niagara Launcher and Termux:X11 by default; others from the tutorial), with LEDs and panels per app. SYM chords reach the keyboard there, so SYM + Space opens the quick launcher instead of the symbols panel.
 - The **quick launcher** opens from other apps (key mappers, Tasker) and the app icon.
 - **Linux desktop** keyboard layout from the keyboard's Alt map and SYM page.
 
 ## Titan 2 Elite, status bar and LEDs
 
-- **Recommended settings**: a short list that suits nearly everyone (modifiers, suggestions, LEDs; on the Titan 2 Elite its trackpad swipes and compact bar), applied on a fresh install or with the Apply button in Privacy & system, which then offers to go through the rest. Matters of taste (auto-correct, GIFs, colours, what the emoji key opens) are switches on the tutorial's Your choices page, and settings that need a permission or another app (one-time codes, Niagara search, hidden-keyboard apps) start off and are set up from its Extras page.
-- **Trackpad swipes on the Titan 2 Elite**: they reach the keyboard only while the phone's Scroll assistant is on (Settings > Gestures > Keyboard gesture), which the trackpad tutorial and the phone trackpad settings row explain; Cursor assistant is optional, but its cursor mode takes the swipes. Swipes need to travel 230 by default there (500 elsewhere), as a natural flick covers about 300 of the Elite's 750-point touch layer.
-- A status bar fitted to the rounded display: filled corners, straight outer buttons, a 5 dp lift above the LEDs, and room around the SYM screens.
+- **Recommended settings**: the configuration Flux Keyboard is tuned with, from its own Titan 2 Elite, offered again after each update as a list of what would change (from your value to the recommended one, Apply all or Keep mine). A short list that suits nearly everyone (modifiers, suggestions, LEDs; on the Titan 2 Elite its trackpad swipes and compact bar), applied on a fresh install or with the Apply button in Privacy & system, which then offers to go through the rest. Matters of taste (auto-correct, GIFs, colours, what the emoji key opens) are switches on the tutorial's Your choices page, and settings that need a permission or another app (one-time codes, Niagara search, hidden-keyboard apps) start off and are set up from its Extras page.
+- **Trackpad swipes on the Titan 2 Elite**: they reach the keyboard only while the phone's Scroll assistant is on (Settings > Gestures > Keyboard gesture), which the trackpad tutorial and the phone trackpad settings row explain; Cursor assistant is optional, but its cursor mode takes the swipes. A suggestion swipe needs only about one key's width (a tenth of the trackpad), so sliding from one key onto the next picks, however slowly within half a second.
+- A status bar fitted to the rounded display: **straight LEDs** and straight corner buttons by default, reaching down and out into the corners on every page (the bar, symbol and emoji pages), with filled corners, a 5 dp lift above the LEDs and room around the SYM screens. Or **contoured LEDs**, Pastiera's contour LEDs reworked: lit and unlit, they run round the display corners on every page at one height, drawn over everything, with the corner buttons following the same curve a small gap inside them. The display corners default to a shape calibrated on the phone, with smooth edges.
+- The phone trackpad settings row opens the phone's **Scroll assistant** page directly.
 - Every Titan 2 Elite setting on one screen, and a **phone trackpad settings** shortcut (also a quick launcher command) that opens the phone's Keyboard gesture page directly (Unihertz's own settings app, `com.agui.settings`), or Settings search with it ready to paste on other phones.
 - **Per-LED colours**, a clear active-to-locked jump and an optional sweeping gradient when locked, set from one table with Off, Active and Locked columns. Shift is blue, Ctrl orange, Alt green, SYM purple and the emoji key pink by default.
 - **SYM's LED** is lit while SYM is held and locked while it's tapped for one symbol or the symbols are open. A **fifth LED** does the same for the emoji key (on by default; Look & sound > Status LED colours); all five LEDs share the width equally.
 - **Wallpaper colours** (option): the keyboard takes its colours from your wallpaper.
+- **Background picture**: your own picture behind the keys, dragged, zoomed and rotated into place on a preview of the bar. With Auto colours the keys are shaded against it with text that reads, and Key opacity sets how solid they are. It's kept in backups.
+- The keyboard follows the system's dark and light mode with Pastiera's Classic Midnight and Classic Cloud themes.
 - A **customisable menu bar** (which buttons, in what order) with a GIF button, and a preview of it at its real height.
 
 ## Settings, tutorial and privacy
 
 - **Flux Keyboard**: its own name, app ID, icon (a keyboard, in Niagara's icon packs too) and home screen fitted to the Titan 2 Elite, crediting and linking the original Pastiera. The compact mode is called **Solderina**.
-- **A tutorial of its own**: one-step setup, every new feature, **Your choices** (auto-correct, double-space full stop, emoji suggestions, GIF search, what the emoji key opens, wallpaper colours, each a switch), a page for making it yours, and the extras that need a permission, on pages that scroll. The trackpad has its own up-to-date guide. After an update, **What's new** shows alone, lists only what's new since the version you had (nothing at all after an update with nothing new), and closes with ✕ or Done.
+- **A tutorial of its own**, rewritten for 0.93: one-step setup, every new feature, **Your choices** (auto-correct, double-space full stop, emoji suggestions, GIF search, what the emoji key opens, wallpaper colours, each a switch), a page for making it yours, and the extras that need a permission, on pages that scroll. The trackpad has its own up-to-date guide. After an update, **What's new** shows alone, lists only what's new since the version you had (nothing at all after an update with nothing new), and closes with ✕ or Done.
 - **Updates from this fork**: Flux Keyboard checks this repository's releases, not upstream's, compares versions properly, and downloads and installs the update itself (Android asks before installing). Choose full releases only (always the latest, however many dev builds follow it), or dev builds too; a dev build starts on dev updates and a full release on releases. Dev builds are offered with their build time ("0.93 dev · 27 Sep 2026, 11:50").
-- **Restricted settings**: features that need the accessibility service or notification access say when Android blocks them for apps installed from a file, and open App info to lift the block.
+- **Restricted settings**: features that need the accessibility service or notification access say when Android blocks them for apps installed from a file, explain step by step how to allow them (in settings and the tutorial), and open App info to lift the block.
+- **Setting links**: hold a setting for a `fluxkeyboard://setting/…` link that opens it in this app, and release notes link to this changelog; nothing points at Pastiera's website.
+- **Backups** include every setting, the background picture and the display corner calibration.
 - Settings grouped by task, ordered by usefulness, searchable, with rows sized to their text, and choices that go together in one dropdown (which swipe deletes a word). Search keeps your query and your place when you open a result and come back, and nothing is focused on its own.
 - Input Languages laid out like every other page.
 - **Offline mode**: nothing in the keyboard goes online.
@@ -107,7 +115,7 @@ Flux Keyboard includes everything the Pastiera team built for Pastiera 0.86 sinc
 - **Greek translation**, and configurable status buttons for the compact mode (Pastierina, called Solderina here).
 - Clipboard history **hidden while the phone is locked**.
 - **Safer backups** (themes and typing sounds included) and many fixes: suggestions in Telegram, emoji search, Firefox accents, Ctrl shortcuts in number fields and more.
-- **Contour LEDs** on the Titan 2 Elite: the modifier LEDs run as rails along the rounded corner buttons. In Flux Keyboard they show when the bar isn't lifted and the outer buttons are rounded; the lifted bar and straight buttons keep Flux Keyboard's LED band. Pastiera's "Fill lower display corners" is the same switch as Flux Keyboard's **Fill corners**.
+- **Contour LEDs** on the Titan 2 Elite and **Display contour calibration**, which Flux Keyboard reworks into its optional contoured LEDs (see above); straight buttons are Flux Keyboard's default. Pastiera's "Fill lower display corners" is Flux Keyboard's Fill corners setting.
 - The menu bar shows **SYM while it is held**, and the navigation bar under the keyboard takes the keyboard's colour.
 - A **software bill of materials** (CycloneDX) in release builds, exported from About.
 

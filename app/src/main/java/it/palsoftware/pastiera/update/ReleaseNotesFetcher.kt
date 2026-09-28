@@ -1,19 +1,10 @@
 package it.palsoftware.pastiera.update
 
-import android.os.Handler
-import android.os.Looper
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
 import org.json.JSONObject
-import java.io.IOException
 
-private const val RELEASE_NOTES_BASE_URL = "https://pastiera.eu/releases"
+/** Flux Keyboard's changelog: where release notes send you for more, never Pastiera's website */
+const val FORK_CHANGELOG_URL = "https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/blob/flux-release/FORK_CHANGES.md"
 
-private val releaseNotesClient = OkHttpClient()
-private val releaseNotesHandler = Handler(Looper.getMainLooper())
 
 data class ReleaseNotesSummary(
     val version: String,
@@ -21,7 +12,7 @@ data class ReleaseNotesSummary(
     val highlights: List<String>,
     val improvements: List<String> = emptyList(),
     val bugFixes: List<String> = emptyList(),
-    val docsUrl: String = "https://pastiera.eu/",
+    val docsUrl: String = FORK_CHANGELOG_URL,
     // Flux Keyboard: what the notes cover, a heading for the fork's own changes, and the
     // Pastiera team's changes since their last official release in a section of their own
     val intro: String? = null,
@@ -77,104 +68,10 @@ data class ReleaseNotesSummary(
                     "it" -> listOf("Le superfici dei candidati e delle emoji sono più affidabili; importazioni, archivi di backup e suoni personalizzati vengono convalidati con maggiore rigore.")
                     else -> listOf("Candidate and emoji surfaces are more reliable; imports, backup archives, and custom typing sounds receive stricter validation.")
                 },
-                docsUrl = when (language) {
-                    "de" -> "https://pastiera.eu/de/"
-                    "it" -> "https://pastiera.eu/it/"
-                    else -> "https://pastiera.eu/"
-                }
+                docsUrl = FORK_CHANGELOG_URL
             )
         }
     }
-}
-
-fun fetchReleaseNotesForVersion(
-    version: String,
-    languageTag: String,
-    callback: (ReleaseNotesSummary?) -> Unit
-) {
-    if (it.palsoftware.pastiera.OfflineMode.enabled) {
-        callback(null)
-        return
-    }
-    val normalizedVersion = normalizeReleaseNotesVersion(version)
-    if (normalizedVersion.isBlank()) {
-        postReleaseNotes(callback, null)
-        return
-    }
-
-    val preferredLanguage = normalizeReleaseNotesLanguage(languageTag)
-    fetchReleaseNotesFromDocs(
-        normalizedVersion = normalizedVersion,
-        language = preferredLanguage,
-        allowEnglishFallback = preferredLanguage != "en",
-        callback = callback
-    )
-}
-
-private fun fetchReleaseNotesFromDocs(
-    normalizedVersion: String,
-    language: String,
-    allowEnglishFallback: Boolean,
-    callback: (ReleaseNotesSummary?) -> Unit
-) {
-    val request = Request.Builder()
-        .url("$RELEASE_NOTES_BASE_URL/$normalizedVersion/$language.json")
-        .header("Accept", "application/json")
-        .build()
-
-    releaseNotesClient.newCall(request).enqueue(object : Callback {
-        override fun onFailure(call: Call, e: IOException) {
-            if (allowEnglishFallback) {
-                fetchReleaseNotesFromDocs(normalizedVersion, "en", false, callback)
-            } else {
-                postReleaseNotes(callback, null)
-            }
-        }
-
-        override fun onResponse(call: Call, response: Response) {
-            response.use { res ->
-                if (!res.isSuccessful) {
-                    if (allowEnglishFallback) {
-                        fetchReleaseNotesFromDocs(normalizedVersion, "en", false, callback)
-                    } else {
-                        postReleaseNotes(callback, null)
-                    }
-                    return
-                }
-
-                val body = res.body?.string().orEmpty()
-                if (body.isBlank()) {
-                    postReleaseNotes(callback, null)
-                    return
-                }
-
-                val notes = parseReleaseNotesJson(body, normalizedVersion)
-                postReleaseNotes(callback, notes)
-            }
-        }
-    })
-}
-
-private fun parseReleaseNotesJson(body: String, expectedVersion: String): ReleaseNotesSummary? {
-    return runCatching {
-        val json = JSONObject(body)
-        val version = json.optString("version", expectedVersion).takeIf(String::isNotBlank) ?: expectedVersion
-        if (normalizeReleaseVersion(version) != expectedVersion) return@runCatching null
-
-        val highlights = parseStringArray(json, "highlights", 8)
-        if (highlights.isEmpty()) return@runCatching null
-
-        ReleaseNotesSummary(
-            version = version,
-            title = json.optString("title").takeIf(String::isNotBlank) ?: "${it.palsoftware.pastiera.BuildConfig.APP_NAME} $version",
-            highlights = highlights,
-            improvements = parseStringArray(json, "improvements", 8),
-            bugFixes = parseStringArray(json, "bugFixes", 12),
-            docsUrl = json.optString("docsUrl")
-                .takeIf { it.startsWith("https://pastiera.eu/") }
-                ?: "https://pastiera.eu/"
-        )
-    }.getOrNull()
 }
 
 private val FORK_VERSION = Regex("""^(\d+(?:\.\d+)*)-flux\.(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})$""")
@@ -254,7 +151,7 @@ internal fun parseBundledReleaseNotes(body: String, version: String, sinceStamp:
         highlights = highlights.ifEmpty { improvements },
         improvements = if (highlights.isEmpty()) emptyList() else improvements,
         bugFixes = bugFixes,
-        docsUrl = json.optString("docsUrl").takeIf { it.startsWith("https://") } ?: "https://pastiera.eu/",
+        docsUrl = json.optString("docsUrl").takeIf { it.startsWith("https://") } ?: FORK_CHANGELOG_URL,
         intro = (if (sinceStamp != null) json.optString("introSince") else "").takeIf(String::isNotBlank)
             ?: json.optString("intro").takeIf(String::isNotBlank),
         sectionTitle = json.optString("sectionTitle").takeIf(String::isNotBlank),
@@ -297,11 +194,3 @@ private fun normalizeReleaseNotesLanguage(languageTag: String): String {
     return language.ifBlank { "en" }
 }
 
-private fun postReleaseNotes(
-    callback: (ReleaseNotesSummary?) -> Unit,
-    summary: ReleaseNotesSummary?
-) {
-    releaseNotesHandler.post {
-        callback(summary)
-    }
-}

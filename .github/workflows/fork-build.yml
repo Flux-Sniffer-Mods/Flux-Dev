@@ -23,6 +23,11 @@ on:
         required: false
         default: ""
         type: string
+      notes_since:
+        description: "Release notes since this build (a version like 0.93-flux.202609271457; leave empty for the build before)"
+        required: false
+        default: ""
+        type: string
       tests:
         description: "Tests: quick (emoji, keys, settings), full, or none"
         required: true
@@ -123,6 +128,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ needs.version.outputs.name }}
+          NOTES_SINCE: ${{ inputs.notes_since }}
         run: |
           mkdir -p out
           cp app/build/outputs/apk/stable/release/app-stable-release.apk "out/flux-keyboard-${{ needs.version.outputs.name }}.apk"
@@ -131,7 +137,11 @@ jobs:
           # was published: a release's createdAt is its commit's date, which a fold can keep old)
           previous=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --json tagName,publishedAt,isDraft \
             --jq "[.[] | select(.isDraft | not) | select(.tagName | startswith(\"flux/v\")) | select(.tagName != \"flux/v$VERSION\")] | sort_by(.publishedAt) | last | .tagName // \"\"")
+          # Or since a chosen build
+          if [ -n "$NOTES_SINCE" ]; then previous="flux/v${NOTES_SINCE#flux/v}"; fi
           python3 .github/scripts/flux_release.py notes "$VERSION" "$previous" "$GITHUB_SHA" > out/RELEASE_NOTES.md
+          # Hand-written notes for a release, when there are some, in place of the generated list
+          if [ -f ".github/release-notes/$VERSION.md" ]; then cp ".github/release-notes/$VERSION.md" out/RELEASE_NOTES.md; fi
           cat out/RELEASE_NOTES.md
 
       - name: Upload APK
@@ -162,6 +172,10 @@ jobs:
             *) title="Flux Keyboard $VERSION"
               kind="--latest" ;;
           esac
+          # A release deleted to be built again leaves its tag behind: move it to this build
+          if ! gh release view "flux/v$VERSION" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh api -X DELETE "repos/$GITHUB_REPOSITORY/git/refs/tags/flux/v$VERSION" >/dev/null 2>&1 || true
+          fi
           gh release create "flux/v$VERSION" out/*.apk \
             --repo "$GITHUB_REPOSITORY" \
             --target "$GITHUB_SHA" \
