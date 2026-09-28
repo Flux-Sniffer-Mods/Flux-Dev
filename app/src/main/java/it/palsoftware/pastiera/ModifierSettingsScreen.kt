@@ -59,6 +59,7 @@ fun ModifierSettingsScreen(
     var longPressThreshold by remember { mutableStateOf(SettingsManager.getLongPressThreshold(context)) }
     var altBinding by remember { mutableStateOf(SettingsManager.getAltModifierBinding(context)) }
     var shiftTapLatches by remember { mutableStateOf(SettingsManager.getShiftTapLatches(context)) }
+    var symSticky by remember { mutableStateOf(SettingsManager.getSymStickyTap(context)) }
     var altTapLatches by remember { mutableStateOf(SettingsManager.getAltTapLatches(context)) }
     var altLatchStaysOnSpace by remember { mutableStateOf(SettingsManager.getAltLatchStaysOnSpace(context)) }
     var ctrlTapLatches by remember { mutableStateOf(SettingsManager.getCtrlTapLatches(context)) }
@@ -151,6 +152,15 @@ fun ModifierSettingsScreen(
             )
 
             SettingsSectionDivider(stringResource(R.string.modifiers_section_tap_lock_long_press))
+            ModifierSwitchRow(
+                title = stringResource(R.string.sym_sticky_title),
+                description = stringResource(R.string.sym_sticky_description),
+                checked = symSticky,
+                linkId = "modifiers.sym_sticky"
+            ) {
+                symSticky = it
+                SettingsManager.setSymStickyTap(context, it)
+            }
             ModifierSwitchRow(
                 title = stringResource(R.string.shift_tap_latches_title),
                 description = stringResource(R.string.shift_tap_latches_description),

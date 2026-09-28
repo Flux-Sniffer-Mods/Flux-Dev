@@ -140,6 +140,9 @@ internal fun layoutSettingEntries(): List<SettingEntry> = listOf(
     SettingEntry(SettingLinkIds.PRIVACY_PASTE_SUGGESTION, R.string.paste_suggestion_title,
         summaryRes = R.string.paste_suggestion_description,
         route = SettingRoute(SettingsDestination.Advanced)),
+    SettingEntry(SettingLinkIds.PRIVACY_PASTE_IN_PASSWORD_FIELDS, R.string.paste_in_password_fields_title,
+        summaryRes = R.string.paste_in_password_fields_description,
+        route = SettingRoute(SettingsDestination.Advanced)),
     SettingEntry(SettingLinkIds.PRIVACY_ONE_TIME_CODES, R.string.one_time_codes_title,
         summaryRes = R.string.one_time_codes_description,
         route = SettingRoute(SettingsDestination.Advanced))

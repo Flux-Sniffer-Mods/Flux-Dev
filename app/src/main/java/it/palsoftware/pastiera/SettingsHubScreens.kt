@@ -414,12 +414,11 @@ internal fun SettingsUpdateRows(context: android.content.Context) {
             }
         }
     )
-    if (fork) ForkUpdateChannelRow(context)
 }
 
 /** Which releases updates offer: full releases, or dev builds too. */
 @Composable
-private fun ForkUpdateChannelRow(context: android.content.Context) {
+internal fun ForkUpdateChannelRow(context: android.content.Context) {
     var channel by remember { mutableStateOf(SettingsManager.getForkUpdateChannel(context)) }
     val dev = channel == SettingsManager.FORK_UPDATE_CHANNEL_DEV
     FluxSwitchRow(
@@ -447,6 +446,7 @@ fun DeveloperOptionsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     }
     FluxScreenScaffold(stringResource(R.string.developer_options_title), onBack, modifier) {
         FluxNote(stringResource(R.string.developer_options_note))
+        if (it.palsoftware.pastiera.update.forkUpdatesEnabled()) ForkUpdateChannelRow(context)
         FluxActionRow(
             linkId = SettingLinkIds.TRACKPAD_DEBUG,
             title = stringResource(R.string.trackpad_debug_title),

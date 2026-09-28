@@ -71,6 +71,7 @@ object SettingsManager {
     private const val KEY_DEVELOPER_OPTIONS_ENABLED = "developer_options_enabled"
     private const val KEY_INCOGNITO_ALWAYS = "incognito_always"
     private const val KEY_PASTE_SUGGESTION = "paste_suggestion_enabled"
+    private const val KEY_PASTE_SUGGESTION_PASSWORD_FIELDS = "paste_suggestion_password_fields"
     private const val KEY_LANGUAGE_PER_APP = "language_per_app_enabled"
     private const val KEY_KEYBOARD_WALLPAPER_COLOURS = "keyboard_theme_wallpaper_colours"
     private const val KEY_ONE_TIME_CODES = "one_time_codes_enabled"
@@ -217,6 +218,7 @@ object SettingsManager {
     private const val KEY_TRACKPAD_SWIPE_THRESHOLD = "trackpad_swipe_threshold" // Threshold for swipe detection on trackpad
     private const val KEY_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD = "trackpad_suggestion_swipe_threshold"
     private const val KEY_TRACKPAD_DELETE_SWIPE_THRESHOLD = "trackpad_delete_swipe_threshold"
+    private const val KEY_TRACKPAD_SIDE_SWIPE_THRESHOLD = "trackpad_side_swipe_threshold"
     private const val KEY_TRACKPAD_PROVIDER = "trackpad_provider" // shizuku | native_ime
     private const val KEY_TRACKPAD_SHIZUKU_DEVICE = "trackpad_shizuku_device"
     private const val KEY_SHIFT_BACKSPACE_DELETE = "shift_backspace_delete" // Shift + Backspace performs forward delete
@@ -470,8 +472,7 @@ object SettingsManager {
     private const val DEFAULT_TRACKPAD_GESTURE_ADD_WORD_ENABLED = true
     private const val DEFAULT_TRACKPAD_GESTURE_ADD_WORD_FULL_WIDTH_ENABLED = true
     private const val DEFAULT_TRACKPAD_SWIPE_THRESHOLD = 500f
-    private const val DEFAULT_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD = DEFAULT_TRACKPAD_SWIPE_THRESHOLD
-    private const val DEFAULT_TRACKPAD_DELETE_SWIPE_THRESHOLD = DEFAULT_TRACKPAD_SWIPE_THRESHOLD
+    private const val TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD = 230f
     private const val MIN_TRACKPAD_SWIPE_THRESHOLD = 120f
     private const val MAX_TRACKPAD_SWIPE_THRESHOLD = 750f
     const val TRACKPAD_PROVIDER_SHIZUKU = "shizuku"
@@ -3053,6 +3054,14 @@ object SettingsManager {
         getPreferences(context).edit().putBoolean(KEY_PASTE_SUGGESTION, enabled).apply()
     }
 
+    /** The paste suggestion in password fields too, masked (a password you just copied). */
+    fun getPasteSuggestionInPasswordFields(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_PASTE_SUGGESTION_PASSWORD_FIELDS, true)
+
+    fun setPasteSuggestionInPasswordFields(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_PASTE_SUGGESTION_PASSWORD_FIELDS, enabled).apply()
+    }
+
     /** Incognito typing everywhere: Pastiera learns nothing from what you type. */
     fun getIncognitoAlways(context: Context): Boolean =
         getPreferences(context).getBoolean(KEY_INCOGNITO_ALWAYS, false)
@@ -3076,8 +3085,9 @@ object SettingsManager {
                 imeOptions and android.view.inputmethod.EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING != 0)
 
     /** Developer options (calibration, debugging and preview tools) are shown in the settings. */
+    /** Developer options: on by default in dev builds (x.yy-flux.<time>), off in full releases. */
     fun getDeveloperOptionsEnabled(context: Context): Boolean =
-        getPreferences(context).getBoolean(KEY_DEVELOPER_OPTIONS_ENABLED, false)
+        getPreferences(context).getBoolean(KEY_DEVELOPER_OPTIONS_ENABLED, BuildConfig.VERSION_NAME.contains("-flux."))
 
     fun setDeveloperOptionsEnabled(context: Context, enabled: Boolean) {
         getPreferences(context).edit().putBoolean(KEY_DEVELOPER_OPTIONS_ENABLED, enabled).apply()
@@ -6155,7 +6165,7 @@ object SettingsManager {
      * Returns the swipe threshold for trackpad gestures.
      */
     fun getTrackpadSwipeThreshold(context: Context): Float {
-        return getPreferences(context).getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, DEFAULT_TRACKPAD_SWIPE_THRESHOLD)
+        return getPreferences(context).getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, defaultTrackpadSwipeThreshold())
             .coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
     }
 
@@ -6172,13 +6182,22 @@ object SettingsManager {
 
     fun getMinTrackpadSwipeThreshold(): Float = MIN_TRACKPAD_SWIPE_THRESHOLD
     fun getMaxTrackpadSwipeThreshold(): Float = MAX_TRACKPAD_SWIPE_THRESHOLD
-    fun getDefaultTrackpadSwipeThreshold(): Float = DEFAULT_TRACKPAD_SWIPE_THRESHOLD
+    fun getDefaultTrackpadSwipeThreshold(): Float = defaultTrackpadSwipeThreshold()
+
+    /**
+     * How far a trackpad swipe goes until set. The Titan 2 Elite's touch layer is about 750
+     * points tall and a natural flick covers about 300, so 500 (two thirds of it) missed most
+     * swipes there; 230 suits it.
+     */
+    private fun defaultTrackpadSwipeThreshold(): Float =
+        if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice()) TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD
+        else DEFAULT_TRACKPAD_SWIPE_THRESHOLD
 
     fun getTrackpadSuggestionSwipeThreshold(context: Context): Float {
         val prefs = getPreferences(context)
         return prefs.getFloat(
             KEY_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD,
-            prefs.getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, DEFAULT_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD)
+            prefs.getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, defaultTrackpadSwipeThreshold())
         ).coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
     }
 
@@ -6189,11 +6208,32 @@ object SettingsManager {
             .commit()
     }
 
+    /**
+     * How far a left or right swipe goes to take the left or right suggestion (Swipe
+     * directions). Until set: 230 on the Titan 2 Elite, elsewhere 60% of the suggestion swipe.
+     */
+    fun getTrackpadSideSwipeThreshold(context: Context): Float {
+        val prefs = getPreferences(context)
+        val fallback = if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice()) {
+            TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD
+        } else {
+            getTrackpadSuggestionSwipeThreshold(context) * 0.6f
+        }
+        return prefs.getFloat(KEY_TRACKPAD_SIDE_SWIPE_THRESHOLD, fallback)
+            .coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
+    }
+
+    fun setTrackpadSideSwipeThreshold(context: Context, threshold: Float) {
+        getPreferences(context).edit()
+            .putFloat(KEY_TRACKPAD_SIDE_SWIPE_THRESHOLD, threshold.coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD))
+            .apply()
+    }
+
     fun getTrackpadDeleteSwipeThreshold(context: Context): Float {
         val prefs = getPreferences(context)
         return prefs.getFloat(
             KEY_TRACKPAD_DELETE_SWIPE_THRESHOLD,
-            prefs.getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, DEFAULT_TRACKPAD_DELETE_SWIPE_THRESHOLD)
+            prefs.getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, defaultTrackpadSwipeThreshold())
         ).coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
     }
 

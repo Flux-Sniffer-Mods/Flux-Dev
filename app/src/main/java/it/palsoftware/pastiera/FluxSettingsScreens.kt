@@ -244,6 +244,14 @@ internal fun isPastieraAccessibilityServiceOn(context: Context): Boolean {
 
 // ------------------------------------------------------------------ Emoji & GIFs
 
+
+/** Rows on Emoji, symbols & GIFs' search page (opened when settings search lands on one). */
+private val FLUX_EMOJI_SEARCH_PAGE_IDS = setOf(
+    "flux_emoji.focus_picker", "flux_emoji.focus_gif", "flux_emoji.type_to_search_layer",
+    "flux_emoji.type_to_search_symbols", "flux_emoji.search_key", "flux_emoji.enter_emoji",
+    "flux_emoji.enter_symbol", "flux_emoji.enter_gif", "flux_emoji.recents_first"
+)
+
 @Composable
 fun FluxEmojiGifsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     val context = LocalContext.current
@@ -274,307 +282,274 @@ fun FluxEmojiGifsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     var symAutoClose by remember { mutableStateOf(SettingsManager.getSymAutoClose(context)) }
     var symAutoCloseOnTouch by remember { mutableStateOf(SettingsManager.getSymAutoCloseOnTouch(context)) }
     var emojiPickerExpandedHeight by remember { mutableStateOf(SettingsManager.getEmojiPickerExpandedHeight(context)) }
-    var symSticky by remember { mutableStateOf(SettingsManager.getSymStickyTap(context)) }
     var emojiSticky by remember { mutableStateOf(SettingsManager.getEmojiStickyTap(context)) }
-    var emojiLed by remember { mutableStateOf(SettingsManager.getEmojiKeyLedEnabled(context)) }
 
-    FluxScreenScaffold(stringResource(R.string.settings_emoji_symbols_gifs_title), onBack, modifier) {
-        FluxNote(stringResource(R.string.flux_emoji_gifs_note))
+    val highlightedSettingId = LocalSettingHighlightId.current
+    var searchPage by remember { mutableStateOf(settingsChild(context, "flux_emoji") == "search") }
+    LaunchedEffect(highlightedSettingId) {
+        if (highlightedSettingId in FLUX_EMOJI_SEARCH_PAGE_IDS) searchPage = true
+    }
 
-        SettingsSectionDivider(stringResource(R.string.flux_section_emoji_key))
-
-        Surface(
-            modifier = Modifier.settingRow("flux_emoji.picker_key")
-                .fillMaxWidth()
-                .heightIn(min = 64.dp)
-                .clickable { showEmojiPickerKeyDialog = true }
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.EmojiEmotions,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(24.dp)
-                )
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = stringResource(R.string.emoji_picker_key_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Text(
-                        text = emojiPickerKeyLabel(context, emojiPickerKey),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
-        }
-
-        HorizontalDivider()
-
-        FluxSwitchRow(
-            linkId = "flux_emoji.sym_sticky",
-            title = stringResource(R.string.sym_sticky_title),
-            description = stringResource(R.string.sym_sticky_description),
-            checked = symSticky,
-            onCheckedChange = { symSticky = it; SettingsManager.setSymStickyTap(context, it) }
-        )
-
-        if (emojiPickerKey != KeyEvent.KEYCODE_UNKNOWN) {
+    FluxScreenScaffold(
+        stringResource(if (searchPage) R.string.flux_search_page_title else R.string.settings_emoji_symbols_gifs_title),
+        onBack,
+        modifier
+    ) {
+        if (searchPage) {
+            SettingsSectionDivider(stringResource(R.string.flux_section_search_on_open))
             FluxSwitchRow(
-                linkId = "flux_emoji.emoji_sticky",
-                title = stringResource(R.string.emoji_sticky_title),
-                description = stringResource(R.string.emoji_sticky_description),
-                checked = emojiSticky,
-                onCheckedChange = { emojiSticky = it; SettingsManager.setEmojiStickyTap(context, it) }
-            )
-            FluxSwitchRow(
-                linkId = "flux_emoji.emoji_led",
-                title = stringResource(R.string.emoji_led_title),
-                description = stringResource(R.string.emoji_led_description),
-                checked = emojiLed,
-                onCheckedChange = { emojiLed = it; SettingsManager.setEmojiKeyLedEnabled(context, it) }
-            )
-            // What the emoji key opens
-            Column(
-                modifier = Modifier.settingRow("flux_emoji.key_target")
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.emoji_key_target_title),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Medium
-                )
-                listOf(false to R.string.emoji_key_target_picker, true to R.string.emoji_key_target_layer)
-                    .forEach { (layer, label) ->
-                        Row(
-                            modifier = Modifier.fillMaxWidth().clickable {
-                                emojiKeyOpensLayer = layer
-                                SettingsManager.setEmojiKeyOpensLayer(context, layer)
-                            },
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            RadioButton(
-                                selected = emojiKeyOpensLayer == layer,
-                                onClick = {
-                                    emojiKeyOpensLayer = layer
-                                    SettingsManager.setEmojiKeyOpensLayer(context, layer)
-                                }
-                            )
-                            Text(stringResource(label), style = MaterialTheme.typography.bodyLarge)
-                        }
-                    }
-            }
-
-            HorizontalDivider()
-
-            // Auto-close for the emoji key's screens, separate from SYM auto-close
-            Row(
-                modifier = Modifier.settingRow("flux_emoji.key_auto_close")
-                    .fillMaxWidth()
-                    .clickable {
-                        emojiKeyAutoClose = !emojiKeyAutoClose
-                        SettingsManager.setEmojiKeyAutoClose(context, emojiKeyAutoClose)
-                    }
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = stringResource(R.string.emoji_key_auto_close_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Text(
-                        text = stringResource(R.string.emoji_key_auto_close_description),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                Switch(
-                    checked = emojiKeyAutoClose,
-                    onCheckedChange = { enabled ->
-                        emojiKeyAutoClose = enabled
-                        SettingsManager.setEmojiKeyAutoClose(context, enabled)
-                    }
-                )
-            }
-
-            HorizontalDivider()
-        }
-
-        SettingsSectionDivider(stringResource(R.string.flux_section_emoji_layer))
-        FluxActionRow(
-            linkId = SettingLinkIds.MAIN_EMOJI_PROFILES,
-            title = stringResource(R.string.emoji_profiles_title),
-            description = stringResource(R.string.emoji_profiles_description),
-            onClick = { openSettingsPage(context, SettingsPage(SettingsDestination.EmojiProfiles)) }
-        )
-
-        // Recents key on the emoji layer
-        Surface(
-            modifier = Modifier.settingRow("flux_emoji.recents_key")
-                .fillMaxWidth()
-                .clickable { showRecentsKeyDialog = true }
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.History,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(24.dp)
-                )
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = stringResource(R.string.emoji_layer_recents_key_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Text(
-                        text = if (emojiLayerRecentsKey == KeyEvent.KEYCODE_UNKNOWN) {
-                            stringResource(R.string.emoji_layer_recents_key_off)
-                        } else {
-                            stringResource(R.string.emoji_layer_recents_key_current, getLetterFromKeyCode(emojiLayerRecentsKey))
-                        },
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
-        }
-
-        SettingsSectionDivider(stringResource(R.string.flux_section_sym_picker))
-        FluxSwitchRow(
-            linkId = "sym.auto_close",
-            title = stringResource(R.string.sym_auto_close_title),
-            description = stringResource(R.string.sym_auto_close_description),
-            checked = symAutoClose,
-            onCheckedChange = { enabled ->
-                symAutoClose = enabled
-                SettingsManager.setSymAutoClose(context, enabled)
-            }
-        )
-        if (symAutoClose) {
-            FluxSwitchRow(
-                linkId = "sym.auto_close_touch",
-                title = stringResource(R.string.sym_auto_close_touch_title),
-                description = stringResource(R.string.sym_auto_close_touch_description),
-                checked = symAutoCloseOnTouch,
+                linkId = "flux_emoji.focus_picker",
+                title = stringResource(R.string.flux_focus_picker_title),
+                description = stringResource(R.string.flux_focus_picker_description),
+                checked = emojiPickerFocus,
                 onCheckedChange = { enabled ->
-                    symAutoCloseOnTouch = enabled
-                    SettingsManager.setSymAutoCloseOnTouch(context, enabled)
+                    emojiPickerFocus = enabled
+                    SettingsManager.setEmojiPickerFocusSearch(context, enabled)
                 }
             )
-        }
-        FluxSwitchRow(
-            linkId = "sym.emoji_height",
-            title = stringResource(R.string.emoji_picker_expanded_height_title),
-            description = stringResource(R.string.emoji_picker_expanded_height_description),
-            checked = emojiPickerExpandedHeight,
-            onCheckedChange = { enabled ->
-                emojiPickerExpandedHeight = enabled
-                SettingsManager.setEmojiPickerExpandedHeight(context, enabled)
-            }
-        )
-
-        SettingsSectionDivider(stringResource(R.string.flux_section_gif_search))
-        if (SettingsManager.isOfflineMode(context)) {
-            FluxNote(stringResource(R.string.flux_gifs_offline_note))
-        }
-
-        // GIF search (KLIPY): a GIF key on the emoji layer and a GIF tab in the picker
-        Column(
-            modifier = Modifier.settingRow("flux_emoji.gif_search")
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = stringResource(R.string.gif_settings_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Text(
-                        text = stringResource(R.string.gif_settings_description),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+            FluxSwitchRow(
+                linkId = "flux_emoji.focus_gif",
+                title = stringResource(R.string.flux_focus_gif_title),
+                description = stringResource(R.string.flux_focus_gif_description),
+                checked = gifFocus,
+                onCheckedChange = { enabled ->
+                    gifFocus = enabled
+                    SettingsManager.setGifFocusSearch(context, enabled)
                 }
-                Switch(
-                    checked = gifsEnabled,
-                    onCheckedChange = { enabled ->
-                        gifsEnabled = enabled
-                        SettingsManager.setGifsEnabled(context, enabled)
-                    }
-                )
-            }
-            if (gifsEnabled) {
-                OutlinedTextField(
-                    value = klipyApiKey,
-                    onValueChange = { value ->
-                        klipyApiKey = value
-                        SettingsManager.setKlipyApiKey(context, value)
+            )
+            FluxSwitchRow(
+                linkId = "flux_emoji.type_to_search_layer",
+                title = stringResource(R.string.flux_type_to_search_layer_title),
+                description = stringResource(R.string.flux_type_to_search_layer_description),
+                checked = layerTypeToSearch,
+                onCheckedChange = { enabled ->
+                    layerTypeToSearch = enabled
+                    SettingsManager.setEmojiLayerTypeToSearch(context, enabled)
+                }
+            )
+            FluxSwitchRow(
+                linkId = "flux_emoji.type_to_search_symbols",
+                title = stringResource(R.string.flux_type_to_search_symbols_title),
+                description = stringResource(R.string.flux_type_to_search_symbols_description),
+                checked = symbolsTypeToSearch,
+                onCheckedChange = { enabled ->
+                    symbolsTypeToSearch = enabled
+                    SettingsManager.setSymbolsTypeToSearch(context, enabled)
+                }
+            )
+
+            FluxActionRow(
+                linkId = "flux_emoji.search_key",
+                title = stringResource(R.string.search_key_title),
+                description = stringResource(R.string.search_key_description) + "\n" +
+                    if (searchKey == KeyEvent.KEYCODE_UNKNOWN) {
+                        stringResource(R.string.emoji_layer_recents_key_off)
+                    } else {
+                        stringResource(R.string.emoji_layer_recents_key_current, getLetterFromKeyCode(searchKey))
                     },
-                    label = { Text(stringResource(R.string.gif_api_key_label)) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
-                )
-                Text(
-                    text = stringResource(
-                        if (SettingsManager.hasBuiltInKlipyApiKey()) R.string.gif_api_key_help_builtin
-                        else R.string.gif_api_key_help
-                    ),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
-                TextButton(onClick = {
-                    runCatching {
-                        context.startActivity(
-                            Intent(Intent.ACTION_VIEW, android.net.Uri.parse(it.palsoftware.pastiera.data.gif.KlipyGifs.SIGNUP_URL))
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        )
-                    }
-                }) {
-                    Text(stringResource(R.string.gif_get_key))
+                onClick = { showSearchKeyDialog = true }
+            )
+
+            SettingsSectionDivider(stringResource(R.string.flux_section_enter))
+            FluxSwitchRow(
+                linkId = "flux_emoji.enter_emoji",
+                title = stringResource(R.string.flux_enter_emoji_title),
+                description = stringResource(R.string.flux_enter_emoji_description),
+                checked = enterPicksEmoji,
+                onCheckedChange = { enabled ->
+                    enterPicksEmoji = enabled
+                    SettingsManager.setEmojiSearchEnterPicks(context, enabled)
                 }
-                // The emoji layer key that opens GIF search
+            )
+            FluxSwitchRow(
+                linkId = "flux_emoji.enter_symbol",
+                title = stringResource(R.string.flux_enter_symbol_title),
+                description = stringResource(R.string.flux_enter_symbol_description),
+                checked = enterPicksSymbol,
+                onCheckedChange = { enabled ->
+                    enterPicksSymbol = enabled
+                    SettingsManager.setSymbolSearchEnterPicks(context, enabled)
+                }
+            )
+            FluxSwitchRow(
+                linkId = "flux_emoji.enter_gif",
+                title = stringResource(R.string.flux_enter_gif_title),
+                description = stringResource(R.string.flux_enter_gif_description),
+                checked = enterPicksGif,
+                onCheckedChange = { enabled ->
+                    enterPicksGif = enabled
+                    SettingsManager.setGifSearchEnterPicks(context, enabled)
+                }
+            )
+
+            SettingsSectionDivider(stringResource(R.string.flux_section_recents_search))
+            FluxSwitchRow(
+                linkId = "flux_emoji.recents_first",
+                title = stringResource(R.string.flux_recents_first_title),
+                description = stringResource(R.string.flux_recents_first_description),
+                checked = recentsFirst,
+                onCheckedChange = { enabled ->
+                    recentsFirst = enabled
+                    SettingsManager.setRecentsFirstInSearch(context, enabled)
+                }
+            )
+        } else {
+            FluxNote(stringResource(R.string.flux_emoji_gifs_note))
+
+            SettingsSectionDivider(stringResource(R.string.flux_section_emoji_key))
+
+            Surface(
+                modifier = Modifier.settingRow("flux_emoji.picker_key")
+                    .fillMaxWidth()
+                    .heightIn(min = 64.dp)
+                    .clickable { showEmojiPickerKeyDialog = true }
+            ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth()
-                        .clickable { showGifKeyDialog = true }
-                        .padding(vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
+                    Icon(
+                        imageVector = Icons.Filled.EmojiEmotions,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(24.dp)
+                    )
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = stringResource(R.string.emoji_layer_gif_key_title),
-                            style = MaterialTheme.typography.bodyLarge,
+                            text = stringResource(R.string.emoji_picker_key_title),
+                            style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = if (emojiLayerGifKey == KeyEvent.KEYCODE_UNKNOWN) {
+                            text = emojiPickerKeyLabel(context, emojiPickerKey),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+
+            HorizontalDivider()
+
+            if (emojiPickerKey != KeyEvent.KEYCODE_UNKNOWN) {
+                FluxSwitchRow(
+                    linkId = "flux_emoji.emoji_sticky",
+                    title = stringResource(R.string.emoji_sticky_title),
+                    description = stringResource(R.string.emoji_sticky_description),
+                    checked = emojiSticky,
+                    onCheckedChange = { emojiSticky = it; SettingsManager.setEmojiStickyTap(context, it) }
+                )
+                // What the emoji key opens
+                Column(
+                    modifier = Modifier.settingRow("flux_emoji.key_target")
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.emoji_key_target_title),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Medium
+                    )
+                    listOf(false to R.string.emoji_key_target_picker, true to R.string.emoji_key_target_layer)
+                        .forEach { (layer, label) ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth().clickable {
+                                    emojiKeyOpensLayer = layer
+                                    SettingsManager.setEmojiKeyOpensLayer(context, layer)
+                                },
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                RadioButton(
+                                    selected = emojiKeyOpensLayer == layer,
+                                    onClick = {
+                                        emojiKeyOpensLayer = layer
+                                        SettingsManager.setEmojiKeyOpensLayer(context, layer)
+                                    }
+                                )
+                                Text(stringResource(label), style = MaterialTheme.typography.bodyLarge)
+                            }
+                        }
+                }
+
+                HorizontalDivider()
+
+                // Auto-close for the emoji key's screens, separate from SYM auto-close
+                Row(
+                    modifier = Modifier.settingRow("flux_emoji.key_auto_close")
+                        .fillMaxWidth()
+                        .clickable {
+                            emojiKeyAutoClose = !emojiKeyAutoClose
+                            SettingsManager.setEmojiKeyAutoClose(context, emojiKeyAutoClose)
+                        }
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = stringResource(R.string.emoji_key_auto_close_title),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = stringResource(R.string.emoji_key_auto_close_description),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Switch(
+                        checked = emojiKeyAutoClose,
+                        onCheckedChange = { enabled ->
+                            emojiKeyAutoClose = enabled
+                            SettingsManager.setEmojiKeyAutoClose(context, enabled)
+                        }
+                    )
+                }
+
+                HorizontalDivider()
+            }
+
+            SettingsSectionDivider(stringResource(R.string.flux_section_emoji_layer))
+            FluxActionRow(
+                linkId = SettingLinkIds.MAIN_EMOJI_PROFILES,
+                title = stringResource(R.string.emoji_profiles_title),
+                description = stringResource(R.string.emoji_profiles_description),
+                onClick = { openSettingsPage(context, SettingsPage(SettingsDestination.EmojiProfiles)) }
+            )
+
+            // Recents key on the emoji layer
+            Surface(
+                modifier = Modifier.settingRow("flux_emoji.recents_key")
+                    .fillMaxWidth()
+                    .clickable { showRecentsKeyDialog = true }
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.History,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = stringResource(R.string.emoji_layer_recents_key_title),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = if (emojiLayerRecentsKey == KeyEvent.KEYCODE_UNKNOWN) {
                                 stringResource(R.string.emoji_layer_recents_key_off)
                             } else {
-                                stringResource(R.string.emoji_layer_recents_key_current, getLetterFromKeyCode(emojiLayerGifKey))
+                                stringResource(R.string.emoji_layer_recents_key_current, getLetterFromKeyCode(emojiLayerRecentsKey))
                             },
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -582,125 +557,164 @@ fun FluxEmojiGifsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                     }
                 }
             }
+
+            SettingsSectionDivider(stringResource(R.string.flux_section_sym_picker))
+            FluxSwitchRow(
+                linkId = "sym.auto_close",
+                title = stringResource(R.string.sym_auto_close_title),
+                description = stringResource(R.string.sym_auto_close_description),
+                checked = symAutoClose,
+                onCheckedChange = { enabled ->
+                    symAutoClose = enabled
+                    SettingsManager.setSymAutoClose(context, enabled)
+                }
+            )
+            if (symAutoClose) {
+                FluxSwitchRow(
+                    linkId = "sym.auto_close_touch",
+                    title = stringResource(R.string.sym_auto_close_touch_title),
+                    description = stringResource(R.string.sym_auto_close_touch_description),
+                    checked = symAutoCloseOnTouch,
+                    onCheckedChange = { enabled ->
+                        symAutoCloseOnTouch = enabled
+                        SettingsManager.setSymAutoCloseOnTouch(context, enabled)
+                    }
+                )
+            }
+            FluxSwitchRow(
+                linkId = "sym.emoji_height",
+                title = stringResource(R.string.emoji_picker_expanded_height_title),
+                description = stringResource(R.string.emoji_picker_expanded_height_description),
+                checked = emojiPickerExpandedHeight,
+                onCheckedChange = { enabled ->
+                    emojiPickerExpandedHeight = enabled
+                    SettingsManager.setEmojiPickerExpandedHeight(context, enabled)
+                }
+            )
+
+            SettingsSectionDivider(stringResource(R.string.flux_section_gif_search))
+            if (SettingsManager.isOfflineMode(context)) {
+                FluxNote(stringResource(R.string.flux_gifs_offline_note))
+            }
+
+            // GIF search (KLIPY): a GIF key on the emoji layer and a GIF tab in the picker
+            Column(
+                modifier = Modifier.settingRow("flux_emoji.gif_search")
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = stringResource(R.string.gif_settings_title),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = stringResource(R.string.gif_settings_description),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Switch(
+                        checked = gifsEnabled,
+                        onCheckedChange = { enabled ->
+                            gifsEnabled = enabled
+                            SettingsManager.setGifsEnabled(context, enabled)
+                        }
+                    )
+                }
+                if (gifsEnabled) {
+                    OutlinedTextField(
+                        value = klipyApiKey,
+                        onValueChange = { value ->
+                            klipyApiKey = value
+                            SettingsManager.setKlipyApiKey(context, value)
+                        },
+                        label = { Text(stringResource(R.string.gif_api_key_label)) },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+                    )
+                    Text(
+                        text = stringResource(
+                            if (SettingsManager.hasBuiltInKlipyApiKey()) R.string.gif_api_key_help_builtin
+                            else R.string.gif_api_key_help
+                        ),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                    TextButton(onClick = {
+                        runCatching {
+                            context.startActivity(
+                                Intent(Intent.ACTION_VIEW, android.net.Uri.parse(it.palsoftware.pastiera.data.gif.KlipyGifs.SIGNUP_URL))
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            )
+                        }
+                    }) {
+                        Text(stringResource(R.string.gif_get_key))
+                    }
+                    // The emoji layer key that opens GIF search
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                            .clickable { showGifKeyDialog = true }
+                            .padding(vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = stringResource(R.string.emoji_layer_gif_key_title),
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text(
+                                text = if (emojiLayerGifKey == KeyEvent.KEYCODE_UNKNOWN) {
+                                    stringResource(R.string.emoji_layer_recents_key_off)
+                                } else {
+                                    stringResource(R.string.emoji_layer_recents_key_current, getLetterFromKeyCode(emojiLayerGifKey))
+                                },
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            }
+
+            SettingsSectionDivider(stringResource(R.string.flux_section_gif_library))
+            FluxSwitchRow(
+                linkId = "flux_emoji.gif_favourites",
+                title = stringResource(R.string.flux_gif_favourites_title),
+                description = stringResource(R.string.flux_gif_favourites_description),
+                checked = gifFavourites,
+                onCheckedChange = { enabled ->
+                    gifFavourites = enabled
+                    SettingsManager.setGifShowFavourites(context, enabled)
+                }
+            )
+            FluxSwitchRow(
+                linkId = "flux_emoji.gif_recents",
+                title = stringResource(R.string.flux_gif_recents_title),
+                description = stringResource(R.string.flux_gif_recents_description),
+                checked = gifRecents,
+                onCheckedChange = { enabled ->
+                    gifRecents = enabled
+                    SettingsManager.setGifShowRecents(context, enabled)
+                }
+            )
+
+
+            SettingsSectionDivider(stringResource(R.string.flux_section_search))
+            FluxActionRow(
+                linkId = "flux_emoji.search_page",
+                title = stringResource(R.string.flux_search_page_title),
+                description = stringResource(R.string.flux_search_page_description),
+                onClick = { openSettingsChild(context, "flux_emoji", "search") }
+            )
         }
-
-        SettingsSectionDivider(stringResource(R.string.flux_section_search_on_open))
-        FluxSwitchRow(
-            linkId = "flux_emoji.focus_picker",
-            title = stringResource(R.string.flux_focus_picker_title),
-            description = stringResource(R.string.flux_focus_picker_description),
-            checked = emojiPickerFocus,
-            onCheckedChange = { enabled ->
-                emojiPickerFocus = enabled
-                SettingsManager.setEmojiPickerFocusSearch(context, enabled)
-            }
-        )
-        FluxSwitchRow(
-            linkId = "flux_emoji.focus_gif",
-            title = stringResource(R.string.flux_focus_gif_title),
-            description = stringResource(R.string.flux_focus_gif_description),
-            checked = gifFocus,
-            onCheckedChange = { enabled ->
-                gifFocus = enabled
-                SettingsManager.setGifFocusSearch(context, enabled)
-            }
-        )
-        FluxSwitchRow(
-            linkId = "flux_emoji.type_to_search_layer",
-            title = stringResource(R.string.flux_type_to_search_layer_title),
-            description = stringResource(R.string.flux_type_to_search_layer_description),
-            checked = layerTypeToSearch,
-            onCheckedChange = { enabled ->
-                layerTypeToSearch = enabled
-                SettingsManager.setEmojiLayerTypeToSearch(context, enabled)
-            }
-        )
-        FluxSwitchRow(
-            linkId = "flux_emoji.type_to_search_symbols",
-            title = stringResource(R.string.flux_type_to_search_symbols_title),
-            description = stringResource(R.string.flux_type_to_search_symbols_description),
-            checked = symbolsTypeToSearch,
-            onCheckedChange = { enabled ->
-                symbolsTypeToSearch = enabled
-                SettingsManager.setSymbolsTypeToSearch(context, enabled)
-            }
-        )
-
-        FluxActionRow(
-            linkId = "flux_emoji.search_key",
-            title = stringResource(R.string.search_key_title),
-            description = stringResource(R.string.search_key_description) + "\n" +
-                if (searchKey == KeyEvent.KEYCODE_UNKNOWN) {
-                    stringResource(R.string.emoji_layer_recents_key_off)
-                } else {
-                    stringResource(R.string.emoji_layer_recents_key_current, getLetterFromKeyCode(searchKey))
-                },
-            onClick = { showSearchKeyDialog = true }
-        )
-
-        SettingsSectionDivider(stringResource(R.string.flux_section_enter))
-        FluxSwitchRow(
-            linkId = "flux_emoji.enter_emoji",
-            title = stringResource(R.string.flux_enter_emoji_title),
-            description = stringResource(R.string.flux_enter_emoji_description),
-            checked = enterPicksEmoji,
-            onCheckedChange = { enabled ->
-                enterPicksEmoji = enabled
-                SettingsManager.setEmojiSearchEnterPicks(context, enabled)
-            }
-        )
-        FluxSwitchRow(
-            linkId = "flux_emoji.enter_symbol",
-            title = stringResource(R.string.flux_enter_symbol_title),
-            description = stringResource(R.string.flux_enter_symbol_description),
-            checked = enterPicksSymbol,
-            onCheckedChange = { enabled ->
-                enterPicksSymbol = enabled
-                SettingsManager.setSymbolSearchEnterPicks(context, enabled)
-            }
-        )
-        FluxSwitchRow(
-            linkId = "flux_emoji.enter_gif",
-            title = stringResource(R.string.flux_enter_gif_title),
-            description = stringResource(R.string.flux_enter_gif_description),
-            checked = enterPicksGif,
-            onCheckedChange = { enabled ->
-                enterPicksGif = enabled
-                SettingsManager.setGifSearchEnterPicks(context, enabled)
-            }
-        )
-
-        SettingsSectionDivider(stringResource(R.string.flux_section_recents))
-        FluxSwitchRow(
-            linkId = "flux_emoji.recents_first",
-            title = stringResource(R.string.flux_recents_first_title),
-            description = stringResource(R.string.flux_recents_first_description),
-            checked = recentsFirst,
-            onCheckedChange = { enabled ->
-                recentsFirst = enabled
-                SettingsManager.setRecentsFirstInSearch(context, enabled)
-            }
-        )
-        FluxSwitchRow(
-            linkId = "flux_emoji.gif_favourites",
-            title = stringResource(R.string.flux_gif_favourites_title),
-            description = stringResource(R.string.flux_gif_favourites_description),
-            checked = gifFavourites,
-            onCheckedChange = { enabled ->
-                gifFavourites = enabled
-                SettingsManager.setGifShowFavourites(context, enabled)
-            }
-        )
-        FluxSwitchRow(
-            linkId = "flux_emoji.gif_recents",
-            title = stringResource(R.string.flux_gif_recents_title),
-            description = stringResource(R.string.flux_gif_recents_description),
-            checked = gifRecents,
-            onCheckedChange = { enabled ->
-                gifRecents = enabled
-                SettingsManager.setGifShowRecents(context, enabled)
-            }
-        )
 
         // The search key: press the letter key to use, like the Recents and GIF keys
         if (showSearchKeyDialog) {

@@ -14,7 +14,7 @@ class PastieraApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         // A fresh install starts from the default configuration, before anything writes settings
-        DefaultConfig.applyIfFreshInstall(this)
+        RecommendedSettings.applyIfFreshInstall(this)
         OfflineMode.load(this)
         it.palsoftware.pastiera.update.clearStaleForkUpdateNotice(this)
         SettingsManager.initializeAltShiftLayoutSwitchDefault(this)

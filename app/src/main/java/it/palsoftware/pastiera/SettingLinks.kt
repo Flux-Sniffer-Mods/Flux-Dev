@@ -43,6 +43,7 @@ object SettingLinkIds {
     const val PRIVACY_INCOGNITO_ALWAYS = "privacy.incognito_always"
     const val PRIVACY_PASTE_SUGGESTION = "privacy.paste_suggestion"
     const val PRIVACY_ONE_TIME_CODES = "privacy.one_time_codes"
+    const val PRIVACY_PASTE_IN_PASSWORD_FIELDS = "privacy.paste_in_password_fields"
     const val PRIVACY_CLEAN_LINKS = "privacy.clean_links"
     const val PRIVACY_INCOGNITO_FOLLOW_APPS = "privacy.incognito_follow_apps"
     const val TERMINAL_MODE_ENABLED = "terminal_mode.enabled"
@@ -143,6 +144,7 @@ object SettingLinkIds {
     const val TRACKPAD_SENSITIVITY = "trackpad.sensitivity"
     const val TRACKPAD_SUGGESTION_SWIPE_THRESHOLD = "trackpad.suggestion_swipe_threshold"
     const val TRACKPAD_DELETE_SWIPE_THRESHOLD = "trackpad.delete_swipe_threshold"
+    const val TRACKPAD_SIDE_SWIPE_THRESHOLD = "trackpad.side_swipe_threshold"
     const val TRACKPAD_DEBUG = "trackpad.debug"
 
     // Modifiers screen
@@ -717,7 +719,9 @@ object SettingLinkRegistry {
             SettingLinkIds.FORK_UPDATE_CHANNEL,
             R.string.fork_update_channel_title,
             R.string.fork_update_channel_stable,
-            destination = SettingsDestination.Advanced
+            destination = SettingsDestination.Developer,
+            availability = SettingAvailability.DeveloperOptionsEnabled,
+            unavailableFallbackId = SettingLinkIds.DEVELOPER_OPTIONS_ENABLED
         ),
         entry(
             SettingLinkIds.ADVANCED_SHOW_RELEASE_NOTES_TUTORIAL,
@@ -762,6 +766,12 @@ object SettingLinkRegistry {
             SettingLinkIds.TRACKPAD_DELETE_SWIPE_THRESHOLD,
             R.string.trackpad_delete_swipe_threshold_title,
             R.string.trackpad_delete_swipe_threshold_description,
+            destination = SettingsDestination.TrackpadGestures
+        ),
+        entry(
+            SettingLinkIds.TRACKPAD_SIDE_SWIPE_THRESHOLD,
+            R.string.trackpad_side_swipe_threshold_title,
+            R.string.trackpad_side_swipe_threshold_description,
             destination = SettingsDestination.TrackpadGestures
         ),
         entry(

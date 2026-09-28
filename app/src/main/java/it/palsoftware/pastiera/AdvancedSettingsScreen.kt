@@ -110,6 +110,7 @@ fun AdvancedSettingsScreen(
     }
     var developerOptions by remember { mutableStateOf(SettingsManager.getDeveloperOptionsEnabled(context)) }
     var pasteSuggestion by remember { mutableStateOf(SettingsManager.getPasteSuggestionEnabled(context)) }
+    var pasteInPasswordFields by remember { mutableStateOf(SettingsManager.getPasteSuggestionInPasswordFields(context)) }
     var oneTimeCodes by remember { mutableStateOf(SettingsManager.getOneTimeCodesEnabled(context)) }
     // Notification access, re-read when coming back from Android's settings
     var notificationAccess by remember { mutableStateOf(SettingsManager.hasNotificationAccess(context)) }
@@ -352,6 +353,28 @@ fun AdvancedSettingsScreen(
                                 SettingsManager.setPasteSuggestionEnabled(context, it)
                             }
                         )
+                        if (pasteSuggestion) {
+                            FluxSwitchRow(
+                                linkId = SettingLinkIds.PRIVACY_PASTE_IN_PASSWORD_FIELDS,
+                                title = stringResource(R.string.paste_in_password_fields_title),
+                                description = stringResource(R.string.paste_in_password_fields_description),
+                                checked = pasteInPasswordFields,
+                                onCheckedChange = {
+                                    pasteInPasswordFields = it
+                                    SettingsManager.setPasteSuggestionInPasswordFields(context, it)
+                                }
+                            )
+                        }
+                        FluxSwitchRow(
+                            linkId = SettingLinkIds.PRIVACY_CLEAN_LINKS,
+                            title = stringResource(R.string.clean_links_title),
+                            description = stringResource(R.string.clean_links_description),
+                            checked = cleanLinks,
+                            onCheckedChange = {
+                                cleanLinks = it
+                                SettingsManager.setCleanPastedLinks(context, it)
+                            }
+                        )
                         FluxSwitchRow(
                             linkId = SettingLinkIds.PRIVACY_ONE_TIME_CODES,
                             title = stringResource(R.string.one_time_codes_title),
@@ -377,16 +400,6 @@ fun AdvancedSettingsScreen(
                                 onClick = { RestrictedSettings.openNotificationAccess(context) }
                             )
                         }
-                        FluxSwitchRow(
-                            linkId = SettingLinkIds.PRIVACY_CLEAN_LINKS,
-                            title = stringResource(R.string.clean_links_title),
-                            description = stringResource(R.string.clean_links_description),
-                            checked = cleanLinks,
-                            onCheckedChange = {
-                                cleanLinks = it
-                                SettingsManager.setCleanPastedLinks(context, it)
-                            }
-                        )
 
                         // Clipboard Retention Time
                         Surface(
@@ -710,7 +723,6 @@ private val TRACKPAD_SETTING_LINK_IDS = setOf(
     "trackpad.swipe_to_delete",
     "trackpad.swipe_to_delete_provider",
     "trackpad.suggestion_swipe_directions",
-    "trackpad.swipe_down_deletes_word",
     "trackpad.phone_settings",
     SettingLinkIds.TRACKPAD_GESTURES_ENABLED,
     SettingLinkIds.TRACKPAD_PROVIDER,
@@ -718,5 +730,6 @@ private val TRACKPAD_SETTING_LINK_IDS = setOf(
     SettingLinkIds.TRACKPAD_SENSITIVITY,
     SettingLinkIds.TRACKPAD_SUGGESTION_SWIPE_THRESHOLD,
     SettingLinkIds.TRACKPAD_DELETE_SWIPE_THRESHOLD,
+    SettingLinkIds.TRACKPAD_SIDE_SWIPE_THRESHOLD,
     SettingLinkIds.TRACKPAD_DEBUG
 )

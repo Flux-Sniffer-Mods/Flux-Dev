@@ -4,10 +4,10 @@
     <string name="flux_tutorial_welcome_description">A keyboard app for phones with a real keyboard, tuned for the Unihertz Titan 2 Elite and built on Pastiera by PalSoftware. The next pages cover what\'s worth knowing.</string>
 
     <string name="flux_tutorial_setup_title">Set it up in one step</string>
-    <string name="flux_tutorial_setup_description">Recommended settings apply a configuration made on a Titan 2 Elite: suggestions, the emoji key, the status bar, the menu bar and more.</string>
+    <string name="flux_tutorial_setup_description">Recommended settings are a few settings that suit nearly everyone: modifiers, suggestions, LEDs and, on the Titan 2 Elite, its trackpad and compact bar. Matters of taste come next, under Your choices.</string>
     <string name="flux_tutorial_setup_bullet_change">Change anything afterwards in Settings.</string>
     <string name="flux_tutorial_setup_bullet_again">Recommended settings are in Settings too, if you want them back later.</string>
-    <string name="flux_tutorial_setup_bullet_other_phone">On other phones, settings that depend on the phone stay as they are.</string>
+    <string name="flux_tutorial_setup_bullet_other_phone">On other phones, the Titan 2 Elite\'s trackpad and compact bar stay as they are.</string>
     <string name="flux_tutorial_setup_button">Apply recommended settings (%1$d changes)</string>
     <string name="flux_tutorial_setup_applied">Recommended settings are on</string>
     <string name="flux_tutorial_setup_failed">Couldn\'t apply the recommended settings.</string>
@@ -37,6 +37,21 @@
     <string name="flux_tutorial_apps_button">Open App shortcuts</string>
     <string name="whats_new_done">Done</string>
     <string name="whats_new_close">Close</string>
+    <string name="flux_tutorial_choices_title">Your choices</string>
+    <string name="flux_tutorial_choices_description">Matters of taste the recommended settings leave to you. Change any of them later in Settings.</string>
+    <string name="flux_tutorial_choices_button">More typing settings</string>
+    <string name="flux_choice_auto_correct_title">Auto-correct as you type</string>
+    <string name="flux_choice_auto_correct_text">Fix typos when you press Space. Off, suggestions still show.</string>
+    <string name="flux_choice_double_space_title">Double Space types a full stop</string>
+    <string name="flux_choice_double_space_text">Two spaces end the sentence with \". \".</string>
+    <string name="flux_choice_emoji_suggestions_title">Emoji suggestions</string>
+    <string name="flux_choice_emoji_suggestions_text">An emoji for the word you\'re typing, in the suggestion bar.</string>
+    <string name="flux_choice_gifs_title">GIF search</string>
+    <string name="flux_choice_gifs_text">A GIF tab in the emoji picker and a GIF key on the emoji layer (searches online, through KLIPY).</string>
+    <string name="flux_choice_emoji_layer_title">The emoji key opens the emoji layer</string>
+    <string name="flux_choice_emoji_layer_text">Emoji on the letter keys, one key each. Off, it opens the emoji picker instead.</string>
+    <string name="flux_choice_wallpaper_title">Colours from your wallpaper</string>
+    <string name="flux_choice_wallpaper_text">The keyboard takes its colours from the wallpaper, light or dark with the system.</string>
     <string name="flux_tutorial_extras_title">Extras to set up</string>
     <string name="flux_tutorial_extras_description">These need a permission or another app, so they start off. Set them up now, or later in Settings.</string>
     <string name="flux_tutorial_extras_on">On</string>
@@ -50,7 +65,7 @@
     <string name="flux_tutorial_extras_hidden_apps_title">Apps that handle the keyboard themselves</string>
     <string name="flux_tutorial_extras_hidden_apps_text">In apps like Termux:X11, the keyboard can stay out of sight and leave every key to the app. Its status LEDs there need the accessibility service.</string>
     <string name="flux_tutorial_extras_hidden_apps_button">Choose these apps</string>
-    <string name="flux_tutorial_emoji_bullet_sticky">Tap SYM or the emoji key once and the next key types its symbol or emoji, without opening a screen (turn it on in Emoji, symbols &amp; GIFs).</string>
+    <string name="flux_tutorial_emoji_bullet_sticky">Tap SYM or the emoji key once and the next key types its symbol or emoji, without opening a screen (turn them on in Modifiers &amp; SYM and in Emoji, symbols &amp; GIFs).</string>
     <string name="flux_tutorial_typing_bullet_swipes">On the trackpad, swipe left, up or right to pick a suggestion, and down to delete a word (Trackpad gestures).</string>
     <string name="flux_tutorial_typing_bullet_shift">Choose which kinds of text field start with a capital: messages, names and addresses by default.</string>
     <string name="flux_tutorial_typing_bullet_language">Each app can keep the language you last typed in there.</string>
