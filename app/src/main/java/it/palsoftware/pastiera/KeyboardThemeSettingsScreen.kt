@@ -1251,6 +1251,7 @@ private fun KeyboardThemeAssignmentSection(
                     )
                 }
             }
+            KeyboardBackgroundImageSettings()
             if (mode == SettingsManager.KEYBOARD_THEME_ASSIGNMENT_MODE_FOLLOW_SYSTEM) {
                 KeyboardThemePickerRow(
                     linkId = if (target == SettingsManager.KeyboardThemeTarget.SOFTWARE) "keyboard_theme.software.light_theme" else "keyboard_theme.hardware.light_theme",

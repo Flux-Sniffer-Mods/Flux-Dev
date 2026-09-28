@@ -67,9 +67,10 @@ class ClipboardButtonFactory : StatusBarButtonFactory {
         val flashOverlay = view.getTag(R.id.tag_flash_overlay) as? View
         val previousCount = view.getTag(R.id.tag_previous_count) as? Int
         
+        // The count floats on its own layer in the button's corner: the button itself never
+        // moves or resizes, so the bar's spacing stays even
         updateBadge(badge, state.itemCount)
-        // The icon steps a little left while a count shows, so the two never touch
-        view.translationX = if (state.itemCount > 0) -dpToPx(view.context, 2.5f).toFloat() else 0f
+        view.translationX = 0f
         setStateDescriptionIfChanged(
             view,
             if (state.itemCount <= 0) {
