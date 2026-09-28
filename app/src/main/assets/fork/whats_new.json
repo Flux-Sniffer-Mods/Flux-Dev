@@ -57,6 +57,10 @@
   ],
   "improvements": [
     {
+      "text": "Note-taking and writing apps (Keep, Obsidian, Notion, OneNote, Docs and others, plus any app Android lists as productivity) keep Enter for a new line, like email apps; Ctrl+Enter does the app's own action, and sends an email.",
+      "after": "202609280039"
+    },
+    {
       "text": "Restricted settings explained: switching on something Android blocks for apps installed from a file (one-time codes, the accessibility service) shows how to allow it step by step, with a button to App info. The tutorial's Extras page does too.",
       "after": "202609280035"
     },

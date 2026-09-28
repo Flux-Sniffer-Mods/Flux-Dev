@@ -15,7 +15,7 @@ import it.palsoftware.pastiera.shortcuts.AppShortcutPresets
  * - Email: Enter is a new line, Ctrl+Enter sends, as Gmail and Outlook document it.
  * - Everything else: the app's own Enter (new line, search, next field).
  */
-enum class EnterStandard { Chat, Email, AppDefault }
+enum class EnterStandard { Chat, Email, Notes, AppDefault }
 
 object AppEnterStandards {
     /** Email apps whose compose screen documents Ctrl+Enter to send. */
@@ -37,20 +37,34 @@ object AppEnterStandards {
         "com.UCMobile.intl", "com.google.android.dialer"
     )
 
+    /** Note-taking and writing apps, where Enter is always a new line. */
+    private val NOTE_APPS = setOf(
+        "com.google.android.keep", "notion.id", "md.obsidian", "com.microsoft.office.onenote",
+        "com.samsung.android.app.notes", "com.evernote", "com.simplemobiletools.notes.pro",
+        "net.cozic.joplin", "com.standardnotes", "com.automattic.simplenote", "com.orgzly",
+        "net.gsantner.markor", "org.fossify.notes", "com.google.android.apps.docs.editors.docs",
+        "com.microsoft.office.word", "com.microsoft.office.officehubrow", "com.todoist",
+        "com.ticktick.task", "com.google.android.apps.tasks"
+    )
+
     fun standardFor(packageName: String?): EnterStandard {
         if (packageName.isNullOrEmpty()) return EnterStandard.AppDefault
         if (packageName in EMAIL_CTRL_ENTER_APPS) return EnterStandard.Email
+        if (packageName in NOTE_APPS) return EnterStandard.Notes
         if (packageName in EXTRA_CHAT_APPS) return EnterStandard.Chat
         if (packageName in NOT_CHAT_APPS) return EnterStandard.AppDefault
         val preset = AppShortcutPresets.forPackage(packageName)
         if (preset != null) return when (preset.category) {
             AppCategory.Social, AppCategory.Dating, AppCategory.Communication -> EnterStandard.Chat
+            AppCategory.Productivity -> EnterStandard.Notes
             else -> EnterStandard.AppDefault
         }
-        // Any other installed app: the category Android records for it (social apps are chats)
-        return if (systemCategory?.invoke(packageName) == android.content.pm.ApplicationInfo.CATEGORY_SOCIAL) {
-            EnterStandard.Chat
-        } else EnterStandard.AppDefault
+        // Any other installed app: the category Android records for it
+        return when (systemCategory?.invoke(packageName)) {
+            android.content.pm.ApplicationInfo.CATEGORY_SOCIAL -> EnterStandard.Chat
+            android.content.pm.ApplicationInfo.CATEGORY_PRODUCTIVITY -> EnterStandard.Notes
+            else -> EnterStandard.AppDefault
+        }
     }
 
     /** An installed app's Android category (ApplicationInfo.category); set when the app starts. */
@@ -71,6 +85,8 @@ object AppEnterStandards {
     fun behaviorFor(packageName: String?, preset: String, fieldSends: Boolean): String? =
         when (standardFor(packageName)) {
             EnterStandard.Email -> SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND
+            // Notes: Enter is always a new line; Ctrl+Enter is the app's own action (done, save)
+            EnterStandard.Notes -> SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND
             // Chats and every other app: the preset, in every field (Flux Keyboard's default:
             // Enter sends, Shift+Enter is a new line)
             EnterStandard.Chat, EnterStandard.AppDefault -> when (preset) {
@@ -89,6 +105,7 @@ object AppEnterStandards {
     /** How the send happens under the standard: the app's documented Ctrl+Enter, or its Send action. */
     fun sendStrategyFor(packageName: String?): String? = when (standardFor(packageName)) {
         EnterStandard.Email -> SettingsManager.ENTER_SEND_STRATEGY_CTRL_ENTER
+        EnterStandard.Notes -> SettingsManager.ENTER_SEND_STRATEGY_EDITOR_ACTION
         EnterStandard.Chat -> SettingsManager.ENTER_SEND_STRATEGY_EDITOR_ACTION
         EnterStandard.AppDefault -> SettingsManager.ENTER_SEND_STRATEGY_EDITOR_ACTION
     }

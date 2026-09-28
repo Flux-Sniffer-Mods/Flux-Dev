@@ -302,7 +302,7 @@ fun AppEnterBehaviorScreen(
                     if (standard == EnterStandard.AppDefault) return@mapNotNull null
                     SettingsManager.AppEnterBehaviorOverride(
                         packageName = app.packageName,
-                        behavior = if (standard == EnterStandard.Email) {
+                        behavior = if (standard == EnterStandard.Email || standard == EnterStandard.Notes) {
                             SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND
                         } else {
                             enterBehaviorForPreset(preset) ?: SettingsManager.ENTER_BEHAVIOR_APP_DEFAULT
@@ -325,7 +325,7 @@ fun AppEnterBehaviorScreen(
             onAdopt = { packageName, standard ->
                 // Adopting the standard makes it an override you can then change
                 val behavior = when (standard) {
-                    EnterStandard.Email -> SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND
+                    EnterStandard.Email, EnterStandard.Notes -> SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND
                     else -> enterBehaviorForPreset(preset) ?: SettingsManager.ENTER_BEHAVIOR_APP_DEFAULT
                 }
                 val addition = SettingsManager.AppEnterBehaviorOverride(
@@ -411,6 +411,7 @@ private fun EnterStandardsSection(
     )
     val chatSummary = stringResource(R.string.enter_standard_chat, getEnterPresetLabel(preset))
     val emailSummary = stringResource(R.string.enter_standard_email)
+    val notesSummary = stringResource(R.string.enter_standard_notes)
     rows.forEach { (app, standard) ->
         Surface(
             modifier = Modifier
@@ -432,7 +433,11 @@ private fun EnterStandardsSection(
                 Column {
                     Text(text = app.appName, style = MaterialTheme.typography.bodyLarge)
                     Text(
-                        text = if (standard == EnterStandard.Email) emailSummary else chatSummary,
+                        text = when (standard) {
+                            EnterStandard.Email -> emailSummary
+                            EnterStandard.Notes -> notesSummary
+                            else -> chatSummary
+                        },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

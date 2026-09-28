@@ -65,6 +65,17 @@ class AppEnterStandardsTest {
     }
 
     @Test
+    fun noteAppsKeepEnterForANewLine() {
+        listOf("com.google.android.keep", "md.obsidian", "notion.id").forEach { pkg ->
+            assertEquals(EnterStandard.Notes, AppEnterStandards.standardFor(pkg))
+            assertEquals(
+                SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND,
+                AppEnterStandards.behaviorFor(pkg, sendPreset, fieldSends = false)
+            )
+        }
+    }
+
+    @Test
     fun shiftSendsPresetGivesEnterNewLineShiftSends() {
         assertEquals(
             SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND,
