@@ -285,6 +285,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Contoured LEDs: the suggestions and the menu bar's buttons reach down to just above the LEDs again, and the menu bar's buttons are full height.",
+      "after": "202609280053"
+    },
+    {
       "text": "Choosing a background picture no longer crashes Flux Keyboard.",
       "after": "202609280037"
     },

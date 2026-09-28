@@ -283,7 +283,10 @@ class HamburgerMenuView(
 
     private fun applyDynamicPadding(rowView: LinearLayout) {
         val rowHeight = rowView.height
-        val maxPadding = dpToPx(MAX_VERTICAL_PADDING_DP)
+        // With contoured LEDs the bar already keeps a band above them: less padding, taller buttons
+        val maxPadding = dpToPx(
+            if (it.palsoftware.pastiera.SettingsManager.getTitan2EliteContourLeds(context)) 2f else MAX_VERTICAL_PADDING_DP
+        )
         if (rowHeight <= 0) {
             return
         }

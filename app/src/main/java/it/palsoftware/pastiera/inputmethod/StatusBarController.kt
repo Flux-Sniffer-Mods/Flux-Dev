@@ -4578,18 +4578,16 @@ class StatusBarController(
                 fun extendButtonBranches(view: ViewGroup, offsetY: Int) {
                     // 2 dp above the contoured LEDs, the distance the corner buttons keep: the
                     // LEDs sit on the calibrated edge, vertical shift included
-                    val calibration = it.palsoftware.pastiera.T2eCornerCalibration.read(context)
-                    val borderInset = kotlin.math.ceil(
-                        (calibration.offsetPx + LedStatusView.contourButtonInsetPx(context) - calibration.shiftYPx)
-                            .coerceAtLeast(3f * resources.displayMetrics.density)
-                    ).toInt()
-                    val visibleBottom = (row.height - this@ImeChromeLayout.paddingBottom).coerceAtLeast(0)
+                    // In the row's coordinates: the band above the LEDs, counted once from the
+                    // keyboard's bottom edge, however the row itself was laid out
+                    val visibleBottom = (this@ImeChromeLayout.height - this@ImeChromeLayout.paddingBottom - row.top)
+                        .coerceAtLeast(0)
                     for (index in 0 until view.childCount) {
                         val child = view.getChildAt(index)
                         if (!containsExtendableButton(child)) continue
                         val absoluteBottom = offsetY + child.bottom
                         val isButton = child.isClickable && child.background != null
-                        val targetBottom = visibleBottom - if (isButton) borderInset else 0
+                        val targetBottom = visibleBottom - if (isButton) contourRowInsetPx() else 0
                         val adjustment = targetBottom - absoluteBottom
                         if (adjustment != 0 && child.bottom + adjustment > child.top) {
                             child.layout(child.left, child.top, child.right, child.bottom + adjustment)
