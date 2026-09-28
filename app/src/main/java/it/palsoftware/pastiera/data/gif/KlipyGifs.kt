@@ -69,6 +69,8 @@ object KlipyGifs {
     const val SEARCH_MAX_AGE_MS = 24L * 60 * 60 * 1000
     const val PREVIEW_CACHE_MAX_BYTES = 40L * 1024 * 1024
     private const val RESULTS_FOLDER = "gif-results"
+    private const val RESULTS_KEEP_MS = 7L * 24 * 60 * 60 * 1000
+    private const val RESULTS_MAX_FILES = 200
     private const val PREVIEWS_FOLDER = "gif-previews"
 
     private val client by lazy {
@@ -287,6 +289,23 @@ object KlipyGifs {
             val temp = File(file.parentFile, file.name + ".tmp")
             temp.writeText(resultsToJson(results))
             temp.renameTo(file)
+            file.parentFile?.let { trimResults(it) }
+        }
+    }
+
+    /**
+     * Every search keeps its answer in a file of its own: those unused for [maxAgeMs] go, and
+     * beyond [maxFiles] the least recently used, so the folder doesn't grow with every search.
+     */
+    fun trimResults(
+        folder: File,
+        maxAgeMs: Long = RESULTS_KEEP_MS,
+        maxFiles: Int = RESULTS_MAX_FILES,
+        now: Long = System.currentTimeMillis()
+    ) {
+        val files = folder.listFiles()?.filter { it.isFile }?.sortedByDescending { it.lastModified() } ?: return
+        files.forEachIndexed { index, file ->
+            if (index >= maxFiles || now - file.lastModified() > maxAgeMs) file.delete()
         }
     }
 
