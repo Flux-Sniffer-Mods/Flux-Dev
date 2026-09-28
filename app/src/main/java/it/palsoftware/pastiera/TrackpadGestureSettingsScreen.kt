@@ -54,7 +54,8 @@ fun TrackpadGestureSettingsScreen(
         mutableStateOf(SettingsManager.getTrackpadSideSwipeThreshold(context))
     }
     var showTutorialDialog by remember { mutableStateOf(false) }
-    var showSensitivitySettings by remember { mutableStateOf(settingsChild(context, "trackpad") == "sensitivity") }
+    // The sensitivity sliders are on the main page now; an old link to their page lands there
+    var showSensitivitySettings by remember { mutableStateOf(false) }
     var shizukuStatus by remember { mutableStateOf(ShizukuStatus.NotConnected) }
     var trackpadProvider by remember { mutableStateOf(SettingsManager.getTrackpadProvider(context)) }
     var providerMenuExpanded by remember { mutableStateOf(false) }
@@ -68,6 +69,12 @@ fun TrackpadGestureSettingsScreen(
     var swipeToDeleteProvider by remember { mutableStateOf(SettingsManager.getSwipeToDeleteProvider(context)) }
     var swipeToDeleteProviderMenuExpanded by remember { mutableStateOf(false) }
     val highlightedSettingId = LocalSettingHighlightId.current
+    // Adding words needs the dictionary: suggestions on
+    val dictionaryOn = SettingsManager.isExperimentalSuggestionsEnabled(context) &&
+        SettingsManager.getSuggestionsEnabled(context)
+    // Trackpad swipes need a trackpad: the Titan 2's or Titan 2 Elite's, or one read through Shizuku
+    val hasTrackpad = it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2Device() ||
+        trackpadProvider == SettingsManager.TRACKPAD_PROVIDER_SHIZUKU
     val trackpadProviderOptions = listOf(
         SettingsManager.TRACKPAD_PROVIDER_NATIVE_IME to stringResource(R.string.trackpad_provider_native_ime),
         SettingsManager.TRACKPAD_PROVIDER_SHIZUKU to stringResource(R.string.trackpad_provider_shizuku)
@@ -82,7 +89,7 @@ fun TrackpadGestureSettingsScreen(
         when (highlightedSettingId) {
             SettingLinkIds.TRACKPAD_SUGGESTION_SWIPE_THRESHOLD,
             SettingLinkIds.TRACKPAD_SIDE_SWIPE_THRESHOLD,
-            SettingLinkIds.TRACKPAD_DELETE_SWIPE_THRESHOLD -> showSensitivitySettings = true
+            SettingLinkIds.TRACKPAD_DELETE_SWIPE_THRESHOLD -> showSensitivitySettings = false
             "trackpad.add_word",
             "trackpad.add_word_full_width",
             "trackpad.swipe_to_delete",
@@ -258,10 +265,17 @@ fun TrackpadGestureSettingsScreen(
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
+                        if (!dictionaryOn) {
+                            Text(
+                                text = stringResource(R.string.trackpad_gesture_add_word_needs_dictionary),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
                     Switch(
                         checked = trackpadGestureAddWordEnabled,
-                        enabled = trackpadGesturesEnabled,
+                        enabled = trackpadGesturesEnabled && dictionaryOn,
                         onCheckedChange = { enabled ->
                             trackpadGestureAddWordEnabled = enabled
                             SettingsManager.setTrackpadGestureAddWordEnabled(context, enabled)
@@ -298,7 +312,7 @@ fun TrackpadGestureSettingsScreen(
                     }
                     Switch(
                         checked = trackpadGestureAddWordFullWidthEnabled,
-                        enabled = trackpadGesturesEnabled && trackpadGestureAddWordEnabled,
+                        enabled = trackpadGesturesEnabled && trackpadGestureAddWordEnabled && dictionaryOn,
                         onCheckedChange = { enabled ->
                             trackpadGestureAddWordFullWidthEnabled = enabled
                             SettingsManager.setTrackpadGestureAddWordFullWidthEnabled(context, enabled)
@@ -616,50 +630,33 @@ fun TrackpadGestureSettingsScreen(
                 }
             }
 
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 72.dp)
-                    .settingRow(SettingLinkIds.TRACKPAD_SENSITIVITY) {
-                        openSettingsChild(context, "trackpad", "sensitivity")
-                    }
-            ) {
-                Row(
+            // How far each swipe goes, right here (only with a trackpad to swipe on)
+            if (hasTrackpad) {
+                Text(
+                    text = stringResource(R.string.trackpad_sensitivity_title),
+                    style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Speed,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = stringResource(R.string.trackpad_sensitivity_title),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Medium
-                        )
-                        Text(
-                            text = stringResource(R.string.trackpad_sensitivity_description),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .settingRow(SettingLinkIds.TRACKPAD_SENSITIVITY)
+                )
+                TrackpadSensitivitySettings(
+                    suggestionSwipeThreshold = suggestionSwipeThreshold,
+                    onSuggestionSwipeThresholdChange = { newValue ->
+                        suggestionSwipeThreshold = newValue
+                        SettingsManager.setTrackpadSuggestionSwipeThreshold(context, newValue)
+                    },
+                    sideSwipeThreshold = sideSwipeThreshold,
+                    onSideSwipeThresholdChange = { newValue ->
+                        sideSwipeThreshold = newValue
+                        SettingsManager.setTrackpadSideSwipeThreshold(context, newValue)
+                    },
+                    deleteSwipeThreshold = deleteSwipeThreshold,
+                    onDeleteSwipeThresholdChange = { newValue ->
+                        deleteSwipeThreshold = newValue
+                        SettingsManager.setTrackpadDeleteSwipeThreshold(context, newValue)
                     }
-                    Text(
-                        text = "${suggestionSwipeThreshold.toInt()} / ${deleteSwipeThreshold.toInt()}",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+                )
             }
 
             if (it.palsoftware.pastiera.inputmethod.DeviceSpecific.isTitan2EliteDevice()) {

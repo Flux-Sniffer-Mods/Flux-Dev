@@ -384,6 +384,16 @@ fun AutoCorrectionCategoryScreen(
                             )
                         }
 
+                        // Gestures that pick, add or delete words live with the suggestions
+                        FluxActionRow(
+                            linkId = SettingLinkIds.ADVANCED_TRACKPAD_GESTURES,
+                            title = stringResource(R.string.settings_trackpad_gestures_title),
+                            description = stringResource(R.string.settings_trackpad_gestures_description),
+                            onClick = {
+                                openSettingsPage(context, SettingsPage(SettingsDestination.TrackpadGestures))
+                            }
+                        )
+
                         SettingsSectionDivider(stringResource(R.string.autocorrect_section_dictionary))
                         Surface(
                             modifier = Modifier
@@ -425,6 +435,29 @@ fun AutoCorrectionCategoryScreen(
                                     )
                                 }
 	                            }
+
+                        var showAddWordSuggestion by remember { mutableStateOf(SettingsManager.getShowAddWordSuggestion(context)) }
+                        FluxSwitchRow(
+                            linkId = "auto_correction.show_add_word",
+                            title = stringResource(R.string.show_add_word_suggestion_title),
+                            description = stringResource(R.string.show_add_word_suggestion_description),
+                            checked = showAddWordSuggestion,
+                            onCheckedChange = { enabled ->
+                                showAddWordSuggestion = enabled
+                                SettingsManager.setShowAddWordSuggestion(context, enabled)
+                            }
+                        )
+                        var addLastWordShortcut by remember { mutableStateOf(SettingsManager.getAddLastWordShortcut(context)) }
+                        FluxSwitchRow(
+                            linkId = "auto_correction.add_last_word_shortcut",
+                            title = stringResource(R.string.add_last_word_shortcut_title),
+                            description = stringResource(R.string.add_last_word_shortcut_description),
+                            checked = addLastWordShortcut,
+                            onCheckedChange = { enabled ->
+                                addLastWordShortcut = enabled
+                                SettingsManager.setAddLastWordShortcut(context, enabled)
+                            }
+                        )
 
                         FluxActionRow(
                             linkId = SettingLinkIds.AUTO_CORRECTION_SPELL_CHECKER,
@@ -545,6 +578,11 @@ fun AutoCorrectionCategoryScreen(
                                         text = stringResource(R.string.auto_correct_accent_matching_title),
                                         style = MaterialTheme.typography.titleMedium,
                                         fontWeight = FontWeight.Medium
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.auto_correct_accent_matching_description),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
                                 Switch(

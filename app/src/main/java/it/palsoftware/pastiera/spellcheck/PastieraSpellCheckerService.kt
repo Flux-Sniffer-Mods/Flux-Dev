@@ -2,6 +2,7 @@ package it.palsoftware.pastiera.spellcheck
 
 import android.service.textservice.SpellCheckerService
 import android.util.Log
+import android.view.textservice.SentenceSuggestionsInfo
 import android.view.textservice.SuggestionsInfo
 import android.view.textservice.TextInfo
 import it.palsoftware.pastiera.core.suggestions.AndroidDictionaryRepository
@@ -61,7 +62,41 @@ class PastieraSpellCheckerService : SpellCheckerService() {
             sequentialWords: Boolean
         ): Array<SuggestionsInfo> = textInfos.orEmpty().map { onGetSuggestions(it, suggestionsLimit) }.toTypedArray()
 
+        /**
+         * Whole sentences, split into words here so a word keeps its apostrophes: Android's own
+         * splitting checked "couldn" out of "couldn't".
+         */
+        override fun onGetSentenceSuggestionsMultiple(
+            textInfos: Array<out TextInfo>?,
+            suggestionsLimit: Int
+        ): Array<SentenceSuggestionsInfo> = textInfos.orEmpty().map { info ->
+            val text = info.text.orEmpty()
+            val words = SpellCheckRules.words(text)
+            val results = words.map { range ->
+                onGetSuggestions(
+                    TextInfo(text.substring(range.first, range.last + 1), info.cookie, info.sequence),
+                    suggestionsLimit
+                )
+            }
+            SentenceSuggestionsInfo(
+                results.toTypedArray(),
+                words.map { it.first }.toIntArray(),
+                words.map { it.last - it.first + 1 }.toIntArray()
+            )
+        }.toTypedArray()
+
         private fun check(word: String, limit: Int): SuggestionController.SpellCheckResult? {
+            val plain = word.replace('’', '\'')
+            val result = checkAsTyped(plain, limit) ?: return null
+            if (result.known || '\'' !in plain) return result
+            // A contraction or possessive of a known word (couldn't, it's, Sam's), or a word the
+            // dictionary spells without its apostrophe
+            val known = listOfNotNull(SpellCheckRules.contractionBase(plain), plain.replace("'", ""))
+                .any { checkAsTyped(it, 1)?.known == true }
+            return if (known) SuggestionController.SpellCheckResult(true, emptyList()) else result
+        }
+
+        private fun checkAsTyped(word: String, limit: Int): SuggestionController.SpellCheckResult? {
             keyboardController?.get()?.spellCheck(language, word, limit)?.let { return it }
             val (repository, engine) = ownDictionary(language) ?: return null
             if (repository.isKnownWord(word)) return SuggestionController.SpellCheckResult(true, emptyList())
@@ -114,6 +149,20 @@ object SpellCheckRules {
             }.isSuccess
             if (opened) return
         }
+    }
+
+    private val WORD = Regex("[\\p{L}\\p{M}\\p{N}]+(?:['’][\\p{L}\\p{M}\\p{N}]+)*")
+
+    /** Where the words are in [text]: letters and digits, with apostrophes inside a word kept. */
+    fun words(text: String): List<IntRange> = WORD.findAll(text).map { it.range }.toList()
+
+    private val CONTRACTION_ENDINGS = listOf("n't", "'s", "'re", "'ve", "'ll", "'d", "'m")
+
+    /** The word a contraction or possessive is made from (couldn't: could, it's: it), or null. */
+    fun contractionBase(word: String): String? {
+        val plain = word.replace('’', '\'')
+        val ending = CONTRACTION_ENDINGS.firstOrNull { plain.endsWith(it, ignoreCase = true) } ?: return null
+        return plain.dropLast(ending.length).takeIf { base -> base.isNotEmpty() && base.all { it.isLetter() } }
     }
 
     /** Languages with a bundled dictionary (assets/common/dictionaries_serialized). */

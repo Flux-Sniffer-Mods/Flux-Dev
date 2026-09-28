@@ -39,12 +39,14 @@ object PhoneTrackpadSettings {
         runCatching { context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }.isSuccess
 
     /**
-     * The Titan 2 Elite's page, found with tools/find-keyboard-gesture-page.sh: Unihertz's own
-     * settings app, not Android's. Its Scroll assistant page next, should the first be missing.
+     * The Titan 2 Elite's pages, found with tools/find-keyboard-gesture-page.sh: Unihertz's own
+     * settings app, not Android's. Scroll assistant first, straight to the switch that matters:
+     * the phone passes keyboard swipes (and flicks) to apps only while it's on. Keyboard gesture,
+     * the page above it, should the phone not open it directly.
      */
     internal val KNOWN_PAGES = listOf(
-        ComponentName("com.agui.settings", "com.agui.settings.touchpad.KeyboardGestureActivity"),
-        ComponentName("com.agui.settings", "com.agui.settings.touchpad.ScrollAssistantActivity")
+        ComponentName("com.agui.settings", "com.agui.settings.touchpad.ScrollAssistantActivity"),
+        ComponentName("com.agui.settings", "com.agui.settings.touchpad.KeyboardGestureActivity")
     )
 
     fun open(context: Context): Boolean {

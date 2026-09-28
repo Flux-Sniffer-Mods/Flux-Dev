@@ -749,6 +749,34 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         uiHandler.postDelayed(runnable, CURSOR_UPDATE_DELAY * 2)
     }
 
+    private val startAutoCapRechecks = mutableListOf<Runnable>()
+
+    /**
+     * A field that has just opened (a new note in Keep, WhatsApp's box after sending) often
+     * can't be read yet, and an empty field sends no cursor update to check again on. Checks
+     * again shortly after, while nothing has been typed, so it starts with a capital.
+     */
+    private fun scheduleStartAutoCapRechecks() {
+        startAutoCapRechecks.forEach { uiHandler.removeCallbacks(it) }
+        startAutoCapRechecks.clear()
+        listOf(120L, 450L).forEach { delay ->
+            val runnable = Runnable {
+                if (!inputContextState.isEditable) return@Runnable
+                AutoCapitalizeHelper.checkAutoCapitalizeOnRestart(
+                    this,
+                    currentInputConnection,
+                    shouldDisableAutoCapitalize,
+                    enableShift = { requestAutoCapShiftOneShot() },
+                    disableShift = { modifierStateController.consumeShiftOneShot() },
+                    onUpdateStatusBar = { updateStatusBarText() },
+                    inputContextState = inputContextState
+                )
+            }
+            startAutoCapRechecks += runnable
+            uiHandler.postDelayed(runnable, delay)
+        }
+    }
+
     private fun isPureModifierKey(keyCode: Int): Boolean {
         return keyCode == KeyEvent.KEYCODE_SHIFT_LEFT ||
             keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT ||
@@ -913,6 +941,14 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
     }
 
+    /**
+     * Whether the field says it sends (a message or comment box). Most chat apps declare Send and
+     * also ask for Enter to stay a new line (IME_FLAG_NO_ENTER_ACTION), so the flag is ignored here.
+     */
+    private fun declaresSendAction(info: EditorInfo): Boolean =
+        info.actionId == EditorInfo.IME_ACTION_SEND ||
+            info.imeOptions and EditorInfo.IME_MASK_ACTION == EditorInfo.IME_ACTION_SEND
+
     private fun resolveAppEnterBehavior(info: EditorInfo?): String? {
         val packageName = info?.packageName ?: return null
         if (!SettingsManager.getAppEnterBehaviorEnabled(this)) return null
@@ -930,7 +966,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             return AppEnterStandards.behaviorFor(
                 packageName,
                 SettingsManager.getAppEnterBehaviorPreset(this),
-                fieldSends = resolveEditorAction(info) == EditorInfo.IME_ACTION_SEND
+                fieldSends = declaresSendAction(info)
             )
         }
 
@@ -945,6 +981,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND
             SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_ONLY ->
                 SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE
+            SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND ->
+                SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND
             else -> null
         }
     }
@@ -1239,6 +1277,18 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                     )
                 }
                 return commitEnterNewline(keyCode, ic, event, "app_enter_newline")
+            }
+            SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND -> {
+                if (!isShiftModifierActive(event) && !ctrlActiveForEnter) {
+                    return commitEnterNewline(keyCode, ic, event, "app_enter_newline")
+                }
+                return performConfiguredAppEnterSend(
+                    keyCode = keyCode,
+                    info = info,
+                    inputConnection = ic,
+                    event = event,
+                    consumeCtrlState = ctrlActiveForEnter
+                )
             }
             SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND -> {
                 if (!ctrlActiveForEnter) {
@@ -2466,6 +2516,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 keyboardVisibilityController.syncStatusBarPresentationModeFromSettings()
             } else if (key == SettingsManager.KEY_TITAN2_ELITE_ROUNDED_CORNER_INSETS ||
                 key == SettingsManager.KEY_TITAN2_ELITE_FILL_CORNERS ||
+                key == SettingsManager.KEY_TITAN2_ELITE_CONTOUR_LEDS ||
                 key == it.palsoftware.pastiera.T2eCornerCalibration.KEY ||
                 key == SettingsManager.KEY_TITAN2_ELITE_TOP_CORNER_MULTIPLIER ||
                 key == SettingsManager.KEY_TITAN2_ELITE_MAX_ICON_SHRINK) {
@@ -3511,7 +3562,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         
         val modifierSnapshot = modifierStateController.snapshot()
         val state = inputContextState
+        // The suggestions' "add to dictionary" chip, unless it's switched off
         val addWordCandidate = suggestionController.pendingAddWord()
+            ?.takeIf { SettingsManager.getShowAddWordSuggestion(this) }
         val suggestionsEnabled = SettingsManager.isExperimentalSuggestionsEnabled(this) && SettingsManager.getSuggestionsEnabled(this)
         val suggestionsStart = ImePerfLogger.mark()
         val baseSuggestions = if (suggestionsEnabled) visibleSuggestionStrings() else emptyList()
@@ -3836,6 +3889,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             } else null
         )
         terminalModeActive = SettingsManager.isTerminalModeApp(this, info?.packageName) && TerminalMode.apply(info)
+        // Flux Keyboard: no microphone button in terminal apps
+        it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonRegistry.setTerminalApp(
+            SettingsManager.isTerminalModeApp(this, info?.packageName)
+        )
         terminalHidesKeyboard = terminalModeActive && SettingsManager.getTerminalModeHideKeyboard(this)
         terminalSurfaceShown = false
         terminalCtrlKeysDown.clear()
@@ -3884,7 +3941,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             // Text context alone cannot identify a field: every empty editor looks like "|".
             clearAutoCapSuppression()
         }
-        DeferredPunctuationSpaceTracker.clear()
+        DeferredPunctuationSpaceTracker.startField(info)
         bounceKeyFilter.reset()
         clicksPowerShiftTapFilter.reset()
         accidentalKeyPressFilter.reset()
@@ -3970,6 +4027,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 onUpdateStatusBar = { updateStatusBarText() },
                 inputContextState = state
             )
+            scheduleStartAutoCapRechecks()
         }
 
         startClipboardCleanupTimer()
@@ -4063,6 +4121,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     override fun onFinishInput() {
+        startAutoCapRechecks.forEach { uiHandler.removeCallbacks(it) }
+        startAutoCapRechecks.clear()
         // Niagara's search closed: back to the app unless one opens from it meanwhile
         if (QuickLauncherOpener.NiagaraReturn.onInputFinished(currentInputEditorInfo?.packageName)) {
             uiHandler.postDelayed({
@@ -4713,6 +4773,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             pendingSelectionAutoCapCheck?.let { uiHandler.removeCallbacks(it) }
             pendingSelectionAutoCapCheck = null
             checkAutoCapitalizeOnSelectionChange(oldSelStart, oldSelEnd, newSelStart, newSelEnd)
+            // Back to the start of the field (a chat app clearing its box after sending): the
+            // text may still be there for a moment, so look again once it's gone
+            if (newSelStart == 0 && newSelEnd == 0 && oldSelStart > 0) scheduleStartAutoCapRechecks()
         }
         ImePerfLogger.logDuration(
             label = "onUpdateSelection",
@@ -5223,8 +5286,12 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             }
         }
         appShortcutKeysDown += pressedKeyCode
-        if (ctrlOneShot) {
+        // The shortcut has run: a one-shot or locked Ctrl lets go (Nav Mode's Ctrl stays)
+        if (ctrlOneShot || (ctrlLatchActive && !ctrlLatchFromNavMode)) {
             ctrlOneShot = false
+            if (ctrlLatchActive && !ctrlLatchFromNavMode) {
+                modifierStateController.clearCtrlState(resetPressedState = false)
+            }
             updateStatusBarText()
         }
         return true
@@ -5888,6 +5955,22 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             }
         }
 
+        // Ctrl + Shift + D: add the last word typed to the dictionary
+        if (
+            hasEditableField &&
+            keyCode == KeyEvent.KEYCODE_D &&
+            event?.repeatCount == 0 &&
+            (event.isCtrlPressed || ctrlPressed || ctrlLatchActive || ctrlOneShot) &&
+            (event.isShiftPressed || shiftPhysicallyPressed) &&
+            SettingsManager.getAddLastWordShortcut(this)
+        ) {
+            modifierStateController.clearCtrlState(resetPressedState = true)
+            modifierStateController.clearShiftState(resetPressedState = true)
+            addLastWordToDictionary()
+            updateStatusBarText()
+            return true
+        }
+
         // Handle Ctrl+Space for subtype cycling
         if (
             layoutSwitchChordsAllowed &&
@@ -6492,6 +6575,25 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     /**
+     * Adds the word before the cursor (or the unknown word the suggestions offered) to the
+     * dictionary, and says what happened.
+     */
+    private fun addLastWordToDictionary() {
+        val before = currentInputConnection?.getTextBeforeCursor(64, 0)?.toString().orEmpty()
+        val word = lastWordIn(before) ?: suggestionController.pendingAddWord()
+        val message = when {
+            word.isNullOrBlank() -> getString(R.string.add_last_word_none)
+            suggestionController.isKnownWordInActiveDictionaries(word) -> getString(R.string.add_last_word_known, word)
+            else -> {
+                suggestionController.addUserWord(word)
+                suggestionController.clearPendingAddWord()
+                getString(R.string.add_last_word_added, word)
+            }
+        }
+        android.widget.Toast.makeText(this, message, android.widget.Toast.LENGTH_SHORT).show()
+    }
+
+    /**
      * Aggiunge una nuova mappatura Alt+tasto -> carattere.
      */
     fun addAltKeyMapping(keyCode: Int, character: String) {
@@ -6737,11 +6839,17 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         val downwardDistance = deltaY
         // Direction picks: the dominant direction counts (a 45° wedge each way) and a shorter
         // swipe does, so a swipe works from anywhere on the keys, edges included
-        val pickDistance = suggestionThreshold * 0.6f
-        val sideDistance = SettingsManager.getTrackpadSideSwipeThreshold(this)
+        // One key's width (the Titan 2 Elite's keys are about square): sliding from one key onto
+        // the next picks, from anywhere on the keys, however slowly within half a second
+        val pickDistance = TrackpadCoordinateMapper.pickDistance(
+            suggestionThreshold * 0.6f, start.xRange)
+        val sideDistance = TrackpadCoordinateMapper.pickDistance(
+            SettingsManager.getTrackpadSideSwipeThreshold(this), start.xRange)
         val horizontalDominant = kotlin.math.abs(deltaX) > kotlin.math.abs(deltaY)
-        val pickFastEnough = maxOf(kotlin.math.abs(deltaX), kotlin.math.abs(deltaY)) / durationMs >=
-            NATIVE_TRACKPAD_MIN_SWIPE_VELOCITY_PX_PER_MS
+        val pickFastEnough = TrackpadCoordinateMapper.pickQuickEnough(
+            maxOf(kotlin.math.abs(deltaX), kotlin.math.abs(deltaY)),
+            if (horizontalDominant) sideDistance else pickDistance,
+            durationMs, NATIVE_TRACKPAD_MIN_SWIPE_VELOCITY_PX_PER_MS)
         val rightEnough = horizontalDominant && rightwardDistance >= sideDistance && pickFastEnough
         val leftPicks = horizontalDominant && leftwardDistance >= sideDistance && pickFastEnough
         val upPicks = !horizontalDominant && upwardDistance >= pickDistance && pickFastEnough
@@ -7134,3 +7242,13 @@ private val HIDDEN_APP_SYSTEM_KEYS = setOf(
     KeyEvent.KEYCODE_VOLUME_DOWN,
     KeyEvent.KEYCODE_VOLUME_MUTE
 )
+
+/** The last word in [text], skipping the spaces and punctuation after it; null when there's none. */
+internal fun lastWordIn(text: String): String? {
+    fun wordChar(c: Char) = c.isLetterOrDigit() || c == '\'' || c == '’' || c == '-'
+    var end = text.length
+    while (end > 0 && !text[end - 1].isLetterOrDigit()) end--
+    var start = end
+    while (start > 0 && wordChar(text[start - 1])) start--
+    return text.substring(start, end).trim('\'', '’', '-').takeIf { word -> word.any { it.isLetter() } }
+}
