@@ -57,6 +57,10 @@
   ],
   "improvements": [
     {
+      "text": "Enter sends in every app by default, with Shift+Enter for a new line (email apps keep Enter for a new line and Ctrl+Enter to send). The new alternative: Enter for a new line, Shift+Enter sends.",
+      "after": "202609280023"
+    },
+    {
       "text": "Termux:X11 keeps the keyboard hidden by default, like Niagara Launcher.",
       "after": "202609280018"
     },

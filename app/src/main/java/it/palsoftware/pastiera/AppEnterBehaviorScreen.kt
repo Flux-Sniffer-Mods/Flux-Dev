@@ -901,6 +901,8 @@ private fun getEnterPresetLabel(preset: String): String {
             stringResource(R.string.app_enter_behaviour_preset_newline_ctrl_send)
         SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_ONLY ->
             stringResource(R.string.app_enter_behaviour_preset_newline_only)
+        SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND ->
+            stringResource(R.string.app_enter_behaviour_preset_newline_shift_send)
         SettingsManager.ENTER_BEHAVIOR_PRESET_CUSTOM ->
             stringResource(R.string.app_enter_behaviour_preset_custom)
         else -> stringResource(R.string.app_enter_behaviour_preset_app_default)
@@ -916,6 +918,8 @@ private fun getEnterBehaviorLabel(behavior: String): String {
             stringResource(R.string.app_enter_behaviour_option_send_shift_newline)
         SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND ->
             stringResource(R.string.app_enter_behaviour_option_newline_ctrl_send)
+        SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND ->
+            stringResource(R.string.app_enter_behaviour_option_newline_shift_send)
         else -> stringResource(R.string.app_enter_behaviour_option_app_default)
     }
 }
@@ -924,6 +928,7 @@ private fun enterPresetOptions(): List<String> {
     return listOf(
         SettingsManager.ENTER_BEHAVIOR_PRESET_APP_DEFAULT,
         SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_SEND_SHIFT_NEWLINE,
+        SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND,
         SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_CTRL_SEND
     )
 }
@@ -932,6 +937,7 @@ private fun enterBehaviorOptions(): List<String> {
     return listOf(
         SettingsManager.ENTER_BEHAVIOR_APP_DEFAULT,
         SettingsManager.ENTER_BEHAVIOR_ENTER_SEND_SHIFT_NEWLINE,
+        SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND,
         SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND
     )
 }
@@ -1164,6 +1170,8 @@ private fun enterBehaviorForPreset(preset: String): String? {
             SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND
         SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_ONLY ->
             SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE
+        SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND ->
+            SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND
         SettingsManager.ENTER_BEHAVIOR_PRESET_APP_DEFAULT ->
             SettingsManager.ENTER_BEHAVIOR_APP_DEFAULT
         else -> null
@@ -1187,6 +1195,8 @@ internal fun inferKnownAppEnterBehaviorPreset(
             SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_SEND_SHIFT_NEWLINE
         SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND ->
             SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_CTRL_SEND
+        SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND ->
+            SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND
         else -> SettingsManager.ENTER_BEHAVIOR_PRESET_CUSTOM
     }
 }

@@ -18,8 +18,11 @@ class AppEnterStandardsTest {
     }
 
     @Test
-    fun chatAppKeepsNewLineOutsideMessageBoxes() {
-        assertNull(AppEnterStandards.behaviorFor("com.facebook.katana", sendPreset, fieldSends = false))
+    fun chatAppFollowsThePresetInEveryField() {
+        assertEquals(
+            SettingsManager.ENTER_BEHAVIOR_ENTER_SEND_SHIFT_NEWLINE,
+            AppEnterStandards.behaviorFor("com.facebook.katana", sendPreset, fieldSends = false)
+        )
     }
 
     @Test
@@ -49,13 +52,26 @@ class AppEnterStandardsTest {
     }
 
     @Test
-    fun otherAppsKeepTheirOwnEnter() {
+    fun otherAppsFollowThePresetToo() {
         listOf("com.android.chrome", "com.google.android.contacts", "com.spotify.music", "unknown.app", null)
             .forEach { pkg ->
                 assertEquals(EnterStandard.AppDefault, AppEnterStandards.standardFor(pkg))
-                assertNull(AppEnterStandards.behaviorFor(pkg, sendPreset, fieldSends = true))
-                assertNull(AppEnterStandards.sendStrategyFor(pkg))
+                assertEquals(
+                    SettingsManager.ENTER_BEHAVIOR_ENTER_SEND_SHIFT_NEWLINE,
+                    AppEnterStandards.behaviorFor(pkg, sendPreset, fieldSends = true)
+                )
+                assertEquals(SettingsManager.ENTER_SEND_STRATEGY_EDITOR_ACTION, AppEnterStandards.sendStrategyFor(pkg))
             }
+    }
+
+    @Test
+    fun shiftSendsPresetGivesEnterNewLineShiftSends() {
+        assertEquals(
+            SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND,
+            AppEnterStandards.behaviorFor(
+                "unknown.app", SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND, fieldSends = false
+            )
+        )
     }
 
     @Test

@@ -331,12 +331,14 @@ object SettingsManager {
     const val ENTER_BEHAVIOR_PRESET_ENTER_SEND_SHIFT_NEWLINE = "enter_send_shift_newline"
     const val ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_CTRL_SEND = "enter_newline_ctrl_send"
     const val ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_ONLY = "enter_newline_only"
+    const val ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND = "enter_newline_shift_send"
     const val ENTER_BEHAVIOR_PRESET_CUSTOM = "custom"
 
     const val ENTER_BEHAVIOR_APP_DEFAULT = "app_default"
     const val ENTER_BEHAVIOR_ENTER_NEWLINE = "enter_newline"
     const val ENTER_BEHAVIOR_ENTER_SEND_SHIFT_NEWLINE = "enter_send_shift_newline"
     const val ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND = "enter_newline_ctrl_send"
+    const val ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND = "enter_newline_shift_send"
 
     const val ENTER_SEND_STRATEGY_AUTO = "auto"
     const val ENTER_SEND_STRATEGY_EDITOR_ACTION = "editor_action"
@@ -7253,6 +7255,7 @@ object SettingsManager {
             ENTER_BEHAVIOR_PRESET_APP_DEFAULT,
             ENTER_BEHAVIOR_PRESET_ENTER_SEND_SHIFT_NEWLINE,
             ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_CTRL_SEND,
+            ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND,
             ENTER_BEHAVIOR_PRESET_CUSTOM -> preset
             else -> ENTER_BEHAVIOR_PRESET_APP_DEFAULT
         }
@@ -7263,7 +7266,8 @@ object SettingsManager {
             ENTER_BEHAVIOR_APP_DEFAULT,
             ENTER_BEHAVIOR_ENTER_NEWLINE,
             ENTER_BEHAVIOR_ENTER_SEND_SHIFT_NEWLINE,
-            ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND -> behavior
+            ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND,
+            ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND -> behavior
             else -> ENTER_BEHAVIOR_APP_DEFAULT
         }
     }

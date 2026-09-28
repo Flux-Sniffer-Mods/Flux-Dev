@@ -71,23 +71,26 @@ object AppEnterStandards {
     fun behaviorFor(packageName: String?, preset: String, fieldSends: Boolean): String? =
         when (standardFor(packageName)) {
             EnterStandard.Email -> SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND
-            EnterStandard.Chat -> if (!fieldSends) null else when (preset) {
+            // Chats and every other app: the preset, in every field (Flux Keyboard's default:
+            // Enter sends, Shift+Enter is a new line)
+            EnterStandard.Chat, EnterStandard.AppDefault -> when (preset) {
                 SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_SEND_SHIFT_NEWLINE ->
                     SettingsManager.ENTER_BEHAVIOR_ENTER_SEND_SHIFT_NEWLINE
                 SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_CTRL_SEND ->
                     SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND
                 SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_ONLY ->
                     SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE
+                SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND ->
+                    SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND
                 else -> null
             }
-            EnterStandard.AppDefault -> null
         }
 
     /** How the send happens under the standard: the app's documented Ctrl+Enter, or its Send action. */
     fun sendStrategyFor(packageName: String?): String? = when (standardFor(packageName)) {
         EnterStandard.Email -> SettingsManager.ENTER_SEND_STRATEGY_CTRL_ENTER
         EnterStandard.Chat -> SettingsManager.ENTER_SEND_STRATEGY_EDITOR_ACTION
-        EnterStandard.AppDefault -> null
+        EnterStandard.AppDefault -> SettingsManager.ENTER_SEND_STRATEGY_EDITOR_ACTION
     }
 
     /** The apps in the shortcut list whose Enter follows a standard (chat or email), by name. */

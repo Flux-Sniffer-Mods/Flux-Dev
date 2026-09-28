@@ -981,6 +981,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND
             SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_ONLY ->
                 SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE
+            SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_SHIFT_SEND ->
+                SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND
             else -> null
         }
     }
@@ -1275,6 +1277,18 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                     )
                 }
                 return commitEnterNewline(keyCode, ic, event, "app_enter_newline")
+            }
+            SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND -> {
+                if (!isShiftModifierActive(event) && !ctrlActiveForEnter) {
+                    return commitEnterNewline(keyCode, ic, event, "app_enter_newline")
+                }
+                return performConfiguredAppEnterSend(
+                    keyCode = keyCode,
+                    info = info,
+                    inputConnection = ic,
+                    event = event,
+                    consumeCtrlState = ctrlActiveForEnter
+                )
             }
             SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND -> {
                 if (!ctrlActiveForEnter) {
