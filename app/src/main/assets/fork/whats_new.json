@@ -57,6 +57,10 @@
   ],
   "improvements": [
     {
+      "text": "Enter per app: every chat and email app you have gets its own entry, set to its category (including apps outside the built-in list, by Android's own app category), so each one is there to change.",
+      "after": "202609280010"
+    },
+    {
       "text": "Punctuation spacing explains itself: each mark is named, with No space before and Space after columns. Space after comma is gone, since the comma's row does it (if it was on, it moves there).",
       "after": "202609280010"
     },

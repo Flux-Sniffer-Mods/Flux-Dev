@@ -42,9 +42,25 @@ object AppEnterStandards {
         if (packageName in EMAIL_CTRL_ENTER_APPS) return EnterStandard.Email
         if (packageName in EXTRA_CHAT_APPS) return EnterStandard.Chat
         if (packageName in NOT_CHAT_APPS) return EnterStandard.AppDefault
-        return when (AppShortcutPresets.forPackage(packageName)?.category) {
+        val preset = AppShortcutPresets.forPackage(packageName)
+        if (preset != null) return when (preset.category) {
             AppCategory.Social, AppCategory.Dating, AppCategory.Communication -> EnterStandard.Chat
             else -> EnterStandard.AppDefault
+        }
+        // Any other installed app: the category Android records for it (social apps are chats)
+        return if (systemCategory?.invoke(packageName) == android.content.pm.ApplicationInfo.CATEGORY_SOCIAL) {
+            EnterStandard.Chat
+        } else EnterStandard.AppDefault
+    }
+
+    /** An installed app's Android category (ApplicationInfo.category); set when the app starts. */
+    @Volatile
+    var systemCategory: ((String) -> Int?)? = null
+
+    fun installSystemCategoryLookup(context: android.content.Context) {
+        val pm = context.applicationContext.packageManager
+        systemCategory = { packageName ->
+            runCatching { pm.getApplicationInfo(packageName, 0).category }.getOrNull()
         }
     }
 

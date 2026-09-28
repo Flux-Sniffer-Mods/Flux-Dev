@@ -97,8 +97,8 @@
     <string name="app_shortcuts_category_weather">Weather</string>
     <string name="app_shortcuts_category_terminal">Terminal</string>
     <string name="app_shortcuts_category_other">Added by you</string>
-    <string name="enter_standards_title">Category standards</string>
-    <string name="enter_standards_description">Installed chat and email apps you haven\'t overridden follow their category. Chat apps use the messaging preset in message boxes; post and note fields keep Enter newline. Email apps use Enter newline, Ctrl+Enter sends. Tap an app to override it.</string>
+    <string name="enter_standards_title">Following their category</string>
+    <string name="enter_standards_description">Every chat and email app you have follows its category unless you set it above. Chats: the messaging preset in message boxes, a new line in posts and notes. Email: Enter for a new line, Ctrl+Enter sends. Tap an app to set it yourself.</string>
     <string name="enter_standards_empty">No other chat or email apps installed from the list.</string>
     <string name="enter_standard_chat">Chat · %1$s</string>
     <string name="enter_standard_email">Email · Enter newline, Ctrl+Enter sends</string>
