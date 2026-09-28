@@ -41,15 +41,15 @@ Input method for physical keyboards android devices (e.g. Unihertz Titan 2), des
 
 **Flux Keyboard** builds on Pastiera for the Unihertz Titan 2 Elite and works on any phone with a hardware keyboard. It installs alongside Pastiera (app ID `io.github.fluxsniffermods.fluxkeyboard`), so you can keep both. The biggest differences:
 
-1. **GIFs, emoji and symbols**: GIF search with favourites, a dedicated **emoji picker key** (Right Shift by default), emoji layer **profiles** that follow the app, and search across every Unicode symbol. Tap SYM or the emoji key to apply it to the next key without opening a screen.
-2. **Spell checking, autofill and one-time codes in every app**: Flux Keyboard becomes Android's spell checker, password managers show their chips in the suggestion bar, and codes from your notifications are offered as a chip.
+1. **GIFs, emoji and symbols**: GIF search with favourites, a dedicated **emoji picker key** (Right Shift by default), emoji layer **profiles** that follow the app, and search across every Unicode symbol. Tap SYM or the emoji key to apply it to the next key without opening a screen; their LEDs (purple and pink) show it.
+2. **Spell checking, autofill and one-time codes in every app**: Flux Keyboard becomes Android's spell checker, password managers show their chips in the suggestion bar, codes from your notifications are offered as a chip, and a password you just copied is offered in password fields as ⎘ •••••••• (never shown, never kept in the clipboard history).
 3. **Edit layouts in the app**: change what any key types, save, restore, copy or export a layout, with no web editor.
 4. **App shortcuts everywhere**: the same shortcuts in every app, suggested per app category, and apps' own shortcuts in the quick launcher, which can also hand over to Niagara's search.
-5. **Made for the Titan 2 Elite**: a status bar fitted to its rounded display, **per-LED colours** with a fifth LED for the emoji key, trackpad swipes for suggestions, a **customisable menu bar**, and **recommended settings** that set it all up in one step.
+5. **Made for the Titan 2 Elite**: a status bar fitted to its rounded display, **per-LED colours** with a fifth LED for the emoji key, trackpad swipes for suggestions and deleting words (tuned to its touch layer, with a shortcut straight to the phone's Keyboard gesture page), a **customisable menu bar**, and **recommended settings** with an Apply button that then walks you through your own choices.
 6. **Settings and tutorial rebuilt**: grouped by task, searchable, hiding what your phone's hardware can't use, and a tutorial that sets up the extras needing a permission, including Android's restricted settings.
 7. **Terminal mode and hidden-keyboard apps**: Termux gets a real Ctrl and the keyboard's Alt and SYM with the keyboard out of the way; Termux:X11 and launchers get the keys without the keyboard.
-8. **Faster suggestions**: pick one with Ctrl+Shift+Q, W or E or a trackpad swipe, undo an auto-replace with Backspace, and paste what you just copied from a chip, with tracking stripped from links.
-9. **Offline mode**, and **updates** from this fork's own releases that download and install from the app.
+8. **Faster typing**: pick a suggestion with Ctrl+Shift+Q, W or E or a trackpad swipe, undo an auto-replace with Backspace, delete forwards with Shift + Backspace, and paste what you just copied from a chip, with tracking stripped from links.
+9. **Offline mode**, and **updates** from this fork's own releases that download and install from the app: full releases, or dev builds too (Developer options).
 
 Everything else, including per-app exact typing and languages, automatic Shift by field type, snippets and voice input that keeps listening, is in the [changelog](FORK_CHANGES.md). It covers everything since Pastiera 0.85, the last official release, including what the Pastiera team has added since, which Flux Keyboard also includes.
 
@@ -60,7 +60,7 @@ Everything else, including per-app exact typing and languages, automatic Shift b
 - Multiple layouts (QWERTY/AZERTY/QWERTZ, Greek, Cyrillic, Arabic, translit, etc.) fully configurable; JSON import/export directly from the app, and an editor in the app for what each key types.
 - SYM pages usable via touch or physical keys (emoji, symbols, clipboard and the full emoji picker), reorderable/disableable, with an integrated layout editor.
 - Clipboard support with multiple entries and pinnable items.
-- Support for dictionary based suggestions/Autocorrections + swipe gestures to accept a suggestion (requires Shizuku)
+- Support for dictionary based suggestions/Autocorrections + trackpad swipes to accept a suggestion (read directly, or through Shizuku)
 - Full backup/restore (settings, layouts, variations, dictionaries), UI translated into multiple languages, and update notices (see [Backup, updates, and data](#backup-updates-and-data)).
 
 ## Typing and modifiers
@@ -102,7 +102,7 @@ Everything else, including per-app exact typing and languages, automatic Shift b
 
 ## Comfort and extra input
 - Double space → period + space + uppercase; 
-- Swipe left on the keyboard to delete a word (Titan 2).
+- Swipe left or down on the keyboard to delete a word (Titan 2; one choice in Trackpad & gestures).
 - Optional Alt+Ctrl shortcut to start speech input; microphone always available on the variants bar.
 - Compact status bar to minimize vertical space. With on-screen keyboard disabled from the IME selector, it uses even less space (Solderina mode, called Pastierina in Pastiera)
 - Translated UI (en/it/de/el/es/fr/hy/pl/ru/uk/vi) and onboarding tutorial. Some settings added by Flux Keyboard are English only.
@@ -110,12 +110,12 @@ Everything else, including per-app exact typing and languages, automatic Shift b
 ## Backup, updates, and data
 - UI-based backup/restore in ZIP format: includes preferences, custom layouts, variations, SYM/Ctrl maps, and user dictionaries.
 - Restore merges saved variations with defaults to avoid losing newly added keys.
-- Update notices when opening settings and once a day (with option to ignore a release). Flux Keyboard checks [this fork's latest release](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases/latest) and offers its APK; offline mode turns the checks off.
+- Update notices when opening settings and once a day (with option to ignore a release). Flux Keyboard checks [this fork's releases](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases) and offers the newest one's APK; offline mode turns the checks off.
 - Customizable files in `files/`: `variations.json`, `ctrl_key_mappings.json`, `sym_key_mappings*.json`, `keyboard_layouts/*.json`, user dictionaries.
 - Android autobackup function 
 
 ## Installation
-1. Download the APK from the [latest Flux Keyboard release](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases/latest), or build it yourself.
+1. Download the APK from the [latest Flux Keyboard release](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases/latest), or a dev build (marked Pre-release) from [all releases](https://github.com/Flux-Sniffer-Mods/Flux-Keyboard/releases). Or build it yourself.
 2. Android Settings → System → Languages & input → Virtual keyboard → Manage keyboards.
 3. Enable “Flux Keyboard” and select it from the input selector when typing.
 
@@ -150,9 +150,18 @@ Keyboard), then uninstall Pastiera Flux.
   - `./scripts/build-nightly-debug.sh 0.86 --install --device <adb-serial>`
 
 ## Flux Keyboard builds
-- `.github/workflows/fork-build.yml` is run by hand with a version name (for example `0.86-flux.202609261200`) and version code.
-- It builds and signs the stable APK with the fork's own key, names the run after the version, and publishes a GitHub release tagged `flux/v<version>` with notes made from [FORK_CHANGES.md](FORK_CHANGES.md). The app's update check reads that release.
-- After a successful build it deletes earlier runs and earlier `flux/` releases, so only the latest build remains.
+- There are two kinds of build, picked by the branch `.github/workflows/fork-build.yml` is run on:
+  - **`flux-release` (the default branch): full releases** such as `0.92`, tagged `flux/v0.92`. The version is the newest one in the `"releases"` list of `app/src/main/assets/fork/whats_new.json`, which also records when it was built.
+  - **`flux-dev`: dev builds** such as `0.93-flux.202609262100`, the next version after the latest release plus the build time, published as pre-releases with "dev" in the title.
+- The version and version code are worked out from the branch; a version given by hand has to be of the branch's kind.
+- Each release lists only what changed since the build before it: a full release since the previous full release, a dev build since the previous build of either kind. The list comes from the What's new entries (`"after"` is the build each entry is new since).
+- The repository's "Latest" release is always the latest full release; dev builds are marked Pre-release.
+- The app's update check reads these releases: Stable offers full releases only, Dev offers both; both read the release tags, so no release is missed however many there are.
+- Dev work goes on `flux-dev` as individual commits, one per change.
+- To make a full release: add it to `"releases"` on `flux-dev`, fold the commits since the last full release into category commits, move `flux-release` up to the result, and run the workflow on `flux-release`. Commits at or below `flux-release` are never rewritten.
+- Builds never delete earlier ones: every run, artifact and release (full or dev) stays. They run one at a time, so each works out its version and "the build before" after the previous one has published.
+- Dev builds turn Developer options on by default, where the app's Dev builds update switch lives; full releases leave them off.
+- `tools/find-keyboard-gesture-page.sh` (run as root from Termux, with the page open) prints which screen a phone's keyboard gesture settings are and whether other apps may open it; that's how the Titan 2 Elite's `com.agui.settings/.touchpad.KeyboardGestureActivity` was found.
 
 The sections below describe upstream Pastiera's workflows and release channels. They need upstream's signing secrets and don't apply to Flux Keyboard builds.
 

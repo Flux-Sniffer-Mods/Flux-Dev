@@ -206,12 +206,30 @@ fun bundledReleaseNotes(
     sinceVersion: String? = null
 ): ReleaseNotesSummary? = runCatching {
     val body = context.assets.open("fork/whats_new.json").bufferedReader().use { it.readText() }
-    // Releases (0.91) carry no build time in their name: the notes list when each was built
-    val releaseStamp = sinceVersion?.let { runCatching { JSONObject(body).optJSONObject("releases")?.optString(it) }.getOrNull() }
-        ?.toLongOrNull()
-    parseBundledReleaseNotes(body, version, forkBuildStamp(sinceVersion) ?: releaseStamp)
+    parseBundledReleaseNotes(body, version, sinceStamp(body, sinceVersion))
         ?: if (sinceVersion != null) parseBundledReleaseNotes(body, version, null) else null
 }.getOrNull()
+
+/**
+ * Whether the notes bundled with this build list anything new since [sinceVersion]; null when
+ * the build has no notes of its own or that version's build time isn't known.
+ */
+fun bundledNotesHaveNewSince(context: android.content.Context, sinceVersion: String): Boolean? = runCatching {
+    val body = context.assets.open("fork/whats_new.json").bufferedReader().use { it.readText() }
+    bundledNotesHaveNewSince(body, sinceVersion)
+}.getOrNull()
+
+internal fun bundledNotesHaveNewSince(body: String, sinceVersion: String): Boolean? {
+    val stamp = sinceStamp(body, sinceVersion) ?: return null
+    return parseBundledReleaseNotes(body, sinceVersion, stamp) != null
+}
+
+/** A version's build time: in a dev build's name, or for releases (0.91) from the notes' list. */
+private fun sinceStamp(body: String, sinceVersion: String?): Long? {
+    if (sinceVersion == null) return null
+    return forkBuildStamp(sinceVersion)
+        ?: runCatching { JSONObject(body).optJSONObject("releases")?.optString(sinceVersion) }.getOrNull()?.toLongOrNull()
+}
 
 internal fun parseBundledReleaseNotes(body: String, version: String, sinceStamp: Long?): ReleaseNotesSummary? {
     val json = JSONObject(body)

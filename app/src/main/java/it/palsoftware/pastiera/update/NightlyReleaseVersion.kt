@@ -1,5 +1,7 @@
 package it.palsoftware.pastiera.update
 
+import it.palsoftware.pastiera.BuildConfig
+
 /** Compare numeric versions and SemVer prereleases; unknown formats never suggest an update. */
 internal fun compareReleaseVersions(first: String, second: String): Int? {
     val pattern = Regex("^(\\d+(?:\\.\\d+)*)(?:-([0-9A-Za-z.-]+))?(?:\\+[0-9A-Za-z.-]+)?$")
@@ -36,9 +38,38 @@ internal fun compareReleaseVersions(first: String, second: String): Int? {
 internal fun forkReleaseIsNewer(tag: String, current: String): Boolean =
     tag.startsWith("flux/") && (compareReleaseVersions(tag.removePrefix("flux/"), current) ?: -1) > 0
 
-/** The newest Flux Keyboard release ("flux/v…" tag) that is newer than [current]. */
 /** A dev build's release (flux/v0.92-flux.<time>), as opposed to a full release (flux/v0.91). */
 internal fun isForkDevRelease(tagName: String): Boolean = tagName.contains("-flux.")
+
+/**
+ * What the update check reads: the fork's release tags, all of them. A list of releases comes
+ * ordered by commit date and a page at a time, so a full release whose folded commits keep
+ * their old dates could sit below a page of dev builds; the tags don't depend on either.
+ */
+internal fun forkReleasesApiUrl(): String =
+    "https://api.github.com/repos/${BuildConfig.FORK_GITHUB_REPOSITORY}/git/matching-refs/tags/flux/v"
+
+/**
+ * The releases among the fork's tags ("refs/tags/flux/v0.92"), dev builds' too: the build
+ * publishes each one's APK as flux-keyboard-<version>.apk, so its page and download follow
+ * from the tag.
+ */
+internal fun forkReleasesFromTags(refs: List<String>): List<GitHubRelease> =
+    refs.map { it.removePrefix("refs/tags/") }
+        .filter { it.startsWith("flux/v") }
+        .map { tag ->
+            val version = tag.removePrefix("flux/v")
+            val base = "https://github.com/${BuildConfig.FORK_GITHUB_REPOSITORY}/releases"
+            GitHubRelease(
+                tagName = tag,
+                // "Flux Keyboard 0.93 dev · 26 Sep 2026, 20:47", as the release is titled
+                name = "Flux Keyboard " + if (isForkDevRelease(tag)) friendlyVersion(version).replaceFirst(" · ", " dev · ") else version,
+                prerelease = false,
+                draft = false,
+                htmlUrl = "$base/tag/$tag",
+                downloadUrl = "$base/download/$tag/flux-keyboard-$version.apk"
+            )
+        }
 
 /** The newest release newer than [current]; dev builds only when [includeDev] (the Dev channel). */
 internal fun findNewerForkRelease(releases: List<GitHubRelease>, current: String, includeDev: Boolean = true): ReleaseInfo? =

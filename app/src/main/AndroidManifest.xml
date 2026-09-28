@@ -42,6 +42,8 @@
         <package android:name="net.dinglisch.android.taskerm" />
         <package android:name="io.homeassistant.companion.android" />
         <package android:name="com.clicks.companionapp" />
+        <!-- Unihertz's settings app: the Titan 2 Elite's Keyboard gesture page -->
+        <package android:name="com.agui.settings" />
     </queries>
 
     <application

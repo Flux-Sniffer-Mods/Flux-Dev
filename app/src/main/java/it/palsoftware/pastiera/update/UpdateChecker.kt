@@ -113,10 +113,11 @@ private fun checkRelease(
     }
 
     val fork = !nightly && forkUpdatesEnabled()
+    val includeDev = fork && SettingsManager.getForkUpdateChannel(context) == SettingsManager.FORK_UPDATE_CHANNEL_DEV
     val request = Request.Builder()
         .url(when {
             nightly -> "https://api.github.com/repos/palsoftware/pastiera/releases?per_page=20"
-            fork -> "https://api.github.com/repos/${BuildConfig.FORK_GITHUB_REPOSITORY}/releases?per_page=20"
+            fork -> forkReleasesApiUrl()
             else -> successorReleasesApiUrl()
         })
         .header("Accept", "application/vnd.github+json")
@@ -141,13 +142,14 @@ private fun checkRelease(
                 }
 
                 val latestRelease = try {
-                    val releases = parseGitHubReleases(JSONArray(body))
+                    val releases = if (fork) {
+                        // The fork's release tags (see forkReleasesApiUrl)
+                        val refs = JSONArray(body)
+                        forkReleasesFromTags((0 until refs.length()).mapNotNull { refs.optJSONObject(it)?.optString("ref") })
+                    } else parseGitHubReleases(JSONArray(body))
                     when {
                         nightly -> findNewerNightlyRelease(releases, BuildConfig.VERSION_NAME)
-                        fork -> findNewerForkRelease(
-                            releases, BuildConfig.VERSION_NAME,
-                            includeDev = SettingsManager.getForkUpdateChannel(context) == SettingsManager.FORK_UPDATE_CHANNEL_DEV
-                        )
+                        fork -> findNewerForkRelease(releases, BuildConfig.VERSION_NAME, includeDev)
                         else -> findLatestRelease(releases, releaseChannel)
                     }
                 } catch (_: Exception) {
