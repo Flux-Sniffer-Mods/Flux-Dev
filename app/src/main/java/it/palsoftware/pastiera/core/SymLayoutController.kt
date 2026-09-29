@@ -73,9 +73,14 @@ class SymLayoutController(
     var emojiLayerShowsRecents: Boolean = false
         private set
 
+    /** The symbols page shows recent symbols on its keys (its Recents key was pressed). */
+    var symbolsShowRecents: Boolean = false
+        private set
+
     private fun leavePage() {
         openedByEmojiKey = false
         emojiLayerShowsRecents = false
+        symbolsShowRecents = false
     }
 
     init {
@@ -161,9 +166,29 @@ class SymLayoutController(
 
     /** The emoji layer's Recents key: recent emoji on the keys, or back to the layer. */
     fun toggleEmojiLayerRecents(): Boolean {
-        if (currentPageType() != SymPage.EMOJI) return false
-        emojiLayerShowsRecents = !emojiLayerShowsRecents
+        when (currentPageType()) {
+            SymPage.EMOJI -> emojiLayerShowsRecents = !emojiLayerShowsRecents
+            SymPage.SYMBOLS -> symbolsShowRecents = !symbolsShowRecents
+            else -> return false
+        }
         return true
+    }
+
+    /**
+     * The symbols page's keys, as the emoji layer's: its own symbols with the Recents and search
+     * keys, or the recent symbols (most recent on Q, then along the rows) while Recents is shown.
+     */
+    private fun symbolsMappings(): Map<Int, String>? {
+        val base = alternateCharacterManager.getSymMappings2()
+        val recentsKey = SettingsManager.getEmojiLayerRecentsKey(context)
+        if (recentsKey == KeyEvent.KEYCODE_UNKNOWN) return withSearchKey(base)
+        if (symbolsShowRecents) {
+            val keys = SettingsManager.EMOJI_LAYER_KEYS.filter { it != recentsKey }
+            val shown = keys.zip(it.palsoftware.pastiera.data.symbols.SymbolSearch.recentSymbols(context)).toMap().toMutableMap()
+            shown[recentsKey] = RECENTS_BACK_LABEL
+            return shown
+        }
+        return withSearchKey(base)?.toMutableMap()?.apply { put(recentsKey, RECENTS_KEY_LABEL) }
     }
 
     /**
@@ -263,7 +288,7 @@ class SymLayoutController(
         return when (currentPageType()) {
             SymPage.DEVICE -> withSearchKey(alternateCharacterManager.getDeviceSymMappings())
             SymPage.EMOJI -> emojiLayerMappings()
-            SymPage.SYMBOLS -> withSearchKey(alternateCharacterManager.getSymMappings2())
+            SymPage.SYMBOLS -> symbolsMappings()
             SymPage.CLIPBOARD -> null // Clipboard doesn't use mappings
             SymPage.EMOJI_PICKER -> null // Emoji picker doesn't use mappings
             else -> null
@@ -396,7 +421,7 @@ class SymLayoutController(
             return SymKeyResult.CONSUME
         }
         val recentsKey = SettingsManager.getEmojiLayerRecentsKey(context)
-        if (page == SymPage.EMOJI && recentsKey != KeyEvent.KEYCODE_UNKNOWN && keyCode == recentsKey) {
+        if ((page == SymPage.EMOJI || page == SymPage.SYMBOLS) && recentsKey != KeyEvent.KEYCODE_UNKNOWN && keyCode == recentsKey) {
             if ((event?.repeatCount ?: 0) == 0 && toggleEmojiLayerRecents()) {
                 updateStatusBar()
             }
@@ -411,7 +436,8 @@ class SymLayoutController(
         ) {
             val target = when (page) {
                 SymPage.EMOJI -> if (emojiLayerShowsRecents) null else SearchTarget.EMOJI_LAYER
-                SymPage.SYMBOLS, SymPage.DEVICE -> SearchTarget.SYMBOLS
+                SymPage.SYMBOLS -> if (symbolsShowRecents) null else SearchTarget.SYMBOLS
+                SymPage.DEVICE -> SearchTarget.SYMBOLS
                 SymPage.EMOJI_PICKER -> SearchTarget.PICKER
                 else -> null
             }
@@ -423,8 +449,10 @@ class SymLayoutController(
 
         // Type to search (its settings): a plain letter starts emoji or symbol search with it
         val typeToSearch = when (page) {
-            SymPage.EMOJI -> SettingsManager.getEmojiLayerTypeToSearch(context)
-            SymPage.SYMBOLS, SymPage.DEVICE -> SettingsManager.getSymbolsTypeToSearch(context)
+            // Not while the keys hold recents: a letter types the recent on it
+            SymPage.EMOJI -> !emojiLayerShowsRecents && SettingsManager.getEmojiLayerTypeToSearch(context)
+            SymPage.SYMBOLS -> !symbolsShowRecents && SettingsManager.getSymbolsTypeToSearch(context)
+            SymPage.DEVICE -> SettingsManager.getSymbolsTypeToSearch(context)
             else -> false
         }
         if (typeToSearch && event != null && keyCode in KeyEvent.KEYCODE_A..KeyEvent.KEYCODE_Z &&
@@ -457,7 +485,7 @@ class SymLayoutController(
         val symChar = when (page) {
             SymPage.DEVICE -> alternateCharacterManager.getDeviceSymMappings()[keyCode]
             SymPage.EMOJI -> emojiLayerMappings()[keyCode]
-            SymPage.SYMBOLS -> alternateCharacterManager.getSymMappings2()[keyCode]
+            SymPage.SYMBOLS -> symbolsMappings()?.get(keyCode)
             SymPage.CLIPBOARD -> null // Clipboard doesn't use key mappings
             SymPage.EMOJI_PICKER -> null // Emoji picker doesn't use key mappings
             else -> null
@@ -474,6 +502,8 @@ class SymLayoutController(
             ) {
                 inputConnection.commitText(symChar, 1)
             }
+            // Symbols typed from the symbols page are its recents
+            if (page == SymPage.SYMBOLS) it.palsoftware.pastiera.data.symbols.SymbolSearch.addRecent(context, symChar)
             if (autoCloseEnabled) {
                 closeSymAndUpdate(updateStatusBar)
             }

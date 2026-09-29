@@ -4,6 +4,10 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "The symbols page has Recents on A, as the emoji layer does: the symbols you use most, one press away.",
+      "after": "202609291915"
+    },
+    {
       "text": "The quick launcher lists your Termux:Widget scripts and tasks (~/.shortcuts) by themselves and keeps them up to date (Apps > Quick Launcher, on by default).",
       "after": "202609291636"
     },
@@ -80,6 +84,14 @@
     "Pick suggestions with Ctrl+Shift+Q, W or E (Right Shift too); Backspace undoes an auto-replace."
   ],
   "improvements": [
+    {
+      "text": "Edit Emoji Layer and Edit Symbols Layer show the search, GIF and Recents keys greyed out, as they aren't mapped.",
+      "after": "202609291915"
+    },
+    {
+      "text": "The emoji and symbol pages have a close key of their own in the bottom-right corner, the same size as the bottom-left one. The switch between emoji and symbols is only there without an emoji key, and the search, GIF and Recents keys stand out in the centred layout too.",
+      "after": "202609291915"
+    },
     {
       "text": "Titan 2 Elite LEDs follow the keys left to right (Shift, Alt, Sym, Ctrl, then the emoji key) in rainbow order: green, yellow, blue, purple and pink.",
       "after": "202609291908"

@@ -1771,7 +1771,7 @@ class StatusBarController(
                             addKeyToRow(rowLayout, row[i], symMappings, fixedKeyWidth, keyHeight, keySpacing, page, inputConnection, false)
                         }
 
-                        rowLayout.addView(View(context), LinearLayout.LayoutParams(fixedKeyWidth, keyHeight))
+                        rowLayout.addView(createGridCloseButton(), LinearLayout.LayoutParams(fixedKeyWidth, keyHeight))
                     }
                 }
                 container.addView(rowLayout)
@@ -1782,8 +1782,12 @@ class StatusBarController(
             // (The rest of the loop for non-Titan 2 remains the same)
             
             // Per la terza riga, aggiungi placeholder con emoji picker button a sinistra
+            // Without an emoji key, the bottom-left slot switches between emoji and symbols;
+            // with one, it holds the pencil
+            val swapButtonShown = SettingsManager.getEmojiPickerKey(context) == android.view.KeyEvent.KEYCODE_UNKNOWN
             if (rowIndex == 2) {
-                val leftPlaceholder = createPlaceholderWithEmojiPickerButton(keyHeight, page)
+                val leftPlaceholder = if (swapButtonShown) createPlaceholderWithEmojiPickerButton(keyHeight, page)
+                    else createPlaceholderWithPencilButton(keyHeight, page)
                 rowLayout.addView(leftPlaceholder, LinearLayout.LayoutParams(fixedKeyWidth, keyHeight).apply {
                     marginEnd = keySpacing
                 })
@@ -1801,14 +1805,7 @@ class StatusBarController(
                     true
                 }
                 
-                // Aggiungi click listener per rendere il pulsante touchabile
-                if (content.isNotEmpty() && inputConnection != null) {
-                    keyButton.isClickable = true
-                    keyButton.isFocusable = true
-                    keyButton.setOnClickListener {
-                        commitTouchSymbolAfterCloseIfNeeded(keyButton, inputConnection, content)
-                    }
-                }
+                bindLayerKey(keyButton, keyCode, content, page, inputConnection)
                 
                 // Usa larghezza fissa invece di weight
                 rowLayout.addView(keyButton, LinearLayout.LayoutParams(fixedKeyWidth, keyHeight).apply {
@@ -1821,11 +1818,12 @@ class StatusBarController(
             
             // Per la terza riga, aggiungi placeholder con icona matita a destra
             if (rowIndex == 2) {
-                val rightPlaceholder = createPlaceholderWithPencilButton(keyHeight, page)
+                val rightPlaceholder = if (swapButtonShown) createPlaceholderWithPencilButton(keyHeight, page)
+                    else createPlaceholderButton(keyHeight)
                 rowLayout.addView(rightPlaceholder, LinearLayout.LayoutParams(fixedKeyWidth, keyHeight).apply {
                     marginStart = keySpacing
                 })
-                rowLayout.addView(View(context), LinearLayout.LayoutParams(fixedKeyWidth, keyHeight).apply {
+                rowLayout.addView(createGridCloseButton(), LinearLayout.LayoutParams(fixedKeyWidth, keyHeight).apply {
                     marginStart = keySpacing
                 })
             }
@@ -2714,7 +2712,7 @@ class StatusBarController(
         }
         
         // Emoji layer's Recents key: a text symbol, drawn larger and bold so it reads like a key
-        val recentsSymbol = page == 1 && (
+        val recentsSymbol = (page == 1 || page == 2) && (
             content == it.palsoftware.pastiera.core.SymLayoutController.RECENTS_KEY_LABEL ||
                 content == it.palsoftware.pastiera.core.SymLayoutController.RECENTS_BACK_LABEL
             )
@@ -2831,6 +2829,32 @@ class StatusBarController(
             }
         }
         return button
+    }
+
+    /**
+     * The layer pages' close button: a key of its own in the bottom-right slot, the same size
+     * and shape as the bottom-left one mirrored (it follows the right display corner), in the
+     * close button's colour.
+     */
+    private fun createGridCloseButton(): View {
+        val theme = activeThemeColors()
+        return FrameLayout(context).apply {
+            background = createCloseButtonBackground(theme)
+            isClickable = true
+            isFocusable = true
+            contentDescription = context.getString(R.string.close)
+            setTag(R.id.tag_outer_edge_button, StatusBarButtonPosition.RIGHT)
+            addView(ImageView(context).apply {
+                setImageResource(R.drawable.ic_close_24)
+                setColorFilter(theme.textAndIcons)
+                scaleType = ImageView.ScaleType.CENTER_INSIDE
+                layoutParams = FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+            })
+            setOnClickListener { onSymCloseRequested?.invoke() }
+        }
     }
 
     private fun createSurfaceCloseButton(): View {
@@ -3037,38 +3061,21 @@ class StatusBarController(
         }
     }
 
-    private fun addKeyToRow(
-        rowLayout: LinearLayout,
+    /**
+     * A layer key's job: the search, GIF and Recents keys stand apart and do their thing; the
+     * others type what they hold. The same on the Titan 2 layout and the centred one.
+     */
+    private fun bindLayerKey(
+        keyButton: View,
         keyCode: Int,
-        symMappings: Map<Int, String>,
-        width: Int,
-        height: Int,
-        spacing: Int,
+        content: String,
         page: Int,
-        inputConnection: android.view.inputmethod.InputConnection?,
-        isLast: Boolean
+        inputConnection: android.view.inputmethod.InputConnection?
     ) {
-        val keyLabels = mapOf(
-            android.view.KeyEvent.KEYCODE_Q to "Q", android.view.KeyEvent.KEYCODE_W to "W", android.view.KeyEvent.KEYCODE_E to "E",
-            android.view.KeyEvent.KEYCODE_R to "R", android.view.KeyEvent.KEYCODE_T to "T", android.view.KeyEvent.KEYCODE_Y to "Y",
-            android.view.KeyEvent.KEYCODE_U to "U", android.view.KeyEvent.KEYCODE_I to "I", android.view.KeyEvent.KEYCODE_O to "O",
-            android.view.KeyEvent.KEYCODE_P to "P", android.view.KeyEvent.KEYCODE_A to "A", android.view.KeyEvent.KEYCODE_S to "S",
-            android.view.KeyEvent.KEYCODE_D to "D", android.view.KeyEvent.KEYCODE_F to "F", android.view.KeyEvent.KEYCODE_G to "G",
-            android.view.KeyEvent.KEYCODE_H to "H", android.view.KeyEvent.KEYCODE_J to "J", android.view.KeyEvent.KEYCODE_K to "K",
-            android.view.KeyEvent.KEYCODE_L to "L", android.view.KeyEvent.KEYCODE_Z to "Z", android.view.KeyEvent.KEYCODE_X to "X",
-            android.view.KeyEvent.KEYCODE_C to "C", android.view.KeyEvent.KEYCODE_V to "V", android.view.KeyEvent.KEYCODE_B to "B",
-            android.view.KeyEvent.KEYCODE_N to "N", android.view.KeyEvent.KEYCODE_M to "M"
-        )
-        val label = keyLabels[keyCode] ?: ""
-        val content = symMappings[keyCode] ?: ""
-        val keyButton = createEmojiKeyButton(label, content, height, page)
-        keyButton.isLongClickable = true
-        keyButton.setOnLongClickListener {
-            openSymCustomization(page = page, keyCode = keyCode, openPicker = true)
-            true
-        }
-        
-        val recentsKey = page == 1 && keyCode == SettingsManager.getEmojiLayerRecentsKey(context)
+        // Recents: the emoji layer's and the symbols page's (the same key)
+        val recentsKey = (page == 1 || page == 2) && keyCode == SettingsManager.getEmojiLayerRecentsKey(context) &&
+            (content == it.palsoftware.pastiera.core.SymLayoutController.RECENTS_KEY_LABEL ||
+                content == it.palsoftware.pastiera.core.SymLayoutController.RECENTS_BACK_LABEL)
         // The GIF key only while it shows GIF (with recent emoji shown it holds one of them)
         val gifKey = page == 1 && keyCode == SettingsManager.activeEmojiLayerGifKey(context) &&
             content == it.palsoftware.pastiera.core.SymLayoutController.GIF_KEY_LABEL
@@ -3110,9 +3117,44 @@ class StatusBarController(
             keyButton.isFocusable = true
             keyButton.setOnClickListener {
                 commitTouchSymbolAfterCloseIfNeeded(keyButton, inputConnection, content)
+                if (page == 2) SymbolSearch.addRecent(context, content)
             }
         }
+    }
+
+    private fun addKeyToRow(
+        rowLayout: LinearLayout,
+        keyCode: Int,
+        symMappings: Map<Int, String>,
+        width: Int,
+        height: Int,
+        spacing: Int,
+        page: Int,
+        inputConnection: android.view.inputmethod.InputConnection?,
+        isLast: Boolean
+    ) {
+        val keyLabels = mapOf(
+            android.view.KeyEvent.KEYCODE_Q to "Q", android.view.KeyEvent.KEYCODE_W to "W", android.view.KeyEvent.KEYCODE_E to "E",
+            android.view.KeyEvent.KEYCODE_R to "R", android.view.KeyEvent.KEYCODE_T to "T", android.view.KeyEvent.KEYCODE_Y to "Y",
+            android.view.KeyEvent.KEYCODE_U to "U", android.view.KeyEvent.KEYCODE_I to "I", android.view.KeyEvent.KEYCODE_O to "O",
+            android.view.KeyEvent.KEYCODE_P to "P", android.view.KeyEvent.KEYCODE_A to "A", android.view.KeyEvent.KEYCODE_S to "S",
+            android.view.KeyEvent.KEYCODE_D to "D", android.view.KeyEvent.KEYCODE_F to "F", android.view.KeyEvent.KEYCODE_G to "G",
+            android.view.KeyEvent.KEYCODE_H to "H", android.view.KeyEvent.KEYCODE_J to "J", android.view.KeyEvent.KEYCODE_K to "K",
+            android.view.KeyEvent.KEYCODE_L to "L", android.view.KeyEvent.KEYCODE_Z to "Z", android.view.KeyEvent.KEYCODE_X to "X",
+            android.view.KeyEvent.KEYCODE_C to "C", android.view.KeyEvent.KEYCODE_V to "V", android.view.KeyEvent.KEYCODE_B to "B",
+            android.view.KeyEvent.KEYCODE_N to "N", android.view.KeyEvent.KEYCODE_M to "M"
+        )
+        val label = keyLabels[keyCode] ?: ""
+        val content = symMappings[keyCode] ?: ""
+        val keyButton = createEmojiKeyButton(label, content, height, page)
+        keyButton.isLongClickable = true
+        keyButton.setOnLongClickListener {
+            openSymCustomization(page = page, keyCode = keyCode, openPicker = true)
+            true
+        }
         
+        bindLayerKey(keyButton, keyCode, content, page, inputConnection)
+
         rowLayout.addView(keyButton, LinearLayout.LayoutParams(width, height))
         if (!isLast) {
             rowLayout.addView(View(context), LinearLayout.LayoutParams(spacing, height))
@@ -3295,13 +3337,14 @@ class StatusBarController(
             
             for ((index, keyCode) in row.withIndex()) {
                 val label = keyLabels[keyCode] ?: ""
+                val reserved = reservedLayerKeys(page)[keyCode]
                 val emoji = symMappings[keyCode] ?: ""
                 
                 // Usa la stessa funzione createEmojiKeyButton della tastiera reale
-                val keyButton = createEmojiKeyButton(label, emoji, keyHeight, page)
+                val keyButton = createEmojiKeyButton(label, reserved ?: emoji, keyHeight, page)
                 
-                // Aggiungi click listener
-                keyButton.setOnClickListener {
+                // The search, GIF and Recents keys aren't mapped: greyed, showing their job
+                if (reserved != null) greyOutReservedKey(keyButton) else keyButton.setOnClickListener {
                     onKeyClick(keyCode, emoji)
                 }
                 
@@ -3328,6 +3371,28 @@ class StatusBarController(
         return container
     }
 
+    /** The keys a layer keeps for itself (search, GIF, Recents), with the label each shows. */
+    private fun reservedLayerKeys(page: Int): Map<Int, String> {
+        val reserved = mutableMapOf<Int, String>()
+        val unknown = android.view.KeyEvent.KEYCODE_UNKNOWN
+        val labels = it.palsoftware.pastiera.core.SymLayoutController
+        if (page == 1 || page == 2) {
+            SettingsManager.getEmojiLayerRecentsKey(context).takeIf { it != unknown }?.let { reserved[it] = labels.RECENTS_KEY_LABEL }
+            SettingsManager.getSearchKey(context).takeIf { it != unknown }?.let { reserved[it] = labels.SEARCH_KEY_LABEL }
+        }
+        if (page == 1) {
+            SettingsManager.activeEmojiLayerGifKey(context).takeIf { it != unknown }?.let { reserved[it] = labels.GIF_KEY_LABEL }
+        }
+        return reserved
+    }
+
+    private fun greyOutReservedKey(keyButton: View) {
+        keyButton.alpha = 0.38f
+        keyButton.isClickable = false
+        keyButton.isFocusable = false
+        keyButton.isEnabled = false
+    }
+
     private fun addKeyToPreviewRow(
         rowLayout: LinearLayout,
         keyCode: Int,
@@ -3351,9 +3416,10 @@ class StatusBarController(
             android.view.KeyEvent.KEYCODE_N to "N", android.view.KeyEvent.KEYCODE_M to "M"
         )
         val label = keyLabels[keyCode] ?: ""
+        val reserved = reservedLayerKeys(page)[keyCode]
         val emoji = symMappings[keyCode] ?: ""
-        val keyButton = createEmojiKeyButton(label, emoji, height, page)
-        keyButton.setOnClickListener {
+        val keyButton = createEmojiKeyButton(label, reserved ?: emoji, height, page)
+        if (reserved != null) greyOutReservedKey(keyButton) else keyButton.setOnClickListener {
             onKeyClick(keyCode, emoji)
         }
         rowLayout.addView(keyButton, LinearLayout.LayoutParams(width, height))
@@ -3782,7 +3848,8 @@ class StatusBarController(
                 surfaceHeight,
                 reserveLedSpace = showLedStrip
             )
-            setSurfaceCloseVisible(snapshot.symPage in listOf(1, 2, 5) ||
+            // The layer pages (1, 2, 5) have their own close key in the grid
+            setSurfaceCloseVisible(
                 (snapshot.symPage == 3 && SettingsManager.getTitan2EliteRoundedCornerInsetsEnabled(context)) ||
                 (snapshot.symPage == 4 && (layout as? ImeChromeLayout)?.expandedPickerButtons != null))
             if (!symShown && !wasSymActive) {
