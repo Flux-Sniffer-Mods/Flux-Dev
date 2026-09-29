@@ -15,6 +15,7 @@ class PastieraApplication : Application() {
         super.onCreate()
         // A fresh install starts from the default configuration, before anything writes settings
         RecommendedSettings.applyIfFreshInstall(this)
+        SettingsManager.keepDevBuildChoices(this)
         OfflineMode.load(this)
         AppEnterStandards.installSystemCategoryLookup(this)
         it.palsoftware.pastiera.update.clearStaleForkUpdateNotice(this)

@@ -96,7 +96,7 @@ Keyboard, then uninstall Pastiera Flux.
 - Build a debug APK with `./gradlew :app:assembleStableDebug` and run the tests with `./gradlew :app:testStableDebugUnitTest`.
 - Signed builds come from `.github/workflows/fork-build.yml`, picked by the branch it runs on:
   - **`flux-release` (the default branch): full releases** such as `0.94`, tagged `flux/v0.94`. The version is the newest one in the `"releases"` list of `app/src/main/assets/fork/whats_new.json`, which also records when it was built.
-  - **`flux-dev`: dev builds** such as `0.95-flux.202610012100`, the next version after the latest release plus the build time, published as pre-releases.
+  - **`flux-dev`: dev builds** such as `0.94.2-flux.202610012100`, named after the next patch release (so the next full release, patch or minor, supersedes and installs over them) plus the build time, published as pre-releases.
 - Each release lists only what changed since the build before it (a full release since the previous full release, a dev build since the previous build of either kind), from the What's new entries' `"after"` times.
 - The repository's "Latest" release is always the latest full release. The app's update check reads the release tags: Stable offers full releases, Dev offers both.
 - Dev work goes on `flux-dev` as individual commits, one per change, and Pastiera's changes are merged into it as they land. For a full release, add it to `"releases"`, fold the commits since the last full release into category commits, move `flux-release` up to the result and run the workflow on `flux-release`. Commits at or below `flux-release` are never rewritten.

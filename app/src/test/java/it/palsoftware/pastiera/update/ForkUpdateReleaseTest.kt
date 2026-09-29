@@ -23,6 +23,16 @@ class ForkUpdateReleaseTest {
     )
 
     @Test
+    fun aFullReleaseSupersedesTheDevBuildsBeforeIt() {
+        // Dev builds after 0.94.1 are 0.94.2-flux.<time>: newer than 0.94.1, older than 0.94.2 or 0.95
+        assertTrue(forkReleaseIsNewer("flux/v0.94.2-flux.202609301200", "0.94.1"))
+        assertTrue(forkReleaseIsNewer("flux/v0.94.2", "0.94.2-flux.202609301200"))
+        assertTrue(forkReleaseIsNewer("flux/v0.95", "0.94.2-flux.202609301200"))
+        assertTrue(forkReleaseIsNewer("flux/v0.94.1", "0.94-flux.202609291518"))
+        assertFalse(forkReleaseIsNewer("flux/v0.94.1", "0.94.2-flux.202609301200"))
+    }
+
+    @Test
     fun offersTheNewestNewerFluxBuild() {
         val found = findNewerForkRelease(
             listOf(

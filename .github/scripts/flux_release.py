@@ -72,15 +72,17 @@ def version_cmd(branch, given):
             sys.exit(f"{branch} builds dev builds (x.yy-flux.<time>); full releases come from {RELEASE_BRANCH}")
         if is_dev(name) and release and parse(name) <= parse(release):
             # 0.92-flux.<time> counts as older than 0.92, so it would never be offered as an update
-            sys.exit(f"Dev builds after {release} need a newer version than it, like {parse(release)[0]}.{parse(release)[1] + 1:02d}-flux.<time>")
+            sys.exit(f"Dev builds after {release} need a newer version than it, like {parse(release)[0]}.{parse(release)[1]:02d}.{parse(release)[2] + 1}-flux.<time>")
     elif is_release_branch(branch):
         if release is None:
             sys.exit(f"No releases in {WHATS_NEW}")
         name = release
     else:
-        major, minor, _ = parse(release) if release else (0, 90, 0)
+        # Named after the next patch (after 0.94.1: 0.94.2-flux.<time>), so whichever full release
+        # comes next (0.94.2 or 0.95) is newer than every dev build before it, and installs over it
+        major, minor, patch = parse(release) if release else (0, 90, 0)
         stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d%H%M")
-        name = f"{major}.{minor + 1:02d}-flux.{stamp}"
+        name = f"{major}.{minor:02d}.{patch + 1}-flux.{stamp}"
     if not is_dev(name) and name not in data.get("releases", {}):
         sys.exit(f'Add "{name}": "<yyyyMMddHHmm>" to "releases" in {WHATS_NEW} before releasing it')
     print(f"kind={'dev' if is_dev(name) else 'release'}")
