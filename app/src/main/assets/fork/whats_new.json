@@ -4,6 +4,14 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "The quick launcher has Flux Keyboard's own shortcuts for the apps in its shortcut and Enter lists: a new message, post or note, an email to write, and the app's search (type the app's name).",
+      "after": "202609291608"
+    },
+    {
+      "text": "Add a shortcut makes the common ones itself: call or message a contact, a website, and Termux tasks (your ~/.shortcuts scripts, run as Termux:Widget runs them), for the apps that only offer theirs to the home screen.",
+      "after": "202609291559"
+    },
+    {
       "text": "Learn words you use often: a word that isn't in the dictionary goes into it once you've typed it three times (Suggestions & auto-correction).",
       "after": "202609291517"
     },
@@ -361,6 +369,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Words not in a restored backup no longer come back into your dictionary",
+      "after": "202609291554"
+    },
+    {
       "text": "The Add a shortcut page is laid out like the other settings pages, with readable names and each shortcut's app",
       "after": "202609291544"
     },
@@ -527,6 +539,7 @@
     "0.92": "202609262030",
     "0.93": "202609281629",
     "0.94": "202609291535",
-    "0.94.1": "202609291550"
+    "0.94.1": "202609291550",
+    "0.94.5": "202609291615"
   }
 }
