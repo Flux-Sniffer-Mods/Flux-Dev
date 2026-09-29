@@ -146,6 +146,15 @@ internal fun customizationSettingEntries(): List<SettingEntry> = listOf(
         )
     ),
     SettingEntry(
+        id = "quick_launcher.add_shortcut",
+        titleRes = R.string.user_shortcuts_title,
+        summaryRes = R.string.user_shortcuts_description,
+        route = SettingRoute(
+            destination = SettingsDestination.Customization,
+            customizationDestination = "launcher_shortcut_behavior"
+        )
+    ),
+    SettingEntry(
         id = "quick_launcher.niagara_back_returns",
         titleRes = R.string.quick_launcher_niagara_back_title,
         summaryRes = R.string.quick_launcher_niagara_back_description,

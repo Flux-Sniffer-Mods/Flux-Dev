@@ -37,6 +37,11 @@
             <category android:name="android.intent.category.HOME" />
         </intent>
 
+        <!-- Apps offering shortcuts for the home screen: Add a shortcut -->
+        <intent>
+            <action android:name="android.intent.action.CREATE_SHORTCUT" />
+        </intent>
+
         <!-- Optional QuickLauncher backend: Niagara Launcher search deep link -->
         <package android:name="bitpit.launcher" />
         <package android:name="net.dinglisch.android.taskerm" />
@@ -98,6 +103,7 @@
             android:theme="@style/Theme.Pastiera" />
         
         <activity android:name=".KeyboardLayoutActivity" android:exported="false" android:theme="@style/Theme.Pastiera" />
+        <activity android:name=".UserShortcutsActivity" android:exported="false" android:theme="@style/Theme.Pastiera" />
 
         <activity android:name=".CornerCalibrationActivity" android:exported="false"
             android:label="Displaykurve kalibrieren" android:theme="@style/Theme.Pastiera" />

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="user_shortcuts_title">Add a shortcut</string>
+    <string name="user_shortcuts_description">Put a shortcut from an app, such as a contact\'s direct dial, a bookmark or a settings page, in the quick launcher\'s results.</string>
+    <string name="user_shortcuts_intro">Only the home screen app can read the shortcuts already on your home screen, so add the ones you want here once. Pick an app below and choose the shortcut in its own screen.</string>
+    <string name="user_shortcuts_yours">Your shortcuts</string>
+    <string name="user_shortcuts_add_from">Add from</string>
+    <string name="user_shortcuts_none">No app on this phone offers shortcuts to add.</string>
+    <string name="user_shortcuts_added">%1$s is in the quick launcher</string>
+    <string name="user_shortcuts_unsupported">This app\'s shortcut can only be opened from the home screen.</string>
+    <string name="user_shortcuts_remove">Remove %1$s</string>
+    <string name="quick_launcher_open_failed">Couldn\'t open %1$s</string>
+</resources>

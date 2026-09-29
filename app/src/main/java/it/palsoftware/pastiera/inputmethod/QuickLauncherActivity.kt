@@ -129,6 +129,11 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Android 16 delivers Back (the gesture, and the key once apps target it) as a back
+        // callback rather than a key press: close the same way the Back key does
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() = requestAnimatedDismiss()
+        })
         disableActivityAnimations()
         window.requestFeature(android.view.Window.FEATURE_NO_TITLE)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
@@ -252,8 +257,11 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
 
         when (keyCode) {
             KeyEvent.KEYCODE_ENTER -> {
-                enterHandledOnKeyDown = true
-                launchTopMatch()
+                // Holding Enter repeats it: launch once
+                if (event == null || event.repeatCount == 0) {
+                    enterHandledOnKeyDown = true
+                    launchTopMatch()
+                }
                 return true
             }
             KeyEvent.KEYCODE_BACK,
@@ -338,6 +346,11 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
             finish()
         } else {
             Log.w(TAG, "Command failed: ${command.id}")
+            android.widget.Toast.makeText(
+                this,
+                getString(it.palsoftware.pastiera.R.string.quick_launcher_open_failed, command.label),
+                android.widget.Toast.LENGTH_SHORT
+            ).show()
         }
     }
 

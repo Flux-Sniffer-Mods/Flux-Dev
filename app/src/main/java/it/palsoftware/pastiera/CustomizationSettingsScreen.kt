@@ -880,6 +880,15 @@ private fun StarterLauncherBehaviorScreen(
                 SettingsManager.setQuickLauncherAppShortcuts(quickLauncherContext, it)
             }
         )
+        FluxActionRow(
+            linkId = "quick_launcher.add_shortcut",
+            title = stringResource(R.string.user_shortcuts_title),
+            description = stringResource(R.string.user_shortcuts_description)
+        ) {
+            quickLauncherContext.startActivity(
+                android.content.Intent(quickLauncherContext, UserShortcutsActivity::class.java)
+            )
+        }
         LauncherShortcutTriggerRow(
             icon = { SettingsRowKeyboardIcon() },
             linkId = "quick_launcher.auto_start_single",

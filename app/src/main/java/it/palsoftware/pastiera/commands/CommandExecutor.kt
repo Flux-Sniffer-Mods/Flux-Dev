@@ -52,6 +52,33 @@ class CommandExecutor(
     }
 
     private fun startIntent(spec: CommandLaunchSpec.IntentUri): CommandExecutionResult {
+        if (spec.action == it.palsoftware.pastiera.shortcuts.UserShortcuts.LAUNCH_ACTION) {
+            // A shortcut added by hand: started as the app that made it built it
+            return try {
+                val intent = Intent.parseUri(spec.intentUri ?: return fail("Command not available"), Intent.URI_INTENT_SCHEME)
+                intent.selector = null
+                // Stored intents can come back from a backup: never pass on access to our own files
+                intent.removeFlags(
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
+                        Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
+                )
+                intent.clipData = null
+                // A contact's direct dial needs the phone permission home screens hold: without
+                // it, open the dialer with the number ready
+                if (intent.action == Intent.ACTION_CALL &&
+                    context.checkSelfPermission(android.Manifest.permission.CALL_PHONE) !=
+                    android.content.pm.PackageManager.PERMISSION_GRANTED
+                ) {
+                    intent.action = Intent.ACTION_DIAL
+                    intent.component = null
+                }
+                context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                CommandExecutionResult.Success
+            } catch (error: Exception) {
+                Log.e(TAG, "Failed to start a hand-added shortcut", error)
+                fail("Command failed")
+            }
+        }
         spec.intentUri?.let { uri ->
             // An app's own shortcut: only if the app still lets other apps open it
             val packageName = spec.packageName ?: return fail("Command not available")
