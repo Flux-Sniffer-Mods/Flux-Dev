@@ -1088,4 +1088,6 @@
     <string name="auto_cap_after_emoticon_description">Un\'emoticon di testo come :) ;D o &lt;3 chiude una frase come un punto, così la parola successiva inizia con la maiuscola.</string>
     <string name="quick_launcher_termux_scripts_title">Script di Termux</string>
     <string name="quick_launcher_termux_scripts_description">I tuoi script e le attività di Termux:Widget (~/.shortcuts) nell\'avvio rapido, sempre aggiornati. Richiede allow-external-apps = true in ~/.termux/termux.properties e il permesso di eseguire comandi in Termux.</string>
+    <string name="quick_launcher_listed_app_shortcuts_title">Scorciatoie per le app compatibili</string>
+    <string name="quick_launcher_listed_app_shortcuts_description">Flux Keyboard aggiunge Nuovo messaggio, Nuova nota, Scrivi email e Cerca all\'avvio rapido per le app che conosce, quando l\'app li accetta.</string>
 </resources>

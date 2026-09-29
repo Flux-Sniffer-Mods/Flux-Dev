@@ -4617,6 +4617,14 @@ object SettingsManager {
     // Flux Keyboard: quick launcher extras
     private const val KEY_QUICK_LAUNCHER_APP_SHORTCUTS = "quick_launcher_app_shortcuts"
     private const val KEY_NIAGARA_BACK_RETURNS = "quick_launcher_niagara_back_returns"
+    private const val KEY_QUICK_LAUNCHER_LISTED_APP_SHORTCUTS = "quick_launcher_listed_app_shortcuts"
+
+    /** Flux Keyboard's own shortcuts (New message, Search) for the apps in its shortcut and Enter lists. */
+    fun getQuickLauncherListedAppShortcuts(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_QUICK_LAUNCHER_LISTED_APP_SHORTCUTS, true)
+    fun setQuickLauncherListedAppShortcuts(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_QUICK_LAUNCHER_LISTED_APP_SHORTCUTS, enabled).apply()
+    }
 
     /** Apps' own launcher shortcuts ("New message") are quick launcher results. */
     fun getQuickLauncherAppShortcuts(context: Context): Boolean =

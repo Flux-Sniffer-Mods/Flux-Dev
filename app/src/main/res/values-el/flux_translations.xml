@@ -855,6 +855,8 @@
     <string name="auto_cap_after_emoticon_description">Ένα emoticon κειμένου όπως :) ;D ή &lt;3 κλείνει την πρόταση σαν τελεία, οπότε η επόμενη λέξη ξεκινά με κεφαλαίο.</string>
     <string name="quick_launcher_termux_scripts_title">Scripts του Termux</string>
     <string name="quick_launcher_termux_scripts_description">Τα scripts και οι εργασίες σας του Termux:Widget (~/.shortcuts) στη γρήγορη εκκίνηση, πάντα ενημερωμένα. Χρειάζεται allow-external-apps = true στο ~/.termux/termux.properties και άδεια εκτέλεσης εντολών στο Termux.</string>
+    <string name="quick_launcher_listed_app_shortcuts_title">Συντομεύσεις για συμβατές εφαρμογές</string>
+    <string name="quick_launcher_listed_app_shortcuts_description">Το Flux Keyboard προσθέτει Νέο μήνυμα, Νέα σημείωση, Σύνταξη email και Αναζήτηση στη γρήγορη εκκίνηση για τις εφαρμογές που γνωρίζει, όπου η εφαρμογή τα δέχεται.</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d συνδυασμός στέλνεται ως συντόμευση της εφαρμογής</item>
         <item quantity="other">%d συνδυασμοί στέλνονται ως συντομεύσεις της εφαρμογής</item>

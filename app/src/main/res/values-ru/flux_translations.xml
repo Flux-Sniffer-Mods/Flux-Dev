@@ -1576,6 +1576,8 @@
     <string name="auto_cap_after_emoticon_description">Текстовый смайлик вроде :) ;D или &lt;3 завершает предложение, как точка, и следующее слово начинается с заглавной.</string>
     <string name="quick_launcher_termux_scripts_title">Скрипты Termux</string>
     <string name="quick_launcher_termux_scripts_description">Ваши скрипты и задачи Termux:Widget (~/.shortcuts) в быстром запуске, всегда актуальные. Нужны allow-external-apps = true в ~/.termux/termux.properties и разрешение запускать команды в Termux.</string>
+    <string name="quick_launcher_listed_app_shortcuts_title">Ярлыки для совместимых приложений</string>
+    <string name="quick_launcher_listed_app_shortcuts_description">Flux Keyboard добавляет в быстрый запуск «Новое сообщение», «Новая заметка», «Написать письмо» и «Поиск» для знакомых ему приложений, если приложение их принимает.</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d сочетание отправляется как собственное сочетание приложения</item>
         <item quantity="few">%d сочетания отправляются как собственные сочетания приложения</item>

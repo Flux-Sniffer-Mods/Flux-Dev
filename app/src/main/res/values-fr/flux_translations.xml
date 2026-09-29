@@ -1576,6 +1576,8 @@
     <string name="auto_cap_after_emoticon_description">Une émoticône en texte comme :) ;D ou &lt;3 termine une phrase comme un point, donc le mot suivant prend une majuscule.</string>
     <string name="quick_launcher_termux_scripts_title">Scripts Termux</string>
     <string name="quick_launcher_termux_scripts_description">Vos scripts et tâches Termux:Widget (~/.shortcuts) dans le lanceur rapide, toujours à jour. Nécessite allow-external-apps = true dans ~/.termux/termux.properties et l’autorisation d’exécuter des commandes dans Termux.</string>
+    <string name="quick_launcher_listed_app_shortcuts_title">Raccourcis pour les applis compatibles</string>
+    <string name="quick_launcher_listed_app_shortcuts_description">Flux Keyboard ajoute Nouveau message, Nouvelle note, Écrire un e-mail et Rechercher au lanceur rapide pour les applis qu’il connaît, quand l’appli les accepte.</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d combinaison envoyée comme raccourci propre à l’appli</item>
         <item quantity="many">%d combinaisons envoyées comme raccourcis propres à l’appli</item>

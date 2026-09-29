@@ -81,6 +81,10 @@
   ],
   "improvements": [
     {
+      "text": "Shortcuts for compatible apps can be turned off on their own (Apps > Quick Launcher).",
+      "after": "202609291638"
+    },
+    {
       "text": "Settings search groups its results under the settings categories, the best-matching category first, so you can see where each setting lives.",
       "after": "202609291629"
     },

@@ -1576,6 +1576,8 @@
     <string name="auto_cap_after_emoticon_description">Emotikona tekstowa, np. :) ;D lub &lt;3, kończy zdanie jak kropka, więc następne słowo zaczyna się wielką literą.</string>
     <string name="quick_launcher_termux_scripts_title">Skrypty Termux</string>
     <string name="quick_launcher_termux_scripts_description">Twoje skrypty i zadania Termux:Widget (~/.shortcuts) w szybkim uruchamianiu, zawsze aktualne. Wymaga allow-external-apps = true w ~/.termux/termux.properties i uprawnienia do uruchamiania poleceń w Termux.</string>
+    <string name="quick_launcher_listed_app_shortcuts_title">Skróty dla zgodnych aplikacji</string>
+    <string name="quick_launcher_listed_app_shortcuts_description">Flux Keyboard dodaje do szybkiego uruchamiania Nowa wiadomość, Nowa notatka, Napisz e-mail i Szukaj dla znanych mu aplikacji, jeśli aplikacja je obsługuje.</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d kombinacja wysyłana jako własny skrót aplikacji</item>
         <item quantity="few">%d kombinacje wysyłane jako własne skróty aplikacji</item>

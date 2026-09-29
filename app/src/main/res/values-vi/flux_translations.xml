@@ -1576,6 +1576,8 @@
     <string name="auto_cap_after_emoticon_description">Biểu tượng cảm xúc dạng chữ như :) ;D hay &lt;3 kết thúc câu như dấu chấm, nên từ tiếp theo được viết hoa.</string>
     <string name="quick_launcher_termux_scripts_title">Script Termux</string>
     <string name="quick_launcher_termux_scripts_description">Các script và tác vụ Termux:Widget (~/.shortcuts) của bạn trong trình khởi chạy nhanh, luôn được cập nhật. Cần allow-external-apps = true trong ~/.termux/termux.properties và quyền chạy lệnh trong Termux.</string>
+    <string name="quick_launcher_listed_app_shortcuts_title">Lối tắt cho ứng dụng tương thích</string>
+    <string name="quick_launcher_listed_app_shortcuts_description">Flux Keyboard thêm Tin nhắn mới, Ghi chú mới, Soạn email và Tìm kiếm vào trình khởi chạy nhanh cho các ứng dụng nó biết, nếu ứng dụng hỗ trợ.</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="other">%d tổ hợp được gửi dưới dạng phím tắt riêng của ứng dụng</item>
     </plurals>

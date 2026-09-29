@@ -24,7 +24,7 @@ class ListedAppCommandSource : CommandSource {
     private data class Cached(val updatedAt: Long, val commands: List<CommandTarget>)
 
     override fun getCommands(context: Context): List<CommandTarget> {
-        if (!SettingsManager.getQuickLauncherAppShortcuts(context)) return emptyList()
+        if (!SettingsManager.getQuickLauncherListedAppShortcuts(context)) return emptyList()
         val pm = context.packageManager
         val launchers = pm.queryIntentActivities(
             Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER), 0

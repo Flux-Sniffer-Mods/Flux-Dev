@@ -1576,6 +1576,8 @@
     <string name="auto_cap_after_emoticon_description">Текстовий смайлик на кшталт :) ;D або &lt;3 завершує речення, як крапка, і наступне слово починається з великої літери.</string>
     <string name="quick_launcher_termux_scripts_title">Скрипти Termux</string>
     <string name="quick_launcher_termux_scripts_description">Ваші скрипти й завдання Termux:Widget (~/.shortcuts) у швидкому запуску, завжди актуальні. Потрібні allow-external-apps = true у ~/.termux/termux.properties і дозвіл запускати команди в Termux.</string>
+    <string name="quick_launcher_listed_app_shortcuts_title">Ярлики для сумісних застосунків</string>
+    <string name="quick_launcher_listed_app_shortcuts_description">Flux Keyboard додає до швидкого запуску «Нове повідомлення», «Нова нотатка», «Написати лист» і «Пошук» для знайомих йому застосунків, якщо застосунок їх приймає.</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d сполучення надсилається як власне сполучення застосунку</item>
         <item quantity="few">%d сполучення надсилаються як власні сполучення застосунку</item>

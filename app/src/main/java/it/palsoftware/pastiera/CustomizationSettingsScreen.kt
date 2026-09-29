@@ -790,6 +790,7 @@ private fun StarterLauncherBehaviorScreen(
     var behaviorMenuExpanded by remember { mutableStateOf(false) }
     val quickLauncherContext = androidx.compose.ui.platform.LocalContext.current
     var appShortcutsInResults by remember { mutableStateOf(SettingsManager.getQuickLauncherAppShortcuts(quickLauncherContext)) }
+    var listedAppShortcuts by remember { mutableStateOf(SettingsManager.getQuickLauncherListedAppShortcuts(quickLauncherContext)) }
     var niagaraBackReturns by remember { mutableStateOf(SettingsManager.getNiagaraBackReturns(quickLauncherContext)) }
     val niagara = quickLauncherBehavior == SettingsManager.QUICK_LAUNCHER_BEHAVIOR_NIAGARA
     val behaviorOptions = listOf(
@@ -878,6 +879,16 @@ private fun StarterLauncherBehaviorScreen(
             onCheckedChange = {
                 appShortcutsInResults = it
                 SettingsManager.setQuickLauncherAppShortcuts(quickLauncherContext, it)
+            }
+        )
+        FluxSwitchRow(
+            linkId = "quick_launcher.listed_app_shortcuts",
+            title = stringResource(R.string.quick_launcher_listed_app_shortcuts_title),
+            description = stringResource(R.string.quick_launcher_listed_app_shortcuts_description),
+            checked = listedAppShortcuts,
+            onCheckedChange = {
+                listedAppShortcuts = it
+                SettingsManager.setQuickLauncherListedAppShortcuts(quickLauncherContext, it)
             }
         )
         FluxActionRow(
