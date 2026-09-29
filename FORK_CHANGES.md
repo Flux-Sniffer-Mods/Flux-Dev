@@ -56,13 +56,14 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 
 - **App shortcuts**: the same shortcuts in every app, suggested per category, plus each app's own launcher shortcuts and settings (Ctrl+Alt+1–4, Ctrl+,).
 - **Quick launcher**: the built-in one by default, in the keyboard's theme colours, with apps' own long-press shortcuts ("New message", "Scan QR code") as results.
-- **Add a shortcut**: put a shortcut an app offers for the home screen (a contact's direct dial, a bookmark, a settings page) in the quick launcher's results (Apps > Quick Launcher), or long-press an app in the quick launcher and pick Add a shortcut.
+- **Flux Keyboard's own quick launcher shortcuts** for the apps in its app shortcut and Enter lists: New message, New post, New note or Compose email, and Search, each only where the app accepts it.
+- **Add a shortcut**: put a shortcut an app offers for the home screen (a contact's direct dial, a bookmark, a settings page) in the quick launcher's results (Apps > Quick Launcher), or long-press an app in the quick launcher and pick Add a shortcut. Flux Keyboard also makes the common ones itself, for apps that only offer theirs to the home screen: call or message a contact (calling straight away if you allow the phone permission), a website, and **Termux tasks** (scripts in ~/.shortcuts, run as Termux:Widget runs them; needs allow-external-apps in Termux).
 - **Niagara search as the quick launcher** (option): Back, the key or the gesture, before opening anything returns to the app you opened it from, and on Niagara's home screen the built-in quick launcher opens instead.
-- **Search bars wait for typing** (option): when an app opens with its search bar focused, the keyboard bar stays hidden until you type or tap the bar.
+- **Search bars wait for typing** (option): when an app opens with its search bar focused, the keyboard bar stays hidden until you type or tap the bar (also palsoftware/pastiera#319).
 - **Terminal mode**: Termux gets the keyboard's Alt and SYM, a real Ctrl, a hidden keyboard and a choice of what the emoji key sends, including Alt.
 - Pastiera's **Enter per app** gets standards by app category: chat apps send with Enter (Shift + Enter for a new line), email and note apps keep Enter for new lines and send with Ctrl + Enter, and every installed chat, email and notes app is listed to change. Search boxes and one-line fields always get their own action (search, go, next).
 - **Terminal apps** get no microphone button.
-- **Hidden-keyboard apps** (Niagara Launcher and Termux:X11 by default; others from the tutorial), with LEDs and panels per app. SYM chords reach the keyboard there, so SYM + Space opens the quick launcher instead of the symbols panel.
+- **Hidden-keyboard apps** (Niagara Launcher and Termux:X11 by default; others from the tutorial), with LEDs and panels per app. The keyboard bar no longer pops up on Niagara's home screen (palsoftware/pastiera#319). SYM chords reach the keyboard there, so SYM + Space opens the quick launcher instead of the symbols panel.
 - The **quick launcher** opens from other apps (key mappers, Tasker) and the app icon.
 - **Linux desktop** keyboard layout from the keyboard's Alt map and SYM page.
 
@@ -127,8 +128,8 @@ Pastiera 0.86's hand-over to Plektra (its welcome page, update checks and About 
 
 ## Upstream issues addressed
 
-palsoftware/pastiera #108, #217, #267, #278, #282, #292, #302, #310, #316, #317.
+palsoftware/pastiera #108, #217, #267, #278, #282, #292, #302, #310, #316, #317, #319.
 
 ## Builds
 
-Signed APKs come from the fork build workflow on GitHub Actions, in two kinds: **full releases** (such as `0.92`, tag `flux/v0.92`) from the `flux-release` branch, and **dev releases** (such as `0.93-flux.202609262047`, published as pre-releases) from the `flux-dev` branch. The repository's latest release is always the latest full release. A full release deletes the dev builds before it; each build's notes list what changed since the build before it; the notes also ship as `RELEASE_NOTES.md` in the build artifact. Builds run one at a time. `tools/find-keyboard-gesture-page.sh` (root, from Termux) finds which screen a phone's keyboard gesture settings are. Flux Keyboard builds are signed with the fork's own key and don't update, or get updated by, official Pastiera.
+Signed APKs come from the fork build workflow on GitHub Actions, in two kinds: **full releases** (such as `0.92`, tag `flux/v0.92`) from the `flux-release` branch, and **dev releases** (such as `0.93-flux.202609262047`, published as pre-releases) from the `flux-dev` branch. The repository's latest release is always the latest full release. A full release deletes the dev builds before it; each build's notes list what changed since the build before it; the notes also ship as `RELEASE_NOTES.md` in the build artifact. Builds run one at a time, and a successful build deletes the workflow runs before it (releases keep their APKs). Dev builds are named after the next patch release (after 0.94.1: `0.94.2-flux.<time>`), so the next full release supersedes them and installs over them, and a dev build's Dev update channel and Developer options stay on after it updates to a release. `tools/find-keyboard-gesture-page.sh` (root, from Termux) finds which screen a phone's keyboard gesture settings are. Flux Keyboard builds are signed with the fork's own key and don't update, or get updated by, official Pastiera.

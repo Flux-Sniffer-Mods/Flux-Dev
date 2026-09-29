@@ -5054,8 +5054,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (!contactDetailsAllowed() || it.palsoftware.pastiera.core.IncognitoTyping.active) return
         val kind = contactFieldKind()
         if (kind == ContactDetails.Kind.PHONE && !endOfEntry) return
-        val before = runCatching { currentInputConnection?.getTextBeforeCursor(CONTACT_TEXT_LIMIT, 0) }
+        val connection = currentInputConnection ?: return
+        val before = runCatching { connection.getTextBeforeCursor(CONTACT_TEXT_LIMIT, 0) }
             .getOrNull()?.toString() ?: return
+        // In an email or phone field, only a whole entry: the cursor in the middle means part of it
+        if (kind != null && runCatching { connection.getTextAfterCursor(1, 0) }.getOrNull()?.isNotEmpty() == true) return
         val detail = ContactDetails.toLearn(before, kind, contactKeysTyped) ?: return
         val store = it.palsoftware.pastiera.core.suggestions.UserDictionaryStore()
         store.loadUserEntries(this)
