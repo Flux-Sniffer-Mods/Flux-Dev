@@ -104,15 +104,16 @@ internal fun BuiltInShortcuts(
     var termuxDialog by rememberSaveable { mutableStateOf(false) }
     val termuxPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { termuxDialog = true }
 
-    row(dialer?.icon, stringResource(R.string.user_shortcuts_call_title), dialer?.name.orEmpty()) {
+    // Only what this phone can do: no dialer or messages app, no such rows
+    if (dialer != null) row(dialer.icon, stringResource(R.string.user_shortcuts_call_title), dialer.name) {
         if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             pickContact("call")
         } else {
             runCatching { callPermission.launch(android.Manifest.permission.CALL_PHONE) }.onFailure { pickContact("call") }
         }
     }
-    row(messages?.icon, stringResource(R.string.user_shortcuts_message_title), messages?.name.orEmpty()) { pickContact("message") }
-    row(browser?.icon, stringResource(R.string.user_shortcuts_website_title), browser?.name.orEmpty()) { websiteDialog = true }
+    if (messages != null) row(messages.icon, stringResource(R.string.user_shortcuts_message_title), messages.name) { pickContact("message") }
+    if (browser != null) row(browser.icon, stringResource(R.string.user_shortcuts_website_title), browser.name) { websiteDialog = true }
     if (termux != null) {
         row(termux.icon, stringResource(R.string.user_shortcuts_termux_title), stringResource(R.string.user_shortcuts_termux_description)) {
             if (ContextCompat.checkSelfPermission(context, UserShortcuts.TERMUX_RUN_COMMAND_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
