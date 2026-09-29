@@ -97,6 +97,10 @@
   ],
   "improvements": [
     {
+      "text": "One-time codes fill codes split over a box per digit: the code chip (and a copied code pasted into a number field) types it a digit at a time, so each box fills and moves on.",
+      "after": "202609292152"
+    },
+    {
       "text": "Alt works in emoji and symbol search: Alt with a key types its Alt character (search \"100\"), and a tapped or locked Alt lets go after it.",
       "after": "202609292146"
     },

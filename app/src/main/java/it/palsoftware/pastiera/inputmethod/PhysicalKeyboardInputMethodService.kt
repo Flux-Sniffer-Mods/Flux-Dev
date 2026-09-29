@@ -5146,7 +5146,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         pasteSuggestionShown = true
         candidatesBarController.showExpansionSuggestions(listOf(label)) { _ ->
             clearPasteSuggestion()
-            currentInputConnection?.commitText(if (passwordField) copy.text else SettingsManager.textToPaste(this, copy.text), 1)
+            val pasted = if (passwordField) copy.text else SettingsManager.textToPaste(this, copy.text)
+            // A copied code into a number field: typed one character at a time, so apps with a
+            // box per digit move along as it goes
+            if (inputContextState.isNumericField && looksLikeOneTimeCode(pasted)) typeOneTimeCode(pasted)
+            else currentInputConnection?.commitText(pasted, 1)
             clipboardHistoryManager.consumeRecentCopy()
             updateStatusBarText()
         }
@@ -5154,6 +5158,31 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     /** A one-time code from a notification, offered as a chip; one tap types it. */
+    private fun looksLikeOneTimeCode(text: CharSequence): Boolean =
+        text.length in 4..10 && text.all { it.isLetterOrDigit() }
+
+    /**
+     * A one-time code typed a character at a time, a moment apart, each into the field in focus
+     * then: one field takes the whole code; codes split over a box per digit (which move to the
+     * next box as each fills) fill every box. Digits go as key presses, which those boxes listen
+     * for; letters as text.
+     */
+    private fun typeOneTimeCode(code: CharSequence) {
+        code.forEachIndexed { index, char ->
+            uiHandler.postDelayed({
+                val ic = currentInputConnection ?: return@postDelayed
+                if (char in '0'..'9') {
+                    val keyCode = KeyEvent.KEYCODE_0 + (char - '0')
+                    val now = SystemClock.uptimeMillis()
+                    ic.sendKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyCode, 0))
+                    ic.sendKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_UP, keyCode, 0))
+                } else {
+                    ic.commitText(char.toString(), 1)
+                }
+            }, index * 70L)
+        }
+    }
+
     private fun offerOneTimeCode() {
         if (!::candidatesBarController.isInitialized || !SettingsManager.getOneTimeCodesEnabled(this)) return
         val state = inputContextState
@@ -5162,7 +5191,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         pasteSuggestionShown = true
         candidatesBarController.showExpansionSuggestions(listOf(getString(R.string.one_time_code_chip, code))) { _ ->
             clearPasteSuggestion()
-            currentInputConnection?.commitText(code, 1)
+            typeOneTimeCode(code)
             it.palsoftware.pastiera.otp.OneTimeCodes.consume()
             updateStatusBarText()
         }
