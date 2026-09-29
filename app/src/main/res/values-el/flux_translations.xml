@@ -502,7 +502,7 @@
     <string name="settings_section_terminals">Τερματικά, κώδικας &amp; επιφάνειες εργασίας</string>
     <string name="settings_section_swipe_pad">Επιφάνεια σάρωσης γραμμής κατάστασης</string>
     <string name="autocorrect_section_suggestions">Προτάσεις και διόρθωση</string>
-    <string name="autocorrect_section_dictionary">Λεξικό και ορθογραφία</string>
+    <string name="autocorrect_section_dictionary">Λεξικό, εκμάθηση και ορθογραφία</string>
     <string name="autocorrect_section_replacements">Αντικαταστάσεις κειμένου</string>
     <string name="autocorrect_section_tuning">Λεπτομερής ρύθμιση</string>
     <string name="inline_autofill_title">Αυτόματη συμπλήρωση στη γραμμή προτάσεων</string>

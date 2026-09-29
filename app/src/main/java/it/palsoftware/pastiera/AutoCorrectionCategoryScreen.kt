@@ -437,28 +437,6 @@ fun AutoCorrectionCategoryScreen(
                                 }
 	                            }
 
-                        var showAddWordSuggestion by remember { mutableStateOf(SettingsManager.getShowAddWordSuggestion(context)) }
-                        FluxSwitchRow(
-                            linkId = "auto_correction.show_add_word",
-                            title = stringResource(R.string.show_add_word_suggestion_title),
-                            description = stringResource(R.string.show_add_word_suggestion_description),
-                            checked = showAddWordSuggestion,
-                            onCheckedChange = { enabled ->
-                                showAddWordSuggestion = enabled
-                                SettingsManager.setShowAddWordSuggestion(context, enabled)
-                            }
-                        )
-                        var addLastWordShortcut by remember { mutableStateOf(SettingsManager.getAddLastWordShortcut(context)) }
-                        FluxSwitchRow(
-                            linkId = "auto_correction.add_last_word_shortcut",
-                            title = stringResource(R.string.add_last_word_shortcut_title),
-                            description = stringResource(R.string.add_last_word_shortcut_description),
-                            checked = addLastWordShortcut,
-                            onCheckedChange = { enabled ->
-                                addLastWordShortcut = enabled
-                                SettingsManager.setAddLastWordShortcut(context, enabled)
-                            }
-                        )
                         var learnFrequentWords by remember { mutableStateOf(SettingsManager.getLearnFrequentWords(context)) }
                         FluxSwitchRow(
                             linkId = "auto_correction.learn_frequent_words",
@@ -482,6 +460,28 @@ fun AutoCorrectionCategoryScreen(
                             }
                         )
 
+                        var showAddWordSuggestion by remember { mutableStateOf(SettingsManager.getShowAddWordSuggestion(context)) }
+                        FluxSwitchRow(
+                            linkId = "auto_correction.show_add_word",
+                            title = stringResource(R.string.show_add_word_suggestion_title),
+                            description = stringResource(R.string.show_add_word_suggestion_description),
+                            checked = showAddWordSuggestion,
+                            onCheckedChange = { enabled ->
+                                showAddWordSuggestion = enabled
+                                SettingsManager.setShowAddWordSuggestion(context, enabled)
+                            }
+                        )
+                        var addLastWordShortcut by remember { mutableStateOf(SettingsManager.getAddLastWordShortcut(context)) }
+                        FluxSwitchRow(
+                            linkId = "auto_correction.add_last_word_shortcut",
+                            title = stringResource(R.string.add_last_word_shortcut_title),
+                            description = stringResource(R.string.add_last_word_shortcut_description),
+                            checked = addLastWordShortcut,
+                            onCheckedChange = { enabled ->
+                                addLastWordShortcut = enabled
+                                SettingsManager.setAddLastWordShortcut(context, enabled)
+                            }
+                        )
                         FluxActionRow(
                             linkId = SettingLinkIds.AUTO_CORRECTION_SPELL_CHECKER,
                             title = stringResource(R.string.spell_checker_title),

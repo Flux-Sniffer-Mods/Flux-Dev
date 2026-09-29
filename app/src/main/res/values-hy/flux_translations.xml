@@ -502,7 +502,7 @@
     <string name="settings_section_terminals">Տերմինալներ, կոդ և աշխատասեղաններ</string>
     <string name="settings_section_swipe_pad">Կարգավիճակի գոտու սահեցման վահանակ</string>
     <string name="autocorrect_section_suggestions">Առաջարկներ և ուղղում</string>
-    <string name="autocorrect_section_dictionary">Բառարան և ուղղագրություն</string>
+    <string name="autocorrect_section_dictionary">Բառարան, ուսուցում և ուղղագրություն</string>
     <string name="autocorrect_section_replacements">Տեքստի փոխարինումներ</string>
     <string name="autocorrect_section_tuning">Նուրբ կարգավորում</string>
     <string name="inline_autofill_title">Ինքնալրացում առաջարկների գոտում</string>

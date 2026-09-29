@@ -502,7 +502,7 @@
     <string name="settings_section_terminals">Terminal, mã &amp; máy tính</string>
     <string name="settings_section_swipe_pad">Bàn vuốt thanh trạng thái</string>
     <string name="autocorrect_section_suggestions">Gợi ý và sửa lỗi</string>
-    <string name="autocorrect_section_dictionary">Từ điển và chính tả</string>
+    <string name="autocorrect_section_dictionary">Từ điển, học từ và chính tả</string>
     <string name="autocorrect_section_replacements">Thay thế văn bản</string>
     <string name="autocorrect_section_tuning">Tinh chỉnh</string>
     <string name="inline_autofill_title">Tự động điền trên thanh gợi ý</string>

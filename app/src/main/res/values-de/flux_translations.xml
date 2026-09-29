@@ -449,7 +449,7 @@
     <string name="settings_section_terminals">Terminals, Code &amp; Desktops</string>
     <string name="settings_section_swipe_pad">Wischfeld der Statusleiste</string>
     <string name="autocorrect_section_suggestions">Vorschläge und Korrektur</string>
-    <string name="autocorrect_section_dictionary">Wörterbuch und Rechtschreibung</string>
+    <string name="autocorrect_section_dictionary">Wörterbuch, Lernen und Rechtschreibung</string>
     <string name="autocorrect_section_replacements">Textersetzungen</string>
     <string name="autocorrect_section_tuning">Feinabstimmung</string>
     <string name="inline_autofill_title">Autofill in der Vorschlagsleiste</string>

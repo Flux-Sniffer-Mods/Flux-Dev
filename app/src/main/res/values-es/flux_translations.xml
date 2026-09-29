@@ -502,7 +502,7 @@
     <string name="settings_section_terminals">Terminales, código y escritorios</string>
     <string name="settings_section_swipe_pad">Panel táctil de la barra de estado</string>
     <string name="autocorrect_section_suggestions">Sugerencias y corrección</string>
-    <string name="autocorrect_section_dictionary">Diccionario y ortografía</string>
+    <string name="autocorrect_section_dictionary">Diccionario, aprendizaje y ortografía</string>
     <string name="autocorrect_section_replacements">Sustituciones de texto</string>
     <string name="autocorrect_section_tuning">Ajuste fino</string>
     <string name="inline_autofill_title">Autocompletar en la barra de sugerencias</string>

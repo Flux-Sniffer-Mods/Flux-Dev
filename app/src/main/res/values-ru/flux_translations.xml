@@ -502,7 +502,7 @@
     <string name="settings_section_terminals">Терминалы, код и рабочие столы</string>
     <string name="settings_section_swipe_pad">Сенсорная панель строки состояния</string>
     <string name="autocorrect_section_suggestions">Подсказки и исправление</string>
-    <string name="autocorrect_section_dictionary">Словарь и орфография</string>
+    <string name="autocorrect_section_dictionary">Словарь, обучение и орфография</string>
     <string name="autocorrect_section_replacements">Замены текста</string>
     <string name="autocorrect_section_tuning">Тонкая настройка</string>
     <string name="inline_autofill_title">Автозаполнение в строке подсказок</string>

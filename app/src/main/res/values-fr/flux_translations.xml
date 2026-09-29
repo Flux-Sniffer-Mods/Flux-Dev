@@ -502,7 +502,7 @@
     <string name="settings_section_terminals">Terminaux, code et bureaux</string>
     <string name="settings_section_swipe_pad">Pavé de balayage de la barre d’état</string>
     <string name="autocorrect_section_suggestions">Suggestions et correction</string>
-    <string name="autocorrect_section_dictionary">Dictionnaire et orthographe</string>
+    <string name="autocorrect_section_dictionary">Dictionnaire, apprentissage et orthographe</string>
     <string name="autocorrect_section_replacements">Remplacements de texte</string>
     <string name="autocorrect_section_tuning">Réglage fin</string>
     <string name="inline_autofill_title">Saisie automatique dans la barre de suggestions</string>

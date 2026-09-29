@@ -502,7 +502,7 @@
     <string name="settings_section_terminals">Terminale, kod i pulpity</string>
     <string name="settings_section_swipe_pad">Panel przesunięć paska stanu</string>
     <string name="autocorrect_section_suggestions">Podpowiedzi i korekta</string>
-    <string name="autocorrect_section_dictionary">Słownik i pisownia</string>
+    <string name="autocorrect_section_dictionary">Słownik, nauka i pisownia</string>
     <string name="autocorrect_section_replacements">Zamiany tekstu</string>
     <string name="autocorrect_section_tuning">Dostrajanie</string>
     <string name="inline_autofill_title">Autouzupełnianie na pasku podpowiedzi</string>
