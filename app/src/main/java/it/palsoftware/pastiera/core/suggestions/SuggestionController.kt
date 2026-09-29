@@ -201,6 +201,9 @@ class SuggestionController(
      */
     var externalSuggestions: ((word: String, locale: Locale, onResult: (List<String>) -> Unit) -> Unit)? = null
 
+    /** The text right after the cursor, for typing in front of a word ([WordInFront]). */
+    var textAfterCursorProvider: (() -> CharSequence?)? = null
+
     private fun updateSuggestionsForWord(word: String) {
         val settings = settingsProvider()
         if (!settings.suggestionsEnabled) {
@@ -219,6 +222,8 @@ class SuggestionController(
         suggestionJob?.cancel()
 
         val wordSnapshot = word
+        WordInFront.trackedWord = word
+        val following = WordInFront.followingWord(runCatching { textAfterCursorProvider?.invoke() }.getOrNull())
         val localeSnapshot = currentLocale
         val layoutSnapshot = keyboardLayoutProvider()
         val primaryRepository = dictionaryRepository
@@ -258,7 +263,13 @@ class SuggestionController(
                 )
             }
 
-            val next = mergeSuggestionResults(primary, extraSuggestions, settings.maxSuggestions, localeSnapshot)
+            val merged = mergeSuggestionResults(primary, extraSuggestions, settings.maxSuggestions, localeSnapshot)
+            // In front of a word: the two joined, when that's a word too ("some|thing")
+            val joined = following.takeIf { it.isNotEmpty() && wordSnapshot.isNotEmpty() }?.let { wordSnapshot + it }
+                ?.takeIf { primaryRepository.isReady && isKnownWordInActiveDictionaries(it) }
+            val next = if (joined != null && merged.none { it.candidate.equals(joined, ignoreCase = true) }) {
+                (merged.take(1) + SuggestionResult(joined, 0, 1.0, SuggestionSource.MAIN) + merged.drop(1)).take(maxOf(settings.maxSuggestions, 3))
+            } else merged
             val pendingCandidate = addWordCandidateFor(wordSnapshot, primaryRepository)
 
             cursorHandler.post {

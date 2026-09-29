@@ -109,6 +109,10 @@
   ],
   "improvements": [
     {
+      "text": "Typing in front of a word: a suggestion for the new word keeps the word after it (with a space), and the two joined are offered too when that's a word (some|thing).",
+      "after": "202609292233"
+    },
+    {
       "text": "The phone trackpad settings shortcut opens Scroll assistant and says what to set there: Scroll assistant on (the phone only passes keyboard swipes on while it's on), Swipe mode left on scrolling.",
       "after": "202609292229"
     },

@@ -110,6 +110,9 @@ object SuggestionButtonHandler {
         }
 
         val wordBeforeCursor = before.substring(start)
+        // Typing in front of a word: a new word keeps the word after the cursor
+        val keepAfter = it.palsoftware.pastiera.core.suggestions.WordInFront.keepsWordAfter(suggestion, wordBeforeCursor, after.substring(0, end))
+        if (keepAfter) end = 0
         val wordAfterCursor = after.substring(0, end)
         val currentWord = wordBeforeCursor + wordAfterCursor
 

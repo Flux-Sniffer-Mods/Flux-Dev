@@ -1891,6 +1891,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         // The phone's own spell checker (Gboard's, say) as a second opinion on misspelt words
         val phoneSpellChecker = it.palsoftware.pastiera.spellcheck.PhoneSpellChecker(this)
         suggestionController.externalSuggestions = { word, locale, onResult -> phoneSpellChecker.suggest(word, locale, onResult) }
+        suggestionController.textAfterCursorProvider = { currentInputConnection?.getTextAfterCursor(32, 0) }
         // The spell checker reads the loaded dictionary instead of loading its own
         it.palsoftware.pastiera.spellcheck.PastieraSpellCheckerService.keyboardController =
             java.lang.ref.WeakReference(suggestionController)
@@ -7401,7 +7402,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             }
 
             val wordBeforeCursor = before.substring(start)
-            val wordAfterCursor = after.substring(0, end)
+            // Typing in front of a word: a new word keeps the word after the cursor
+            val keepAfter = it.palsoftware.pastiera.core.suggestions.WordInFront.keepsWordAfter(suggestion, wordBeforeCursor, after.substring(0, end))
+            val wordAfterCursor = if (keepAfter) "" else after.substring(0, end)
             val currentWord = wordBeforeCursor + wordAfterCursor
 
             val deleteBefore = wordBeforeCursor.length
