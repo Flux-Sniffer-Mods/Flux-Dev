@@ -81,6 +81,10 @@
   ],
   "improvements": [
     {
+      "text": "Settings: Titan 2 layout alignment is off by default, and suggestion swipes need a longer swipe (300) so scrolling doesn't pick one.",
+      "after": "202609291905"
+    },
+    {
       "text": "Shortcuts for compatible apps can be turned off on their own (Apps > Quick Launcher).",
       "after": "202609291638"
     },

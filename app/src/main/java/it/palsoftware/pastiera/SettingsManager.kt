@@ -495,6 +495,8 @@ object SettingsManager {
     private const val DEFAULT_TRACKPAD_SWIPE_THRESHOLD = 500f
     private const val TITAN2_ELITE_TRACKPAD_SWIPE_THRESHOLD = 40f
     private const val MIN_TRACKPAD_SWIPE_THRESHOLD = 40f
+    /** Flux Keyboard: a deliberate swipe, so scrolling past the suggestions doesn't pick one. */
+    private const val DEFAULT_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD = 300f
     private const val MAX_TRACKPAD_SWIPE_THRESHOLD = 750f
     const val TRACKPAD_PROVIDER_SHIZUKU = "shizuku"
     const val TRACKPAD_PROVIDER_NATIVE_IME = "native_ime"
@@ -1608,7 +1610,7 @@ object SettingsManager {
         if (prefs.contains(KEY_TITAN2_LAYOUT_ENABLED)) {
             return prefs.getBoolean(KEY_TITAN2_LAYOUT_ENABLED, false)
         }
-        return DeviceSpecific.isTitan2Device()
+        return false // Flux Keyboard: centred by default; aligning is an option
     }
 
     fun setTitan2LayoutEnabled(context: Context, enabled: Boolean) {
@@ -6389,7 +6391,7 @@ object SettingsManager {
         val prefs = getPreferences(context)
         return prefs.getFloat(
             KEY_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD,
-            prefs.getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, defaultTrackpadSwipeThreshold())
+            prefs.getFloat(KEY_TRACKPAD_SWIPE_THRESHOLD, DEFAULT_TRACKPAD_SUGGESTION_SWIPE_THRESHOLD)
         ).coerceIn(MIN_TRACKPAD_SWIPE_THRESHOLD, MAX_TRACKPAD_SWIPE_THRESHOLD)
     }
 
