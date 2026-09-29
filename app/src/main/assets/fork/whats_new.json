@@ -413,6 +413,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Emoji and symbol search no longer gets a capital from the app's automatic capital or Shift",
+      "after": "202609291920"
+    },
+    {
       "text": "Double-tapping Shift gives Caps Lock at the start of a sentence too, where an automatic capital was already on",
       "after": "202609291919"
     },

@@ -2289,10 +2289,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
         symLayoutController.onTypeToSearch = { emoji, text ->
             uiHandler.post {
+                // Lower case, as the rest of the search is typed
                 if (emoji) {
-                    candidatesBarController.requestEmojiPickerSearch(text)
+                    candidatesBarController.requestEmojiPickerSearch(text.lowercase())
                 } else {
-                    candidatesBarController.requestSymbolSearch(text)
+                    candidatesBarController.requestSymbolSearch(text.lowercase())
                 }
                 symLayoutController.openEmojiPickerPage()
                 updateStatusBarText()
@@ -5685,12 +5686,13 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             candidatesBarController.handleEmojiPickerSearchKeyDown(
                 event,
                 emojiSearchCtrlActive,
+                // Search is lower case: no automatic capital or Shift from the app's field
                 resolveTypedText = { typedEvent ->
                     getCharacterFromLayout(
                         typedEvent.keyCode,
                         typedEvent,
-                        isShiftModifierActive(typedEvent)
-                    )?.toString()
+                        false
+                    )?.toString()?.lowercase()
                 }
             )
         ) {
