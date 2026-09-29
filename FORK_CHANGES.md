@@ -22,9 +22,13 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 
 ## Typing
 
+- **Learn words you use often**: a word that isn't in the dictionary goes into it once you've typed it three times, so it's suggested and never auto-corrected (on by default).
+- **Remember emails and phone numbers**: ones you type yourself are kept in your dictionary and offered as chips in email and phone fields; tap one to fill the field. Nothing pasted or filled in, nothing from password fields (on by default).
+- **Incognito typing**: learn nothing when an app asks (private tabs), or always: no new words, emails or numbers, next-word predictions, word use, or recent emoji, symbols and GIFs. What was learned before is still offered. Words are never learned from password, email or web address fields.
 - **Ctrl + Shift + D adds the last word** you typed to the dictionary (Auto-correction > Dictionary, on by default), and the suggestions' **“add to dictionary”** chip can be switched off.
-- **Spell checker**: Flux Keyboard as Android's spell checker, underlining typos in any app, and reading words with apostrophes (couldn't, I'm) whole.
-- **No automatic spaces after punctuation** in email, sign-in, web address and password fields, and a clearer punctuation spacing dialog: each mark named, with No space before and Space after columns.
+- **Spell checker**: Flux Keyboard as Android's spell checker, underlining typos in any app, and reading words with apostrophes whole: contractions (couldn't, won't, can't) and elisions (l'homme, dell'anno).
+- **No automatic spaces after punctuation** in email, sign-in, web address and password fields, nor inside numbers, times and decimals (1,000, 12:30, 3.14), and a clearer punctuation spacing dialog: each mark named, with No space before and Space after columns.
+- **Emoticons keep their shape**: punctuation typed straight into more, as in :-) ;( :D, gets no space after it; if a word follows (:Do) the space comes back. Double Space for a full stop is off by default.
 - **Inline autofill**: password manager chips in the suggestion bar.
 - **One-time codes**: a code from a notification (sign-in, bank, delivery) is offered as a chip in the next text field for three minutes, and not again once typed. The code is the number next to a word like "code" or "PIN" (whole words: "shipping" and "security briefing" don't count), so order and account numbers aren't mistaken for it. Off until you give it notification access.
 - **Pick suggestions from the keyboard**: Ctrl+Shift+Q, W or E takes the left, middle or right suggestion (Ctrl+1/2/3 on keyboards with a number row). Either Shift works, including Right Shift while it's the emoji key.
@@ -33,14 +37,13 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 - **Backspace undoes an auto-replace** and keeps the space after it; text replacements can be undone with auto-replace off too.
 - **Automatic Shift by field type**: choose which kinds of text field start with a capital (text, names and addresses by default; search, links and email addresses off). A kind that's off gets no automatic Shift, even when an app asks for capitals.
 - **Paste suggestion**: what you just copied, offered in the next text field (long text is shortened without breaking an emoji). In a password field it's offered as ⎘ •••••••• (never the text itself), including a password you copied from a password manager; those stay in memory only and never go into the clipboard history.
-- **Clean pasted links**: pasted links lose tracking (utm_, fbclid, si…) and open the full site rather than the mobile one.
+- **Clean copied links**: a link you copy loses its tracking (utm_, fbclid, YouTube's si and ab_channel…) on the clipboard itself, so it's clean wherever it's pasted, and opens the full site rather than the mobile one. Password managers' copies and formatted text are left alone.
 - **Emoji suggestions**: an emoji for the word you're typing.
 - **Exact typing** (Apps): in the apps you pick (SSH clients, code editors, AI agents) nothing rewrites what you type: no auto-correct, text replacements, auto-capitals, double-space full stop or automatic spaces. Optionally also wherever an app itself asks for no suggestions.
 - **Remember the language per app**: each app gets back the language you last typed in there.
 - **Snippets** fill in `{date}`, `{time}`, `{datetime}`, `{isodate}`, `{day}` and `{clipboard}`.
 - **Smart toggle**: Alt and Ctrl switch themselves off by context.
 - **Voice input keeps listening** through pauses until you stop it or stay silent.
-- **Incognito typing**: learn nothing when an app asks, or always.
 - **Ctrl+Shift+Space** switches language backwards.
 - No automatic Shift in scripts without capitals (Thai, Arabic, CJK…).
 - **Bold suggestions** option.
@@ -53,10 +56,11 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 
 - **App shortcuts**: the same shortcuts in every app, suggested per category, plus each app's own launcher shortcuts and settings (Ctrl+Alt+1–4, Ctrl+,).
 - **Quick launcher**: the built-in one by default, in the keyboard's theme colours, with apps' own long-press shortcuts ("New message", "Scan QR code") as results.
+- **Add a shortcut**: put a shortcut an app offers for the home screen (a contact's direct dial, a bookmark, a settings page) in the quick launcher's results (Apps > Quick Launcher).
 - **Niagara search as the quick launcher** (option): Back, the key or the gesture, before opening anything returns to the app you opened it from, and on Niagara's home screen the built-in quick launcher opens instead.
 - **Search bars wait for typing** (option): when an app opens with its search bar focused, the keyboard bar stays hidden until you type or tap the bar.
 - **Terminal mode**: Termux gets the keyboard's Alt and SYM, a real Ctrl, a hidden keyboard and a choice of what the emoji key sends, including Alt.
-- Pastiera's **Enter per app** gets standards by app category: chat apps send with Enter (Shift + Enter for a new line), email and note apps keep Enter for new lines and send with Ctrl + Enter, and every installed chat, email and notes app is listed to change.
+- Pastiera's **Enter per app** gets standards by app category: chat apps send with Enter (Shift + Enter for a new line), email and note apps keep Enter for new lines and send with Ctrl + Enter, and every installed chat, email and notes app is listed to change. Search boxes and one-line fields always get their own action (search, go, next).
 - **Terminal apps** get no microphone button.
 - **Hidden-keyboard apps** (Niagara Launcher and Termux:X11 by default; others from the tutorial), with LEDs and panels per app. SYM chords reach the keyboard there, so SYM + Space opens the quick launcher instead of the symbols panel.
 - The **quick launcher** opens from other apps (key mappers, Tasker) and the app icon.
@@ -127,4 +131,4 @@ palsoftware/pastiera #108, #217, #267, #278, #282, #292, #302, #310, #316, #317.
 
 ## Builds
 
-Signed APKs come from the fork build workflow on GitHub Actions, in two kinds: **full releases** (such as `0.92`, tag `flux/v0.92`) from the `flux-release` branch, and **dev releases** (such as `0.93-flux.202609262047`, published as pre-releases) from the `flux-dev` branch. The repository's latest release is always the latest full release. Every build is kept, and each one's notes list what changed since the build before it; the notes also ship as `RELEASE_NOTES.md` in the build artifact. Builds run one at a time. `tools/find-keyboard-gesture-page.sh` (root, from Termux) finds which screen a phone's keyboard gesture settings are. Flux Keyboard builds are signed with the fork's own key and don't update, or get updated by, official Pastiera.
+Signed APKs come from the fork build workflow on GitHub Actions, in two kinds: **full releases** (such as `0.92`, tag `flux/v0.92`) from the `flux-release` branch, and **dev releases** (such as `0.93-flux.202609262047`, published as pre-releases) from the `flux-dev` branch. The repository's latest release is always the latest full release. A full release deletes the dev builds before it; each build's notes list what changed since the build before it; the notes also ship as `RELEASE_NOTES.md` in the build artifact. Builds run one at a time. `tools/find-keyboard-gesture-page.sh` (root, from Termux) finds which screen a phone's keyboard gesture settings are. Flux Keyboard builds are signed with the fork's own key and don't update, or get updated by, official Pastiera.
