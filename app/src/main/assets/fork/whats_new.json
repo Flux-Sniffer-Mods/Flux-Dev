@@ -85,6 +85,10 @@
   ],
   "improvements": [
     {
+      "text": "The symbols page's defaults put your currency on N (from Keyboard > Currency symbol, or the phone's region) and $ on M (€ if yours is $), with ~ on K.",
+      "after": "202609291915"
+    },
+    {
       "text": "Edit Emoji Layer and Edit Symbols Layer show the search, GIF and Recents keys greyed out, as they aren't mapped.",
       "after": "202609291915"
     },

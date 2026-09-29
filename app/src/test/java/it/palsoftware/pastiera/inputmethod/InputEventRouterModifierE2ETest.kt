@@ -473,17 +473,17 @@ class InputEventRouterModifierE2ETest {
     }
 
     @Test
-    fun symSymbolsPage_defaultLayout_mapsA_andConsumes() {
-        // These check A's mapping, clear of the search key (Q by default, off here anyway)
+    fun symSymbolsPage_defaultLayout_mapsS_andConsumes() {
+        // S's mapping (Q is the search key and A the Recents key)
         SettingsManager.setSearchKey(context, KeyEvent.KEYCODE_UNKNOWN)
         val callbacks = TestCallbacks(modifierStateController)
-        val expected = alternateCharacterManager.getSymMappings2()[KeyEvent.KEYCODE_A] ?: "~"
+        val expected = alternateCharacterManager.getSymMappings2()[KeyEvent.KEYCODE_S] ?: "="
         symLayoutController.openSymbolsPage()
         assertTrue(symLayoutController.isSymActive())
 
         val result = routeKeyDown(
-            keyCode = KeyEvent.KEYCODE_A,
-            event = keyDown(KeyEvent.KEYCODE_A),
+            keyCode = KeyEvent.KEYCODE_S,
+            event = keyDown(KeyEvent.KEYCODE_S),
             callbacks = callbacks
         )
 
@@ -533,16 +533,16 @@ class InputEventRouterModifierE2ETest {
 
     @Test
     fun symSymbolsPage_customMapping_isUsed() {
-        // These check A's mapping, clear of the search key (Q by default, off here anyway)
+        // W's mapping (Q is the search key and A the Recents key)
         SettingsManager.setSearchKey(context, KeyEvent.KEYCODE_UNKNOWN)
         val callbacks = TestCallbacks(modifierStateController)
-        SettingsManager.saveSymMappingsPage2(context, mapOf(KeyEvent.KEYCODE_A to "#"))
+        SettingsManager.saveSymMappingsPage2(context, mapOf(KeyEvent.KEYCODE_W to "#"))
         alternateCharacterManager.reloadSymMappings2()
         symLayoutController.openSymbolsPage()
 
         val result = routeKeyDown(
-            keyCode = KeyEvent.KEYCODE_A,
-            event = keyDown(KeyEvent.KEYCODE_A),
+            keyCode = KeyEvent.KEYCODE_W,
+            event = keyDown(KeyEvent.KEYCODE_W),
             callbacks = callbacks
         )
 

@@ -184,7 +184,7 @@ fun SymCustomizationScreen(
 
     // Load default mappings for page 2 (characters)
     val defaultMappingsPage2 = remember {
-        loadMappingsFromJson("common/sym/sym_key_mappings_page2.json")
+        SettingsManager.personaliseSymbolsDefaults(context, loadMappingsFromJson("common/sym/sym_key_mappings_page2.json"))
     }
 
     // Load custom mappings or fallback to defaults for page 1

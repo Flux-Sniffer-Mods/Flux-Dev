@@ -128,13 +128,15 @@ class KeyMappingLoaderTest {
 
         val mappings = KeyMappingLoader.loadSymKeyMappingsPage2(context.assets)
 
-        // Off the search key (Q): ~ on A, the second and third rows moved along one key
+        // Off the search key (Q) and the Recents key (A): ~ on K, your currency on N, $ on M
         assertEquals(null, mappings[KeyEvent.KEYCODE_Q])
-        assertEquals("~", mappings[KeyEvent.KEYCODE_A])
+        assertEquals(null, mappings[KeyEvent.KEYCODE_A])
+        assertEquals("\u00A4", mappings[KeyEvent.KEYCODE_N])
+        assertEquals("$", mappings[KeyEvent.KEYCODE_M])
         assertEquals("=", mappings[KeyEvent.KEYCODE_S])
         assertEquals(";", mappings[KeyEvent.KEYCODE_D])
         assertEquals("–", mappings[KeyEvent.KEYCODE_G])
-        assertEquals("„", mappings[KeyEvent.KEYCODE_K])
+        assertEquals("~", mappings[KeyEvent.KEYCODE_K])
         assertEquals("“", mappings[KeyEvent.KEYCODE_L])
         assertEquals("&", mappings[KeyEvent.KEYCODE_V])
         assertEquals("°", mappings[KeyEvent.KEYCODE_O])

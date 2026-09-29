@@ -5072,11 +5072,38 @@ object SettingsManager {
      * Returns the symbol used for dedicated hardware currency keys.
      */
     fun getPhysicalKeyboardCurrencySymbol(context: Context): String {
-        val value = getPreferences(context).getString(
-            KEY_PHYSICAL_KEYBOARD_CURRENCY_SYMBOL,
-            DEFAULT_PHYSICAL_KEYBOARD_CURRENCY_SYMBOL
-        ) ?: DEFAULT_PHYSICAL_KEYBOARD_CURRENCY_SYMBOL
+        // Until chosen: the phone's own currency (its region's), when it's one of ours
+        val value = getPreferences(context).getString(KEY_PHYSICAL_KEYBOARD_CURRENCY_SYMBOL, null)
+            ?: return localCurrencySymbol()
         return normalizePhysicalKeyboardCurrencySymbol(value)
+    }
+
+    private fun localCurrencySymbol(): String {
+        val code = runCatching { java.util.Currency.getInstance(java.util.Locale.getDefault()).currencyCode }.getOrNull()
+        return when (code) {
+            "USD", "CAD", "AUD", "NZD", "MXN", "SGD", "HKD" -> "$"
+            "GBP" -> "£"
+            "JPY", "CNY" -> "¥"
+            "INR" -> "₹"
+            "RUB" -> "₽"
+            else -> DEFAULT_PHYSICAL_KEYBOARD_CURRENCY_SYMBOL
+        }
+    }
+
+    /**
+     * The symbols page's defaults made yours: N holds your currency (Keyboard > Currency
+     * symbol), M a second one, $ or, when yours is $, €.
+     */
+    fun personaliseSymbolsDefaults(context: Context, mappings: Map<Int, String>): Map<Int, String> {
+        val currency = getPhysicalKeyboardCurrencySymbol(context)
+        return mappings.mapValues { (keyCode, symbol) ->
+            when {
+                symbol == "\u00A4" -> currency
+                // Two of the same would waste a key
+                keyCode == KeyEvent.KEYCODE_M && symbol == "$" && currency == "$" -> "€"
+                else -> symbol
+            }
+        }
     }
 
     /**

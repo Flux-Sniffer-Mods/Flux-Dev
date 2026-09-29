@@ -2444,6 +2444,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             } else if (key == "physical_keyboard_currency_symbol") {
                 Log.d(TAG, "Physical keyboard currency symbol changed, reloading Device SYM and Alt modifier mappings...")
                 alternateCharacterManager.reloadModifierAndDeviceSymMappings()
+                // The symbols page's defaults carry it too
+                alternateCharacterManager.reloadSymMappings2()
             } else if (key != null && (key.startsWith("auto_correct_custom_") || key == "auto_correct_enabled_languages")) {
                 Log.d(TAG, "Auto-correction rules changed, reloading...")
                 // Reload auto-corrections (including new custom languages)
