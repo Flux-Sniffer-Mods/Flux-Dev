@@ -59,11 +59,11 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 - **Flux Keyboard's own quick launcher shortcuts** for the apps in its app shortcut and Enter lists: New message, New post, New note or Compose email, and Search, each only where the app accepts it.
 - **Add a shortcut**: put a shortcut an app offers for the home screen (a contact's direct dial, a bookmark, a settings page) in the quick launcher's results (Apps > Quick Launcher), or long-press an app in the quick launcher and pick Add a shortcut. Flux Keyboard also makes the common ones itself, for apps that only offer theirs to the home screen: call or message a contact, a website, and **Termux tasks** (scripts in ~/.shortcuts, run as Termux:Widget runs them; needs allow-external-apps in Termux).
 - **Niagara search as the quick launcher** (option): Back, the key or the gesture, before opening anything returns to the app you opened it from, and on Niagara's home screen the built-in quick launcher opens instead.
-- **Search bars wait for typing** (option): when an app opens with its search bar focused, the keyboard bar stays hidden until you type or tap the bar.
+- **Search bars wait for typing** (option): when an app opens with its search bar focused, the keyboard bar stays hidden until you type or tap the bar (also palsoftware/pastiera#319).
 - **Terminal mode**: Termux gets the keyboard's Alt and SYM, a real Ctrl, a hidden keyboard and a choice of what the emoji key sends, including Alt.
 - Pastiera's **Enter per app** gets standards by app category: chat apps send with Enter (Shift + Enter for a new line), email and note apps keep Enter for new lines and send with Ctrl + Enter, and every installed chat, email and notes app is listed to change. Search boxes and one-line fields always get their own action (search, go, next).
 - **Terminal apps** get no microphone button.
-- **Hidden-keyboard apps** (Niagara Launcher and Termux:X11 by default; others from the tutorial), with LEDs and panels per app. SYM chords reach the keyboard there, so SYM + Space opens the quick launcher instead of the symbols panel.
+- **Hidden-keyboard apps** (Niagara Launcher and Termux:X11 by default; others from the tutorial), with LEDs and panels per app. The keyboard bar no longer pops up on Niagara's home screen (palsoftware/pastiera#319). SYM chords reach the keyboard there, so SYM + Space opens the quick launcher instead of the symbols panel.
 - The **quick launcher** opens from other apps (key mappers, Tasker) and the app icon.
 - **Linux desktop** keyboard layout from the keyboard's Alt map and SYM page.
 
@@ -128,7 +128,7 @@ Pastiera 0.86's hand-over to Plektra (its welcome page, update checks and About 
 
 ## Upstream issues addressed
 
-palsoftware/pastiera #108, #217, #267, #278, #282, #292, #302, #310, #316, #317.
+palsoftware/pastiera #108, #217, #267, #278, #282, #292, #302, #310, #316, #317, #319.
 
 ## Builds
 
