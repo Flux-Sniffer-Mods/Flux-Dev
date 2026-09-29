@@ -446,8 +446,10 @@ class SpeechRecognitionManager(
                 putExtra(RecognizerIntent.EXTRA_PROMPT, context.getString(R.string.speech_recognition_prompt))
                 if (it.palsoftware.pastiera.SettingsManager.getSpeechKeepListening(context)) {
                     // Wait longer before deciding a pause is the end (recognizers that honour it)
-                    putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 3000L)
-                    putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 2500L)
+                    // The pause timeout (Settings): how long a silence ends it
+                    val pauseMs = it.palsoftware.pastiera.SettingsManager.getSpeechPauseTimeoutSeconds(context) * 1000L
+                    putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, pauseMs)
+                    putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, (pauseMs - 500L).coerceAtLeast(500L))
                     putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 2000L)
                 }
             }

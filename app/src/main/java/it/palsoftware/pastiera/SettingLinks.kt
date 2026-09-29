@@ -76,6 +76,7 @@ object SettingLinkIds {
     const val TEXT_INPUT_SEARCH_BAR_WAITS = "text_input.search_bar_waits_for_typing"
     const val TEXT_INPUT_ALT_CTRL_SPEECH_SHORTCUT = "text_input.alt_ctrl_speech_shortcut"
     const val TEXT_INPUT_SPEECH_KEEP_LISTENING = "text_input.speech_keep_listening"
+    const val TEXT_INPUT_SPEECH_PAUSE_TIMEOUT = "text_input.speech_pause_timeout"
     const val TEXT_INPUT_SHIFT_BACKSPACE_DELETE = "text_input.shift_backspace_delete"
     const val TEXT_INPUT_ALT_BACKSPACE_DELETE = "text_input.alt_backspace_delete"
     const val TEXT_INPUT_BACKSPACE_AT_START_DELETE = "text_input.backspace_at_start_delete"
@@ -500,6 +501,11 @@ object SettingLinkRegistry {
             SettingLinkIds.TEXT_INPUT_SPEECH_KEEP_LISTENING,
             R.string.speech_keep_listening_title,
             R.string.speech_keep_listening_description,
+            destination = SettingsDestination.Modifiers
+        ),
+        entry(
+            SettingLinkIds.TEXT_INPUT_SPEECH_PAUSE_TIMEOUT,
+            R.string.speech_pause_timeout_title,
             destination = SettingsDestination.Modifiers
         ),
         entry(

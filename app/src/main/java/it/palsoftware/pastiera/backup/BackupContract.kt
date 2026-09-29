@@ -358,6 +358,7 @@ internal object BackupPreferenceContract {
             "suggestions_bold" to PreferenceValueType.BOOLEAN,
             "suggestion_keys" to PreferenceValueType.STRING,
             "speech_keep_listening" to PreferenceValueType.BOOLEAN,
+            "speech_pause_timeout_seconds" to PreferenceValueType.INT,
             "inline_autofill_enabled" to PreferenceValueType.BOOLEAN,
             "led_individual_colors" to PreferenceValueType.BOOLEAN,
             "led_locked_animation" to PreferenceValueType.BOOLEAN,

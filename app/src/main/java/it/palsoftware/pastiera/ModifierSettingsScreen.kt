@@ -287,6 +287,35 @@ fun ModifierSettingsScreen(
                 speechKeepListening = it
                 SettingsManager.setSpeechKeepListening(context, it)
             }
+            if (speechKeepListening) {
+                var pauseSeconds by remember { mutableStateOf(SettingsManager.getSpeechPauseTimeoutSeconds(context)) }
+                Surface(modifier = Modifier.fillMaxWidth().settingRow(SettingLinkIds.TEXT_INPUT_SPEECH_PAUSE_TIMEOUT)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Icon(Icons.Filled.Timer, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp))
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(stringResource(R.string.speech_pause_timeout_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium)
+                            Text(
+                                stringResource(R.string.speech_pause_timeout_value, pauseSeconds),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Slider(
+                                value = pauseSeconds.toFloat(),
+                                onValueChange = { value ->
+                                    pauseSeconds = value.toInt()
+                                    SettingsManager.setSpeechPauseTimeoutSeconds(context, pauseSeconds)
+                                },
+                                valueRange = 1f..20f,
+                                steps = 18
+                            )
+                        }
+                    }
+                }
+            }
 
             SettingsSectionDivider(stringResource(R.string.nav_mode_title))
             ModifierNavigationRow(

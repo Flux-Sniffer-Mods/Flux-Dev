@@ -85,6 +85,10 @@
   ],
   "improvements": [
     {
+      "text": "Voice input: choose how long a pause ends it, from 1 to 20 seconds (Modifiers & keys, with Keep listening on).",
+      "after": "202609291922"
+    },
+    {
       "text": "The symbols page's defaults put your currency on N (from Keyboard > Currency symbol, or the phone's region) and $ on M (€ if yours is $), with ~ on K.",
       "after": "202609291915"
     },

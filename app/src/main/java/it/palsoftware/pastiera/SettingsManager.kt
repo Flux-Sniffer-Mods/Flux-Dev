@@ -3119,6 +3119,14 @@ object SettingsManager {
     fun getSpeechKeepListening(context: Context): Boolean =
         getPreferences(context).getBoolean(KEY_SPEECH_KEEP_LISTENING, true)
 
+    /** How long a pause (seconds) ends voice input while it keeps listening. 3 s by default. */
+    fun getSpeechPauseTimeoutSeconds(context: Context): Int =
+        getPreferences(context).getInt("speech_pause_timeout_seconds", 3).coerceIn(1, 20)
+
+    fun setSpeechPauseTimeoutSeconds(context: Context, seconds: Int) {
+        getPreferences(context).edit().putInt("speech_pause_timeout_seconds", seconds.coerceIn(1, 20)).apply()
+    }
+
     fun setSpeechKeepListening(context: Context, enabled: Boolean) {
         getPreferences(context).edit().putBoolean(KEY_SPEECH_KEEP_LISTENING, enabled).apply()
     }
