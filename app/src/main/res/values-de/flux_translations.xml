@@ -949,6 +949,34 @@
     <string name="quick_launcher_termux_scripts_description">Deine Termux:Widget-Skripte und -Aufgaben (~/.shortcuts) im Schnellstarter, immer aktuell. Braucht allow-external-apps = true in ~/.termux/termux.properties und die Berechtigung, Befehle in Termux auszuführen.</string>
     <string name="quick_launcher_listed_app_shortcuts_title">Verknüpfungen für kompatible Apps</string>
     <string name="quick_launcher_listed_app_shortcuts_description">Flux Keyboard fügt dem Schnellstarter für die Apps, die es kennt, Neue Nachricht, Neue Notiz, E-Mail schreiben und Suche hinzu, sofern die App sie annimmt.</string>
+    <string name="quick_launcher_listed_app_toggle">Flux-Keyboard-Verknüpfungen für diese App</string>
+    <string name="termux_runs_background">Termux · Hintergrund</string>
+    <string name="termux_runs_terminal">Termux · Terminal</string>
+    <string name="emoji_layer_recents_first_title">Zuletzt benutzte Emoji zuerst auf der Ebene</string>
+    <string name="emoji_layer_recents_first_description">Die zuletzt benutzten Emoji belegen die ersten Tasten der Ebene, ihre eigenen rücken weiter. Auch auf der Ebene getippte zählen.</string>
+    <string name="emoji_layer_recents_count">Zuletzt benutzte Emoji: %1$d Tasten</string>
+    <string name="suggestion_swipe_learning_title">Aus deinen Wischgesten lernen</string>
+    <string name="suggestion_swipe_learning_description">Eine sofort rückgängig gemachte Auswahl lässt Wischgesten etwas länger sein müssen; eine zu kurze vor einer Auswahl etwas kürzer.</string>
+    <string name="suggestion_swipe_learning_reset">Gelerntes vergessen</string>
+    <string name="suggestion_swipe_learning_reset_done">Vorschlags-Wischgesten wieder auf deiner Einstellung</string>
+    <string name="suggestion_swipe_idle_title">Nach einer Pause scrollen Wischgesten</string>
+    <string name="suggestion_swipe_idle_value">Nach %1$d s ohne Tippen scrollt eine Wischgeste statt auszuwählen</string>
+    <string name="suggestion_swipe_idle_off">Wischgesten wählen immer</string>
+    <string name="phone_trackpad_scroll_assist_tip">Schalte den Scroll-Assistenten ein: Das Telefon gibt Wischgesten der Tastatur nur dann an Flux Keyboard weiter. Lass den Wischmodus auf Scrollen: Eigene Wischaktionen behalten die Gesten für sich.</string>
+    <string name="phone_spell_checker_title">Die Rechtschreibprüfung des Telefons in Vorschlägen</string>
+    <string name="phone_spell_checker_description">Ist die Android-Rechtschreibprüfung die einer anderen App (etwa Gboard), kommen ihre Korrekturen für ein falsch geschriebenes Wort in die Vorschlagsleiste.</string>
+    <string name="select_from_cursor_title">Ab dem Cursor markieren</string>
+    <string name="select_from_cursor_subtitle">Navigationsmodus an, jede Bewegung erweitert die Markierung</string>
+    <string name="private_mode_title">Privatmodus</string>
+    <string name="private_mode_subtitle">Inkognito-Tippen und Offlinemodus zusammen</string>
+    <string name="private_mode_on">Privatmodus an: Nichts wird gelernt oder gemerkt, und nichts geht online</string>
+    <string name="private_mode_off">Privatmodus aus: Tippen und Offlinemodus sind wieder wie vorher</string>
+    <string name="speech_pause_timeout_title">Pause, bis die Spracheingabe stoppt</string>
+    <string name="speech_pause_timeout_value">%1$d s Stille</string>
+    <string name="flux_tutorial_extras_termux_title">Termux-Skripte im Schnellstarter</string>
+    <string name="flux_tutorial_extras_termux_text">Deine Termux:Widget-Skripte und -Aufgaben (~/.shortcuts) starten direkt aus dem Schnellstarter. Erlaube Flux Keyboard, Befehle in Termux auszuführen, und setze allow-external-apps = true in ~/.termux/termux.properties.</string>
+    <string name="flux_tutorial_extras_termux_button">Termux-Befehle erlauben</string>
+    <string name="flux_tutorial_typing_bullet_learn">Es lernt mit: Wörter, die du oft tippst, und E-Mails und Nummern, die du selbst tippst (nie beim Inkognito-Tippen).</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d Kombination als eigenes Tastenkürzel der App gesendet</item>
         <item quantity="other">%d Kombinationen als eigene Tastenkürzel der App gesendet</item>

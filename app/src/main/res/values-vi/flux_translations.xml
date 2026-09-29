@@ -1578,6 +1578,34 @@
     <string name="quick_launcher_termux_scripts_description">Các script và tác vụ Termux:Widget (~/.shortcuts) của bạn trong trình khởi chạy nhanh, luôn được cập nhật. Cần allow-external-apps = true trong ~/.termux/termux.properties và quyền chạy lệnh trong Termux.</string>
     <string name="quick_launcher_listed_app_shortcuts_title">Lối tắt cho ứng dụng tương thích</string>
     <string name="quick_launcher_listed_app_shortcuts_description">Flux Keyboard thêm Tin nhắn mới, Ghi chú mới, Soạn email và Tìm kiếm vào trình khởi chạy nhanh cho các ứng dụng nó biết, nếu ứng dụng hỗ trợ.</string>
+    <string name="quick_launcher_listed_app_toggle">Lối tắt Flux Keyboard cho ứng dụng này</string>
+    <string name="termux_runs_background">Termux · chạy nền</string>
+    <string name="termux_runs_terminal">Termux · terminal</string>
+    <string name="emoji_layer_recents_first_title">Emoji gần đây lên đầu lớp</string>
+    <string name="emoji_layer_recents_first_description">Các emoji bạn dùng gần nhất chiếm các phím đầu của lớp, emoji của lớp dời sang sau. Emoji gõ từ lớp cũng được tính.</string>
+    <string name="emoji_layer_recents_count">Emoji gần đây: %1$d phím</string>
+    <string name="suggestion_swipe_learning_title">Học từ các lần vuốt</string>
+    <string name="suggestion_swipe_learning_description">Lựa chọn bị hoàn tác ngay khiến lần vuốt cần dài hơn một chút; lần vuốt thiếu trước một lựa chọn khiến nó cần ngắn hơn.</string>
+    <string name="suggestion_swipe_learning_reset">Quên những gì đã học</string>
+    <string name="suggestion_swipe_learning_reset_done">Vuốt gợi ý trở lại theo cài đặt của bạn</string>
+    <string name="suggestion_swipe_idle_title">Sau khi dừng gõ, vuốt để cuộn</string>
+    <string name="suggestion_swipe_idle_value">Sau %1$d giây không gõ, vuốt sẽ cuộn thay vì chọn</string>
+    <string name="suggestion_swipe_idle_off">Vuốt luôn chọn</string>
+    <string name="phone_trackpad_scroll_assist_tip">Bật Trợ lý cuộn: điện thoại chỉ chuyển thao tác vuốt bàn phím cho Flux Keyboard khi nó bật. Để Chế độ vuốt ở cuộn: thao tác vuốt tùy chỉnh sẽ giữ lấy lần vuốt.</string>
+    <string name="phone_spell_checker_title">Trình kiểm tra chính tả của điện thoại trong gợi ý</string>
+    <string name="phone_spell_checker_description">Khi trình kiểm tra chính tả của Android thuộc ứng dụng khác (như Gboard), các sửa lỗi của nó cho từ sai sẽ có trong thanh gợi ý.</string>
+    <string name="select_from_cursor_title">Chọn từ con trỏ</string>
+    <string name="select_from_cursor_subtitle">Bật Chế độ điều hướng, mỗi lần di chuyển mở rộng vùng chọn</string>
+    <string name="private_mode_title">Chế độ riêng tư</string>
+    <string name="private_mode_subtitle">Gõ ẩn danh và chế độ ngoại tuyến cùng lúc</string>
+    <string name="private_mode_on">Đã bật chế độ riêng tư: không học, không ghi nhớ và không gì lên mạng</string>
+    <string name="private_mode_off">Đã tắt chế độ riêng tư: việc gõ và chế độ ngoại tuyến trở lại như trước</string>
+    <string name="speech_pause_timeout_title">Khoảng dừng trước khi ngừng nhập giọng nói</string>
+    <string name="speech_pause_timeout_value">%1$d giây im lặng</string>
+    <string name="flux_tutorial_extras_termux_title">Script Termux trong trình khởi chạy nhanh</string>
+    <string name="flux_tutorial_extras_termux_text">Script và tác vụ Termux:Widget (~/.shortcuts) chạy ngay từ trình khởi chạy nhanh. Cho phép Flux Keyboard chạy lệnh trong Termux và đặt allow-external-apps = true trong ~/.termux/termux.properties.</string>
+    <string name="flux_tutorial_extras_termux_button">Cho phép chạy lệnh Termux</string>
+    <string name="flux_tutorial_typing_bullet_learn">Nó học dần: các từ bạn hay gõ, và email và số điện thoại bạn tự gõ (không bao giờ khi gõ ẩn danh).</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="other">%d tổ hợp được gửi dưới dạng phím tắt riêng của ứng dụng</item>
     </plurals>

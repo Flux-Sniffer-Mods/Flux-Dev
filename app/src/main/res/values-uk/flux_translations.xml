@@ -1578,6 +1578,34 @@
     <string name="quick_launcher_termux_scripts_description">Ваші скрипти й завдання Termux:Widget (~/.shortcuts) у швидкому запуску, завжди актуальні. Потрібні allow-external-apps = true у ~/.termux/termux.properties і дозвіл запускати команди в Termux.</string>
     <string name="quick_launcher_listed_app_shortcuts_title">Ярлики для сумісних застосунків</string>
     <string name="quick_launcher_listed_app_shortcuts_description">Flux Keyboard додає до швидкого запуску «Нове повідомлення», «Нова нотатка», «Написати лист» і «Пошук» для знайомих йому застосунків, якщо застосунок їх приймає.</string>
+    <string name="quick_launcher_listed_app_toggle">Ярлики Flux Keyboard для цього застосунку</string>
+    <string name="termux_runs_background">Termux · у фоні</string>
+    <string name="termux_runs_terminal">Termux · у терміналі</string>
+    <string name="emoji_layer_recents_first_title">Недавні емодзі першими на шарі</string>
+    <string name="emoji_layer_recents_first_description">Останні використані емодзі займають перші клавіші шару, а його власні зсуваються. Враховуються й набрані з шару.</string>
+    <string name="emoji_layer_recents_count">Недавні емодзі: %1$d клавіш</string>
+    <string name="suggestion_swipe_learning_title">Вчитися на ваших свайпах</string>
+    <string name="suggestion_swipe_learning_description">Одразу скасований вибір робить свайп трохи довшим; свайп, що не дотягнув перед вибором, — трохи коротшим.</string>
+    <string name="suggestion_swipe_learning_reset">Забути вивчене</string>
+    <string name="suggestion_swipe_learning_reset_done">Свайпи підказок знову за вашим налаштуванням</string>
+    <string name="suggestion_swipe_idle_title">Після паузи свайп прокручує</string>
+    <string name="suggestion_swipe_idle_value">Через %1$d с без набору свайп прокручує замість вибору</string>
+    <string name="suggestion_swipe_idle_off">Свайп завжди вибирає</string>
+    <string name="phone_trackpad_scroll_assist_tip">Увімкніть помічник прокручування: телефон передає свайпи клавіатури у Flux Keyboard лише поки він увімкнений. Залиште режим свайпу на прокручуванні: власні дії забирають свайпи собі.</string>
+    <string name="phone_spell_checker_title">Перевірка правопису телефона в підказках</string>
+    <string name="phone_spell_checker_description">Якщо перевірка правопису Android від іншого застосунку (наприклад, Gboard), її виправлення для слова з помилкою додаються до панелі підказок.</string>
+    <string name="select_from_cursor_title">Виділити від курсора</string>
+    <string name="select_from_cursor_subtitle">Режим навігації увімкнено, кожен рух розширює виділення</string>
+    <string name="private_mode_title">Приватний режим</string>
+    <string name="private_mode_subtitle">Інкогніто-набір і офлайн-режим разом</string>
+    <string name="private_mode_on">Приватний режим увімкнено: нічого не запам\'ятовується і нічого не йде в мережу</string>
+    <string name="private_mode_off">Приватний режим вимкнено: набір і офлайн-режим як були</string>
+    <string name="speech_pause_timeout_title">Пауза до зупинки диктування</string>
+    <string name="speech_pause_timeout_value">%1$d с тиші</string>
+    <string name="flux_tutorial_extras_termux_title">Скрипти Termux у швидкому запуску</string>
+    <string name="flux_tutorial_extras_termux_text">Ваші скрипти й завдання Termux:Widget (~/.shortcuts) запускаються зі швидкого запуску. Дозвольте Flux Keyboard виконувати команди в Termux і вкажіть allow-external-apps = true у ~/.termux/termux.properties.</string>
+    <string name="flux_tutorial_extras_termux_button">Дозволити команди Termux</string>
+    <string name="flux_tutorial_typing_bullet_learn">Він вчиться в процесі: слова, які ви часто пишете, і пошту та номери, які ви вводите самі (ніколи в режимі інкогніто).</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d сполучення надсилається як власне сполучення застосунку</item>
         <item quantity="few">%d сполучення надсилаються як власні сполучення застосунку</item>

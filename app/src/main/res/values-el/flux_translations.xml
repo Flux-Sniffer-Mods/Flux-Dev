@@ -857,6 +857,34 @@
     <string name="quick_launcher_termux_scripts_description">Τα scripts και οι εργασίες σας του Termux:Widget (~/.shortcuts) στη γρήγορη εκκίνηση, πάντα ενημερωμένα. Χρειάζεται allow-external-apps = true στο ~/.termux/termux.properties και άδεια εκτέλεσης εντολών στο Termux.</string>
     <string name="quick_launcher_listed_app_shortcuts_title">Συντομεύσεις για συμβατές εφαρμογές</string>
     <string name="quick_launcher_listed_app_shortcuts_description">Το Flux Keyboard προσθέτει Νέο μήνυμα, Νέα σημείωση, Σύνταξη email και Αναζήτηση στη γρήγορη εκκίνηση για τις εφαρμογές που γνωρίζει, όπου η εφαρμογή τα δέχεται.</string>
+    <string name="quick_launcher_listed_app_toggle">Συντομεύσεις του Flux Keyboard για αυτή την εφαρμογή</string>
+    <string name="termux_runs_background">Termux · παρασκήνιο</string>
+    <string name="termux_runs_terminal">Termux · τερματικό</string>
+    <string name="emoji_layer_recents_first_title">Πρόσφατα emoji πρώτα στο επίπεδο</string>
+    <string name="emoji_layer_recents_first_description">Τα emoji που χρησιμοποίησες τελευταία παίρνουν τα πρώτα πλήκτρα του επιπέδου και τα δικά του μετακινούνται. Μετράνε και όσα πληκτρολογείς από το επίπεδο.</string>
+    <string name="emoji_layer_recents_count">Πρόσφατα emoji: %1$d πλήκτρα</string>
+    <string name="suggestion_swipe_learning_title">Μάθηση από τα σαρώματά σου</string>
+    <string name="suggestion_swipe_learning_description">Μια επιλογή που αναιρείς αμέσως κάνει τα σαρώματα να θέλουν λίγο περισσότερο· ένα που δεν φτάνει πριν από μια επιλογή, λίγο λιγότερο.</string>
+    <string name="suggestion_swipe_learning_reset">Ξέχασε όσα έμαθε</string>
+    <string name="suggestion_swipe_learning_reset_done">Τα σαρώματα προτάσεων στη ρύθμισή σου</string>
+    <string name="suggestion_swipe_idle_title">Μετά από παύση, το σάρωμα κάνει κύλιση</string>
+    <string name="suggestion_swipe_idle_value">Μετά από %1$d δ χωρίς πληκτρολόγηση, το σάρωμα κάνει κύλιση αντί να επιλέγει</string>
+    <string name="suggestion_swipe_idle_off">Τα σαρώματα επιλέγουν πάντα</string>
+    <string name="phone_trackpad_scroll_assist_tip">Ενεργοποίησε τον βοηθό κύλισης: το τηλέφωνο περνά τα σαρώματα του πληκτρολογίου στο Flux Keyboard μόνο όσο είναι ενεργός. Άφησε τη λειτουργία σαρώματος σε κύλιση: οι προσαρμοσμένες ενέργειες κρατούν τα σαρώματα.</string>
+    <string name="phone_spell_checker_title">Ο ορθογραφικός έλεγχος του τηλεφώνου στις προτάσεις</string>
+    <string name="phone_spell_checker_description">Όταν ο ορθογραφικός έλεγχος του Android είναι άλλης εφαρμογής (π.χ. του Gboard), οι διορθώσεις του για μια λάθος λέξη μπαίνουν στη γραμμή προτάσεων.</string>
+    <string name="select_from_cursor_title">Επιλογή από τον κέρσορα</string>
+    <string name="select_from_cursor_subtitle">Λειτουργία πλοήγησης ενεργή, κάθε κίνηση επεκτείνει την επιλογή</string>
+    <string name="private_mode_title">Ιδιωτική λειτουργία</string>
+    <string name="private_mode_subtitle">Ανώνυμη πληκτρολόγηση και λειτουργία εκτός σύνδεσης μαζί</string>
+    <string name="private_mode_on">Ιδιωτική λειτουργία ενεργή: τίποτα δεν μαθαίνεται ή δεν θυμάται, και τίποτα δεν πάει online</string>
+    <string name="private_mode_off">Ιδιωτική λειτουργία ανενεργή: η πληκτρολόγηση και η λειτουργία εκτός σύνδεσης επιστρέφουν όπως ήταν</string>
+    <string name="speech_pause_timeout_title">Παύση πριν σταματήσει η υπαγόρευση</string>
+    <string name="speech_pause_timeout_value">%1$d δ σιωπής</string>
+    <string name="flux_tutorial_extras_termux_title">Scripts του Termux στη γρήγορη εκκίνηση</string>
+    <string name="flux_tutorial_extras_termux_text">Τα scripts και οι εργασίες σου του Termux:Widget (~/.shortcuts) τρέχουν από τη γρήγορη εκκίνηση. Επίτρεψε στο Flux Keyboard να εκτελεί εντολές στο Termux και βάλε allow-external-apps = true στο ~/.termux/termux.properties.</string>
+    <string name="flux_tutorial_extras_termux_button">Να επιτρέπονται εντολές Termux</string>
+    <string name="flux_tutorial_typing_bullet_learn">Μαθαίνει στην πορεία: λέξεις που γράφεις συχνά, και email και αριθμούς που γράφεις εσύ (ποτέ στην ανώνυμη πληκτρολόγηση).</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d συνδυασμός στέλνεται ως συντόμευση της εφαρμογής</item>
         <item quantity="other">%d συνδυασμοί στέλνονται ως συντομεύσεις της εφαρμογής</item>

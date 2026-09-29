@@ -1578,6 +1578,34 @@
     <string name="quick_launcher_termux_scripts_description">Vos scripts et tâches Termux:Widget (~/.shortcuts) dans le lanceur rapide, toujours à jour. Nécessite allow-external-apps = true dans ~/.termux/termux.properties et l’autorisation d’exécuter des commandes dans Termux.</string>
     <string name="quick_launcher_listed_app_shortcuts_title">Raccourcis pour les applis compatibles</string>
     <string name="quick_launcher_listed_app_shortcuts_description">Flux Keyboard ajoute Nouveau message, Nouvelle note, Écrire un e-mail et Rechercher au lanceur rapide pour les applis qu’il connaît, quand l’appli les accepte.</string>
+    <string name="quick_launcher_listed_app_toggle">Raccourcis Flux Keyboard pour cette appli</string>
+    <string name="termux_runs_background">Termux · arrière-plan</string>
+    <string name="termux_runs_terminal">Termux · terminal</string>
+    <string name="emoji_layer_recents_first_title">Emoji récents en premier sur la couche</string>
+    <string name="emoji_layer_recents_first_description">Les emoji utilisés en dernier prennent les premières touches de la couche, les siens se décalent. Ceux tapés depuis la couche comptent aussi.</string>
+    <string name="emoji_layer_recents_count">Emoji récents : %1$d touches</string>
+    <string name="suggestion_swipe_learning_title">Apprendre de vos balayages</string>
+    <string name="suggestion_swipe_learning_description">Un choix annulé aussitôt demande un balayage un peu plus long ; un balayage trop court avant un choix, un peu moins.</string>
+    <string name="suggestion_swipe_learning_reset">Oublier ce qui a été appris</string>
+    <string name="suggestion_swipe_learning_reset_done">Balayages de suggestions revenus à votre réglage</string>
+    <string name="suggestion_swipe_idle_title">Après une pause, balayer fait défiler</string>
+    <string name="suggestion_swipe_idle_value">Après %1$d s sans taper, un balayage fait défiler au lieu de choisir</string>
+    <string name="suggestion_swipe_idle_off">Les balayages choisissent toujours</string>
+    <string name="phone_trackpad_scroll_assist_tip">Activez l’assistant de défilement : le téléphone ne transmet les balayages du clavier à Flux Keyboard que lorsqu’il est actif. Laissez le mode de balayage sur défilement : les actions personnalisées gardent les balayages.</string>
+    <string name="phone_spell_checker_title">Le correcteur du téléphone dans les suggestions</string>
+    <string name="phone_spell_checker_description">Si le correcteur d’Android est celui d’une autre appli (Gboard, par exemple), ses corrections pour un mot mal orthographié rejoignent la barre de suggestions.</string>
+    <string name="select_from_cursor_title">Sélectionner depuis le curseur</string>
+    <string name="select_from_cursor_subtitle">Mode navigation activé, chaque déplacement étend la sélection</string>
+    <string name="private_mode_title">Mode privé</string>
+    <string name="private_mode_subtitle">Saisie incognito et mode hors ligne ensemble</string>
+    <string name="private_mode_on">Mode privé activé : rien n’est appris ni retenu, et rien ne va en ligne</string>
+    <string name="private_mode_off">Mode privé désactivé : la saisie et le mode hors ligne reviennent comme avant</string>
+    <string name="speech_pause_timeout_title">Pause avant l’arrêt de la dictée</string>
+    <string name="speech_pause_timeout_value">%1$d s de silence</string>
+    <string name="flux_tutorial_extras_termux_title">Scripts Termux dans le lanceur rapide</string>
+    <string name="flux_tutorial_extras_termux_text">Vos scripts et tâches Termux:Widget (~/.shortcuts) se lancent depuis le lanceur rapide. Autorisez Flux Keyboard à exécuter des commandes dans Termux et mettez allow-external-apps = true dans ~/.termux/termux.properties.</string>
+    <string name="flux_tutorial_extras_termux_button">Autoriser les commandes Termux</string>
+    <string name="flux_tutorial_typing_bullet_learn">Il apprend au fil de l’eau : les mots que vous tapez souvent, et les e-mails et numéros que vous tapez vous-même (jamais en saisie incognito).</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d combinaison envoyée comme raccourci propre à l’appli</item>
         <item quantity="many">%d combinaisons envoyées comme raccourcis propres à l’appli</item>

@@ -1578,6 +1578,34 @@
     <string name="quick_launcher_termux_scripts_description">Tus scripts y tareas de Termux:Widget (~/.shortcuts) en el lanzador rápido, siempre al día. Requiere allow-external-apps = true en ~/.termux/termux.properties y permiso para ejecutar comandos en Termux.</string>
     <string name="quick_launcher_listed_app_shortcuts_title">Atajos para apps compatibles</string>
     <string name="quick_launcher_listed_app_shortcuts_description">Flux Keyboard añade Nuevo mensaje, Nueva nota, Redactar correo y Buscar al lanzador rápido para las apps que conoce, cuando la app los admite.</string>
+    <string name="quick_launcher_listed_app_toggle">Atajos de Flux Keyboard para esta app</string>
+    <string name="termux_runs_background">Termux · segundo plano</string>
+    <string name="termux_runs_terminal">Termux · terminal</string>
+    <string name="emoji_layer_recents_first_title">Emoji recientes primero en la capa</string>
+    <string name="emoji_layer_recents_first_description">Los emoji que usaste por última vez ocupan las primeras teclas de la capa y los suyos se desplazan. También cuentan los que escribes desde la capa.</string>
+    <string name="emoji_layer_recents_count">Emoji recientes: %1$d teclas</string>
+    <string name="suggestion_swipe_learning_title">Aprender de tus deslizamientos</string>
+    <string name="suggestion_swipe_learning_description">Una selección que deshaces enseguida hace que los deslizamientos necesiten algo más; uno que se queda corto antes de una selección, algo menos.</string>
+    <string name="suggestion_swipe_learning_reset">Olvidar lo aprendido</string>
+    <string name="suggestion_swipe_learning_reset_done">Deslizamientos de sugerencias según tu ajuste</string>
+    <string name="suggestion_swipe_idle_title">Tras una pausa, deslizar desplaza</string>
+    <string name="suggestion_swipe_idle_value">Tras %1$d s sin escribir, deslizar desplaza en vez de elegir</string>
+    <string name="suggestion_swipe_idle_off">Deslizar siempre elige</string>
+    <string name="phone_trackpad_scroll_assist_tip">Activa el asistente de desplazamiento: el teléfono solo pasa los deslizamientos del teclado a Flux Keyboard mientras está activo. Deja el modo de deslizamiento en desplazar: las acciones personalizadas se quedan los deslizamientos.</string>
+    <string name="phone_spell_checker_title">El corrector del teléfono en las sugerencias</string>
+    <string name="phone_spell_checker_description">Si el corrector de Android es de otra app (el de Gboard, por ejemplo), sus correcciones para una palabra mal escrita se suman a la barra de sugerencias.</string>
+    <string name="select_from_cursor_title">Seleccionar desde el cursor</string>
+    <string name="select_from_cursor_subtitle">Modo de navegación activo; cada movimiento amplía la selección</string>
+    <string name="private_mode_title">Modo privado</string>
+    <string name="private_mode_subtitle">Escritura incógnito y modo sin conexión a la vez</string>
+    <string name="private_mode_on">Modo privado activado: no se aprende ni se recuerda nada, y nada sale a internet</string>
+    <string name="private_mode_off">Modo privado desactivado: la escritura y el modo sin conexión vuelven a como estaban</string>
+    <string name="speech_pause_timeout_title">Pausa antes de que se detenga el dictado</string>
+    <string name="speech_pause_timeout_value">%1$d s de silencio</string>
+    <string name="flux_tutorial_extras_termux_title">Scripts de Termux en el lanzador rápido</string>
+    <string name="flux_tutorial_extras_termux_text">Tus scripts y tareas de Termux:Widget (~/.shortcuts) se ejecutan desde el lanzador rápido. Permite a Flux Keyboard ejecutar comandos en Termux y pon allow-external-apps = true en ~/.termux/termux.properties.</string>
+    <string name="flux_tutorial_extras_termux_button">Permitir ejecutar comandos de Termux</string>
+    <string name="flux_tutorial_typing_bullet_learn">Aprende sobre la marcha: las palabras que escribes a menudo y los correos y números que escribes tú (nunca en escritura incógnito).</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d combinación enviada como atajo propio de la app</item>
         <item quantity="many">%d combinaciones enviadas como atajos propios de la app</item>

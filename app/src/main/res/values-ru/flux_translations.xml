@@ -1578,6 +1578,34 @@
     <string name="quick_launcher_termux_scripts_description">Ваши скрипты и задачи Termux:Widget (~/.shortcuts) в быстром запуске, всегда актуальные. Нужны allow-external-apps = true в ~/.termux/termux.properties и разрешение запускать команды в Termux.</string>
     <string name="quick_launcher_listed_app_shortcuts_title">Ярлыки для совместимых приложений</string>
     <string name="quick_launcher_listed_app_shortcuts_description">Flux Keyboard добавляет в быстрый запуск «Новое сообщение», «Новая заметка», «Написать письмо» и «Поиск» для знакомых ему приложений, если приложение их принимает.</string>
+    <string name="quick_launcher_listed_app_toggle">Ярлыки Flux Keyboard для этого приложения</string>
+    <string name="termux_runs_background">Termux · в фоне</string>
+    <string name="termux_runs_terminal">Termux · в терминале</string>
+    <string name="emoji_layer_recents_first_title">Недавние эмодзи первыми на слое</string>
+    <string name="emoji_layer_recents_first_description">Последние использованные эмодзи занимают первые клавиши слоя, а его собственные сдвигаются. Считаются и набранные со слоя.</string>
+    <string name="emoji_layer_recents_count">Недавние эмодзи: %1$d клавиш</string>
+    <string name="suggestion_swipe_learning_title">Учиться на ваших свайпах</string>
+    <string name="suggestion_swipe_learning_description">Сразу отменённый выбор делает свайп чуть длиннее; свайп, не дотянувший перед выбором, — чуть короче.</string>
+    <string name="suggestion_swipe_learning_reset">Забыть выученное</string>
+    <string name="suggestion_swipe_learning_reset_done">Свайпы подсказок снова по вашей настройке</string>
+    <string name="suggestion_swipe_idle_title">После паузы свайп прокручивает</string>
+    <string name="suggestion_swipe_idle_value">Через %1$d с без набора свайп прокручивает вместо выбора</string>
+    <string name="suggestion_swipe_idle_off">Свайп всегда выбирает</string>
+    <string name="phone_trackpad_scroll_assist_tip">Включите помощник прокрутки: телефон передаёт свайпы клавиатуры в Flux Keyboard только пока он включён. Оставьте режим свайпа на прокрутке: свои действия забирают свайпы себе.</string>
+    <string name="phone_spell_checker_title">Проверка правописания телефона в подсказках</string>
+    <string name="phone_spell_checker_description">Если проверка правописания Android от другого приложения (например, Gboard), её исправления для слова с ошибкой добавляются в панель подсказок.</string>
+    <string name="select_from_cursor_title">Выделить от курсора</string>
+    <string name="select_from_cursor_subtitle">Режим навигации включён, каждое движение расширяет выделение</string>
+    <string name="private_mode_title">Приватный режим</string>
+    <string name="private_mode_subtitle">Инкогнито-набор и офлайн-режим вместе</string>
+    <string name="private_mode_on">Приватный режим включён: ничего не запоминается и ничего не уходит в сеть</string>
+    <string name="private_mode_off">Приватный режим выключен: набор и офлайн-режим как были</string>
+    <string name="speech_pause_timeout_title">Пауза до остановки диктовки</string>
+    <string name="speech_pause_timeout_value">%1$d с тишины</string>
+    <string name="flux_tutorial_extras_termux_title">Скрипты Termux в быстром запуске</string>
+    <string name="flux_tutorial_extras_termux_text">Ваши скрипты и задачи Termux:Widget (~/.shortcuts) запускаются из быстрого запуска. Разрешите Flux Keyboard выполнять команды в Termux и укажите allow-external-apps = true в ~/.termux/termux.properties.</string>
+    <string name="flux_tutorial_extras_termux_button">Разрешить команды Termux</string>
+    <string name="flux_tutorial_typing_bullet_learn">Он учится по ходу: слова, которые вы часто пишете, и почту и номера, которые вы вводите сами (никогда в режиме инкогнито).</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d сочетание отправляется как собственное сочетание приложения</item>
         <item quantity="few">%d сочетания отправляются как собственные сочетания приложения</item>

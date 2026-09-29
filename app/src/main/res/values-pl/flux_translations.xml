@@ -1578,6 +1578,34 @@
     <string name="quick_launcher_termux_scripts_description">Twoje skrypty i zadania Termux:Widget (~/.shortcuts) w szybkim uruchamianiu, zawsze aktualne. Wymaga allow-external-apps = true w ~/.termux/termux.properties i uprawnienia do uruchamiania poleceń w Termux.</string>
     <string name="quick_launcher_listed_app_shortcuts_title">Skróty dla zgodnych aplikacji</string>
     <string name="quick_launcher_listed_app_shortcuts_description">Flux Keyboard dodaje do szybkiego uruchamiania Nowa wiadomość, Nowa notatka, Napisz e-mail i Szukaj dla znanych mu aplikacji, jeśli aplikacja je obsługuje.</string>
+    <string name="quick_launcher_listed_app_toggle">Skróty Flux Keyboard dla tej aplikacji</string>
+    <string name="termux_runs_background">Termux · w tle</string>
+    <string name="termux_runs_terminal">Termux · w terminalu</string>
+    <string name="emoji_layer_recents_first_title">Ostatnie emoji na początku warstwy</string>
+    <string name="emoji_layer_recents_first_description">Ostatnio użyte emoji zajmują pierwsze klawisze warstwy, a jej własne się przesuwają. Liczą się też wpisane z warstwy.</string>
+    <string name="emoji_layer_recents_count">Ostatnie emoji: %1$d klawiszy</string>
+    <string name="suggestion_swipe_learning_title">Ucz się z moich przesunięć</string>
+    <string name="suggestion_swipe_learning_description">Wybór cofnięty od razu sprawia, że przesunięcie musi być trochę dłuższe; zbyt krótkie przed wyborem — trochę krótsze.</string>
+    <string name="suggestion_swipe_learning_reset">Zapomnij, czego się nauczył</string>
+    <string name="suggestion_swipe_learning_reset_done">Przesunięcia podpowiedzi znów według ustawienia</string>
+    <string name="suggestion_swipe_idle_title">Po przerwie przesunięcie przewija</string>
+    <string name="suggestion_swipe_idle_value">Po %1$d s bez pisania przesunięcie przewija zamiast wybierać</string>
+    <string name="suggestion_swipe_idle_off">Przesunięcia zawsze wybierają</string>
+    <string name="phone_trackpad_scroll_assist_tip">Włącz asystenta przewijania: telefon przekazuje przesunięcia klawiatury do Flux Keyboard tylko wtedy, gdy jest włączony. Zostaw tryb przesuwania na przewijaniu: własne akcje zabierają przesunięcia.</string>
+    <string name="phone_spell_checker_title">Sprawdzanie pisowni telefonu w podpowiedziach</string>
+    <string name="phone_spell_checker_description">Gdy sprawdzanie pisowni Androida należy do innej aplikacji (np. Gboard), jego poprawki dla błędnego słowa trafiają na pasek podpowiedzi.</string>
+    <string name="select_from_cursor_title">Zaznacz od kursora</string>
+    <string name="select_from_cursor_subtitle">Tryb nawigacji włączony, każdy ruch rozszerza zaznaczenie</string>
+    <string name="private_mode_title">Tryb prywatny</string>
+    <string name="private_mode_subtitle">Pisanie incognito i tryb offline razem</string>
+    <string name="private_mode_on">Tryb prywatny włączony: nic nie jest zapamiętywane i nic nie trafia do sieci</string>
+    <string name="private_mode_off">Tryb prywatny wyłączony: pisanie i tryb offline wracają do poprzedniego stanu</string>
+    <string name="speech_pause_timeout_title">Przerwa, po której dyktowanie się kończy</string>
+    <string name="speech_pause_timeout_value">%1$d s ciszy</string>
+    <string name="flux_tutorial_extras_termux_title">Skrypty Termux w szybkim uruchamianiu</string>
+    <string name="flux_tutorial_extras_termux_text">Twoje skrypty i zadania Termux:Widget (~/.shortcuts) uruchamiasz z szybkiego uruchamiania. Pozwól Flux Keyboard uruchamiać polecenia w Termux i ustaw allow-external-apps = true w ~/.termux/termux.properties.</string>
+    <string name="flux_tutorial_extras_termux_button">Zezwól na polecenia Termux</string>
+    <string name="flux_tutorial_typing_bullet_learn">Uczy się na bieżąco: słów, które często piszesz, oraz adresów e-mail i numerów wpisanych przez ciebie (nigdy w trybie incognito).</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d kombinacja wysyłana jako własny skrót aplikacji</item>
         <item quantity="few">%d kombinacje wysyłane jako własne skróty aplikacji</item>

@@ -1578,6 +1578,34 @@
     <string name="quick_launcher_termux_scripts_description">Ձեր Termux:Widget սկրիպտներն ու առաջադրանքները (~/.shortcuts) արագ գործարկիչում՝ միշտ թարմ։ Պահանջում է allow-external-apps = true ~/.termux/termux.properties-ում և Termux-ում հրամաններ գործարկելու թույլտվություն։</string>
     <string name="quick_launcher_listed_app_shortcuts_title">Դյուրանցումներ համատեղելի հավելվածների համար</string>
     <string name="quick_launcher_listed_app_shortcuts_description">Flux Keyboard-ը արագ գործարկիչում ավելացնում է Նոր հաղորդագրություն, Նոր նշում, Գրել նամակ և Որոնում իրեն հայտնի հավելվածների համար, եթե հավելվածն ընդունում է դրանք։</string>
+    <string name="quick_launcher_listed_app_toggle">Flux Keyboard-ի դյուրանցումները այս հավելվածի համար</string>
+    <string name="termux_runs_background">Termux · ֆոնում</string>
+    <string name="termux_runs_terminal">Termux · տերմինալում</string>
+    <string name="emoji_layer_recents_first_title">Վերջին էմոջիները շերտի սկզբում</string>
+    <string name="emoji_layer_recents_first_description">Վերջին օգտագործված էմոջիները զբաղեցնում են շերտի առաջին ստեղները, իսկ շերտինները տեղափոխվում են։ Հաշվվում են նաև շերտից մուտքագրվածները։</string>
+    <string name="emoji_layer_recents_count">Վերջին էմոջիներ՝ %1$d ստեղն</string>
+    <string name="suggestion_swipe_learning_title">Սովորել ձեր սահեցումներից</string>
+    <string name="suggestion_swipe_learning_description">Անմիջապես չեղարկված ընտրությունը սահեցումը մի փոքր երկարացնում է, ընտրությունից առաջ կարճ մնացածը՝ մի փոքր կարճացնում։</string>
+    <string name="suggestion_swipe_learning_reset">Մոռանալ սովորածը</string>
+    <string name="suggestion_swipe_learning_reset_done">Առաջարկների սահեցումները՝ ըստ ձեր կարգավորման</string>
+    <string name="suggestion_swipe_idle_title">Դադարից հետո սահեցումը ոլորում է</string>
+    <string name="suggestion_swipe_idle_value">%1$d վ առանց մուտքագրման հետո սահեցումը ոլորում է, ոչ թե ընտրում</string>
+    <string name="suggestion_swipe_idle_off">Սահեցումը միշտ ընտրում է</string>
+    <string name="phone_trackpad_scroll_assist_tip">Միացրեք ոլորման օգնականը․ հեռախոսը ստեղնաշարի սահեցումները Flux Keyboard-ին է փոխանցում միայն այն միացված լինելու դեպքում։ Թողեք սահեցման ռեժիմը ոլորման վրա․ հատուկ գործողությունները սահեցումները պահում են իրենց համար։</string>
+    <string name="phone_spell_checker_title">Հեռախոսի ուղղագրիչը առաջարկներում</string>
+    <string name="phone_spell_checker_description">Երբ Android-ի ուղղագրիչը այլ հավելվածինն է (օրինակ՝ Gboard-ինը), սխալ բառի նրա ուղղումները հայտնվում են առաջարկների գոտում։</string>
+    <string name="select_from_cursor_title">Ընտրել կուրսորից</string>
+    <string name="select_from_cursor_subtitle">Նավիգացիայի ռեժիմը միացված է, յուրաքանչյուր շարժում ընդլայնում է ընտրությունը</string>
+    <string name="private_mode_title">Գաղտնի ռեժիմ</string>
+    <string name="private_mode_subtitle">Ինկոգնիտո մուտքագրում և անցանց ռեժիմ միասին</string>
+    <string name="private_mode_on">Գաղտնի ռեժիմը միացված է․ ոչինչ չի սովորվում կամ հիշվում, և ոչինչ առցանց չի գնում</string>
+    <string name="private_mode_off">Գաղտնի ռեժիմն անջատված է․ մուտքագրումն ու անցանց ռեժիմը վերադարձան նախկինին</string>
+    <string name="speech_pause_timeout_title">Դադար՝ մինչև ձայնային մուտքագրումը կանգնի</string>
+    <string name="speech_pause_timeout_value">%1$d վ լռություն</string>
+    <string name="flux_tutorial_extras_termux_title">Termux-ի սկրիպտներ արագ գործարկիչում</string>
+    <string name="flux_tutorial_extras_termux_text">Ձեր Termux:Widget սկրիպտներն ու առաջադրանքները (~/.shortcuts) գործարկվում են արագ գործարկիչից։ Թույլ տվեք Flux Keyboard-ին հրամաններ կատարել Termux-ում և ~/.termux/termux.properties-ում դրեք allow-external-apps = true։</string>
+    <string name="flux_tutorial_extras_termux_button">Թույլատրել Termux-ի հրամանները</string>
+    <string name="flux_tutorial_typing_bullet_learn">Սովորում է ընթացքում․ հաճախ գրվող բառերը, և ձեր իսկ գրած էլ. հասցեներն ու համարները (երբեք ինկոգնիտո մուտքագրման ժամանակ)։</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d համակցություն ուղարկվում է որպես հավելվածի դյուրանցում</item>
         <item quantity="other">%d համակցություն ուղարկվում է որպես հավելվածի դյուրանցումներ</item>
