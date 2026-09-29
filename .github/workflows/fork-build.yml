@@ -170,7 +170,12 @@ jobs:
               title="Flux Keyboard ${VERSION%%-*} dev · $when"
               kind="--prerelease" ;;
             *) title="Flux Keyboard $VERSION"
-              kind="--latest" ;;
+              kind="--latest"
+              # A full release replaces the dev builds before it: their releases and tags go
+              gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --json tagName --jq '.[].tagName' |
+                grep -- '-flux\.' | while read -r tag; do
+                  gh release delete "$tag" --repo "$GITHUB_REPOSITORY" --cleanup-tag --yes || true
+                done ;;
           esac
           # A release deleted to be built again leaves its tag behind: move it to this build
           if ! gh release view "flux/v$VERSION" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
