@@ -9,9 +9,11 @@ class UserShortcutCommandSource : CommandSource {
 
     override fun getCommands(context: Context): List<CommandTarget> {
         val pm = context.packageManager
-        return UserShortcuts.all(context).map { shortcut ->
-            val appName = runCatching { pm.getApplicationLabel(pm.getApplicationInfo(shortcut.packageName, 0)).toString() }
-                .getOrDefault(shortcut.packageName)
+        return UserShortcuts.all(context).mapNotNull { shortcut ->
+            // A shortcut whose app was uninstalled isn't offered (it's kept, in case it comes back)
+            val appInfo = runCatching { pm.getApplicationInfo(shortcut.packageName, 0) }.getOrNull()
+                ?: return@mapNotNull null
+            val appName = runCatching { pm.getApplicationLabel(appInfo).toString() }.getOrDefault(shortcut.packageName)
             CommandTarget(
                 id = "user_shortcut:${shortcut.id}",
                 source = id,
