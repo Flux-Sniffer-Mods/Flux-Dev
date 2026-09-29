@@ -1567,6 +1567,11 @@
     <string name="user_shortcuts_website_address">Адрес</string>
     <string name="user_shortcuts_name">Название</string>
     <string name="user_shortcuts_add">Добавить</string>
+    <string name="quick_launcher_action_new_message">Новое сообщение</string>
+    <string name="quick_launcher_action_new_post">Новая публикация</string>
+    <string name="quick_launcher_action_new_note">Новая заметка</string>
+    <string name="quick_launcher_action_compose">Написать письмо</string>
+    <string name="quick_launcher_action_search">Поиск</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d сочетание отправляется как собственное сочетание приложения</item>
         <item quantity="few">%d сочетания отправляются как собственные сочетания приложения</item>

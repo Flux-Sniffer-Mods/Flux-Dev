@@ -1567,6 +1567,11 @@
     <string name="user_shortcuts_website_address">Địa chỉ</string>
     <string name="user_shortcuts_name">Tên</string>
     <string name="user_shortcuts_add">Thêm</string>
+    <string name="quick_launcher_action_new_message">Tin nhắn mới</string>
+    <string name="quick_launcher_action_new_post">Bài đăng mới</string>
+    <string name="quick_launcher_action_new_note">Ghi chú mới</string>
+    <string name="quick_launcher_action_compose">Soạn email</string>
+    <string name="quick_launcher_action_search">Tìm kiếm</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="other">%d tổ hợp được gửi dưới dạng phím tắt riêng của ứng dụng</item>
     </plurals>

@@ -56,6 +56,7 @@ Flux Keyboard was called **Pastiera Flux** (app ID `it.palsoftware.pastiera.flux
 
 - **App shortcuts**: the same shortcuts in every app, suggested per category, plus each app's own launcher shortcuts and settings (Ctrl+Alt+1–4, Ctrl+,).
 - **Quick launcher**: the built-in one by default, in the keyboard's theme colours, with apps' own long-press shortcuts ("New message", "Scan QR code") as results.
+- **Flux Keyboard's own quick launcher shortcuts** for the apps in its app shortcut and Enter lists: New message, New post, New note or Compose email, and Search, each only where the app accepts it.
 - **Add a shortcut**: put a shortcut an app offers for the home screen (a contact's direct dial, a bookmark, a settings page) in the quick launcher's results (Apps > Quick Launcher), or long-press an app in the quick launcher and pick Add a shortcut. Flux Keyboard also makes the common ones itself, for apps that only offer theirs to the home screen: call or message a contact, a website, and **Termux tasks** (scripts in ~/.shortcuts, run as Termux:Widget runs them; needs allow-external-apps in Termux).
 - **Niagara search as the quick launcher** (option): Back, the key or the gesture, before opening anything returns to the app you opened it from, and on Niagara's home screen the built-in quick launcher opens instead.
 - **Search bars wait for typing** (option): when an app opens with its search bar focused, the keyboard bar stays hidden until you type or tap the bar.

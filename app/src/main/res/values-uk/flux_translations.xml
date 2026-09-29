@@ -1567,6 +1567,11 @@
     <string name="user_shortcuts_website_address">Адреса</string>
     <string name="user_shortcuts_name">Назва</string>
     <string name="user_shortcuts_add">Додати</string>
+    <string name="quick_launcher_action_new_message">Нове повідомлення</string>
+    <string name="quick_launcher_action_new_post">Новий допис</string>
+    <string name="quick_launcher_action_new_note">Нова нотатка</string>
+    <string name="quick_launcher_action_compose">Написати лист</string>
+    <string name="quick_launcher_action_search">Пошук</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d сполучення надсилається як власне сполучення застосунку</item>
         <item quantity="few">%d сполучення надсилаються як власні сполучення застосунку</item>

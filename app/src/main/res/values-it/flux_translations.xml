@@ -1079,4 +1079,9 @@
     <string name="user_shortcuts_website_address">Indirizzo</string>
     <string name="user_shortcuts_name">Nome</string>
     <string name="user_shortcuts_add">Aggiungi</string>
+    <string name="quick_launcher_action_new_message">Nuovo messaggio</string>
+    <string name="quick_launcher_action_new_post">Nuovo post</string>
+    <string name="quick_launcher_action_new_note">Nuova nota</string>
+    <string name="quick_launcher_action_compose">Scrivi email</string>
+    <string name="quick_launcher_action_search">Cerca</string>
 </resources>

@@ -938,6 +938,11 @@
     <string name="user_shortcuts_website_address">Adresse</string>
     <string name="user_shortcuts_name">Name</string>
     <string name="user_shortcuts_add">Hinzufügen</string>
+    <string name="quick_launcher_action_new_message">Neue Nachricht</string>
+    <string name="quick_launcher_action_new_post">Neuer Beitrag</string>
+    <string name="quick_launcher_action_new_note">Neue Notiz</string>
+    <string name="quick_launcher_action_compose">E-Mail schreiben</string>
+    <string name="quick_launcher_action_search">Suchen</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d Kombination als eigenes Tastenkürzel der App gesendet</item>
         <item quantity="other">%d Kombinationen als eigene Tastenkürzel der App gesendet</item>

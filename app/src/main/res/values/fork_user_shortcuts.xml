@@ -23,4 +23,9 @@
     <string name="user_shortcuts_website_address">Address</string>
     <string name="user_shortcuts_name">Name</string>
     <string name="user_shortcuts_add">Add</string>
+    <string name="quick_launcher_action_new_message">New message</string>
+    <string name="quick_launcher_action_new_post">New post</string>
+    <string name="quick_launcher_action_new_note">New note</string>
+    <string name="quick_launcher_action_compose">Compose email</string>
+    <string name="quick_launcher_action_search">Search</string>
 </resources>

@@ -846,6 +846,11 @@
     <string name="user_shortcuts_website_address">Διεύθυνση</string>
     <string name="user_shortcuts_name">Όνομα</string>
     <string name="user_shortcuts_add">Προσθήκη</string>
+    <string name="quick_launcher_action_new_message">Νέο μήνυμα</string>
+    <string name="quick_launcher_action_new_post">Νέα ανάρτηση</string>
+    <string name="quick_launcher_action_new_note">Νέα σημείωση</string>
+    <string name="quick_launcher_action_compose">Σύνταξη email</string>
+    <string name="quick_launcher_action_search">Αναζήτηση</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d συνδυασμός στέλνεται ως συντόμευση της εφαρμογής</item>
         <item quantity="other">%d συνδυασμοί στέλνονται ως συντομεύσεις της εφαρμογής</item>

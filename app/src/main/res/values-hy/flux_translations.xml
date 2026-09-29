@@ -1567,6 +1567,11 @@
     <string name="user_shortcuts_website_address">Հասցե</string>
     <string name="user_shortcuts_name">Անուն</string>
     <string name="user_shortcuts_add">Ավելացնել</string>
+    <string name="quick_launcher_action_new_message">Նոր հաղորդագրություն</string>
+    <string name="quick_launcher_action_new_post">Նոր գրառում</string>
+    <string name="quick_launcher_action_new_note">Նոր նշում</string>
+    <string name="quick_launcher_action_compose">Գրել նամակ</string>
+    <string name="quick_launcher_action_search">Որոնում</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d համակցություն ուղարկվում է որպես հավելվածի դյուրանցում</item>
         <item quantity="other">%d համակցություն ուղարկվում է որպես հավելվածի դյուրանցումներ</item>

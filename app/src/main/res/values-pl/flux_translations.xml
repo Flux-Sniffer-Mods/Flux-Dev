@@ -1567,6 +1567,11 @@
     <string name="user_shortcuts_website_address">Adres</string>
     <string name="user_shortcuts_name">Nazwa</string>
     <string name="user_shortcuts_add">Dodaj</string>
+    <string name="quick_launcher_action_new_message">Nowa wiadomość</string>
+    <string name="quick_launcher_action_new_post">Nowy post</string>
+    <string name="quick_launcher_action_new_note">Nowa notatka</string>
+    <string name="quick_launcher_action_compose">Napisz e-mail</string>
+    <string name="quick_launcher_action_search">Szukaj</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d kombinacja wysyłana jako własny skrót aplikacji</item>
         <item quantity="few">%d kombinacje wysyłane jako własne skróty aplikacji</item>
