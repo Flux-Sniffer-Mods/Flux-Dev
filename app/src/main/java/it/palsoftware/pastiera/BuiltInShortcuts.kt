@@ -97,11 +97,20 @@ internal fun BuiltInShortcuts(
         }.onFailure { pickingFor = null }
     }
 
+    // Calling straight away needs the phone permission; without it the dialer opens with the number
+    val callPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { pickContact("call") }
+
     var websiteDialog by rememberSaveable { mutableStateOf(false) }
     var termuxDialog by rememberSaveable { mutableStateOf(false) }
     val termuxPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { termuxDialog = true }
 
-    row(dialer?.icon, stringResource(R.string.user_shortcuts_call_title), dialer?.name.orEmpty()) { pickContact("call") }
+    row(dialer?.icon, stringResource(R.string.user_shortcuts_call_title), dialer?.name.orEmpty()) {
+        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            pickContact("call")
+        } else {
+            runCatching { callPermission.launch(android.Manifest.permission.CALL_PHONE) }.onFailure { pickContact("call") }
+        }
+    }
     row(messages?.icon, stringResource(R.string.user_shortcuts_message_title), messages?.name.orEmpty()) { pickContact("message") }
     row(browser?.icon, stringResource(R.string.user_shortcuts_website_title), browser?.name.orEmpty()) { websiteDialog = true }
     if (termux != null) {
