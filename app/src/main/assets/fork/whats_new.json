@@ -361,6 +361,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Words not in a restored backup no longer come back into your dictionary",
+      "after": "202609291554"
+    },
+    {
       "text": "The Add a shortcut page is laid out like the other settings pages, with readable names and each shortcut's app",
       "after": "202609291544"
     },
