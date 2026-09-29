@@ -1154,6 +1154,38 @@ object SettingLinkRegistry {
             R.string.keyboard_theme_title
     ) + customizationSettingSubtitles()
 
+    /** The main settings categories, in the order the settings screen lists them. */
+    val categories: List<SettingsDestination> = listOf(
+        SettingsDestination.Typing, SettingsDestination.KeyboardsLayouts, SettingsDestination.Modifiers,
+        SettingsDestination.FluxEmojiGifs, SettingsDestination.Apps, SettingsDestination.LookSound,
+        SettingsDestination.Advanced
+    )
+
+    /** Which main category a settings page belongs to. */
+    fun categoryOf(destination: SettingsDestination): SettingsDestination = when (destination) {
+        SettingsDestination.Typing, SettingsDestination.AutoCorrection, SettingsDestination.TextInput,
+        SettingsDestination.TextExpansion, SettingsDestination.EditingKeys, SettingsDestination.NavMode,
+        SettingsDestination.TrackpadGestures, SettingsDestination.Accessibility -> SettingsDestination.Typing
+        SettingsDestination.KeyboardsLayouts, SettingsDestination.CustomInputStyles,
+        SettingsDestination.KeyboardsDevices, SettingsDestination.FluxTitanScreen -> SettingsDestination.KeyboardsLayouts
+        SettingsDestination.Modifiers, SettingsDestination.DeviceSymLayerEditor -> SettingsDestination.Modifiers
+        SettingsDestination.FluxEmojiGifs, SettingsDestination.EmojiProfiles -> SettingsDestination.FluxEmojiGifs
+        SettingsDestination.Apps, SettingsDestination.AppShortcuts, SettingsDestination.ExactTyping,
+        SettingsDestination.TerminalMode, SettingsDestination.FluxHiddenApps, SettingsDestination.FluxLinuxDesktop,
+        SettingsDestination.Customization -> SettingsDestination.Apps
+        SettingsDestination.LookSound, SettingsDestination.LedColors -> SettingsDestination.LookSound
+        else -> SettingsDestination.Advanced
+    }
+
+    /**
+     * [search], grouped by main category: the category with the best match first, and the
+     * best matches first within each, so the headings show where each setting lives.
+     */
+    fun searchGrouped(context: Context, query: String): List<Pair<SettingsDestination, List<SettingEntry>>> =
+        search(context, query)
+            .groupBy { categoryOf(it.route.destination) }
+            .toList()
+
     /**
      * Search across all registered entries. The query is split into tokens;
      * an entry matches only when every token matches, and ranks by the summed

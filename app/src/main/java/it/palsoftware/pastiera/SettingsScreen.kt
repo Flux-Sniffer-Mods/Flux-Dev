@@ -413,7 +413,7 @@ private fun SettingsMainScreen(
     val categoriesScrollState = rememberScrollState()
     val keyboardController = LocalSoftwareKeyboardController.current
     val searchResults = remember(searchQuery, context) {
-        SettingLinkRegistry.search(context, searchQuery)
+        SettingLinkRegistry.searchGrouped(context, searchQuery)
     }
     Scaffold(
         topBar = {
@@ -469,14 +469,20 @@ private fun SettingsMainScreen(
                                 .padding(horizontal = 16.dp, vertical = 12.dp)
                         )
                     } else {
-                        searchResults.forEach { entry ->
-                            SettingSearchResultRow(
-                                entry = entry,
-                                onClick = {
-                                    keyboardController?.hide()
-                                    onOpenSettingEntry(entry)
-                                }
+                        // Grouped under the main categories, the best-matching category first
+                        searchResults.forEach { (category, entries) ->
+                            SettingsSectionDivider(
+                                stringResource(SettingLinkRegistry.destinationTitles[category] ?: R.string.settings_title)
                             )
+                            entries.forEach { entry ->
+                                SettingSearchResultRow(
+                                    entry = entry,
+                                    onClick = {
+                                        keyboardController?.hide()
+                                        onOpenSettingEntry(entry)
+                                    }
+                                )
+                            }
                         }
                     }
                     Spacer(modifier = Modifier.height(16.dp))

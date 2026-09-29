@@ -77,6 +77,10 @@
   ],
   "improvements": [
     {
+      "text": "Settings search groups its results under the settings categories, the best-matching category first, so you can see where each setting lives.",
+      "after": "202609291629"
+    },
+    {
       "text": "Capital after an emoticon: a text emoticon such as :) ;D or <3 ends a sentence like a full stop, so the next word gets a capital (Typing, on by default).",
       "after": "202609291627"
     },
