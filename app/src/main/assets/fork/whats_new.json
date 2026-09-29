@@ -89,6 +89,10 @@
   ],
   "improvements": [
     {
+      "text": "Alt works in emoji and symbol search: Alt with a key types its Alt character (search \"100\"), and a tapped or locked Alt lets go after it.",
+      "after": "202609292146"
+    },
+    {
       "text": "Flux Keyboard's New and Search shortcuts reach every app that offers those screens, going by its category, not only the apps in its lists.",
       "after": "202609291928"
     },

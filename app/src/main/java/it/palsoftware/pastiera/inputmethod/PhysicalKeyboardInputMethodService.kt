@@ -5687,13 +5687,26 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             candidatesBarController.handleEmojiPickerSearchKeyDown(
                 event,
                 emojiSearchCtrlActive,
-                // Search is lower case: no automatic capital or Shift from the app's field
+                // Search is lower case: no automatic capital or Shift from the app's field. Alt
+                // (held, tapped or locked) types the key's Alt character, "1" for 100 emoji, then
+                // lets go
                 resolveTypedText = { typedEvent ->
-                    getCharacterFromLayout(
-                        typedEvent.keyCode,
-                        typedEvent,
-                        false
-                    )?.toString()?.lowercase()
+                    val altOn = typedEvent.isAltPressed || altPhysicallyPressed || altOneShot || altLatchActive
+                    val altChar = if (altOn) alternateCharacterManager.getAltModifierMappings()[typedEvent.keyCode] else null
+                    if (altChar != null) {
+                        if (!altPhysicallyPressed && !typedEvent.isAltPressed) {
+                            altOneShot = false
+                            if (altLatchActive) modifierStateController.clearAltState()
+                            updateStatusBarText()
+                        }
+                        altChar
+                    } else {
+                        getCharacterFromLayout(
+                            typedEvent.keyCode,
+                            typedEvent,
+                            false
+                        )?.toString()?.lowercase()
+                    }
                 }
             )
         ) {
