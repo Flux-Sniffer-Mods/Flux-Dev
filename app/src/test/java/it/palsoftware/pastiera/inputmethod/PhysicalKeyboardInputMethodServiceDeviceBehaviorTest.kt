@@ -327,6 +327,25 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
     }
 
     @Test
+    fun appEnter_shiftEnterIsANewLine_inAChatBoxNotMarkedMultiLine() {
+        // WhatsApp's message box: Send action, not marked multi-line, Enter sends
+        focusNewField(
+            newRecorder = RecordingInputConnection(),
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES,
+            packageName = "com.whatsapp",
+            imeOptions = EditorInfo.IME_ACTION_SEND
+        )
+        recorder.performEditorActionResult = true
+
+        service.onKeyDown(
+            KeyEvent.KEYCODE_ENTER,
+            KeyEvent(2_753L, 2_753L, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, KeyEvent.META_SHIFT_ON or KeyEvent.META_SHIFT_LEFT_ON)
+        )
+
+        assertTrue(recorder.editorActions.isEmpty())
+    }
+
+    @Test
     fun appEnter_facebookMessengerManualEditorStrategy_usesEditorAction() {
         configureAppEnterOverride(
             packageName = "com.facebook.orca",

@@ -1279,15 +1279,22 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             )
         }
 
-        // Search boxes, address bars and one-line fields: Enter does the field's own action
-        // (search, go, next), whatever Enter does in the app's message and note fields
+        val appEnterBehavior = resolveAppEnterBehavior(info)
+        // Search boxes and address bars always, and one-line fields where the app's Enter would
+        // type a new line: Enter does the field's own action (search, go, next). A message box
+        // that sends with Enter keeps Shift + Enter for a new line (WhatsApp's isn't marked
+        // multi-line, but takes new lines)
+        val enterMakesNewLine = appEnterBehavior == SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE ||
+            appEnterBehavior == SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_CTRL_SEND ||
+            appEnterBehavior == SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE_SHIFT_SEND
         if (actionId != null && !navModeController.isNavModeActive() &&
-            (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_GO || !acceptsNewLines(info))
+            (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_GO ||
+                (enterMakesNewLine && !acceptsNewLines(info)))
         ) {
             return performEnterEditorAction(keyCode, actionId, ic, event, consumeCtrlState = ctrlActiveForEnter)
         }
 
-        when (resolveAppEnterBehavior(info)) {
+        when (appEnterBehavior) {
             SettingsManager.ENTER_BEHAVIOR_ENTER_NEWLINE -> {
                 if (navModeController.isNavModeActive() && ctrlActiveForEnter) {
                     return performConfiguredAppEnterSend(

@@ -373,6 +373,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Shift + Enter makes a new line in WhatsApp again",
+      "after": "202609291623"
+    },
+    {
       "text": "Words not in a restored backup no longer come back into your dictionary",
       "after": "202609291554"
     },
