@@ -126,6 +126,10 @@ class CommandExecutor(
     }
 
     private fun executeInternalAction(actionId: String): CommandExecutionResult {
+        // Root commands (only offered on rooted phones)
+        if (actionId.startsWith("root_")) {
+            return if (RootCommandSource.execute(context, actionId)) CommandExecutionResult.Success else fail("Unknown action")
+        }
         return when (actionId) {
             PastieraCommandSource.ACTION_OPEN_QUICK_LAUNCHER -> {
                 try {

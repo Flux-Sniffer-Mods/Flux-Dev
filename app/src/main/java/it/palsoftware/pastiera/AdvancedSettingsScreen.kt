@@ -341,6 +341,16 @@ fun AdvancedSettingsScreen(
                             linkId = SettingLinkIds.MAIN_FLUX_OFFLINE,
                             onClick = { onNavigate(SettingsDestination.FluxOffline) }
                         )
+                        // Rooted phones only
+                        if (remember { it.palsoftware.pastiera.root.RootShell.probablyRooted() }) {
+                            SettingsCategoryRow(
+                                icon = Icons.Filled.Code,
+                                title = stringResource(R.string.root_title),
+                                description = stringResource(R.string.root_row_description),
+                                linkId = "main.root",
+                                onClick = { onNavigate(SettingsDestination.Root) }
+                            )
+                        }
 
                         SettingsSectionDivider(stringResource(R.string.settings_section_clipboard))
                         FluxSwitchRow(

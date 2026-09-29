@@ -110,6 +110,8 @@ import rikka.shizuku.Shizuku
 class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibilityKeyBridge.Target {
 
     companion object {
+        /** Root page: read the keyboard's touch pad as root (and pause the scroll module while typing) */
+        const val ROOT_TRACKPAD_KEY = "root_read_trackpad"
         private const val PASTE_SUGGESTION_WINDOW_MS = 60_000L
         private const val TAG = "PastieraInputMethod"
         private const val TRACKPAD_DEBUG_TAG = "TrackpadDebug"
@@ -1844,6 +1846,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     override fun onCreate() {
         super.onCreate()
         ClicksAccessibilityKeyBridge.register(this)
+        // Root: the keyboard backlight follows the screen, when set (the Root page)
+        it.palsoftware.pastiera.root.KeyboardBacklight.start(this)
         // A code arriving while typing is offered straight away
         it.palsoftware.pastiera.otp.OneTimeCodes.onNewCode = { if (isInputViewShown || isInputViewActive) offerOneTimeCode() }
         EmojiCompatSupport.ensureLoaded(this)
@@ -4172,6 +4176,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     override fun onFinishInput() {
+        // Root: the scroll module scrolls again once you're out of the field
+        it.palsoftware.pastiera.root.ScrollModule.onTypingEnded()
         // Leaving the field: an email or number typed there is complete
         learnContactDetails(endOfEntry = true)
         contactKeysTyped = 0
@@ -4254,13 +4260,18 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         attachTrackpadDecorViewMotionHook("onWindowShown")
     }
 
+    private fun rootTrackpad(): Boolean =
+        SettingsManager.getPreferences(this).getBoolean(ROOT_TRACKPAD_KEY, false)
+
     private fun shouldStartShizukuTrackpadDetector(): Boolean {
+        // Root (the Root page) reads the pad the same way Shizuku does
+        it.palsoftware.pastiera.inputmethod.trackpad.ShizukuTrackpadDeviceDiscovery.viaRoot = rootTrackpad()
         return SettingsManager.getTrackpadGesturesEnabled(this) &&
-            SettingsManager.getTrackpadProvider(this) == SettingsManager.TRACKPAD_PROVIDER_SHIZUKU
+            (SettingsManager.getTrackpadProvider(this) == SettingsManager.TRACKPAD_PROVIDER_SHIZUKU || rootTrackpad())
     }
 
     private fun isNativeImeTrackpadProviderActive(): Boolean {
-        return SettingsManager.getTrackpadGesturesEnabled(this) &&
+        return SettingsManager.getTrackpadGesturesEnabled(this) && !rootTrackpad() &&
             SettingsManager.getTrackpadProvider(this) == SettingsManager.TRACKPAD_PROVIDER_NATIVE_IME
     }
 
@@ -5535,6 +5546,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     override fun onKeyDown(keyCode_: Int, event_: KeyEvent?): Boolean {
         // The quick launcher in front: its keys go to it, not to the app's field beneath
         if (QuickLauncherActivity.ownsKey(event_)) return false
+        // Root: the scroll module pauses while you type, so the pad's swipes pick suggestions
+        if ((event_?.repeatCount ?: 0) == 0 && rootTrackpad() && inputContextState.isEditable) {
+            it.palsoftware.pastiera.root.ScrollModule.onTypingStarted(this)
+        }
         // Suggestion swipes: typing keeps them picking; Backspace right after one undoes it
         if ((event_?.repeatCount ?: 0) == 0 && !KeyEvent.isModifierKey(keyCode_)) {
             if (keyCode_ == KeyEvent.KEYCODE_DEL) it.palsoftware.pastiera.core.SuggestionSwipeLearning.onDeleted(this)

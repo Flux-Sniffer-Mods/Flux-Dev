@@ -4,6 +4,10 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "Root page (rooted phones only, in Advanced): the keyboard backlight on and off with the screen, following its brightness, or flashing for notifications; suggestion swipes reading the touch pad as root, pausing the Titan 2 better keyboard scroll module while you type; and root shortcuts to force-stop the app in front, restart the system UI, toggle Battery Saver or cut the app in front off the network.",
+      "after": "202609292312"
+    },
+    {
       "text": "Works with Gboard's spell checker: when Android's spell checker is another app's, its corrections for a misspelt word join Flux Keyboard's suggestions (Suggestions & auto-correction, on by default).",
       "after": "202609292231"
     },

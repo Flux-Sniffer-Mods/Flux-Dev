@@ -67,7 +67,7 @@ class TrackpadGestureDetector(
         val shizukuAvailable = shizukuRunning && shizukuAuthorized
         Log.d(DEBUG_TAG, "start() Shizuku status: running=$shizukuRunning, authorized=$shizukuAuthorized, available=$shizukuAvailable")
         
-        if (!shizukuAvailable) {
+        if (!shizukuAvailable && !ShizukuTrackpadDeviceDiscovery.viaRoot) {
             val reason = when {
                 !shizukuRunning -> "Shizuku not running"
                 !shizukuAuthorized -> "App not authorized in Shizuku"

@@ -39,6 +39,48 @@ internal fun systemSettingEntries(): List<SettingEntry> = listOf(
         route = SettingRoute(SettingsDestination.Accessibility)
     ),
     SettingEntry(
+        id = "main.root",
+        titleRes = R.string.root_title,
+        summaryRes = R.string.root_row_description,
+        route = SettingRoute(SettingsDestination.Root),
+        availabilityCheck = { _ -> it.palsoftware.pastiera.root.RootShell.probablyRooted() }
+    ),
+    SettingEntry(
+        id = "root.backlight_screen",
+        titleRes = R.string.root_backlight_screen_title,
+        summaryRes = R.string.root_backlight_screen_description,
+        route = SettingRoute(SettingsDestination.Root),
+        availabilityCheck = { _ -> it.palsoftware.pastiera.root.RootShell.probablyRooted() }
+    ),
+    SettingEntry(
+        id = "root.backlight_brightness",
+        titleRes = R.string.root_backlight_brightness_title,
+        summaryRes = R.string.root_backlight_brightness_description,
+        route = SettingRoute(SettingsDestination.Root),
+        availabilityCheck = { _ -> it.palsoftware.pastiera.root.RootShell.probablyRooted() }
+    ),
+    SettingEntry(
+        id = "root.backlight_flash",
+        titleRes = R.string.root_backlight_flash_title,
+        summaryRes = R.string.root_backlight_flash_description,
+        route = SettingRoute(SettingsDestination.Root),
+        availabilityCheck = { _ -> it.palsoftware.pastiera.root.RootShell.probablyRooted() }
+    ),
+    SettingEntry(
+        id = "root.trackpad",
+        titleRes = R.string.root_trackpad_title,
+        summaryRes = R.string.root_trackpad_description,
+        route = SettingRoute(SettingsDestination.Root),
+        availabilityCheck = { _ -> it.palsoftware.pastiera.root.RootShell.probablyRooted() }
+    ),
+    SettingEntry(
+        id = "root.scroll_module",
+        titleRes = R.string.root_scroll_module_title,
+        summaryRes = R.string.root_scroll_module_description,
+        route = SettingRoute(SettingsDestination.Root),
+        availabilityCheck = { _ -> it.palsoftware.pastiera.root.RootShell.probablyRooted() }
+    ),
+    SettingEntry(
         id = "trackpad.swipe_learning",
         titleRes = R.string.suggestion_swipe_learning_title,
         summaryRes = R.string.suggestion_swipe_learning_description,

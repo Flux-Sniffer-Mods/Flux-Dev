@@ -71,6 +71,7 @@ enum class SettingsDestination {
     FluxHiddenApps,
     FluxLinuxDesktop,
     FluxOffline,
+    Root,
     KeyboardsLayouts,
     Typing,
     EditingKeys,
@@ -346,6 +347,9 @@ fun SettingsScreen(
             }
             SettingsDestination.FluxOffline -> {
                 FluxOfflineScreen(modifier = modifier, onBack = { navigateBack() })
+            }
+            SettingsDestination.Root -> {
+                RootSettingsScreen(modifier = modifier, onBack = { navigateBack() })
             }
             SettingsDestination.About -> {
                 AboutScreen(

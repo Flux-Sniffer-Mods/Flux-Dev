@@ -61,6 +61,7 @@ class CommandRegistry(
                 TermuxScriptCommandSource(),
                 UserShortcutCommandSource(),
                 DeviceControlCommandSource(),
+                RootCommandSource(),
                 NavCommandSource()
             )
         }

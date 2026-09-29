@@ -7,6 +7,10 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 object ShizukuTrackpadDeviceDiscovery {
+    /** Read the pad as root instead of through Shizuku (the Root page) */
+    @Volatile
+    var viaRoot: Boolean = false
+
     suspend fun discover(): List<TrackpadInputDevice> = withContext(Dispatchers.IO) {
         discoverBlocking()
     }
@@ -27,6 +31,7 @@ object ShizukuTrackpadDeviceDiscovery {
     }
 
     internal fun startProcess(command: Array<String>): Process {
+        if (viaRoot) return it.palsoftware.pastiera.root.RootShell.start(command.joinToString(" "))
         val newProcessMethod = Shizuku::class.java.getDeclaredMethod(
             "newProcess",
             Array<String>::class.java,
