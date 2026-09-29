@@ -4584,6 +4584,22 @@ object SettingsManager {
             else -> if (BuildConfig.VERSION_NAME.contains("-flux.")) FORK_UPDATE_CHANNEL_DEV else FORK_UPDATE_CHANNEL_STABLE
         }
 
+    /**
+     * A dev build's choices stay when it updates to a full release: the Dev update channel and
+     * Developer options, which otherwise follow the installed build, are kept as settings. Also
+     * for a release installed over a dev build, while What's new still remembers the dev build.
+     */
+    fun keepDevBuildChoices(context: Context) {
+        val prefs = getPreferences(context)
+        val onDevBuild = BuildConfig.VERSION_NAME.contains("-flux.") ||
+            prefs.getString(KEY_LAST_SEEN_WHATS_NEW_VERSION, null)?.contains("-flux.") == true
+        if (!onDevBuild) return
+        val edit = prefs.edit()
+        if (!prefs.contains(KEY_FORK_UPDATE_CHANNEL)) edit.putString(KEY_FORK_UPDATE_CHANNEL, FORK_UPDATE_CHANNEL_DEV)
+        if (!prefs.contains(KEY_DEVELOPER_OPTIONS_ENABLED)) edit.putBoolean(KEY_DEVELOPER_OPTIONS_ENABLED, true)
+        edit.apply()
+    }
+
     fun setForkUpdateChannel(context: Context, channel: String) {
         getPreferences(context).edit().putString(KEY_FORK_UPDATE_CHANNEL, channel).apply()
     }
