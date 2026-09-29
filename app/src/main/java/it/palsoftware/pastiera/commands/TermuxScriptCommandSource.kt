@@ -20,7 +20,7 @@ class TermuxScriptCommandSource : CommandSource {
             val path = intent.getStringExtra("com.termux.RUN_COMMAND_PATH").orEmpty()
             if (added.any { path in it }) return@mapNotNull null
             val label = TermuxScripts.label(script)
-            val kind = if (script.startsWith("tasks/")) "Termux task" else "Termux"
+            val kind = TermuxScripts.kind(context, script.startsWith("tasks/"))
             CommandTarget(
                 id = "termux:$script",
                 source = id,

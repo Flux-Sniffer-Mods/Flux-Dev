@@ -225,8 +225,14 @@ private fun TermuxTaskDialog(onPicked: (String) -> Unit, onDismiss: () -> Unit) 
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     else -> found.forEach { script ->
-                        Text(script, style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.fillMaxWidth().clickable { onPicked(script) }.padding(vertical = 10.dp))
+                        Column(Modifier.fillMaxWidth().clickable { onPicked(script) }.padding(vertical = 8.dp)) {
+                            Text(script, style = MaterialTheme.typography.bodyLarge)
+                            Text(
+                                it.palsoftware.pastiera.shortcuts.TermuxScripts.kind(context, script.startsWith("tasks/")),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                     }
                 }
                 if (failed && !found.isNullOrEmpty()) {

@@ -19,7 +19,9 @@ class UserShortcutCommandSource : CommandSource {
                 source = id,
                 kind = CommandKind.Shortcut,
                 label = shortcut.label,
-                subtitle = appName,
+                subtitle = it.palsoftware.pastiera.shortcuts.TermuxScripts.runsInBackground(shortcut.intentUri)
+                    ?.let { background -> it.palsoftware.pastiera.shortcuts.TermuxScripts.kind(context, background) }
+                    ?: appName,
                 icon = CommandIcon.DrawableIcon(UserShortcuts.icon(context, shortcut)),
                 launch = CommandLaunchSpec.IntentUri(
                     action = UserShortcuts.LAUNCH_ACTION,

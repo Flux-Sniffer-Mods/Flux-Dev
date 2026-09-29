@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
+import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.SettingsManager
 
 /**
@@ -49,6 +50,17 @@ object TermuxScripts {
     /** The script's path in Termux and whether it runs in the background (Termux:Widget's tasks). */
     fun command(script: String): Intent =
         UserShortcuts.termuxCommand("${UserShortcuts.TERMUX_HOME}/.shortcuts/$script", background = script.startsWith("tasks/"))
+
+    /** "Termux · background" or "Termux · terminal": how the script runs, as Termux:Widget runs it. */
+    fun kind(context: Context, background: Boolean): String =
+        context.getString(if (background) R.string.termux_runs_background else R.string.termux_runs_terminal)
+
+    /** Whether a Termux command (as an intent URI) runs in the background; null when it isn't one. */
+    fun runsInBackground(intentUri: String): Boolean? {
+        val intent = runCatching { Intent.parseUri(intentUri, Intent.URI_INTENT_SCHEME) }.getOrNull() ?: return null
+        if (intent.action != "com.termux.RUN_COMMAND") return null
+        return intent.getBooleanExtra("com.termux.RUN_COMMAND_BACKGROUND", false)
+    }
 
     fun label(script: String): String = script.substringAfterLast('/').substringBeforeLast('.').ifBlank { script }
 
