@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="emoticon_punctuation_title">Emoticons keep their shape</string>
+    <string name="emoticon_punctuation_description">Punctuation typed straight into more, as in :-) ;( :D or :\'(, gets no space after it. If a word follows (:Do), the space comes back. Full stops always keep their space.</string>
+</resources>

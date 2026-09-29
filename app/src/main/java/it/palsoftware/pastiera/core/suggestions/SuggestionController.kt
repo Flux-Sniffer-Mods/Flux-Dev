@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.core.suggestions
 
+import it.palsoftware.pastiera.SettingsManager
 import android.content.Context
 import android.content.res.AssetManager
 import android.os.Handler
@@ -60,6 +61,7 @@ class SuggestionController(
     )
     private var autoReplaceController = createAutoReplaceController()
     private val nextWordPredictor = nextWordPredictorOverride ?: NextWordPredictor(UserNGramStore(appContext))
+    private val frequentWordLearner by lazy { FrequentWordLearner(SettingsManager.getPreferences(appContext)) }
     private val extraSuggestionEngines = mutableMapOf<String, SuggestionLanguageEngine>()
 
     private data class SuggestionLanguageEngine(
@@ -584,6 +586,14 @@ class SuggestionController(
         nextWordPredictor.destroy()
     }
 
+    /** A word outside the dictionary, typed often enough, goes into it ("Learn words you use often"). */
+    private fun learnIfUsedOften(word: String) {
+        if (!SettingsManager.getLearnFrequentWords(appContext)) return
+        // Until the dictionary is loaded every word would look new
+        if (!dictionaryRepository.isReady || isKnownWordInActiveDictionaries(word)) return
+        frequentWordLearner.countUse(word)?.let(::addUserWord)
+    }
+
     private fun handleCompletedWordBoundary(completedWord: String?, boundaryChar: Char?) {
         val settings = settingsProvider()
         if (!settings.suggestionsEnabled) {
@@ -601,6 +611,7 @@ class SuggestionController(
             previousCompletedWord?.let { previous ->
                 nextWordPredictor.learn(currentLocale, previous, cleanWord)
             }
+            learnIfUsedOften(cleanWord)
         }
 
         when {

@@ -91,7 +91,7 @@ class PastieraSpellCheckerService : SpellCheckerService() {
             if (result.known || '\'' !in plain) return result
             // A contraction or possessive of a known word (couldn't, it's, Sam's), or a word the
             // dictionary spells without its apostrophe
-            val known = listOfNotNull(SpellCheckRules.contractionBase(plain), plain.replace("'", ""))
+            val known = SpellCheckRules.apostropheForms(plain)
                 .any { checkAsTyped(it, 1)?.known == true }
             return if (known) SuggestionController.SpellCheckResult(true, emptyList()) else result
         }
@@ -163,6 +163,36 @@ object SpellCheckRules {
         val plain = word.replace('’', '\'')
         val ending = CONTRACTION_ENDINGS.firstOrNull { plain.endsWith(it, ignoreCase = true) } ?: return null
         return plain.dropLast(ending.length).takeIf { base -> base.isNotEmpty() && base.all { it.isLetter() } }
+    }
+
+    /** Contractions whose first part isn't a word of its own (won't: "wo"), and what they're made from */
+    private val IRREGULAR_CONTRACTIONS = mapOf(
+        "won't" to "will", "can't" to "can", "shan't" to "shall", "ain't" to "is",
+        "y'all" to "you", "o'clock" to "clock", "ma'am" to "madam", "'tis" to "it", "'twas" to "it"
+    )
+
+    /** Short elided words before an apostrophe: l'homme, d'accord, qu'il, dell'anno, un'altra */
+    private const val MAX_ELISION_LENGTH = 6
+
+    /**
+     * Known words a word with apostrophes may be checked as: what a contraction or possessive is
+     * made from (couldn't: could, won't: will), the word after an elision (l'homme: homme), or
+     * the word without its apostrophes. Any one being known makes the word known.
+     */
+    fun apostropheForms(word: String): List<String> {
+        val plain = word.replace('’', '\'')
+        val forms = mutableListOf<String>()
+        IRREGULAR_CONTRACTIONS[plain.lowercase(Locale.ROOT)]?.let(forms::add)
+        contractionBase(plain)?.let(forms::add)
+        val apostrophe = plain.lastIndexOf('\'')
+        // Not for English endings ('re, 've…): "thye're" isn't known because "re" is
+        if (forms.isEmpty() && apostrophe in 1..MAX_ELISION_LENGTH) {
+            val prefix = plain.substring(0, apostrophe)
+            val rest = plain.substring(apostrophe + 1)
+            if (prefix.all { it.isLetter() } && rest.length >= 2) forms += rest
+        }
+        forms += plain.replace("'", "")
+        return forms.distinct()
     }
 
     /** Languages with a bundled dictionary (assets/common/dictionaries_serialized). */

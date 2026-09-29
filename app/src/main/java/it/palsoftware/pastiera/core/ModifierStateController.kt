@@ -29,7 +29,10 @@ class ModifierStateController(
             isConsecutiveTap: Boolean,
             singleTapLatches: Boolean = false
         ): ShiftState {
-            val doubleTap = isConsecutiveTap && now - lastTapTime < doubleTapThreshold
+            // A quick second tap locks Shift only if the first turned it on: tapping it on, off,
+            // then on again gives Shift, not Caps Lock
+            val doubleTap = isConsecutiveTap && now - lastTapTime < doubleTapThreshold &&
+                state == ShiftState.ONE_SHOT
             lastTapTime = now
             state = when {
                 doubleTap -> if (state == ShiftState.CAPS) ShiftState.OFF else ShiftState.CAPS

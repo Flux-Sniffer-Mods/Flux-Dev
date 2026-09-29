@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera
 
+import it.palsoftware.pastiera.core.writeTextAtomically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -456,6 +457,28 @@ fun AutoCorrectionCategoryScreen(
                             onCheckedChange = { enabled ->
                                 addLastWordShortcut = enabled
                                 SettingsManager.setAddLastWordShortcut(context, enabled)
+                            }
+                        )
+                        var learnFrequentWords by remember { mutableStateOf(SettingsManager.getLearnFrequentWords(context)) }
+                        FluxSwitchRow(
+                            linkId = "auto_correction.learn_frequent_words",
+                            title = stringResource(R.string.learn_frequent_words_title),
+                            description = stringResource(R.string.learn_frequent_words_description),
+                            checked = learnFrequentWords,
+                            onCheckedChange = { enabled ->
+                                learnFrequentWords = enabled
+                                SettingsManager.setLearnFrequentWords(context, enabled)
+                            }
+                        )
+                        var learnContactDetails by remember { mutableStateOf(SettingsManager.getLearnContactDetails(context)) }
+                        FluxSwitchRow(
+                            linkId = "auto_correction.learn_contact_details",
+                            title = stringResource(R.string.learn_contact_details_title),
+                            description = stringResource(R.string.learn_contact_details_description),
+                            checked = learnContactDetails,
+                            onCheckedChange = { enabled ->
+                                learnContactDetails = enabled
+                                SettingsManager.setLearnContactDetails(context, enabled)
                             }
                         )
 
@@ -1102,7 +1125,7 @@ private class DefaultUserDefaultsStore(private val context: Context) {
                 obj.put("f", entry.frequency)
                 array.put(obj)
             }
-            file.writeText(array.toString())
+            file.writeTextAtomically(array.toString())
         } catch (_: Exception) {
             // Ignore persistence errors; UI will just not reflect changes
         }

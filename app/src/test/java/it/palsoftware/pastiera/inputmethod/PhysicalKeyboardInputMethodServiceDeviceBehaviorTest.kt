@@ -306,6 +306,27 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
     }
 
     @Test
+    fun appEnter_searchBoxSearches_evenWhenTheAppsEnterIsANewLine() {
+        SettingsManager.setAppEnterBehaviorPreset(RuntimeEnvironment.getApplication(), SettingsManager.ENTER_BEHAVIOR_PRESET_ENTER_NEWLINE_ONLY)
+        focusNewField(
+            newRecorder = RecordingInputConnection(),
+            inputType = InputType.TYPE_CLASS_TEXT,
+            packageName = "com.android.vending",
+            imeOptions = EditorInfo.IME_ACTION_SEARCH
+        )
+        recorder.performEditorActionResult = true
+
+        val handled = service.onKeyDown(
+            KeyEvent.KEYCODE_ENTER,
+            keyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 2_752L, 2_752L)
+        )
+
+        assertTrue(handled)
+        assertEquals(listOf(EditorInfo.IME_ACTION_SEARCH), recorder.editorActions)
+        assertFalse(recorder.committedTexts.contains("\n"))
+    }
+
+    @Test
     fun appEnter_facebookMessengerManualEditorStrategy_usesEditorAction() {
         configureAppEnterOverride(
             packageName = "com.facebook.orca",
@@ -1401,13 +1422,15 @@ class PhysicalKeyboardInputMethodServiceDeviceBehaviorTest {
     private fun focusNewField(
         newRecorder: RecordingInputConnection,
         inputType: Int = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES,
-        packageName: String = "it.palsoftware.pastiera.test"
+        packageName: String = "it.palsoftware.pastiera.test",
+        imeOptions: Int = 0
     ) {
         recorder = newRecorder
         inputConnection = recorder.asProxy()
         editorInfo = EditorInfo().apply {
             this.inputType = inputType
             this.packageName = packageName
+            this.imeOptions = imeOptions
         }
         setField(service, "mInputConnection", inputConnection)
         setField(service, "mStartedInputConnection", inputConnection)

@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera
 
+import it.palsoftware.pastiera.core.writeTextAtomically
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -1273,7 +1274,7 @@ private fun migrateLegacyGermanSystemLayoutMapping(context: Context) {
             }
         }
         if (changed) {
-            file.writeText(json.toString(2))
+            file.writeTextAtomically(json.toString(2))
         }
         prefs.edit().putBoolean(migrationKey, true).apply()
     } catch (e: Exception) {
@@ -1582,7 +1583,7 @@ private fun updateLocaleLayoutMapping(context: Context, locale: String, layout: 
         json.put(locale, layout)
 
         // Save to custom file
-        customMappingFile.writeText(json.toString(2))
+        customMappingFile.writeTextAtomically(json.toString(2))
 
         android.util.Log.d("CustomInputStyles", "Updated locale-layout mapping: $locale -> $layout")
 

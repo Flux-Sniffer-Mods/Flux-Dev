@@ -96,10 +96,14 @@ fun TextInputSettingsScreen(
         mutableStateOf(SettingsManager.getFrenchPunctuationOnlyFrenchLayouts(context))
     }
 
-    remember { SettingsManager.foldCommaSpaceIntoPunctuationSpacing(context) }
+    // Before the rows below read it: an old Space after comma setting moves into punctuation spacing
+    remember { SettingsManager.foldCommaSpaceIntoPunctuationSpacing(context); true }
 
     var autoSpacePunctuation by remember {
         mutableStateOf(SettingsManager.getAutoSpacePunctuation(context))
+    }
+    var emoticonPunctuation by remember {
+        mutableStateOf(SettingsManager.getEmoticonPunctuation(context))
     }
     var spaceAfterPunctuation by remember {
         mutableStateOf(SettingsManager.getSpaceAfterPunctuation(context))
@@ -384,6 +388,18 @@ fun TextInputSettingsScreen(
                 linkId = SettingLinkIds.TEXT_INPUT_AUTO_SPACE_PUNCTUATION,
                 onClick = { autoSpacePunctuationDialogVisible = true }
             )
+            AnimatedVisibility(visible = spaceAfterPunctuation.any { it != '.' }) {
+                SettingsSwitchRow(
+                    title = stringResource(R.string.emoticon_punctuation_title),
+                    description = stringResource(R.string.emoticon_punctuation_description),
+                    checked = emoticonPunctuation,
+                    linkId = SettingLinkIds.TEXT_INPUT_EMOTICON_PUNCTUATION,
+                    onCheckedChange = { enabled ->
+                        emoticonPunctuation = enabled
+                        SettingsManager.setEmoticonPunctuation(context, enabled)
+                    }
+                )
+            }
             SettingsSwitchRow(
                 title = stringResource(R.string.french_punctuation_spacing_title),
                 description = stringResource(R.string.french_punctuation_spacing_description),

@@ -20,8 +20,11 @@ object LinkCleaner {
 
     // Share ids some sites add; only removed on those sites, where they never change the page
     private val SITE_TRACKING = mapOf(
-        "youtube.com" to setOf("si", "feature", "pp"),
-        "youtu.be" to setOf("si", "feature"),
+        "youtube.com" to setOf(
+            "si", "feature", "pp", "ab_channel", "source_ve_path",
+            "embeds_referring_euri", "embeds_referring_origin", "embeds_euri"
+        ),
+        "youtu.be" to setOf("si", "feature", "pp"),
         "open.spotify.com" to setOf("si", "context", "nd"),
         "instagram.com" to setOf("igsh", "igshid", "img_index"),
         "twitter.com" to setOf("s", "t", "ref_src"),

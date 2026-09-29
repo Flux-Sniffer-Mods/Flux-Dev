@@ -78,9 +78,36 @@ class ClipboardHistoryManager internal constructor(
     }
 
     override fun onPrimaryClipChanged() {
+        // The clean link comes back here as a change of its own
+        if (cleanCopiedLink()) return
         recordRecentCopy()
         if (!isEnabled || !isHistoryAccessible()) return
         fetchPrimaryClip()
+    }
+
+    /**
+     * A link just copied loses its tracking on the clipboard itself (Clean links), so it's clean
+     * wherever it's pasted: an app's own Paste and Ctrl+V too, not only Pastiera's. Only a plain
+     * text copy is replaced, never a password manager's, formatted text or a file. Returns
+     * whether the clip was replaced.
+     */
+    private fun cleanCopiedLink(): Boolean {
+        if (!SettingsManager.getCleanPastedLinks(context)) return false
+        val clip = runCatching { clipboardManager.primaryClip }.getOrNull() ?: return false
+        if (clip.itemCount != 1 || isSensitive(clip)) return false
+        val description = clip.description ?: return false
+        if (description.mimeTypeCount != 1 ||
+            !description.hasMimeType(android.content.ClipDescription.MIMETYPE_TEXT_PLAIN)
+        ) return false
+        val item = clip.getItemAt(0) ?: return false
+        if (item.htmlText != null || item.uri != null || item.intent != null) return false
+        val text = item.text?.toString() ?: return false
+        if (text.length > MAX_CLEANED_COPY || !text.contains("://")) return false
+        val cleaned = LinkCleaner.clean(text)
+        if (cleaned == text) return false
+        return runCatching {
+            clipboardManager.setPrimaryClip(android.content.ClipData.newPlainText(description.label, cleaned))
+        }.isSuccess
     }
 
     private fun recordRecentCopy() {
@@ -268,5 +295,7 @@ class ClipboardHistoryManager internal constructor(
         private const val TAG = "ClipboardHistoryManager"
         // ClipDescription.EXTRA_IS_SENSITIVE (Android 13), set by password managers and read on every version
         private const val SENSITIVE_EXTRA = "android.content.extra.IS_SENSITIVE"
+        // Longer copies are left alone (a document, not a link someone shared)
+        private const val MAX_CLEANED_COPY = 4000
     }
 }

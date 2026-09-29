@@ -61,6 +61,7 @@ import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.inputmethod.NotificationHelper
 import it.palsoftware.pastiera.core.AutoCorrectionManager
 import it.palsoftware.pastiera.core.DeferredPunctuationSpaceTracker
+import it.palsoftware.pastiera.core.ContactDetails
 import it.palsoftware.pastiera.core.InputContextState
 import it.palsoftware.pastiera.core.ModifierStateController
 import it.palsoftware.pastiera.core.NavModeController
@@ -297,6 +298,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     
     // Constants
     private val DOUBLE_TAP_THRESHOLD = 500L
+    // Shift, Ctrl or Alt held this long with no other key: a hold, which leaves them as they were.
+    // Shorter is a tap: a deliberate press of a physical key can take 300 ms or more.
+    private val MODIFIER_HOLD_MS = 500L
+    // How much of a field is read to learn or match an email or phone number
+    private val CONTACT_TEXT_LIMIT = 320
     private val CURSOR_UPDATE_DELAY = 50L
     private val MULTI_TAP_TIMEOUT_MS = 400L
 
@@ -941,6 +947,14 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
     }
 
+    /** Whether the field can hold more than one line (a message, note or post, not a search box). */
+    private fun acceptsNewLines(info: EditorInfo?): Boolean {
+        val type = info?.inputType ?: return false
+        if (type and android.text.InputType.TYPE_MASK_CLASS != android.text.InputType.TYPE_CLASS_TEXT) return false
+        return type and (android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE or
+            android.text.InputType.TYPE_TEXT_FLAG_IME_MULTI_LINE) != 0
+    }
+
     /**
      * Whether the field says it sends (a message or comment box). Most chat apps declare Send and
      * also ask for Enter to stay a new line (IME_FLAG_NO_ENTER_ACTION), so the flag is ignored here.
@@ -1263,6 +1277,14 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 event = event,
                 consumeCtrlState = false
             )
+        }
+
+        // Search boxes, address bars and one-line fields: Enter does the field's own action
+        // (search, go, next), whatever Enter does in the app's message and note fields
+        if (actionId != null && !navModeController.isNavModeActive() &&
+            (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_GO || !acceptsNewLines(info))
+        ) {
+            return performEnterEditorAction(keyCode, actionId, ic, event, consumeCtrlState = ctrlActiveForEnter)
         }
 
         when (resolveAppEnterBehavior(info)) {
@@ -2608,12 +2630,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         
         val filter = IntentFilter(SpeechRecognitionActivity.ACTION_SPEECH_RESULT)
         
-        // On Android 13+ (API 33+) we must specify whether the receiver is exported
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(speechResultReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
-        } else {
-            registerReceiver(speechResultReceiver, filter)
-        }
+        // Not exported on every Android version: other apps can't type into fields through it
+        ContextCompat.registerReceiver(this, speechResultReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
         
         Log.d(TAG, "Broadcast receiver registered for: ${SpeechRecognitionActivity.ACTION_SPEECH_RESULT}")
         
@@ -2642,11 +2660,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             addAction(PermissionRequestActivity.ACTION_PERMISSION_DENIED)
         }
         
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(permissionResultReceiver, permissionFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
-        } else {
-            registerReceiver(permissionResultReceiver, permissionFilter)
-        }
+        // Not exported on every Android version: other apps can't type into fields through it
+        ContextCompat.registerReceiver(this, permissionResultReceiver, permissionFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
         
         Log.d(TAG, "Broadcast receiver registered for permission request results")
         
@@ -2663,11 +2678,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
         
         val userDictFilter = IntentFilter(AppBroadcastActions.USER_DICTIONARY_UPDATED)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(userDictionaryReceiver, userDictFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
-        } else {
-            registerReceiver(userDictionaryReceiver, userDictFilter)
-        }
+        // Not exported on every Android version: other apps can't type into fields through it
+        ContextCompat.registerReceiver(this, userDictionaryReceiver, userDictFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
         
         Log.d(TAG, "Broadcast receiver registered for user dictionary updates")
         
@@ -2682,11 +2694,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         }
         
         val subtypesFilter = IntentFilter("it.palsoftware.pastiera.ACTION_ADDITIONAL_SUBTYPES_UPDATED")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(additionalSubtypesReceiver, subtypesFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
-        } else {
-            registerReceiver(additionalSubtypesReceiver, subtypesFilter)
-        }
+        // Not exported on every Android version: other apps can't type into fields through it
+        ContextCompat.registerReceiver(this, additionalSubtypesReceiver, subtypesFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
         
         Log.d(TAG, "Broadcast receiver registered for additional subtypes updates")
 
@@ -3179,6 +3188,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             Toast.makeText(this, R.string.gif_sent_as_link, Toast.LENGTH_SHORT).show()
             return
         }
+        val pickedInPackage = editorInfo.packageName
+        val pickedInField = editorInfo.fieldId
         gifScope.launch {
             val file = try {
                 KlipyGifs.downloadToCache(this@PhysicalKeyboardInputMethodService, gif)
@@ -3187,9 +3198,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             } catch (e: Exception) {
                 null
             }
-            // The field may have changed during the download: use the current one
+            // The field was re-bound during the download: use the current connection, but never
+            // send to another app or field (a different chat) than the GIF was picked in
             val connection = currentInputConnection ?: return@launch
             val info = currentInputEditorInfo ?: return@launch
+            if (info.packageName != pickedInPackage || info.fieldId != pickedInField) return@launch
             if (file == null) {
                 connection.commitText(gif.gifUrl, 1)
                 return@launch
@@ -3955,8 +3968,12 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         // Reset clipboard overlay when starting new input
 
         updateInputContextState(info)
+        val incognitoField = SettingsManager.isIncognitoField(this, info?.imeOptions ?: 0)
+        it.palsoftware.pastiera.core.IncognitoTyping.active = incognitoField
         if (::suggestionController.isInitialized) {
-            suggestionController.incognito = SettingsManager.isIncognitoField(this, info?.imeOptions ?: 0)
+            // Words are never learned from passwords, email addresses or web addresses either
+            suggestionController.incognito = incognitoField ||
+                inputContextState.isPasswordField || inputContextState.restrictedReason != null
         }
         val state = inputContextState
         val isEditable = state.isEditable
@@ -4048,6 +4065,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         if (!restarting) restoreAppLanguage(info)
         if (!restarting) offerPasteSuggestion()
         if (!restarting) offerOneTimeCode()
+        if (!restarting) {
+            contactChips = emptyList()
+            refreshContactSuggestions()
+        }
         initializeInputContext(restarting)
         suggestionController.onContextReset()
         
@@ -4121,6 +4142,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     override fun onFinishInput() {
+        // Leaving the field: an email or number typed there is complete
+        learnContactDetails(endOfEntry = true)
+        contactKeysTyped = 0
+        contactDetailsSaved = null
         startAutoCapRechecks.forEach { uiHandler.removeCallbacks(it) }
         startAutoCapRechecks.clear()
         // Niagara's search closed: back to the app unless one opens from it meanwhile
@@ -4709,6 +4734,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     ) {
         val perfStart = ImePerfLogger.mark()
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
+        if (contactChips.isNotEmpty() || contactFieldKind() != null) refreshContactSuggestions()
         
         val state = inputContextState
         val cursorPositionChanged = (oldSelStart != newSelStart) || (oldSelEnd != newSelEnd)
@@ -4981,6 +5007,100 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
     // Paste suggestion: the chip offering what was just copied, while it is shown
     private var pasteSuggestionShown = false
+
+    // Remember emails and phone numbers (ContactDetails): keys typed in this field, so only what
+    // was typed by hand is kept, and the saved ones for this field's chips
+    private var contactKeysTyped = 0
+    private var contactDetailsSaved: List<String>? = null
+    private var contactChips: List<String> = emptyList()
+
+    private fun contactFieldKind(): ContactDetails.Kind? = when {
+        inputContextState.isEmailField -> ContactDetails.Kind.EMAIL
+        inputContextState.isPhoneField -> ContactDetails.Kind.PHONE
+        else -> null
+    }
+
+    /** Whether this field may learn and offer emails and numbers: never private or password fields. */
+    private fun contactDetailsAllowed(): Boolean {
+        if (!SettingsManager.getLearnContactDetails(this)) return false
+        val info = currentInputEditorInfo ?: return false
+        val state = inputContextState
+        return state.isReallyEditable && !state.isPasswordField && !terminalModeActive && !keyboardHiddenForApp &&
+            info.packageName != null
+    }
+
+    private fun countContactKey(keyCode: Int, event: KeyEvent?) {
+        if ((event?.repeatCount ?: 0) != 0 || KeyEvent.isModifierKey(keyCode)) return
+        when (keyCode) {
+            KeyEvent.KEYCODE_DEL, KeyEvent.KEYCODE_FORWARD_DEL, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_TAB,
+            KeyEvent.KEYCODE_ESCAPE, KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT,
+            KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN, KEYCODE_SYM -> return
+        }
+        contactKeysTyped++
+    }
+
+    private fun savedContactDetails(): List<String> = contactDetailsSaved ?: run {
+        val store = it.palsoftware.pastiera.core.suggestions.UserDictionaryStore()
+        store.loadUserEntries(this)
+        store.getSnapshot().map { it.word }.filter { ContactDetails.kindOf(it) != null }
+    }.also { contactDetailsSaved = it }
+
+    /**
+     * Keeps an email or phone number just typed by hand. [endOfEntry]: Enter, Tab or leaving the
+     * field, the only time a number with spaces is known to be complete.
+     */
+    private fun learnContactDetails(endOfEntry: Boolean) {
+        // Incognito: saved ones are still offered, nothing new is kept
+        if (!contactDetailsAllowed() || it.palsoftware.pastiera.core.IncognitoTyping.active) return
+        val kind = contactFieldKind()
+        if (kind == ContactDetails.Kind.PHONE && !endOfEntry) return
+        val before = runCatching { currentInputConnection?.getTextBeforeCursor(CONTACT_TEXT_LIMIT, 0) }
+            .getOrNull()?.toString() ?: return
+        val detail = ContactDetails.toLearn(before, kind, contactKeysTyped) ?: return
+        val store = it.palsoftware.pastiera.core.suggestions.UserDictionaryStore()
+        store.loadUserEntries(this)
+        val saved = store.getSnapshot().map { it.word }
+        if (ContactDetails.alreadySaved(saved, detail)) return
+        store.addWord(this, detail)
+        contactDetailsSaved = null
+        if (::suggestionController.isInitialized) suggestionController.refreshUserDictionary()
+    }
+
+    /** In an email or phone field: the saved ones that go on from what's typed, as chips. */
+    private fun refreshContactSuggestions() {
+        if (!::candidatesBarController.isInitialized) return
+        val kind = contactFieldKind()
+        val matches = if (kind == null || pasteSuggestionShown || !contactDetailsAllowed()) {
+            emptyList()
+        } else {
+            val typed = runCatching { currentInputConnection?.getTextBeforeCursor(CONTACT_TEXT_LIMIT, 0) }
+                .getOrNull()?.toString().orEmpty()
+            ContactDetails.matching(savedContactDetails(), typed, kind)
+        }
+        if (matches == contactChips) return
+        contactChips = matches
+        if (matches.isEmpty()) {
+            candidatesBarController.clearExpansionSuggestions()
+        } else {
+            candidatesBarController.showExpansionSuggestions(matches) { chosen ->
+                val connection = currentInputConnection ?: return@showExpansionSuggestions
+                val typedLength = connection.getTextBeforeCursor(CONTACT_TEXT_LIMIT, 0)?.length ?: 0
+                connection.beginBatchEdit()
+                connection.deleteSurroundingText(typedLength, 0)
+                connection.commitText(chosen, 1)
+                connection.endBatchEdit()
+                it.palsoftware.pastiera.core.suggestions.UserDictionaryStore().apply {
+                    loadUserEntries(this@PhysicalKeyboardInputMethodService)
+                    markUsed(this@PhysicalKeyboardInputMethodService, chosen)
+                }
+                contactDetailsSaved = null
+                contactChips = emptyList()
+                candidatesBarController.clearExpansionSuggestions()
+                updateStatusBarText()
+            }
+        }
+        updateStatusBarText()
+    }
 
     /** In a new text field, offer text copied within the last minute as a chip to paste it. */
     private fun offerPasteSuggestion() {
@@ -5386,6 +5506,13 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 return true
             }
         }
+        if ((event_?.repeatCount ?: 0) == 0) {
+            when (keyCode_) {
+                KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_TAB -> learnContactDetails(endOfEntry = true)
+                KeyEvent.KEYCODE_SPACE -> learnContactDetails(endOfEntry = false)
+            }
+        }
+        countContactKey(keyCode_, event_)
         val handled = handleKeyDown(keyCode_, event_)
         if (keyboardHiddenForApp || terminalHidesKeyboard) syncHiddenAppPanel()
         return handled
@@ -6421,7 +6548,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             if (shiftPressed) {
                 val downTime = modifierDownTimes[keyCode] ?: 0L
                 val holdDuration = if (downTime > 0) event?.eventTime?.minus(downTime) ?: 0L else 0L
-                val isLongHold = holdDuration > 300L
+                val isLongHold = holdDuration > MODIFIER_HOLD_MS
                 val stickyEnabled = SettingsManager.isStaticVariationBarLayerStickyEnabled(this)
                 val isIntentionalHold = variationInteractedDuringHold || (isLongHold && !otherKeyInteractedDuringHold)
 
@@ -6441,7 +6568,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                     if (result.shouldUpdateStatusBar) {
                         updateStatusBarText()
                     }
-                    val isQuickTap = holdDuration < 300L && !variationInteractedDuringHold && !otherKeyInteractedDuringHold
+                    val isQuickTap = holdDuration < MODIFIER_HOLD_MS && !variationInteractedDuringHold && !otherKeyInteractedDuringHold
                     if (stickyEnabled && isQuickTap) {
                         val now = event?.eventTime ?: System.currentTimeMillis()
                         if (lastShiftTapUpTime > 0L && now - lastShiftTapUpTime <= DOUBLE_TAP_THRESHOLD) {
@@ -6467,7 +6594,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             if (ctrlPressed) {
                 val downTime = modifierDownTimes[keyCode] ?: 0L
                 val holdDuration = if (downTime > 0) event?.eventTime?.minus(downTime) ?: 0L else 0L
-                val isLongHold = holdDuration > 300L
+                val isLongHold = holdDuration > MODIFIER_HOLD_MS
                 val shortcutUsedDuringHold = otherKeyInteractedDuringHold
                 val isIntentionalHold = variationInteractedDuringHold || (isLongHold && !otherKeyInteractedDuringHold)
 
@@ -6501,7 +6628,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             if (altPressed) {
                 val downTime = modifierDownTimes[keyCode] ?: 0L
                 val holdDuration = if (downTime > 0) event?.eventTime?.minus(downTime) ?: 0L else 0L
-                val isLongHold = holdDuration > 300L
+                val isLongHold = holdDuration > MODIFIER_HOLD_MS
                 val stickyEnabled = SettingsManager.isStaticVariationBarLayerStickyEnabled(this)
                 val isIntentionalHold = variationInteractedDuringHold || (isLongHold && !otherKeyInteractedDuringHold)
 
@@ -6521,7 +6648,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                     if (result.shouldUpdateStatusBar) {
                         updateStatusBarText()
                     }
-                    val isQuickTap = holdDuration < 300L && !variationInteractedDuringHold && !otherKeyInteractedDuringHold
+                    val isQuickTap = holdDuration < MODIFIER_HOLD_MS && !variationInteractedDuringHold && !otherKeyInteractedDuringHold
                     if (stickyEnabled && isQuickTap) {
                         val now = event?.eventTime ?: System.currentTimeMillis()
                         if (lastAltTapUpTime > 0L && now - lastAltTapUpTime <= DOUBLE_TAP_THRESHOLD) {

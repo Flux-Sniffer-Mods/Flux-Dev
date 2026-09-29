@@ -69,7 +69,7 @@
     <string name="terminal_mode_add_app">Add a terminal app</string>
     <string name="terminal_mode_add_app_description">SSH clients and other terminals</string>
     <string name="incognito_always_title">Incognito typing</string>
-    <string name="incognito_always_description">Learn nothing from what you type: no new next-word predictions anywhere</string>
+    <string name="incognito_always_description">Learn nothing from anything you type: no new words, predictions, emails or numbers, and no recent emoji, symbols or GIFs</string>
     <string name="incognito_follow_apps_title">Incognito when an app asks</string>
     <string name="incognito_follow_apps_description">Learn nothing in fields that ask keyboards not to, such as private browser tabs</string>
     <string name="paste_suggestion_title">Suggest pasting what you copied</string>
@@ -224,8 +224,8 @@
     <string name="menu_bar_reset">Reset the menu bar</string>
     <string name="suggestions_bold_title">Bold suggestions</string>
     <string name="suggestions_bold_description">Suggestion bar words in bold, easier to spot at a glance</string>
-    <string name="clean_links_title">Clean pasted links</string>
-    <string name="clean_links_description">Links you paste from the clipboard lose tracking (utm_, fbclid, si…) and open the full site, not the mobile one</string>
+    <string name="clean_links_title">Clean copied links</string>
+    <string name="clean_links_description">Links you copy lose their tracking (utm_, fbclid, YouTube\'s si…) right on the clipboard, so they\'re clean wherever you paste them, and open the full site rather than the mobile one</string>
     <string name="suggestion_keys_title">Pick suggestions from the keyboard</string>
     <string name="suggestion_keys_ctrl_shift_qwe">Ctrl+Shift+Q, W or E: the left, middle or right suggestion</string>
     <string name="suggestion_keys_ctrl_digits">Ctrl+1, 2 or 3: the left, middle or right suggestion (number row)</string>

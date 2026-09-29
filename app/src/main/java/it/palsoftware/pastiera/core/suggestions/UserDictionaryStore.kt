@@ -76,6 +76,8 @@ class UserDictionaryStore {
     }
 
     fun markUsed(context: Context, word: String) {
+        // Incognito: how often words are used isn't recorded
+        if (it.palsoftware.pastiera.core.IncognitoTyping.active) return
         val cacheKey = word.lowercase()
         cache[cacheKey]?.let {
             cache[cacheKey] = it.copy(lastUsed = System.currentTimeMillis(), frequency = it.frequency + 1)
