@@ -241,6 +241,7 @@
     <string name="suggestion_swipe_idle_title">Swipes scroll after a pause</string>
     <string name="suggestion_swipe_idle_value">After %1$d s without typing, a swipe scrolls instead of picking</string>
     <string name="suggestion_swipe_idle_off">Swipes always pick</string>
+    <string name="phone_trackpad_scroll_assist_tip">Turn Scroll assistant on: the phone only passes keyboard swipes to Flux Keyboard while it\'s on. Leave Swipe mode on scrolling: custom swipe actions take the swipes for themselves.</string>
     <string name="select_from_cursor_title">Select from the cursor</string>
     <string name="select_from_cursor_subtitle">Nav Mode on, and every move extends the selection</string>
     <string name="private_mode_title">Private mode</string>

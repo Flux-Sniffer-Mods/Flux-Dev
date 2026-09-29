@@ -6,18 +6,24 @@ PATH=/system/bin:/system/xbin:$PATH
 #
 #   su -c sh find-keyboard-gesture-page.sh
 #
-# then switch to Settings and open the Keyboard gesture page before the countdown ends.
-# Everything is written to /sdcard/Download/flux-keyboard-gesture-page.txt as well.
+# then switch to Settings and open the page before the countdown ends: Keyboard gesture, or
+# Scroll assistant (Settings > Gestures > Keyboard gestures > Scroll assistant), or its
+# Swipe mode page. Give the page's name as the second argument to label the output:
+#
+#   su -c "sh find-keyboard-gesture-page.sh 15 'Scroll assistant'"
+# Everything is written to /sdcard/Download/flux-settings-page.txt as well.
 
-OUT=/sdcard/Download/flux-keyboard-gesture-page.txt
+OUT=/sdcard/Download/flux-settings-page.txt
 WAIT=${1:-15}
+PAGE=${2:-Keyboard gesture}
 
-echo "Open Settings > Gestures > Keyboard gesture now (you have $WAIT seconds)..."
+echo "Open Settings > Gestures > $PAGE now (you have $WAIT seconds)..."
 i=$WAIT
 while [ "$i" -gt 0 ]; do printf "\r%2d " "$i"; sleep 1; i=$((i - 1)); done
 echo
 
 {
+  echo "== Page: $PAGE"
   echo "== Device"
   getprop ro.product.model; getprop ro.build.fingerprint
 

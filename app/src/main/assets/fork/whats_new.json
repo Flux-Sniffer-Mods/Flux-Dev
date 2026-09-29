@@ -105,6 +105,10 @@
   ],
   "improvements": [
     {
+      "text": "The phone trackpad settings shortcut opens Scroll assistant and says what to set there: Scroll assistant on (the phone only passes keyboard swipes on while it's on), Swipe mode left on scrolling.",
+      "after": "202609292229"
+    },
+    {
       "text": "One-time codes fill codes split over a box per digit: the code chip (and a copied code pasted into a number field) types it a digit at a time, so each box fills and moves on.",
       "after": "202609292152"
     },

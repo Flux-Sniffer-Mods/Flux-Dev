@@ -51,7 +51,13 @@ object PhoneTrackpadSettings {
 
     fun open(context: Context): Boolean {
         // Opening an activity the phone doesn't have, or doesn't let other apps open, just fails
-        KNOWN_PAGES.forEach { page -> if (start(context, Intent().setComponent(page))) return true }
+        KNOWN_PAGES.forEach { page ->
+            if (start(context, Intent().setComponent(page))) {
+                // What to set there for Flux Keyboard's swipes
+                Toast.makeText(context, R.string.phone_trackpad_scroll_assist_tip, Toast.LENGTH_LONG).show()
+                return true
+            }
+        }
         findDevicePage(context)?.let { page ->
             if (start(context, Intent().setComponent(page))) return true
         }
