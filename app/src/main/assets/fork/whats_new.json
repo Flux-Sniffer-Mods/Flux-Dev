@@ -85,6 +85,10 @@
   ],
   "improvements": [
     {
+      "text": "The tutorial is reordered: set up, then typing, emoji and symbols, moving around, your apps and the quick launcher, your choices and the look, and last the extras that need a permission, now including running your Termux scripts.",
+      "after": "202609291924"
+    },
+    {
       "text": "Voice input: choose how long a pause ends it, from 1 to 20 seconds (Modifiers & keys, with Keep listening on).",
       "after": "202609291922"
     },

@@ -280,7 +280,9 @@ fun TutorialScreen(
                 )
             )
         }
-        // Flux Keyboard: set up in one step, then what's different, then Pastiera's essentials
+        // Flux Keyboard's flow: get it working (set up, the caption bar), learn it (typing, emoji
+        // and symbols, moving around), your apps (shortcuts, the quick launcher), make it yours
+        // (choices, the look), then the extras that need a permission or another app
         add(TutorialPageType.FluxSetup)
         if (DeviceSpecific.isTitan2Device()) {
             add(
@@ -290,13 +292,6 @@ fun TutorialScreen(
                 )
             )
         }
-        add(TutorialPageType.FluxEmoji)
-        add(TutorialPageType.FluxTyping)
-        add(TutorialPageType.FluxApps)
-        add(TutorialPageType.FluxChoices)
-        add(TutorialPageType.FluxPersonalise)
-        add(TutorialPageType.FluxExtras)
-        add(TutorialPageType.QuickLauncher)
         // The on-screen keyboard mode matters only on phones without a keyboard
         if (!DeviceSpecific.isPhysicalKeyboardDevice()) {
             add(
@@ -308,6 +303,8 @@ fun TutorialScreen(
                 )
             )
         }
+        add(TutorialPageType.FluxTyping)
+        add(TutorialPageType.FluxEmoji)
         add(
             TutorialPageType.NavMode(
                 title = stringResource(R.string.tutorial_page_nav_mode_title),
@@ -316,13 +313,11 @@ fun TutorialScreen(
                 iconTint = MaterialTheme.colorScheme.tertiary
             )
         )
-        add(
-            TutorialPageType.LedIndicator(
-                title = stringResource(R.string.tutorial_page_led_title),
-                description = stringResource(R.string.tutorial_page_led_description),
-                iconTint = MaterialTheme.colorScheme.secondary
-            )
-        )
+        add(TutorialPageType.FluxApps)
+        add(TutorialPageType.QuickLauncher)
+        add(TutorialPageType.FluxChoices)
+        add(TutorialPageType.FluxPersonalise)
+        add(TutorialPageType.FluxExtras)
         add(
             TutorialPageType.Standard(
                 title = stringResource(R.string.tutorial_page_ready_title),

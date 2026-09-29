@@ -16,7 +16,7 @@
     <string name="flux_tutorial_emoji_description">One key opens a picker with everything in it.</string>
     <string name="flux_tutorial_emoji_bullet_key">Tap the emoji key (Right Shift by default) to open the picker. Held with Ctrl, it still works as Shift.</string>
     <string name="flux_tutorial_emoji_bullet_gif">Search GIFs, and keep favourites and recents.</string>
-    <string name="flux_tutorial_emoji_bullet_symbols">Search every Unicode symbol by name.</string>
+    <string name="flux_tutorial_emoji_bullet_symbols">Search every Unicode symbol by name. The symbols page keeps the ones you use on its Recents key (A).</string>
     <string name="flux_tutorial_emoji_bullet_profiles">Emoji layer profiles (chatting, work, social…) can follow the app you\'re in.</string>
     <string name="flux_tutorial_emoji_button">Choose the emoji key</string>
 
@@ -70,7 +70,7 @@
     <string name="flux_tutorial_typing_bullet_swipes">On the trackpad, swipe left, up or right to pick a suggestion, and down to delete a word (Trackpad gestures).</string>
     <string name="flux_tutorial_typing_bullet_shift">Choose which kinds of text field start with a capital: messages, names and addresses by default.</string>
     <string name="flux_tutorial_typing_bullet_language">Each app can keep the language you last typed in there.</string>
-    <string name="flux_tutorial_apps_bullet_launcher">The quick launcher opens apps and their own shortcuts (\"New message\"), from any app with SYM + Space.</string>
+    <string name="flux_tutorial_apps_bullet_launcher">The quick launcher (SYM + Space, from any app) opens apps, their own shortcuts (\"New message\"), Flux Keyboard\'s New and Search for the apps it knows, your Termux scripts, and whatever you add: long-press an app there to add one.</string>
     <string name="flux_tutorial_apps_bullet_search">Apps that open with their search bar focused can keep the keyboard bar hidden until you type.</string>
     <string name="flux_tutorial_personalise_title">Make it yours</string>
     <string name="flux_tutorial_personalise_description">Change what keys type, and how the keyboard looks.</string>
@@ -84,4 +84,8 @@
     <string name="flux_tutorial_typing_bullet_punctuation">Punctuation spacing: choose which marks take a space after them, and which never have one before.</string>
     <string name="flux_tutorial_personalise_bullet_contour">On the Titan 2 Elite, the LEDs can follow the screen\'s rounded bottom corners, drawn over the corner buttons (Titan 2 Elite settings).</string>
     <string name="flux_tutorial_apps_bullet_updates">Updates download inside the app and install when you say so.</string>
+    <string name="flux_tutorial_extras_termux_title">Termux scripts in the quick launcher</string>
+    <string name="flux_tutorial_extras_termux_text">Your Termux:Widget scripts and tasks (~/.shortcuts) run straight from the quick launcher. Allow Flux Keyboard to run commands in Termux, and set allow-external-apps = true in ~/.termux/termux.properties.</string>
+    <string name="flux_tutorial_extras_termux_button">Allow running Termux commands</string>
+    <string name="flux_tutorial_typing_bullet_learn">It learns as you go: words you type often, and the emails and phone numbers you type yourself (never in Incognito typing).</string>
 </resources>

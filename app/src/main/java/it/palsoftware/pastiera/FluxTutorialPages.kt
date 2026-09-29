@@ -110,6 +110,7 @@ fun FluxTutorialTypingPageContent(modifier: Modifier = Modifier) {
         bullets = listOf(
             stringResource(R.string.flux_tutorial_typing_bullet_pick),
             stringResource(R.string.flux_tutorial_typing_bullet_swipes),
+            stringResource(R.string.flux_tutorial_typing_bullet_learn),
             stringResource(R.string.flux_tutorial_typing_bullet_undo),
             stringResource(R.string.flux_tutorial_typing_bullet_paste),
             stringResource(R.string.flux_tutorial_typing_bullet_spell),
@@ -166,6 +167,17 @@ fun FluxTutorialExtrasPageContent(modifier: Modifier = Modifier) {
         SettingsManager.getOneTimeCodesEnabled(context) && SettingsManager.hasNotificationAccess(context)
     }
     val niagaraInstalled = remember { context.packageManager.getLaunchIntentForPackage("bitpit.launcher") != null }
+    // Termux: the permission to run your ~/.shortcuts scripts from the quick launcher
+    val termuxInstalled = remember {
+        runCatching { context.packageManager.getApplicationInfo(it.palsoftware.pastiera.shortcuts.UserShortcuts.TERMUX_PACKAGE, 0) }.isSuccess
+    }
+    val termuxAllowed = remember(refresh) { it.palsoftware.pastiera.shortcuts.TermuxScripts.available(context) }
+    val termuxPermission = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) it.palsoftware.pastiera.shortcuts.TermuxScripts.refresh(context)
+        refresh++
+    }
     val niagaraOn = remember(refresh) {
         SettingsManager.getQuickLauncherBehavior(context) == SettingsManager.QUICK_LAUNCHER_BEHAVIOR_NIAGARA
     }
@@ -206,6 +218,19 @@ fun FluxTutorialExtrasPageContent(modifier: Modifier = Modifier) {
                         refresh++
                     }
                 )
+                if (termuxInstalled) {
+                    ExtraStep(
+                        title = stringResource(R.string.flux_tutorial_extras_termux_title),
+                        text = stringResource(R.string.flux_tutorial_extras_termux_text),
+                        button = stringResource(if (termuxAllowed) R.string.flux_tutorial_extras_on else R.string.flux_tutorial_extras_termux_button),
+                        enabled = !termuxAllowed,
+                        onClick = {
+                            runCatching {
+                                termuxPermission.launch(it.palsoftware.pastiera.shortcuts.UserShortcuts.TERMUX_RUN_COMMAND_PERMISSION)
+                            }
+                        }
+                    )
+                }
                 if (niagaraInstalled) {
                     ExtraStep(
                         title = stringResource(R.string.flux_tutorial_extras_niagara_title),
