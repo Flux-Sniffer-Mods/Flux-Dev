@@ -150,6 +150,11 @@ class CommandExecutor(
                 }
             }
             PastieraCommandSource.ACTION_TOGGLE_SOFTWARE_KEYBOARD_MODE -> toggleSoftwareKeyboardMode()
+            PastieraCommandSource.ACTION_SELECT_FROM_CURSOR -> {
+                val controller = navModeController ?: return fail("Nav mode unavailable")
+                controller.startSelectingFromCursor()
+                CommandExecutionResult.Success
+            }
             PastieraCommandSource.ACTION_TOGGLE_PRIVATE_MODE -> {
                 it.palsoftware.pastiera.core.PrivateMode.toggle(context)
                 CommandExecutionResult.Success

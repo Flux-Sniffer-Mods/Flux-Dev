@@ -4,6 +4,10 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "Select from the cursor: a key shortcut turns on Nav Mode with the selection anchored where the cursor is, so arrows, Home, End and cursor swipes extend it. Assign it in Customize keys.",
+      "after": "202609292225"
+    },
+    {
       "text": "Private mode: one key shortcut (or the quick launcher) turns on Incognito typing in every field and Offline mode together, and says so; again turns it off. Assign it in Customize keys.",
       "after": "202609292154"
     },
