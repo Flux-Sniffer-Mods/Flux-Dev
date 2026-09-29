@@ -117,7 +117,7 @@
       "after": "202609291908"
     },
     {
-      "text": "Settings: Titan 2 layout alignment is off by default, and suggestion swipes need a longer swipe (300) so scrolling doesn't pick one.",
+      "text": "Settings: Titan 2 layout alignment is off by default, and suggestion swipes need a swipe of 150 by default.",
       "after": "202609291905"
     },
     {
@@ -428,6 +428,10 @@
     "Safer backups (themes and typing sounds included) and many fixes, from Telegram suggestions to Firefox accents."
   ],
   "bugFixes": [
+    {
+      "text": "Automatic capitals work in apps that keep invisible characters in an empty field or fill it in late, such as Instagram and Keep",
+      "after": "202609292144"
+    },
     {
       "text": "Emoji and symbol search no longer gets a capital from the app's automatic capital or Shift",
       "after": "202609291920"

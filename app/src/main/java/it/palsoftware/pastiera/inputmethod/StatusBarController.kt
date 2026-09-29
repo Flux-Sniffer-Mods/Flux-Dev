@@ -1786,8 +1786,13 @@ class StatusBarController(
             // with one, it holds the pencil
             val swapButtonShown = SettingsManager.getEmojiPickerKey(context) == android.view.KeyEvent.KEYCODE_UNKNOWN
             if (rowIndex == 2) {
-                val leftPlaceholder = if (swapButtonShown) createPlaceholderWithEmojiPickerButton(keyHeight, page)
-                    else createPlaceholderWithPencilButton(keyHeight, page)
+                val leftPlaceholder = (if (swapButtonShown) createPlaceholderWithEmojiPickerButton(keyHeight, page)
+                    else createPlaceholderWithPencilButton(keyHeight, page)).apply {
+                    // The bottom-left key mirrors the close key: its shape and colour, in the left
+                    // display corner, so both corners (and the LEDs between them) match
+                    background = createCloseButtonBackground(activeThemeColors())
+                    setTag(R.id.tag_outer_edge_button, StatusBarButtonPosition.LEFT)
+                }
                 rowLayout.addView(leftPlaceholder, LinearLayout.LayoutParams(fixedKeyWidth, keyHeight).apply {
                     marginEnd = keySpacing
                 })

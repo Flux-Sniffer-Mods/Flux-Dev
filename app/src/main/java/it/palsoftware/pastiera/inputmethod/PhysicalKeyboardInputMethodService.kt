@@ -765,7 +765,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private fun scheduleStartAutoCapRechecks() {
         startAutoCapRechecks.forEach { uiHandler.removeCallbacks(it) }
         startAutoCapRechecks.clear()
-        listOf(120L, 450L).forEach { delay ->
+        // Some apps (Instagram, Keep) fill their field in a little after it opens
+        listOf(120L, 450L, 1000L).forEach { delay ->
             val runnable = Runnable {
                 if (!inputContextState.isEditable) return@Runnable
                 AutoCapitalizeHelper.checkAutoCapitalizeOnRestart(
