@@ -35,6 +35,7 @@ import android.util.TypedValue
 import it.palsoftware.pastiera.R
 import it.palsoftware.pastiera.data.gif.KlipyGifs
 import it.palsoftware.pastiera.data.symbols.SymbolSearch
+import it.palsoftware.pastiera.data.emoji.EmojiLayerRecents
 import it.palsoftware.pastiera.MainActivity
 import it.palsoftware.pastiera.SymCustomizationActivity
 import it.palsoftware.pastiera.KeyboardBackgroundImage
@@ -3123,6 +3124,7 @@ class StatusBarController(
             keyButton.setOnClickListener {
                 commitTouchSymbolAfterCloseIfNeeded(keyButton, inputConnection, content)
                 if (page == 2) SymbolSearch.addRecent(context, content)
+                if (page == 1) EmojiLayerRecents.markUsed(context, content)
             }
         }
     }

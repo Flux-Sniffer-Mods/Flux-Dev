@@ -4,6 +4,10 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "Recent emoji first on the emoji layer (option): the emoji you used last take its first keys and its own move along. Emoji typed from the layer count too, so a favourite already on it moves to the front instead of showing twice.",
+      "after": "202609292148"
+    },
+    {
       "text": "Long-press an app in the quick launcher to add Flux Keyboard's own shortcut for it (call or message a contact from your phone and messages apps, a website from your browser, a Termux task), and to turn its New and Search shortcuts on or off.",
       "after": "202609291928"
     },

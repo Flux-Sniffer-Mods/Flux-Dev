@@ -557,6 +557,36 @@ fun FluxEmojiGifsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                     }
                 }
             }
+            // Recent emoji first on the layer, and how many keys they take
+            var layerRecentsFirst by remember { mutableStateOf(it.palsoftware.pastiera.data.emoji.EmojiLayerRecents.enabled(context)) }
+            var layerRecentsCount by remember { mutableStateOf(it.palsoftware.pastiera.data.emoji.EmojiLayerRecents.count(context)) }
+            FluxSwitchRow(
+                linkId = "flux_emoji.layer_recents_first",
+                title = stringResource(R.string.emoji_layer_recents_first_title),
+                description = stringResource(R.string.emoji_layer_recents_first_description),
+                checked = layerRecentsFirst,
+                onCheckedChange = { enabled ->
+                    layerRecentsFirst = enabled
+                    it.palsoftware.pastiera.data.emoji.EmojiLayerRecents.setEnabled(context, enabled)
+                }
+            )
+            if (layerRecentsFirst) {
+                Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
+                    Text(
+                        stringResource(R.string.emoji_layer_recents_count, layerRecentsCount),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    androidx.compose.material3.Slider(
+                        value = layerRecentsCount.toFloat(),
+                        onValueChange = { value ->
+                            layerRecentsCount = value.toInt()
+                            it.palsoftware.pastiera.data.emoji.EmojiLayerRecents.setCount(context, layerRecentsCount)
+                        },
+                        valueRange = 1f..10f,
+                        steps = 8
+                    )
+                }
+            }
 
             SettingsSectionDivider(stringResource(R.string.flux_section_sym_picker))
             FluxSwitchRow(

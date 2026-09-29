@@ -45,6 +45,8 @@ internal fun fluxSettingEntries(): List<SettingEntry> {
             summaryRes = R.string.emoji_led_description, route = SettingRoute(SettingsDestination.LedColors)),
         SettingEntry("flux_emoji.key_auto_close", R.string.emoji_key_auto_close_title, route = emoji),
         SettingEntry("flux_emoji.recents_key", R.string.emoji_layer_recents_key_title, route = emoji),
+        SettingEntry("flux_emoji.layer_recents_first", R.string.emoji_layer_recents_first_title,
+            summaryRes = R.string.emoji_layer_recents_first_description, route = emoji),
         SettingEntry("flux_emoji.search_page", R.string.flux_search_page_title,
             summaryRes = R.string.flux_search_page_description, route = emoji),
         SettingEntry("flux_emoji.gif_search", R.string.gif_settings_title, route = emoji),

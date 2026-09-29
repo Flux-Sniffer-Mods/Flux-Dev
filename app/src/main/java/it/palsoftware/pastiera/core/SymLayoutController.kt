@@ -216,6 +216,12 @@ class SymLayoutController(
         val shown = if (showingRecents) {
             val keys = SettingsManager.EMOJI_LAYER_KEYS.filter { it != recentsKey }
             keys.zip(RecentEmojiManager.getRecentEmojis(context, keys.size)).toMap().toMutableMap()
+        } else if (it.palsoftware.pastiera.data.emoji.EmojiLayerRecents.enabled(context)) {
+            // Recent emoji first: the ones you used last on the first free keys, the layer's
+            // own moved along by as many
+            val recents = it.palsoftware.pastiera.data.emoji.EmojiLayerRecents
+            val keys = SettingsManager.EMOJI_LAYER_KEYS.filter { key -> key != recentsKey && key != gifKey && key != searchKey }
+            recents.arrange(keys, base, recents.used(context), recents.count(context)).toMutableMap()
         } else {
             base.toMutableMap()
         }
@@ -502,8 +508,9 @@ class SymLayoutController(
             ) {
                 inputConnection.commitText(symChar, 1)
             }
-            // Symbols typed from the symbols page are its recents
+            // Symbols typed from the symbols page are its recents; emoji from the layer count as used
             if (page == SymPage.SYMBOLS) it.palsoftware.pastiera.data.symbols.SymbolSearch.addRecent(context, symChar)
+            if (page == SymPage.EMOJI) it.palsoftware.pastiera.data.emoji.EmojiLayerRecents.markUsed(context, symChar)
             if (autoCloseEnabled) {
                 closeSymAndUpdate(updateStatusBar)
             }

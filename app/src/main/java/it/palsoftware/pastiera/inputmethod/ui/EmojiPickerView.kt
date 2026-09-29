@@ -1543,6 +1543,7 @@ class EmojiPickerView(
         // view from its container, which cancels coroutineScope; ATOMIC guarantees the write
         // still runs even when cancellation lands before the coroutine body starts.
         coroutineScope.launch(Dispatchers.IO, start = CoroutineStart.ATOMIC) {
+            it.palsoftware.pastiera.data.emoji.EmojiLayerRecents.markUsed(context, emoji)
             val changed = RecentEmojiManager.addRecentEmoji(
                 context,
                 emoji,
