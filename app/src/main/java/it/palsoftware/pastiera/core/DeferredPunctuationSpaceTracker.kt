@@ -139,7 +139,10 @@ object DeferredPunctuationSpaceTracker {
     internal fun continuesEmoticon(punctuation: Char, next: Char): Boolean {
         if (punctuation == '.' || next.isWhitespace()) return false
         val face = punctuation == ':' || punctuation == ';'
-        if (next.isLetterOrDigit()) return face && next in EMOTICON_LETTERS
+        // Any letter after ":" or ";" waits: the key after it tells a word (": Do") from a face
+        // (":v", ":T"), so the space only goes in once it's a word
+        if (next.isLetter()) return face
+        if (next.isDigit()) return face && next in EMOTICON_LETTERS
         if (next in "\"“”«„") return false
         if (!face && next in "([{'‘") return false
         return true

@@ -76,8 +76,17 @@ class DeferredPunctuationSpaceTrackerTest {
     @Test
     fun fullStopsAndOtherWordsKeepTheirSpace() {
         SettingsManager.setSpaceAfterPunctuation(context, ".,:;!?")
-        "a.(b,\"c:w".forEach { commit(it.toString()) }
-        assertEquals("a. (b, \"c: w", inputConnection.text)
+        "a.(b,\"c:wo".forEach { commit(it.toString()) }
+        assertEquals("a. (b, \"c: wo", inputConnection.text)
+    }
+
+    @Test
+    fun aLetterAfterAColonWaitsForTheNextKey() {
+        SettingsManager.setSpaceAfterPunctuation(context, ".,:;!?")
+        ":v".forEach { commit(it.toString()) }
+        assertEquals(":v", inputConnection.text)
+        commit("e")
+        assertEquals(": ve", inputConnection.text)
     }
 
     @Test

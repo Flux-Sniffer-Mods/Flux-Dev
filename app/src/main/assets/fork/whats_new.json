@@ -429,6 +429,10 @@
   ],
   "bugFixes": [
     {
+      "text": "The space after a colon waits for the next key, so :v or :T stays an emoticon and only a word gets the space",
+      "after": "202609292145"
+    },
+    {
       "text": "Automatic capitals work in apps that keep invisible characters in an empty field or fill it in late, such as Instagram and Keep",
       "after": "202609292144"
     },
