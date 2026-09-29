@@ -3911,6 +3911,13 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             } else null
         )
         terminalModeActive = SettingsManager.isTerminalModeApp(this, info?.packageName) && TerminalMode.apply(info)
+        // A new field (a search a Ctrl shortcut opened, say): a latched Ctrl doesn't come along,
+        // so typing there isn't taken for more shortcuts
+        if (!restarting && !terminalModeActive && ::modifierStateController.isInitialized &&
+            !ctrlPhysicallyPressed && SettingsManager.getSmartCtrlOffAfterShortcut(this)
+        ) {
+            releaseCtrlAfterShortcut()
+        }
         // Flux Keyboard: no microphone button in terminal apps
         it.palsoftware.pastiera.inputmethod.statusbar.StatusBarButtonRegistry.setTerminalApp(
             SettingsManager.isTerminalModeApp(this, info?.packageName)
@@ -5419,15 +5426,23 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             }
         }
         appShortcutKeysDown += pressedKeyCode
-        // The shortcut has run: a one-shot or locked Ctrl lets go (Nav Mode's Ctrl stays)
-        if (ctrlOneShot || (ctrlLatchActive && !ctrlLatchFromNavMode)) {
-            ctrlOneShot = false
-            if (ctrlLatchActive && !ctrlLatchFromNavMode) {
-                modifierStateController.clearCtrlState(resetPressedState = false)
-            }
-            updateStatusBarText()
-        }
+        // The shortcut has run: Ctrl lets go, a one-shot, locked or Nav Mode one alike, so the
+        // next key (typing in the search the shortcut opened) isn't another shortcut
+        releaseCtrlAfterShortcut()
         return true
+    }
+
+    /** Ctrl off after an app's shortcut ran: one-shot, locked or Nav Mode (a held Ctrl stays held). */
+    private fun releaseCtrlAfterShortcut() {
+        if (!ctrlOneShot && !ctrlLatchActive && !ctrlLatchFromNavMode && !navModeController.isNavModeActive()) return
+        val wasNavModeLatched = ctrlLatchFromNavMode || navModeController.isNavModeActive()
+        ctrlOneShot = false
+        modifierStateController.clearCtrlState(resetPressedState = false)
+        if (wasNavModeLatched) {
+            navModeController.cancelNotification()
+            navModeController.refreshNavModeState()
+        }
+        updateStatusBarText()
     }
 
     override fun onKeyLongPress(keyCode_: Int, event_: KeyEvent?): Boolean {

@@ -413,6 +413,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Ctrl switches off after an app shortcut such as Ctrl+F, and doesn't carry into the search it opens, so typing there isn't taken for more shortcuts",
+      "after": "202609291917"
+    },
+    {
       "text": "Shift + Enter makes a new line in WhatsApp again",
       "after": "202609291623"
     },

@@ -3272,7 +3272,7 @@ object SettingsManager {
 
     /** Smart toggle: a tapped Ctrl latch switches off after one shortcut (not after cursor moves). */
     fun getSmartCtrlOffAfterShortcut(context: Context): Boolean =
-        getPreferences(context).getBoolean(KEY_SMART_CTRL_OFF_AFTER_SHORTCUT, false)
+        getPreferences(context).getBoolean(KEY_SMART_CTRL_OFF_AFTER_SHORTCUT, true)
 
     fun setSmartCtrlOffAfterShortcut(context: Context, enabled: Boolean) {
         getPreferences(context).edit().putBoolean(KEY_SMART_CTRL_OFF_AFTER_SHORTCUT, enabled).apply()
