@@ -833,6 +833,19 @@
     <string name="learn_contact_details_description">Τα email και οι αριθμοί τηλεφώνου που πληκτρολογείτε μόνοι σας αποθηκεύονται στο λεξικό σας και προτείνονται ξανά σε πεδία email και τηλεφώνου. Ποτέ ό,τι επικολλάτε, ούτε από πεδία κωδικών ή ιδιωτικά πεδία.</string>
     <string name="learn_frequent_words_title">Εκμάθηση λέξεων που χρησιμοποιείτε συχνά</string>
     <string name="learn_frequent_words_description">Μια λέξη που δεν υπάρχει στο λεξικό προστίθεται μόλις την πληκτρολογήσετε τρεις φορές, ώστε να προτείνεται και να μη διορθώνεται ποτέ αυτόματα. Όχι κατά την πληκτρολόγηση σε ανώνυμη λειτουργία.</string>
+    <string name="user_shortcuts_builtin">Από το Flux Keyboard</string>
+    <string name="user_shortcuts_call_title">Κλήση επαφής</string>
+    <string name="user_shortcuts_message_title">Μήνυμα σε επαφή</string>
+    <string name="user_shortcuts_website_title">Ιστότοπος</string>
+    <string name="user_shortcuts_termux_title">Εργασία Termux</string>
+    <string name="user_shortcuts_termux_description">Ένα script στο ~/.shortcuts, που εκτελείται όπως στο Termux:Widget: όσα είναι στο tasks στο παρασκήνιο, τα υπόλοιπα σε τερματικό.</string>
+    <string name="user_shortcuts_termux_setup">Το Termux χρειάζεται allow-external-apps = true στο ~/.termux/termux.properties (και επανεκκίνηση του Termux), και το Flux Keyboard άδεια εκτέλεσης εντολών στο Termux.</string>
+    <string name="user_shortcuts_termux_none">Δεν βρέθηκαν scripts στο ~/.shortcuts</string>
+    <string name="user_shortcuts_call_label">Κλήση: %1$s</string>
+    <string name="user_shortcuts_message_label">Μήνυμα: %1$s</string>
+    <string name="user_shortcuts_website_address">Διεύθυνση</string>
+    <string name="user_shortcuts_name">Όνομα</string>
+    <string name="user_shortcuts_add">Προσθήκη</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d συνδυασμός στέλνεται ως συντόμευση της εφαρμογής</item>
         <item quantity="other">%d συνδυασμοί στέλνονται ως συντομεύσεις της εφαρμογής</item>

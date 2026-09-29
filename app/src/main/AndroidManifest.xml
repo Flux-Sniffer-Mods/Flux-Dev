@@ -26,6 +26,8 @@
 
     <!-- Query per vedere tutte le app installate che possono essere avviate -->
     <queries>
+        <!-- Termux tasks in the quick launcher (Add a shortcut) -->
+        <package android:name="com.termux" />
         <intent>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
@@ -50,6 +52,9 @@
         <!-- Unihertz's settings app: the Titan 2 Elite's Keyboard gesture page -->
         <package android:name="com.agui.settings" />
     </queries>
+
+    <!-- Termux tasks in the quick launcher: run a script in ~/.shortcuts through Termux -->
+    <uses-permission android:name="com.termux.permission.RUN_COMMAND" />
 
     <application
         android:name=".PastieraApplication"

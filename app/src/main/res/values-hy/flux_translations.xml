@@ -1554,6 +1554,19 @@
     <string name="learn_contact_details_description">Ձեր ինքնուրույն մուտքագրած էլ. հասցեներն ու հեռախոսահամարները պահվում են ձեր բառարանում և կրկին առաջարկվում էլ. փոստի ու հեռախոսի դաշտերում։ Երբեք՝ տեղադրված տեքստը կամ գաղտնաբառի և անձնական դաշտերի պարունակությունը։</string>
     <string name="learn_frequent_words_title">Սովորել հաճախ օգտագործվող բառերը</string>
     <string name="learn_frequent_words_description">Բառարանում չեղած բառը ավելացվում է, երբ այն երեք անգամ մուտքագրեք, որպեսզի առաջարկվի և երբեք ինքնաշտկված չլինի։ Ոչ՝ ինկոգնիտո մուտքագրման ժամանակ։</string>
+    <string name="user_shortcuts_builtin">Flux Keyboard-ի ստեղծածները</string>
+    <string name="user_shortcuts_call_title">Զանգել կոնտակտին</string>
+    <string name="user_shortcuts_message_title">Գրել կոնտակտին</string>
+    <string name="user_shortcuts_website_title">Կայք</string>
+    <string name="user_shortcuts_termux_title">Termux առաջադրանք</string>
+    <string name="user_shortcuts_termux_description">Սկրիպտ ~/.shortcuts-ից, որն աշխատում է ինչպես Termux:Widget-ում՝ tasks-ինը ֆոնում, մյուսները՝ տերմինալում։</string>
+    <string name="user_shortcuts_termux_setup">Termux-ին անհրաժեշտ է allow-external-apps = true ~/.termux/termux.properties-ում (ապա վերագործարկեք Termux-ը), իսկ Flux Keyboard-ին՝ Termux-ում հրամաններ գործարկելու թույլտվություն։</string>
+    <string name="user_shortcuts_termux_none">~/.shortcuts-ում սկրիպտներ չեն գտնվել</string>
+    <string name="user_shortcuts_call_label">Զանգել՝ %1$s</string>
+    <string name="user_shortcuts_message_label">Գրել՝ %1$s</string>
+    <string name="user_shortcuts_website_address">Հասցե</string>
+    <string name="user_shortcuts_name">Անուն</string>
+    <string name="user_shortcuts_add">Ավելացնել</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d համակցություն ուղարկվում է որպես հավելվածի դյուրանցում</item>
         <item quantity="other">%d համակցություն ուղարկվում է որպես հավելվածի դյուրանցումներ</item>

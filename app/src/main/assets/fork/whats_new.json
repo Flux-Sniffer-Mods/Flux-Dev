@@ -4,6 +4,10 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "Add a shortcut makes the common ones itself: call or message a contact, a website, and Termux tasks (your ~/.shortcuts scripts, run as Termux:Widget runs them), for the apps that only offer theirs to the home screen.",
+      "after": "202609291559"
+    },
+    {
       "text": "Learn words you use often: a word that isn't in the dictionary goes into it once you've typed it three times (Suggestions & auto-correction).",
       "after": "202609291517"
     },

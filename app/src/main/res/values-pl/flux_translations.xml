@@ -1554,6 +1554,19 @@
     <string name="learn_contact_details_description">Adresy e-mail i numery telefonów wpisane przez Ciebie są zapisywane w słowniku i ponownie proponowane w polach e-mail i telefonu. Nigdy nic wklejonego ani z pól haseł i pól prywatnych.</string>
     <string name="learn_frequent_words_title">Ucz się często używanych słów</string>
     <string name="learn_frequent_words_description">Słowo spoza słownika trafia do niego, gdy wpiszesz je trzy razy – wtedy jest podpowiadane i nigdy nie jest autokorygowane. Nie podczas pisania incognito.</string>
+    <string name="user_shortcuts_builtin">Utworzone przez Flux Keyboard</string>
+    <string name="user_shortcuts_call_title">Zadzwoń do kontaktu</string>
+    <string name="user_shortcuts_message_title">Napisz do kontaktu</string>
+    <string name="user_shortcuts_website_title">Strona internetowa</string>
+    <string name="user_shortcuts_termux_title">Zadanie Termux</string>
+    <string name="user_shortcuts_termux_description">Skrypt z ~/.shortcuts, uruchamiany jak w Termux:Widget: te z tasks w tle, pozostałe w terminalu.</string>
+    <string name="user_shortcuts_termux_setup">Termux wymaga allow-external-apps = true w ~/.termux/termux.properties (potem uruchom Termux ponownie), a Flux Keyboard uprawnienia do uruchamiania poleceń w Termux.</string>
+    <string name="user_shortcuts_termux_none">Nie znaleziono skryptów w ~/.shortcuts</string>
+    <string name="user_shortcuts_call_label">Zadzwoń: %1$s</string>
+    <string name="user_shortcuts_message_label">Napisz: %1$s</string>
+    <string name="user_shortcuts_website_address">Adres</string>
+    <string name="user_shortcuts_name">Nazwa</string>
+    <string name="user_shortcuts_add">Dodaj</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d kombinacja wysyłana jako własny skrót aplikacji</item>
         <item quantity="few">%d kombinacje wysyłane jako własne skróty aplikacji</item>

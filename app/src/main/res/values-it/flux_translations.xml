@@ -1066,4 +1066,17 @@
     <string name="learn_contact_details_description">Le email e i numeri di telefono che digiti tu vengono salvati nel dizionario e riproposti nei campi email e telefono. Mai ciò che incolli, né quanto scritto in campi password o privati.</string>
     <string name="learn_frequent_words_title">Impara le parole che usi spesso</string>
     <string name="learn_frequent_words_description">Una parola che non è nel dizionario viene aggiunta dopo che l\'hai digitata tre volte, così viene suggerita e mai corretta automaticamente. Non durante la digitazione in incognito.</string>
+    <string name="user_shortcuts_builtin">Creati da Flux Keyboard</string>
+    <string name="user_shortcuts_call_title">Chiama un contatto</string>
+    <string name="user_shortcuts_message_title">Scrivi a un contatto</string>
+    <string name="user_shortcuts_website_title">Sito web</string>
+    <string name="user_shortcuts_termux_title">Attività Termux</string>
+    <string name="user_shortcuts_termux_description">Uno script in ~/.shortcuts, eseguito come fa Termux:Widget: quelli in tasks in background, gli altri in un terminale.</string>
+    <string name="user_shortcuts_termux_setup">Termux richiede allow-external-apps = true in ~/.termux/termux.properties (poi riavvia Termux), e Flux Keyboard richiede il permesso di eseguire comandi in Termux.</string>
+    <string name="user_shortcuts_termux_none">Nessuno script trovato in ~/.shortcuts</string>
+    <string name="user_shortcuts_call_label">Chiama %1$s</string>
+    <string name="user_shortcuts_message_label">Scrivi a %1$s</string>
+    <string name="user_shortcuts_website_address">Indirizzo</string>
+    <string name="user_shortcuts_name">Nome</string>
+    <string name="user_shortcuts_add">Aggiungi</string>
 </resources>

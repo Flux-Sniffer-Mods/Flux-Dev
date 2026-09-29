@@ -166,6 +166,11 @@ private fun UserShortcutsScreen(onBack: () -> Unit, directProvider: ComponentNam
                 }
             }
         }
+        SettingsSectionDivider(stringResource(R.string.user_shortcuts_builtin))
+        BuiltInShortcuts(
+            row = { icon, title, description, onClick -> ShortcutRow(icon = icon, title = title, description = description, onClick = onClick) },
+            onAdded = { shortcuts = UserShortcuts.all(context) }
+        )
         SettingsSectionDivider(stringResource(R.string.user_shortcuts_add_from))
         if (providers.isEmpty()) {
             FluxNote(stringResource(R.string.user_shortcuts_none))

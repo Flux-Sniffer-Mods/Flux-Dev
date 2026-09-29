@@ -1554,6 +1554,19 @@
     <string name="learn_contact_details_description">Les e-mails et numéros de téléphone que vous tapez vous-même sont gardés dans votre dictionnaire et proposés à nouveau dans les champs e-mail et téléphone. Jamais ce que vous collez, ni ce qui vient des champs de mot de passe ou privés.</string>
     <string name="learn_frequent_words_title">Apprendre les mots que vous utilisez souvent</string>
     <string name="learn_frequent_words_description">Un mot absent du dictionnaire y est ajouté une fois tapé trois fois, pour être suggéré et jamais corrigé automatiquement. Pas pendant la saisie en navigation privée.</string>
+    <string name="user_shortcuts_builtin">Créés par Flux Keyboard</string>
+    <string name="user_shortcuts_call_title">Appeler un contact</string>
+    <string name="user_shortcuts_message_title">Écrire à un contact</string>
+    <string name="user_shortcuts_website_title">Site web</string>
+    <string name="user_shortcuts_termux_title">Tâche Termux</string>
+    <string name="user_shortcuts_termux_description">Un script de ~/.shortcuts, lancé comme le fait Termux:Widget : ceux de tasks en arrière-plan, les autres dans un terminal.</string>
+    <string name="user_shortcuts_termux_setup">Termux a besoin de allow-external-apps = true dans ~/.termux/termux.properties (puis redémarrez Termux), et Flux Keyboard de l’autorisation d’exécuter des commandes dans Termux.</string>
+    <string name="user_shortcuts_termux_none">Aucun script trouvé dans ~/.shortcuts</string>
+    <string name="user_shortcuts_call_label">Appeler %1$s</string>
+    <string name="user_shortcuts_message_label">Écrire à %1$s</string>
+    <string name="user_shortcuts_website_address">Adresse</string>
+    <string name="user_shortcuts_name">Nom</string>
+    <string name="user_shortcuts_add">Ajouter</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d combinaison envoyée comme raccourci propre à l’appli</item>
         <item quantity="many">%d combinaisons envoyées comme raccourcis propres à l’appli</item>

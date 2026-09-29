@@ -109,6 +109,34 @@ object UserShortcuts {
         return shortcut
     }
 
+    /**
+     * A shortcut Flux Keyboard makes itself (a contact to call or message, a website, a Termux
+     * task): [intent] is started as it is; [packageName] is the app it belongs to (its icon).
+     */
+    fun addBuilt(context: Context, label: String, packageName: String, intent: Intent): UserShortcut {
+        val shortcut = UserShortcut(
+            id = UUID.randomUUID().toString(),
+            label = label,
+            packageName = packageName,
+            intentUri = intent.toUri(Intent.URI_INTENT_SCHEME)
+        )
+        save(context, all(context) + shortcut)
+        return shortcut
+    }
+
+    // Termux's run-command service (a script in ~/.shortcuts, as Termux:Widget runs it)
+    const val TERMUX_PACKAGE = "com.termux"
+    const val TERMUX_RUN_COMMAND_SERVICE = "com.termux.app.RunCommandService"
+    const val TERMUX_RUN_COMMAND_PERMISSION = "com.termux.permission.RUN_COMMAND"
+    const val TERMUX_HOME = "/data/data/com.termux/files/home"
+
+    /** Runs [path] in Termux: in the background, or in a terminal session. */
+    fun termuxCommand(path: String, background: Boolean, arguments: Array<String>? = null): Intent =
+        Intent("com.termux.RUN_COMMAND").setClassName(TERMUX_PACKAGE, TERMUX_RUN_COMMAND_SERVICE)
+            .putExtra("com.termux.RUN_COMMAND_PATH", path)
+            .putExtra("com.termux.RUN_COMMAND_BACKGROUND", background)
+            .apply { arguments?.let { putExtra("com.termux.RUN_COMMAND_ARGUMENTS", it) } }
+
     @Suppress("DEPRECATION")
     private fun legacyIntent(data: Intent): Intent? =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
