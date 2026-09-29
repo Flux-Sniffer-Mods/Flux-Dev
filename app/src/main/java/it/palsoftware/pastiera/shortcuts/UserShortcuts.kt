@@ -47,6 +47,18 @@ object UserShortcuts {
         SettingsManager.getPreferences(context).edit().putString(KEY, array.toString()).apply()
     }
 
+    private const val UNSUPPORTED_KEY = "quick_launcher_unsupported_shortcut_screens"
+
+    /** A shortcut screen that only pins to the home screen: it isn't offered again. */
+    fun markUnsupported(context: Context, component: String) {
+        val prefs = SettingsManager.getPreferences(context)
+        val set = prefs.getStringSet(UNSUPPORTED_KEY, emptySet()).orEmpty() + component
+        prefs.edit().putStringSet(UNSUPPORTED_KEY, set).apply()
+    }
+
+    fun isUnsupported(context: Context, component: String): Boolean =
+        component in SettingsManager.getPreferences(context).getStringSet(UNSUPPORTED_KEY, emptySet()).orEmpty()
+
     fun remove(context: Context, id: String) {
         save(context, all(context).filterNot { it.id == id })
         iconFile(context, id).delete()
