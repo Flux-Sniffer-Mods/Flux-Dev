@@ -72,9 +72,30 @@ object KeyboardBackgroundImage {
         val decoded = resolver.openInputStream(uri)?.use {
             BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inSampleSize = sample })
         } ?: return false
-        val scale = MAX_SIDE_PX.toFloat() / maxOf(decoded.width, decoded.height)
-        val bitmap = if (scale < 1f) {
-            Bitmap.createScaledBitmap(decoded, (decoded.width * scale).toInt(), (decoded.height * scale).toInt(), true)
+        // Camera photos are stored sideways with an EXIF note of which way is up: honour it, and
+        // scale down in the same step
+        val orientation = runCatching {
+            resolver.openInputStream(uri)?.use {
+                android.media.ExifInterface(it).getAttributeInt(
+                    android.media.ExifInterface.TAG_ORIENTATION, android.media.ExifInterface.ORIENTATION_NORMAL)
+            }
+        }.getOrNull() ?: android.media.ExifInterface.ORIENTATION_NORMAL
+        val scale = minOf(1f, MAX_SIDE_PX.toFloat() / maxOf(decoded.width, decoded.height))
+        val matrix = Matrix().apply {
+            postScale(scale, scale)
+            when (orientation) {
+                android.media.ExifInterface.ORIENTATION_ROTATE_90 -> postRotate(90f)
+                android.media.ExifInterface.ORIENTATION_ROTATE_180 -> postRotate(180f)
+                android.media.ExifInterface.ORIENTATION_ROTATE_270 -> postRotate(270f)
+                android.media.ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> postScale(-1f, 1f)
+                android.media.ExifInterface.ORIENTATION_FLIP_VERTICAL -> postScale(1f, -1f)
+                android.media.ExifInterface.ORIENTATION_TRANSPOSE -> { postRotate(90f); postScale(-1f, 1f) }
+                android.media.ExifInterface.ORIENTATION_TRANSVERSE -> { postRotate(270f); postScale(-1f, 1f) }
+            }
+        }
+        val bitmap = if (!matrix.isIdentity) {
+            Bitmap.createBitmap(decoded, 0, 0, decoded.width, decoded.height, matrix, true)
+                .also { if (it !== decoded) decoded.recycle() }
         } else decoded
         val tmp = File(context.filesDir, "$FILE_NAME.tmp")
         tmp.outputStream().use { bitmap.compress(Bitmap.CompressFormat.JPEG, 90, it) }

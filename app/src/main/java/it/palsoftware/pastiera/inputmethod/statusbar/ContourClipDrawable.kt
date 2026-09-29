@@ -28,8 +28,10 @@ internal class ContourClipDrawable(
     private val location = IntArray(2)
     private val chromeLocation = IntArray(2)
 
-    init {
-        inner.callback = this
+    // The view clears the old background's callback when this replaces it, after this was built:
+    // claim it again whenever drawing, so the button's own drawable can still redraw itself
+    private fun claimInner() {
+        if (inner.callback !== this) inner.callback = this
     }
 
     private fun chrome(): StatusBarController.ImeChromeLayout? {
@@ -56,6 +58,7 @@ internal class ContourClipDrawable(
     }
 
     override fun draw(canvas: Canvas) {
+        claimInner()
         val path = contour()
         if (path == null) {
             inner.draw(canvas)
