@@ -407,6 +407,12 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
 
     private fun registerQuickLauncherPreferencesListener() {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            // Flux Keyboard's own shortcuts turned on or off, or Termux's scripts listed again
+            if (key == "quick_launcher_listed_apps_off" || key == "quick_launcher_listed_app_shortcuts" ||
+                key == "quick_launcher_termux_scripts_found"
+            ) {
+                reloadCommandsFromRegistry()
+            }
             if (key == PREF_COMMAND_SURFACE_SOURCES) {
                 launchedAutomatically = false
                 commands = quickLauncherCommandsFromCachedApps()
@@ -1046,9 +1052,61 @@ private fun QuickLauncherEntryContextMenu(
         // Add a shortcut: the home screen shortcuts this app offers (a contact's direct dial…)
         val menuContext = LocalContext.current
         val appPackage = (command.launch as? it.palsoftware.pastiera.commands.CommandLaunchSpec.AppPackage)?.packageName
-        val shortcutProviders = remember(appPackage, expanded) {
+        // Flux Keyboard's own for this app first (call or message a contact, a website, a Termux
+        // task); the app's home screen variants only where Flux Keyboard has none
+        val builtInKinds = remember(appPackage, expanded) {
             if (appPackage == null || !expanded) emptyList()
+            else it.palsoftware.pastiera.builtInKindsFor(menuContext, appPackage)
+        }
+        builtInKinds.forEach { kind ->
+            DropdownMenuItem(
+                text = {
+                    Column {
+                        Text(stringResource(R.string.user_shortcuts_title))
+                        Text(
+                            stringResource(it.palsoftware.pastiera.builtInTitle(kind)),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                },
+                leadingIcon = { Icon(imageVector = Icons.Filled.Add, contentDescription = null) },
+                onClick = {
+                    onDismiss()
+                    runCatching {
+                        menuContext.startActivity(
+                            android.content.Intent(menuContext, it.palsoftware.pastiera.UserShortcutsActivity::class.java)
+                                .putExtra(it.palsoftware.pastiera.UserShortcutsActivity.EXTRA_BUILT_IN, kind)
+                                .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                        )
+                    }
+                    (menuContext as? android.app.Activity)?.finish()
+                }
+            )
+        }
+        val shortcutProviders = remember(appPackage, expanded, builtInKinds) {
+            if (appPackage == null || !expanded || builtInKinds.isNotEmpty()) emptyList()
             else it.palsoftware.pastiera.UserShortcutsActivity.providersOf(menuContext, appPackage)
+        }
+        // Flux Keyboard's New and Search for this app: on or off, app by app
+        val offersListed = remember(appPackage, expanded) {
+            appPackage != null && expanded &&
+                it.palsoftware.pastiera.commands.ListedAppCommandSource().offersShortcuts(menuContext, appPackage)
+        }
+        if (offersListed && appPackage != null) {
+            var listedOff by remember(appPackage) {
+                mutableStateOf(appPackage in SettingsManager.getQuickLauncherListedAppsOff(menuContext))
+            }
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.quick_launcher_listed_app_toggle)) },
+                trailingIcon = {
+                    androidx.compose.material3.Switch(checked = !listedOff, onCheckedChange = null)
+                },
+                onClick = {
+                    listedOff = !listedOff
+                    SettingsManager.setQuickLauncherListedAppOff(menuContext, appPackage, listedOff)
+                }
+            )
         }
         shortcutProviders.forEach { (component, label) ->
             DropdownMenuItem(

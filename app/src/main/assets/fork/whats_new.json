@@ -4,6 +4,10 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "Long-press an app in the quick launcher to add Flux Keyboard's own shortcut for it (call or message a contact from your phone and messages apps, a website from your browser, a Termux task), and to turn its New and Search shortcuts on or off.",
+      "after": "202609291928"
+    },
+    {
       "text": "The symbols page has Recents on A, as the emoji layer does: the symbols you use most, one press away.",
       "after": "202609291915"
     },
@@ -84,6 +88,10 @@
     "Pick suggestions with Ctrl+Shift+Q, W or E (Right Shift too); Backspace undoes an auto-replace."
   ],
   "improvements": [
+    {
+      "text": "Flux Keyboard's New and Search shortcuts reach every app that offers those screens, going by its category, not only the apps in its lists.",
+      "after": "202609291928"
+    },
     {
       "text": "The tutorial is reordered: set up, then typing, emoji and symbols, moving around, your apps and the quick launcher, your choices and the look, and last the extras that need a permission, now including running your Termux scripts.",
       "after": "202609291924"

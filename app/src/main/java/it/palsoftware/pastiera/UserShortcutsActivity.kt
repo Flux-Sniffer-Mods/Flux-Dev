@@ -65,6 +65,9 @@ class UserShortcutsActivity : LocalizedComponentActivity() {
          */
         const val EXTRA_PROVIDER = "provider"
 
+        /** A built-in shortcut kind (call, message, website, termux) to start straight away. */
+        const val EXTRA_BUILT_IN = "built_in"
+
         /** The screens [packageName] offers for making home screen shortcuts, with their names. */
         fun providersOf(context: android.content.Context, packageName: String): List<Pair<ComponentName, String>> {
             val pm = context.packageManager
@@ -84,7 +87,8 @@ class UserShortcutsActivity : LocalizedComponentActivity() {
             PastieraTheme {
                 UserShortcutsScreen(
                     onBack = { finish() },
-                    directProvider = intent.getStringExtra(EXTRA_PROVIDER)?.let(ComponentName::unflattenFromString)
+                    directProvider = intent.getStringExtra(EXTRA_PROVIDER)?.let(ComponentName::unflattenFromString),
+                    directBuiltIn = intent.getStringExtra(EXTRA_BUILT_IN)
                 )
             }
         }
@@ -94,7 +98,7 @@ class UserShortcutsActivity : LocalizedComponentActivity() {
 private data class ShortcutProvider(val component: ComponentName, val label: String, val appName: String, val icon: Drawable?)
 
 @Composable
-private fun UserShortcutsScreen(onBack: () -> Unit, directProvider: ComponentName? = null) {
+private fun UserShortcutsScreen(onBack: () -> Unit, directProvider: ComponentName? = null, directBuiltIn: String? = null) {
     val context = LocalContext.current
     var shortcuts by remember { mutableStateOf(UserShortcuts.all(context)) }
     val providers = remember {
@@ -175,7 +179,10 @@ private fun UserShortcutsScreen(onBack: () -> Unit, directProvider: ComponentNam
         SettingsSectionDivider(stringResource(R.string.user_shortcuts_builtin))
         BuiltInShortcuts(
             row = { icon, title, description, onClick -> ShortcutRow(icon = icon, title = title, description = description, onClick = onClick) },
-            onAdded = { shortcuts = UserShortcuts.all(context) }
+            onAdded = { shortcuts = UserShortcuts.all(context) },
+            direct = directBuiltIn,
+            // Opened from the quick launcher for one app: back to where you were
+            onDirectDone = onBack
         )
         SettingsSectionDivider(stringResource(R.string.user_shortcuts_add_from))
         if (providers.isEmpty()) {

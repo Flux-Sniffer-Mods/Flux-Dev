@@ -30,6 +30,7 @@
     <string name="quick_launcher_action_search">Search</string>
     <string name="quick_launcher_listed_app_shortcuts_title">Shortcuts for compatible apps</string>
     <string name="quick_launcher_listed_app_shortcuts_description">Flux Keyboard adds New message, New note, Compose email and Search to the quick launcher for the apps it knows, where the app accepts them.</string>
+    <string name="quick_launcher_listed_app_toggle">Flux Keyboard\'s shortcuts for this app</string>
     <string name="termux_runs_background">Termux · background</string>
     <string name="termux_runs_terminal">Termux · terminal</string>
     <string name="quick_launcher_termux_scripts_title">Termux scripts</string>

@@ -4630,6 +4630,17 @@ object SettingsManager {
     private const val KEY_QUICK_LAUNCHER_LISTED_APP_SHORTCUTS = "quick_launcher_listed_app_shortcuts"
 
     /** Flux Keyboard's own shortcuts (New message, Search) for the apps in its shortcut and Enter lists. */
+    /** Apps whose Flux Keyboard shortcuts you turned off (from their long-press menu). */
+    fun getQuickLauncherListedAppsOff(context: Context): Set<String> =
+        getPreferences(context).getStringSet("quick_launcher_listed_apps_off", null).orEmpty()
+
+    fun setQuickLauncherListedAppOff(context: Context, packageName: String, off: Boolean) {
+        val current = getQuickLauncherListedAppsOff(context)
+        getPreferences(context).edit()
+            .putStringSet("quick_launcher_listed_apps_off", if (off) current + packageName else current - packageName)
+            .apply()
+    }
+
     fun getQuickLauncherListedAppShortcuts(context: Context): Boolean =
         getPreferences(context).getBoolean(KEY_QUICK_LAUNCHER_LISTED_APP_SHORTCUTS, true)
     fun setQuickLauncherListedAppShortcuts(context: Context, enabled: Boolean) {

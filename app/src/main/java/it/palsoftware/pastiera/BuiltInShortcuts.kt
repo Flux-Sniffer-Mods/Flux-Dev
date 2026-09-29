@@ -46,10 +46,35 @@ import it.palsoftware.pastiera.shortcuts.UserShortcuts
  * to call or message, a website, and Termux tasks (scripts in ~/.shortcuts, as Termux:Widget
  * runs them).
  */
+/** The built-in shortcut kinds [packageName] is the app for (its dialer, messages, browser, Termux). */
+internal fun builtInKindsFor(context: Context, packageName: String): List<String> = buildList {
+    if (packageName == dialerPackage(context)) add(BUILT_IN_CALL)
+    if (packageName == runCatching { Telephony.Sms.getDefaultSmsPackage(context) }.getOrNull()) add(BUILT_IN_MESSAGE)
+    if (packageName == browserPackage(context)) add(BUILT_IN_WEBSITE)
+    if (packageName == UserShortcuts.TERMUX_PACKAGE) add(BUILT_IN_TERMUX)
+}
+
+internal const val BUILT_IN_CALL = "call"
+internal const val BUILT_IN_MESSAGE = "message"
+internal const val BUILT_IN_WEBSITE = "website"
+internal const val BUILT_IN_TERMUX = "termux"
+
+/** A built-in kind's title, for menus. */
+internal fun builtInTitle(kind: String): Int = when (kind) {
+    BUILT_IN_CALL -> R.string.user_shortcuts_call_title
+    BUILT_IN_MESSAGE -> R.string.user_shortcuts_message_title
+    BUILT_IN_WEBSITE -> R.string.user_shortcuts_website_title
+    else -> R.string.user_shortcuts_termux_title
+}
+
 @Composable
 internal fun BuiltInShortcuts(
     row: @Composable (icon: Drawable?, title: String, description: String, onClick: () -> Unit) -> Unit,
-    onAdded: () -> Unit
+    onAdded: () -> Unit,
+    /** One kind to start straight away (from an app's long-press menu in the quick launcher). */
+    direct: String? = null,
+    /** The direct one is done, added or cancelled. */
+    onDirectDone: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val pm = context.packageManager
@@ -61,6 +86,10 @@ internal fun BuiltInShortcuts(
     fun added(label: String) {
         onAdded()
         Toast.makeText(context, context.getString(R.string.user_shortcuts_added, label), Toast.LENGTH_SHORT).show()
+        if (direct != null) onDirectDone()
+    }
+    fun cancelled() {
+        if (direct != null) onDirectDone()
     }
 
     // Call or message a contact: Android's own picker, no contacts permission needed
@@ -68,15 +97,15 @@ internal fun BuiltInShortcuts(
     val contactPicker = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         val kind = pickingFor ?: return@rememberLauncherForActivityResult
         pickingFor = null
-        val uri = result.data?.data ?: return@rememberLauncherForActivityResult
+        val uri = result.data?.data ?: return@rememberLauncherForActivityResult cancelled()
         val (name, number) = runCatching {
             context.contentResolver.query(
                 uri,
                 arrayOf(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER),
                 null, null, null
             )?.use { c -> if (c.moveToFirst()) (c.getString(0) ?: "") to (c.getString(1) ?: "") else null }
-        }.getOrNull() ?: return@rememberLauncherForActivityResult
-        if (number.isBlank()) return@rememberLauncherForActivityResult
+        }.getOrNull() ?: return@rememberLauncherForActivityResult cancelled()
+        if (number.isBlank()) return@rememberLauncherForActivityResult cancelled()
         val who = name.ifBlank { number }
         val label: String
         val shortcut = if (kind == "call") {
@@ -94,7 +123,7 @@ internal fun BuiltInShortcuts(
         pickingFor = kind
         runCatching {
             contactPicker.launch(Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI))
-        }.onFailure { pickingFor = null }
+        }.onFailure { pickingFor = null; cancelled() }
     }
 
     // Calling straight away needs the phone permission; without it the dialer opens with the number
@@ -104,23 +133,43 @@ internal fun BuiltInShortcuts(
     var termuxDialog by rememberSaveable { mutableStateOf(false) }
     val termuxPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { termuxDialog = true }
 
-    // Only what this phone can do: no dialer or messages app, no such rows
-    if (dialer != null) row(dialer.icon, stringResource(R.string.user_shortcuts_call_title), dialer.name) {
+    fun startCall() {
         if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             pickContact("call")
         } else {
             runCatching { callPermission.launch(android.Manifest.permission.CALL_PHONE) }.onFailure { pickContact("call") }
         }
     }
-    if (messages != null) row(messages.icon, stringResource(R.string.user_shortcuts_message_title), messages.name) { pickContact("message") }
-    if (browser != null) row(browser.icon, stringResource(R.string.user_shortcuts_website_title), browser.name) { websiteDialog = true }
-    if (termux != null) {
-        row(termux.icon, stringResource(R.string.user_shortcuts_termux_title), stringResource(R.string.user_shortcuts_termux_description)) {
-            if (ContextCompat.checkSelfPermission(context, UserShortcuts.TERMUX_RUN_COMMAND_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
-                termuxDialog = true
-            } else {
-                runCatching { termuxPermission.launch(UserShortcuts.TERMUX_RUN_COMMAND_PERMISSION) }.onFailure { termuxDialog = true }
-            }
+    fun startTermux() {
+        if (ContextCompat.checkSelfPermission(context, UserShortcuts.TERMUX_RUN_COMMAND_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
+            termuxDialog = true
+        } else {
+            runCatching { termuxPermission.launch(UserShortcuts.TERMUX_RUN_COMMAND_PERMISSION) }.onFailure { termuxDialog = true }
+        }
+    }
+
+    // From the quick launcher: that one, straight away
+    var directStarted by rememberSaveable { mutableStateOf(false) }
+    androidx.compose.runtime.LaunchedEffect(direct) {
+        if (direct == null || directStarted) return@LaunchedEffect
+        directStarted = true
+        when (direct) {
+            BUILT_IN_CALL -> startCall()
+            BUILT_IN_MESSAGE -> pickContact("message")
+            BUILT_IN_WEBSITE -> websiteDialog = true
+            BUILT_IN_TERMUX -> startTermux()
+            else -> onDirectDone()
+        }
+    }
+    if (direct != null) {
+        // Only the dialogs below, no rows
+    } else {
+        // Only what this phone can do: no dialer or messages app, no such rows
+        if (dialer != null) row(dialer.icon, stringResource(R.string.user_shortcuts_call_title), dialer.name) { startCall() }
+        if (messages != null) row(messages.icon, stringResource(R.string.user_shortcuts_message_title), messages.name) { pickContact("message") }
+        if (browser != null) row(browser.icon, stringResource(R.string.user_shortcuts_website_title), browser.name) { websiteDialog = true }
+        if (termux != null) {
+            row(termux.icon, stringResource(R.string.user_shortcuts_termux_title), stringResource(R.string.user_shortcuts_termux_description)) { startTermux() }
         }
     }
 
@@ -128,7 +177,7 @@ internal fun BuiltInShortcuts(
         var address by rememberSaveable { mutableStateOf("") }
         var name by rememberSaveable { mutableStateOf("") }
         AlertDialog(
-            onDismissRequest = { websiteDialog = false },
+            onDismissRequest = { websiteDialog = false; cancelled() },
             title = { Text(stringResource(R.string.user_shortcuts_website_title)) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -148,7 +197,7 @@ internal fun BuiltInShortcuts(
                     added(label)
                 }) { Text(stringResource(R.string.user_shortcuts_add)) }
             },
-            dismissButton = { TextButton(onClick = { websiteDialog = false }) { Text(stringResource(android.R.string.cancel)) } }
+            dismissButton = { TextButton(onClick = { websiteDialog = false; cancelled() }) { Text(stringResource(android.R.string.cancel)) } }
         )
     }
 
@@ -163,7 +212,7 @@ internal fun BuiltInShortcuts(
                     UserShortcuts.termuxCommand("${UserShortcuts.TERMUX_HOME}/.shortcuts/$path", background))
                 added(label)
             },
-            onDismiss = { termuxDialog = false }
+            onDismiss = { termuxDialog = false; cancelled() }
         )
     }
 }

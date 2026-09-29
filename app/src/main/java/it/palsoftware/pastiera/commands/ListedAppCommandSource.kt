@@ -13,7 +13,8 @@ import it.palsoftware.pastiera.shortcuts.AppShortcutPresets
 import it.palsoftware.pastiera.shortcuts.StandardShortcut
 
 /**
- * Flux Keyboard's own quick launcher commands for the apps in its app shortcut and Enter lists:
+ * Flux Keyboard's own quick launcher commands for the apps in its app shortcut and Enter lists
+ * (and, going by their Play Store category, every other app that offers the screens):
  * a new message, post or note (or an email to write), and the app's search, straight from the
  * quick launcher. The same screens the app shortcuts open; each only when the app on the phone
  * accepts it.
@@ -26,19 +27,28 @@ class ListedAppCommandSource : CommandSource {
     override fun getCommands(context: Context): List<CommandTarget> {
         if (!SettingsManager.getQuickLauncherListedAppShortcuts(context)) return emptyList()
         val pm = context.packageManager
+        val off = SettingsManager.getQuickLauncherListedAppsOff(context)
         val launchers = pm.queryIntentActivities(
             Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER), 0
-        ).map { it.activityInfo.packageName }.distinct().filter { it != context.packageName }
+        ).map { it.activityInfo.packageName }.distinct().filter { it != context.packageName && it !in off }
         return launchers.flatMap { commandsFor(context, it) }
     }
+
+    /** Whether [packageName] gets Flux Keyboard's shortcuts (whether or not they're turned off for it). */
+    fun offersShortcuts(context: Context, packageName: String): Boolean = commandsFor(context, packageName).isNotEmpty()
 
     private fun commandsFor(context: Context, packageName: String): List<CommandTarget> {
         val preset = AppShortcutPresets.forPackage(packageName)
         val standard = AppEnterStandards.standardFor(packageName)
-        if (preset == null && standard == EnterStandard.AppDefault) return emptyList()
         val pm = context.packageManager
         val updatedAt = runCatching { pm.getPackageInfo(packageName, 0).lastUpdateTime }.getOrNull() ?: return emptyList()
         cache[packageName]?.takeIf { it.updatedAt == updatedAt }?.let { return it.commands }
+        // Apps in neither list: what their Play Store category says they are, and only the
+        // screens they declare themselves (a search screen, sharing text for a message or note)
+        val appCategory = if (preset == null && standard == EnterStandard.AppDefault) {
+            runCatching { pm.getApplicationInfo(packageName, 0).category }.getOrNull()
+                ?: android.content.pm.ApplicationInfo.CATEGORY_UNDEFINED
+        } else null
 
         val appName = runCatching { pm.getApplicationLabel(pm.getApplicationInfo(packageName, 0)).toString() }
             .getOrDefault(preset?.appName ?: packageName)
@@ -46,6 +56,11 @@ class ListedAppCommandSource : CommandSource {
 
         // What "new" is in this app, and the ways into it (the first the app accepts is used)
         val (newLabel, newIntents) = when {
+            appCategory == android.content.pm.ApplicationInfo.CATEGORY_SOCIAL ->
+                R.string.quick_launcher_action_new_message to listOf(AppIntent.share())
+            appCategory == android.content.pm.ApplicationInfo.CATEGORY_PRODUCTIVITY ->
+                R.string.quick_launcher_action_new_note to listOf(AppIntent.share())
+            appCategory != null -> R.string.quick_launcher_action_new_post to emptyList()
             standard == EnterStandard.Email ->
                 R.string.quick_launcher_action_compose to listOf(AppIntent(AppIntent.ACTION_SENDTO, data = "mailto:"))
             standard == EnterStandard.Notes || preset?.category == AppCategory.Productivity ->
