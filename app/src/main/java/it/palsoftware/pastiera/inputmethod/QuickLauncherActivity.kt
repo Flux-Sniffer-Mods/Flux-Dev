@@ -218,6 +218,16 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        frontSince = android.os.SystemClock.uptimeMillis()
+    }
+
+    override fun onPause() {
+        frontSince = 0L
+        super.onPause()
+    }
+
     override fun onDestroy() {
         quickLauncherPrefsListener?.let { listener ->
             SettingsManager.getPreferences(this).unregisterOnSharedPreferenceChangeListener(listener)
@@ -509,6 +519,19 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
     }
 
     companion object {
+        /**
+         * When the quick launcher came to the front (uptime), 0 when it isn't. Keys pressed since
+         * are its own: the keyboard, still attached to the app beneath, lets them through, or
+         * typing into the search would sometimes go nowhere.
+         */
+        @Volatile
+        var frontSince: Long = 0L
+
+        fun ownsKey(event: KeyEvent?): Boolean {
+            val since = frontSince
+            return since != 0L && event != null && event.downTime >= since
+        }
+
         const val EXTRA_TOGGLE_REQUEST = "it.palsoftware.pastiera.inputmethod.extra.TOGGLE_QUICK_LAUNCHER"
         private const val TAG = "QuickLauncher"
         private const val PREF_COMMAND_SURFACE_SOURCES = "command_surface_sources"

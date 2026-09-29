@@ -5529,6 +5529,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private var niagaraBackReturnTo: String? = null
 
     override fun onKeyDown(keyCode_: Int, event_: KeyEvent?): Boolean {
+        // The quick launcher in front: its keys go to it, not to the app's field beneath
+        if (QuickLauncherActivity.ownsKey(event_)) return false
         // Suggestion swipes: typing keeps them picking; Backspace right after one undoes it
         if ((event_?.repeatCount ?: 0) == 0 && !KeyEvent.isModifierKey(keyCode_)) {
             if (keyCode_ == KeyEvent.KEYCODE_DEL) it.palsoftware.pastiera.core.SuggestionSwipeLearning.onDeleted(this)
@@ -6447,6 +6449,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     override fun onKeyUp(keyCode_: Int, event_: KeyEvent?): Boolean {
+        if (QuickLauncherActivity.ownsKey(event_)) return false
         if (keyCode_ == KEYCODE_SYM) {
             symKeyHeld = false
             // Released after a chord in a hidden app: no panel
