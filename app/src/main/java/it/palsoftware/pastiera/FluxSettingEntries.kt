@@ -30,6 +30,10 @@ internal fun fluxSettingEntries(): List<SettingEntry> {
             summaryRes = R.string.show_add_word_suggestion_description, route = autoCorrection),
         SettingEntry("auto_correction.add_last_word_shortcut", R.string.add_last_word_shortcut_title,
             summaryRes = R.string.add_last_word_shortcut_description, route = autoCorrection),
+        SettingEntry("auto_correction.learn_frequent_words", R.string.learn_frequent_words_title,
+            summaryRes = R.string.learn_frequent_words_description, route = autoCorrection),
+        SettingEntry("auto_correction.learn_contact_details", R.string.learn_contact_details_title,
+            summaryRes = R.string.learn_contact_details_description, route = autoCorrection),
         // Emoji & GIFs
         SettingEntry("flux_emoji.picker_key", R.string.emoji_picker_key_title, route = emoji),
         SettingEntry("flux_emoji.key_target", R.string.emoji_key_target_title, route = emoji),

@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera
 
+import it.palsoftware.pastiera.core.writeTextAtomically
 import android.content.Context
 import android.content.res.Configuration
 import android.content.SharedPreferences
@@ -61,6 +62,7 @@ object SettingsManager {
     private const val KEY_COMMA_SPACE = "comma_space"
     private const val KEY_AUTO_SPACE_PUNCTUATION = "auto_space_punctuation"
     private const val KEY_SPACE_AFTER_PUNCTUATION = "space_after_punctuation"
+    private const val KEY_EMOTICON_PUNCTUATION = "emoticon_punctuation"
     private const val KEY_SMART_QUOTES = "smart_quotes"
     private const val KEY_SMART_QUOTES_STYLE = "smart_quotes_style"
     private const val KEY_SWIPE_TO_DELETE = "swipe_to_delete"
@@ -227,6 +229,8 @@ object SettingsManager {
     private const val KEY_TRACKPAD_SHIZUKU_DEVICE = "trackpad_shizuku_device"
     private const val KEY_SHIFT_BACKSPACE_DELETE = "shift_backspace_delete" // Shift + Backspace performs forward delete
     const val KEY_SHOW_ADD_WORD_SUGGESTION = "show_add_word_suggestion" // Offer "add to dictionary" in the suggestions
+    const val KEY_LEARN_CONTACT_DETAILS = "learn_contact_details" // Keep emails and phone numbers typed by hand
+    const val KEY_LEARN_FREQUENT_WORDS = "learn_frequent_words" // Add words typed often to the dictionary
     const val KEY_ADD_LAST_WORD_SHORTCUT = "add_last_word_shortcut" // Ctrl + Shift + D adds the last word to the dictionary
     private const val KEY_ALT_BACKSPACE_DELETE = "alt_backspace_delete" // Alt + Backspace performs forward delete
     private const val KEY_BACKSPACE_AT_START_DELETE = "backspace_at_start_delete" // Backspace at line start performs forward delete
@@ -393,7 +397,7 @@ object SettingsManager {
     private const val DEFAULT_AUTO_CAPITALIZE_FIRST_LETTER = true
     private const val DEFAULT_AUTO_CAPITALIZE_RESPECT_MANUAL_SHIFT_OFF = true
     private const val DEFAULT_AUTO_CAPITALIZE_RESTRICTED_FIELDS = false
-    private const val DEFAULT_DOUBLE_SPACE_TO_PERIOD = true
+    private const val DEFAULT_DOUBLE_SPACE_TO_PERIOD = false
     private const val DEFAULT_SPACED_HYPHEN_TO_EN_DASH = false
     const val DASH_STYLE_EN = "en_dash"
     const val DASH_STYLE_EM = "em_dash"
@@ -2280,6 +2284,14 @@ object SettingsManager {
             .apply()
     }
 
+    /** Punctuation typed straight into more (":-)", ":D") skips its space after, so emoticons keep their shape */
+    fun getEmoticonPunctuation(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_EMOTICON_PUNCTUATION, true)
+
+    fun setEmoticonPunctuation(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_EMOTICON_PUNCTUATION, enabled).apply()
+    }
+
     fun getSpaceAfterPunctuation(context: Context): String {
         val stored = getPreferences(context).getString(
             KEY_SPACE_AFTER_PUNCTUATION,
@@ -2787,6 +2799,25 @@ object SettingsManager {
     /**
      * Returns whether Shift+Backspace performs forward delete.
      */
+    /** Whether a word outside the dictionary typed three times is added to it (on by default). */
+    fun getLearnFrequentWords(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_LEARN_FREQUENT_WORDS, true)
+
+    fun setLearnFrequentWords(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_LEARN_FREQUENT_WORDS, enabled).apply()
+    }
+
+    /**
+     * Whether emails and phone numbers typed by hand are kept in the user dictionary and offered
+     * again in email and phone fields (on by default; never while typing incognito).
+     */
+    fun getLearnContactDetails(context: Context): Boolean =
+        getPreferences(context).getBoolean(KEY_LEARN_CONTACT_DETAILS, true)
+
+    fun setLearnContactDetails(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean(KEY_LEARN_CONTACT_DETAILS, enabled).apply()
+    }
+
     /** Whether the suggestions offer to add an unknown word to the dictionary (on by default). */
     fun getShowAddWordSuggestion(context: Context): Boolean =
         getPreferences(context).getBoolean(KEY_SHOW_ADD_WORD_SUGGESTION, true)
@@ -4817,7 +4848,7 @@ object SettingsManager {
                 )
             }
 
-            mappingsFile.writeText(jsonObject.toString())
+            mappingsFile.writeTextAtomically(jsonObject.toString())
             prefs.edit()
                 .putInt(KEY_NAV_MODE_DEFAULT_MAPPINGS_VERSION, CURRENT_NAV_MODE_DEFAULT_MAPPINGS_VERSION)
                 .putLong(KEY_NAV_MODE_MAPPINGS_UPDATED, System.currentTimeMillis())
@@ -4892,7 +4923,7 @@ object SettingsManager {
             jsonObject.put("mappings", mappingsObject)
             
             val mappingsFile = getNavModeMappingsFile(context)
-            mappingsFile.writeText(jsonObject.toString())
+            mappingsFile.writeTextAtomically(jsonObject.toString())
             
             // Update timestamp in SharedPreferences to notify the service
             getPreferences(context).edit()

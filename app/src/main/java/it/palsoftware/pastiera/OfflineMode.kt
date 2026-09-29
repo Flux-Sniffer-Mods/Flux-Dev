@@ -1,6 +1,7 @@
 package it.palsoftware.pastiera
 
 import android.content.Context
+import android.content.SharedPreferences
 
 /**
  * Offline mode: nothing in Pastiera goes online. GIF search (KLIPY) disappears, and dictionary
@@ -13,8 +14,17 @@ object OfflineMode {
     var enabled: Boolean = false
         private set
 
+    // Held here: SharedPreferences keeps its listeners only weakly
+    private var listener: SharedPreferences.OnSharedPreferenceChangeListener? = null
+
+    /** Reads the setting and follows it from then on, however it changes (a restored backup too) */
     fun load(context: Context) {
-        enabled = SettingsManager.isOfflineMode(context)
+        val appContext = context.applicationContext
+        enabled = SettingsManager.isOfflineMode(appContext)
+        if (listener != null) return
+        listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+            enabled = SettingsManager.isOfflineMode(appContext)
+        }.also { SettingsManager.getPreferences(appContext).registerOnSharedPreferenceChangeListener(it) }
     }
 
     internal fun update(value: Boolean) {

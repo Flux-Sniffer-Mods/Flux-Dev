@@ -30,6 +30,8 @@ object RecommendedSettings {
         "exact_typing_no_suggestions" to true,
         "gifs_enabled" to true,
         "keyboard_theme_wallpaper_colours" to true,
+        "learn_contact_details" to true,
+        "learn_frequent_words" to true,
         "led_individual_colors" to true,
         "led_locked_animation" to true,
         "one_time_codes_enabled" to true,

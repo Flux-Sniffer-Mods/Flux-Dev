@@ -302,28 +302,28 @@ fun FluxTutorialChoicesPageContent(modifier: Modifier = Modifier) {
             ) {
                 ChoiceSwitch(
                     R.string.flux_choice_auto_correct_title, R.string.flux_choice_auto_correct_text,
-                    SettingsManager.getAutoCorrectEnabled(context)
+                    { SettingsManager.getAutoCorrectEnabled(context) }
                 ) { SettingsManager.setAutoCorrectEnabled(context, it) }
                 ChoiceSwitch(
                     R.string.flux_choice_double_space_title, R.string.flux_choice_double_space_text,
-                    SettingsManager.getDoubleSpaceToPeriod(context)
+                    { SettingsManager.getDoubleSpaceToPeriod(context) }
                 ) { SettingsManager.setDoubleSpaceToPeriod(context, it) }
                 ChoiceSwitch(
                     R.string.flux_choice_emoji_suggestions_title, R.string.flux_choice_emoji_suggestions_text,
-                    SettingsManager.getEmojiSuggestionsEnabled(context)
+                    { SettingsManager.getEmojiSuggestionsEnabled(context) }
                 ) { SettingsManager.setEmojiSuggestionsEnabled(context, it) }
                 ChoiceSwitch(
                     R.string.flux_choice_gifs_title, R.string.flux_choice_gifs_text,
-                    SettingsManager.getGifsEnabled(context)
+                    { SettingsManager.getGifsEnabled(context) }
                 ) { SettingsManager.setGifsEnabled(context, it) }
                 ChoiceSwitch(
                     R.string.flux_choice_emoji_layer_title, R.string.flux_choice_emoji_layer_text,
-                    SettingsManager.getEmojiKeyOpensLayer(context)
+                    { SettingsManager.getEmojiKeyOpensLayer(context) }
                 ) { SettingsManager.setEmojiKeyOpensLayer(context, it) }
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
                     ChoiceSwitch(
                         R.string.flux_choice_wallpaper_title, R.string.flux_choice_wallpaper_text,
-                        SettingsManager.getKeyboardWallpaperColours(context)
+                        { SettingsManager.getKeyboardWallpaperColours(context) }
                     ) { SettingsManager.setKeyboardWallpaperColours(context, it) }
                 }
             }
@@ -332,8 +332,18 @@ fun FluxTutorialChoicesPageContent(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun ChoiceSwitch(titleRes: Int, textRes: Int, initial: Boolean, onChange: (Boolean) -> Unit) {
-    var checked by remember { androidx.compose.runtime.mutableStateOf(initial) }
+private fun ChoiceSwitch(titleRes: Int, textRes: Int, read: () -> Boolean, onChange: (Boolean) -> Unit) {
+    val context = LocalContext.current
+    var checked by remember { androidx.compose.runtime.mutableStateOf(read()) }
+    // The pager composes this page before the one beside it applies the recommended settings:
+    // follow the stored value so a switch never shows a stale state
+    androidx.compose.runtime.DisposableEffect(Unit) {
+        val prefs = SettingsManager.getPreferences(context)
+        val listener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ -> checked = read() }
+        prefs.registerOnSharedPreferenceChangeListener(listener)
+        checked = read()
+        onDispose { prefs.unregisterOnSharedPreferenceChangeListener(listener) }
+    }
     androidx.compose.foundation.layout.Row(
         modifier = Modifier
             .fillMaxWidth()
