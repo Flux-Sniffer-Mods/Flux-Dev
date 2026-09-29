@@ -1554,6 +1554,24 @@
     <string name="learn_contact_details_description">Адреси пошти й номери телефонів, які ви набираєте самі, зберігаються у словнику та знову пропонуються в полях пошти й телефону. Ніколи не вставлений текст і нічого з полів паролів та приватних полів.</string>
     <string name="learn_frequent_words_title">Запам’ятовувати часто вживані слова</string>
     <string name="learn_frequent_words_description">Слово, якого немає у словнику, додається до нього, коли ви наберете його тричі: воно пропонуватиметься й ніколи не виправлятиметься автоматично. Окрім режиму інкогніто.</string>
+    <string name="user_shortcuts_builtin">Створені Flux Keyboard</string>
+    <string name="user_shortcuts_call_title">Зателефонувати контакту</string>
+    <string name="user_shortcuts_message_title">Написати контакту</string>
+    <string name="user_shortcuts_website_title">Сайт</string>
+    <string name="user_shortcuts_termux_title">Завдання Termux</string>
+    <string name="user_shortcuts_termux_description">Скрипт із ~/.shortcuts, що запускається як у Termux:Widget: з tasks — у фоні, решта — у терміналі.</string>
+    <string name="user_shortcuts_termux_setup">Termux потрібен allow-external-apps = true у ~/.termux/termux.properties (потім перезапустіть Termux), а Flux Keyboard — дозвіл запускати команди в Termux.</string>
+    <string name="user_shortcuts_termux_none">У ~/.shortcuts скриптів не знайдено</string>
+    <string name="user_shortcuts_call_label">Зателефонувати: %1$s</string>
+    <string name="user_shortcuts_message_label">Написати: %1$s</string>
+    <string name="user_shortcuts_website_address">Адреса</string>
+    <string name="user_shortcuts_name">Назва</string>
+    <string name="user_shortcuts_add">Додати</string>
+    <string name="quick_launcher_action_new_message">Нове повідомлення</string>
+    <string name="quick_launcher_action_new_post">Новий допис</string>
+    <string name="quick_launcher_action_new_note">Нова нотатка</string>
+    <string name="quick_launcher_action_compose">Написати лист</string>
+    <string name="quick_launcher_action_search">Пошук</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d сполучення надсилається як власне сполучення застосунку</item>
         <item quantity="few">%d сполучення надсилаються як власні сполучення застосунку</item>

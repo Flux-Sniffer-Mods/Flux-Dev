@@ -925,6 +925,24 @@
     <string name="learn_contact_details_description">Selbst getippte E-Mail-Adressen und Telefonnummern werden in deinem Wörterbuch gespeichert und in E-Mail- und Telefonfeldern wieder angeboten. Nie Eingefügtes und nichts aus Passwort- oder privaten Feldern.</string>
     <string name="learn_frequent_words_title">Oft verwendete Wörter lernen</string>
     <string name="learn_frequent_words_description">Ein Wort, das nicht im Wörterbuch steht, wird aufgenommen, sobald du es dreimal getippt hast – dann wird es vorgeschlagen und nie automatisch korrigiert. Nicht beim Inkognito-Tippen.</string>
+    <string name="user_shortcuts_builtin">Von Flux Keyboard erstellt</string>
+    <string name="user_shortcuts_call_title">Kontakt anrufen</string>
+    <string name="user_shortcuts_message_title">Kontakt anschreiben</string>
+    <string name="user_shortcuts_website_title">Website</string>
+    <string name="user_shortcuts_termux_title">Termux-Aufgabe</string>
+    <string name="user_shortcuts_termux_description">Ein Skript in ~/.shortcuts, ausgeführt wie von Termux:Widget: die in tasks im Hintergrund, die anderen in einem Terminal.</string>
+    <string name="user_shortcuts_termux_setup">Termux braucht allow-external-apps = true in ~/.termux/termux.properties (danach Termux neu starten), und Flux Keyboard die Berechtigung, Befehle in Termux auszuführen.</string>
+    <string name="user_shortcuts_termux_none">Keine Skripte in ~/.shortcuts gefunden</string>
+    <string name="user_shortcuts_call_label">%1$s anrufen</string>
+    <string name="user_shortcuts_message_label">%1$s schreiben</string>
+    <string name="user_shortcuts_website_address">Adresse</string>
+    <string name="user_shortcuts_name">Name</string>
+    <string name="user_shortcuts_add">Hinzufügen</string>
+    <string name="quick_launcher_action_new_message">Neue Nachricht</string>
+    <string name="quick_launcher_action_new_post">Neuer Beitrag</string>
+    <string name="quick_launcher_action_new_note">Neue Notiz</string>
+    <string name="quick_launcher_action_compose">E-Mail schreiben</string>
+    <string name="quick_launcher_action_search">Suchen</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d Kombination als eigenes Tastenkürzel der App gesendet</item>
         <item quantity="other">%d Kombinationen als eigene Tastenkürzel der App gesendet</item>

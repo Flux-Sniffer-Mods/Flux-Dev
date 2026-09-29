@@ -1554,6 +1554,24 @@
     <string name="learn_contact_details_description">Адреса почты и номера телефонов, которые вы набираете сами, сохраняются в словаре и снова предлагаются в полях почты и телефона. Никогда не вставленный текст и ничего из полей паролей и приватных полей.</string>
     <string name="learn_frequent_words_title">Запоминать часто используемые слова</string>
     <string name="learn_frequent_words_description">Слово, которого нет в словаре, добавляется в него, когда вы наберёте его трижды: оно будет предлагаться и никогда не исправится автоматически. Кроме режима инкогнито.</string>
+    <string name="user_shortcuts_builtin">Созданные Flux Keyboard</string>
+    <string name="user_shortcuts_call_title">Позвонить контакту</string>
+    <string name="user_shortcuts_message_title">Написать контакту</string>
+    <string name="user_shortcuts_website_title">Сайт</string>
+    <string name="user_shortcuts_termux_title">Задача Termux</string>
+    <string name="user_shortcuts_termux_description">Скрипт из ~/.shortcuts, запускаемый как в Termux:Widget: из tasks — в фоне, остальные — в терминале.</string>
+    <string name="user_shortcuts_termux_setup">Termux нужен allow-external-apps = true в ~/.termux/termux.properties (затем перезапустите Termux), а Flux Keyboard — разрешение запускать команды в Termux.</string>
+    <string name="user_shortcuts_termux_none">В ~/.shortcuts скриптов не найдено</string>
+    <string name="user_shortcuts_call_label">Позвонить: %1$s</string>
+    <string name="user_shortcuts_message_label">Написать: %1$s</string>
+    <string name="user_shortcuts_website_address">Адрес</string>
+    <string name="user_shortcuts_name">Название</string>
+    <string name="user_shortcuts_add">Добавить</string>
+    <string name="quick_launcher_action_new_message">Новое сообщение</string>
+    <string name="quick_launcher_action_new_post">Новая публикация</string>
+    <string name="quick_launcher_action_new_note">Новая заметка</string>
+    <string name="quick_launcher_action_compose">Написать письмо</string>
+    <string name="quick_launcher_action_search">Поиск</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d сочетание отправляется как собственное сочетание приложения</item>
         <item quantity="few">%d сочетания отправляются как собственные сочетания приложения</item>

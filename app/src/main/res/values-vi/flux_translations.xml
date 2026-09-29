@@ -1554,6 +1554,24 @@
     <string name="learn_contact_details_description">Email và số điện thoại bạn tự gõ được lưu trong từ điển và gợi ý lại trong các ô email và số điện thoại. Không bao giờ lưu nội dung dán vào, hay từ ô mật khẩu và ô riêng tư.</string>
     <string name="learn_frequent_words_title">Học các từ bạn hay dùng</string>
     <string name="learn_frequent_words_description">Một từ chưa có trong từ điển sẽ được thêm vào sau khi bạn gõ nó ba lần, để được gợi ý và không bao giờ bị tự sửa. Không áp dụng khi gõ ẩn danh.</string>
+    <string name="user_shortcuts_builtin">Do Flux Keyboard tạo</string>
+    <string name="user_shortcuts_call_title">Gọi một liên hệ</string>
+    <string name="user_shortcuts_message_title">Nhắn tin cho một liên hệ</string>
+    <string name="user_shortcuts_website_title">Trang web</string>
+    <string name="user_shortcuts_termux_title">Tác vụ Termux</string>
+    <string name="user_shortcuts_termux_description">Một script trong ~/.shortcuts, chạy như Termux:Widget: các script trong tasks chạy nền, số còn lại chạy trong terminal.</string>
+    <string name="user_shortcuts_termux_setup">Termux cần allow-external-apps = true trong ~/.termux/termux.properties (rồi khởi động lại Termux), và Flux Keyboard cần quyền chạy lệnh trong Termux.</string>
+    <string name="user_shortcuts_termux_none">Không tìm thấy script nào trong ~/.shortcuts</string>
+    <string name="user_shortcuts_call_label">Gọi %1$s</string>
+    <string name="user_shortcuts_message_label">Nhắn tin cho %1$s</string>
+    <string name="user_shortcuts_website_address">Địa chỉ</string>
+    <string name="user_shortcuts_name">Tên</string>
+    <string name="user_shortcuts_add">Thêm</string>
+    <string name="quick_launcher_action_new_message">Tin nhắn mới</string>
+    <string name="quick_launcher_action_new_post">Bài đăng mới</string>
+    <string name="quick_launcher_action_new_note">Ghi chú mới</string>
+    <string name="quick_launcher_action_compose">Soạn email</string>
+    <string name="quick_launcher_action_search">Tìm kiếm</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="other">%d tổ hợp được gửi dưới dạng phím tắt riêng của ứng dụng</item>
     </plurals>

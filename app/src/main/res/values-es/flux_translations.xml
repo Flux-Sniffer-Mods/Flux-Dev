@@ -1554,6 +1554,24 @@
     <string name="learn_contact_details_description">Los correos y números de teléfono que escribes tú mismo se guardan en tu diccionario y se ofrecen de nuevo en los campos de correo y teléfono. Nunca lo que pegas, ni lo de campos de contraseña o privados.</string>
     <string name="learn_frequent_words_title">Aprender las palabras que usas a menudo</string>
     <string name="learn_frequent_words_description">Una palabra que no está en el diccionario se añade cuando la has escrito tres veces, así se sugiere y nunca se autocorrige. No mientras escribes en modo incógnito.</string>
+    <string name="user_shortcuts_builtin">Creados por Flux Keyboard</string>
+    <string name="user_shortcuts_call_title">Llamar a un contacto</string>
+    <string name="user_shortcuts_message_title">Escribir a un contacto</string>
+    <string name="user_shortcuts_website_title">Sitio web</string>
+    <string name="user_shortcuts_termux_title">Tarea de Termux</string>
+    <string name="user_shortcuts_termux_description">Un script de ~/.shortcuts, ejecutado como lo hace Termux:Widget: los de tasks en segundo plano, los demás en una terminal.</string>
+    <string name="user_shortcuts_termux_setup">Termux necesita allow-external-apps = true en ~/.termux/termux.properties (y reiniciar Termux), y Flux Keyboard necesita permiso para ejecutar comandos en Termux.</string>
+    <string name="user_shortcuts_termux_none">No se encontraron scripts en ~/.shortcuts</string>
+    <string name="user_shortcuts_call_label">Llamar a %1$s</string>
+    <string name="user_shortcuts_message_label">Escribir a %1$s</string>
+    <string name="user_shortcuts_website_address">Dirección</string>
+    <string name="user_shortcuts_name">Nombre</string>
+    <string name="user_shortcuts_add">Añadir</string>
+    <string name="quick_launcher_action_new_message">Nuevo mensaje</string>
+    <string name="quick_launcher_action_new_post">Nueva publicación</string>
+    <string name="quick_launcher_action_new_note">Nueva nota</string>
+    <string name="quick_launcher_action_compose">Redactar correo</string>
+    <string name="quick_launcher_action_search">Buscar</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d combinación enviada como atajo propio de la app</item>
         <item quantity="many">%d combinaciones enviadas como atajos propios de la app</item>
