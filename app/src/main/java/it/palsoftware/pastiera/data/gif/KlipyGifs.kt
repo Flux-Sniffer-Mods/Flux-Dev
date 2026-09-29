@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.data.gif
 
+import it.palsoftware.pastiera.core.writeBytesAtomically
 import android.content.ClipDescription
 import android.content.Context
 import it.palsoftware.pastiera.OfflineMode
@@ -349,7 +350,7 @@ object KlipyGifs {
         } else {
             download(context, url).also { downloaded ->
                 runCatching {
-                    file.writeBytes(downloaded)
+                    file.writeBytesAtomically(downloaded)
                     trimPreviews(folder, PREVIEW_CACHE_MAX_BYTES)
                 }
             }
@@ -425,7 +426,7 @@ object KlipyGifs {
         folder.listFiles()?.filter { now - it.lastModified() > CACHE_MAX_AGE_MS }?.forEach { it.delete() }
         val name = gif.id.filter { it.isLetterOrDigit() }.ifEmpty { gif.gifUrl.hashCode().toUInt().toString() }
         File(folder, "gif-$name.gif").also { file ->
-            if (!file.exists() || file.length() == 0L) file.writeBytes(download(context, gif.gifUrl))
+            if (!file.exists() || file.length() == 0L) file.writeBytesAtomically(download(context, gif.gifUrl))
         }
     }
 

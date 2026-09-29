@@ -22,6 +22,7 @@ object GifCollections {
 
     /** A GIF was sent: it goes to the top of the recents. */
     fun addRecent(context: Context, gif: GifResult) {
+        if (it.palsoftware.pastiera.core.IncognitoTyping.active) return
         write(context, RECENTS_FILE, (listOf(gif) + recents(context).filter { it.id != gif.id }).take(MAX_RECENTS))
     }
 
@@ -55,6 +56,12 @@ object GifCollections {
     }.getOrNull().orEmpty()
 
     private fun write(context: Context, name: String, gifs: List<GifResult>) {
-        runCatching { File(context.filesDir, name).writeText(KlipyGifs.resultsToJson(gifs)) }
+        // Written whole then swapped in: an interrupted write never loses the favourites
+        runCatching {
+            val file = File(context.filesDir, name)
+            val temp = File(context.filesDir, "$name.tmp")
+            temp.writeText(KlipyGifs.resultsToJson(gifs))
+            if (!temp.renameTo(file)) temp.delete()
+        }
     }
 }

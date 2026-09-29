@@ -1,5 +1,6 @@
 package it.palsoftware.pastiera.data.symbols
 
+import it.palsoftware.pastiera.core.writeTextAtomically
 import android.content.Context
 import android.graphics.Paint
 import android.os.Build
@@ -194,8 +195,9 @@ object SymbolSearch {
 
     /** A symbol was picked: it goes to the top of the recents. */
     fun addRecent(context: Context, symbol: String) {
+        if (it.palsoftware.pastiera.core.IncognitoTyping.active) return
         val updated = (listOf(symbol) + recentSymbols(context).filter { it != symbol }).take(MAX_RECENTS)
-        runCatching { File(context.applicationContext.filesDir, RECENTS_FILE).writeText(updated.joinToString("\n")) }
+        runCatching { File(context.applicationContext.filesDir, RECENTS_FILE).writeTextAtomically(updated.joinToString("\n")) }
     }
 
     /** [found] with the [recents] among them first (newest first), the rest in their order. */
