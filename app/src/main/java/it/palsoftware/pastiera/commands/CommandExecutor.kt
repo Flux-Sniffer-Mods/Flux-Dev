@@ -63,6 +63,11 @@ class CommandExecutor(
                         Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
                 )
                 intent.clipData = null
+                // A Termux task runs through Termux's command service
+                if (intent.component?.className == it.palsoftware.pastiera.shortcuts.UserShortcuts.TERMUX_RUN_COMMAND_SERVICE) {
+                    context.startForegroundService(intent)
+                    return CommandExecutionResult.Success
+                }
                 // A contact's direct dial needs the phone permission home screens hold: without
                 // it, open the dialer with the number ready
                 if (intent.action == Intent.ACTION_CALL &&

@@ -72,6 +72,7 @@ class UserShortcutsActivity : LocalizedComponentActivity() {
                 pm.queryIntentActivities(Intent(Intent.ACTION_CREATE_SHORTCUT).setPackage(packageName), 0)
                     .filter { it.activityInfo.exported }
                     .map { ComponentName(it.activityInfo.packageName, it.activityInfo.name) to it.loadLabel(pm).toString() }
+                    .filterNot { (component, _) -> UserShortcuts.isUnsupported(context, component.flattenToString()) }
             }.getOrDefault(emptyList())
         }
     }
@@ -100,6 +101,7 @@ private fun UserShortcutsScreen(onBack: () -> Unit, directProvider: ComponentNam
         val pm = context.packageManager
         pm.queryIntentActivities(Intent(Intent.ACTION_CREATE_SHORTCUT), 0)
             .filter { it.activityInfo.exported && it.activityInfo.packageName != context.packageName }
+            .filterNot { UserShortcuts.isUnsupported(context, ComponentName(it.activityInfo.packageName, it.activityInfo.name).flattenToString()) }
             .map {
                 ShortcutProvider(
                     ComponentName(it.activityInfo.packageName, it.activityInfo.name),
@@ -111,6 +113,7 @@ private fun UserShortcutsScreen(onBack: () -> Unit, directProvider: ComponentNam
             .sortedBy { it.label.lowercase() }
     }
     var pendingPackage by rememberSaveable { mutableStateOf<String?>(null) }
+    var pendingComponent by rememberSaveable { mutableStateOf<String?>(null) }
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         val packageName = pendingPackage ?: return@rememberLauncherForActivityResult
         pendingPackage = null
@@ -120,6 +123,8 @@ private fun UserShortcutsScreen(onBack: () -> Unit, directProvider: ComponentNam
         }
         val added = UserShortcuts.addFromResult(context, packageName, result.data)
         if (added == null) {
+            // It pins to the home screen instead: not offered again
+            pendingComponent?.let { UserShortcuts.markUnsupported(context, it) }
             Toast.makeText(context, R.string.user_shortcuts_unsupported, Toast.LENGTH_LONG).show()
         } else {
             shortcuts = UserShortcuts.all(context)
@@ -133,6 +138,7 @@ private fun UserShortcutsScreen(onBack: () -> Unit, directProvider: ComponentNam
         if (directProvider != null && !directLaunched) {
             directLaunched = true
             pendingPackage = directProvider.packageName
+            pendingComponent = directProvider.flattenToString()
             runCatching { picker.launch(Intent(Intent.ACTION_CREATE_SHORTCUT).setComponent(directProvider)) }
                 .onFailure {
                     pendingPackage = null
@@ -166,6 +172,11 @@ private fun UserShortcutsScreen(onBack: () -> Unit, directProvider: ComponentNam
                 }
             }
         }
+        SettingsSectionDivider(stringResource(R.string.user_shortcuts_builtin))
+        BuiltInShortcuts(
+            row = { icon, title, description, onClick -> ShortcutRow(icon = icon, title = title, description = description, onClick = onClick) },
+            onAdded = { shortcuts = UserShortcuts.all(context) }
+        )
         SettingsSectionDivider(stringResource(R.string.user_shortcuts_add_from))
         if (providers.isEmpty()) {
             FluxNote(stringResource(R.string.user_shortcuts_none))
@@ -173,6 +184,7 @@ private fun UserShortcutsScreen(onBack: () -> Unit, directProvider: ComponentNam
         providers.forEach { provider ->
             ShortcutRow(icon = provider.icon, title = provider.label, description = provider.appName, onClick = {
                 pendingPackage = provider.component.packageName
+                pendingComponent = provider.component.flattenToString()
                 runCatching {
                     picker.launch(Intent(Intent.ACTION_CREATE_SHORTCUT).setComponent(provider.component))
                 }.onFailure {
