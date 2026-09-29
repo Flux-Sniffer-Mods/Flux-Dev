@@ -81,6 +81,10 @@
   ],
   "improvements": [
     {
+      "text": "Titan 2 Elite LEDs follow the keys left to right (Shift, Alt, Sym, Ctrl, then the emoji key) in rainbow order: green, yellow, blue, purple and pink.",
+      "after": "202609291908"
+    },
+    {
       "text": "Settings: Titan 2 layout alignment is off by default, and suggestion swipes need a longer swipe (300) so scrolling doesn't pick one.",
       "after": "202609291905"
     },

@@ -73,17 +73,17 @@ internal object ModifierLedLayouts {
     )
 
     /**
-     * Titan 2 Elite: one LED per modifier, left to right in physical order (Alt, Shift, Ctrl,
-     * Sym), on every screen. Nothing is shared, so Shift never lights the Sym LED, which matters
+     * Titan 2 Elite: one LED per modifier, left to right as the keys sit (Shift, Alt, Sym,
+     * Ctrl), on every screen. Nothing is shared, so Shift never lights the Sym LED, which matters
      * when Right Shift is the emoji picker key.
      */
     val TITAN_2_ELITE_SPLIT = ModifierLedLayout(
         id = "titan2-elite-split",
         segments = listOf(
-            ModifierLedSegment(ModifierLedState.ALT, x = 0.00f, y = 0.5f, width = 0.22f, height = 0.5f),
-            ModifierLedSegment(ModifierLedState.SHIFT, x = 0.26f, y = 0.5f, width = 0.22f, height = 0.5f),
-            ModifierLedSegment(ModifierLedState.CTRL, x = 0.52f, y = 0.5f, width = 0.22f, height = 0.5f),
-            ModifierLedSegment(ModifierLedState.SYM, x = 0.78f, y = 0.5f, width = 0.22f, height = 0.5f)
+            ModifierLedSegment(ModifierLedState.SHIFT, x = 0.00f, y = 0.5f, width = 0.22f, height = 0.5f),
+            ModifierLedSegment(ModifierLedState.ALT, x = 0.26f, y = 0.5f, width = 0.22f, height = 0.5f),
+            ModifierLedSegment(ModifierLedState.SYM, x = 0.52f, y = 0.5f, width = 0.22f, height = 0.5f),
+            ModifierLedSegment(ModifierLedState.CTRL, x = 0.78f, y = 0.5f, width = 0.22f, height = 0.5f)
         )
     )
 
@@ -99,10 +99,10 @@ internal object ModifierLedLayouts {
         })
     }
 
-    /** Titan 2 Elite in physical order with the emoji key (Right Shift by default) last. */
+    /** Titan 2 Elite in key order with the emoji key (Right Shift by default) last. */
     val TITAN_2_ELITE_SPLIT_EMOJI = fiveEqual(
         "titan2-elite-split-emoji",
-        listOf(ModifierLedState.ALT, ModifierLedState.SHIFT, ModifierLedState.CTRL, ModifierLedState.SYM, ModifierLedState.EMOJI)
+        listOf(ModifierLedState.SHIFT, ModifierLedState.ALT, ModifierLedState.SYM, ModifierLedState.CTRL, ModifierLedState.EMOJI)
     )
 
     val DEFAULT_EMOJI = fiveEqual(

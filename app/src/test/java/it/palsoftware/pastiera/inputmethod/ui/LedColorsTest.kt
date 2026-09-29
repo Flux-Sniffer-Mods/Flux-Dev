@@ -28,9 +28,9 @@ class LedColorsTest {
     }
 
     @Test
-    fun theLightBlueShiftLedJumpsClearlyWhenLocked() {
+    fun theShiftLedJumpsClearlyWhenLocked() {
         // The default Shift colour is bright already; locking must still be obvious
-        val blue = LedColors.Led.SHIFT.defaultColor
+        val blue = LedColors.Led.SHIFT.defaultColor // green
         val active = hsv(LedColors.shade(blue, LedColors.Level.ACTIVE))
         val locked = hsv(LedColors.shade(blue, LedColors.Level.LOCKED))
         assertTrue("brightness ${active[2]} -> ${locked[2]}", locked[2] - active[2] >= 0.3f)

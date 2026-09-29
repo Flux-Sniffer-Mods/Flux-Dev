@@ -55,7 +55,7 @@ class ModifierLedLayoutTest {
         val segments = ModifierLedLayouts.TITAN_2_ELITE_SPLIT.segments.sortedBy { it.x }
 
         assertEquals(
-            listOf(ModifierLedState.ALT, ModifierLedState.SHIFT, ModifierLedState.CTRL, ModifierLedState.SYM),
+            listOf(ModifierLedState.SHIFT, ModifierLedState.ALT, ModifierLedState.SYM, ModifierLedState.CTRL),
             segments.map { it.state }
         )
         segments.zipWithNext().forEach { (left, right) ->

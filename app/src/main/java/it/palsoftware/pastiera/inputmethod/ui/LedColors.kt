@@ -11,11 +11,11 @@ import it.palsoftware.pastiera.SettingsManager
  */
 object LedColors {
     enum class Led(val key: String, val defaultColor: Int) {
-        SHIFT("shift", Color.rgb(79, 195, 247)),
-        CTRL("ctrl", Color.rgb(255, 183, 77)),
-        ALT("alt", Color.rgb(129, 199, 132)),
-        // A clear purple, well apart from the emoji LED's pink
-        SYM("sym", Color.rgb(149, 76, 255)),
+        // Left to right, the colours run as a rainbow: green, yellow, blue, purple, pink
+        SHIFT("shift", Color.rgb(102, 204, 106)),
+        ALT("alt", Color.rgb(255, 213, 79)),
+        SYM("sym", Color.rgb(79, 164, 247)),
+        CTRL("ctrl", Color.rgb(149, 76, 255)),
         EMOJI("emoji", Color.rgb(255, 105, 180))
     }
 
