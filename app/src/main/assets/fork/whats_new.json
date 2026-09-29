@@ -4,6 +4,10 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "Works with Gboard's spell checker: when Android's spell checker is another app's, its corrections for a misspelt word join Flux Keyboard's suggestions (Suggestions & auto-correction, on by default).",
+      "after": "202609292231"
+    },
+    {
       "text": "Select from the cursor: a key shortcut turns on Nav Mode with the selection anchored where the cursor is, so arrows, Home, End and cursor swipes extend it. Assign it in Customize keys.",
       "after": "202609292225"
     },

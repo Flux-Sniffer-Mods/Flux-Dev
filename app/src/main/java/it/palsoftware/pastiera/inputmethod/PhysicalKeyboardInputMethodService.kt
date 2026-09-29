@@ -1888,6 +1888,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             activeSuggestionLocalesProvider = { getAdditionalSuggestionLocalesForActiveInputStyle() }
         )
         inputEventRouter.suggestionController = suggestionController
+        // The phone's own spell checker (Gboard's, say) as a second opinion on misspelt words
+        val phoneSpellChecker = it.palsoftware.pastiera.spellcheck.PhoneSpellChecker(this)
+        suggestionController.externalSuggestions = { word, locale, onResult -> phoneSpellChecker.suggest(word, locale, onResult) }
         // The spell checker reads the loaded dictionary instead of loading its own
         it.palsoftware.pastiera.spellcheck.PastieraSpellCheckerService.keyboardController =
             java.lang.ref.WeakReference(suggestionController)

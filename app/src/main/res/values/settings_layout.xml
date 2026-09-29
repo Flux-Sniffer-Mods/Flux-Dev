@@ -81,7 +81,7 @@
     <string name="spell_checker_name">Pastiera spell checker</string>
     <string name="spell_checker_subtype" translatable="false">%s</string>
     <string name="spell_checker_title">Spell checker</string>
-    <string name="spell_checker_description">Underline misspelt words in every app using Pastiera\'s dictionaries, including words you added. Tap to choose Pastiera in Android\'s spell checker settings.</string>
+    <string name="spell_checker_description">Underline misspelt words in every app using Flux Keyboard\'s dictionaries, including words you added. Tap to choose Flux Keyboard in Android\'s spell checker settings.</string>
     <string name="alt_key_editor_intro">Make your own Device SYM layer: what each key types with SYM, and with Alt when Alt uses the Device SYM layer. A profile can replace a keyboard\'s own layer automatically, and Pastiera\'s backup includes it.</string>
     <string name="alt_key_editor_keys_description">Tap a key to set what it types. Leave it empty to type nothing.</string>
     <string name="alt_key_editor_import_title">Import a profile</string>
@@ -242,6 +242,8 @@
     <string name="suggestion_swipe_idle_value">After %1$d s without typing, a swipe scrolls instead of picking</string>
     <string name="suggestion_swipe_idle_off">Swipes always pick</string>
     <string name="phone_trackpad_scroll_assist_tip">Turn Scroll assistant on: the phone only passes keyboard swipes to Flux Keyboard while it\'s on. Leave Swipe mode on scrolling: custom swipe actions take the swipes for themselves.</string>
+    <string name="phone_spell_checker_title">The phone\'s spell checker in suggestions</string>
+    <string name="phone_spell_checker_description">When Android\'s spell checker is another app\'s (Gboard\'s, say), its corrections for a misspelt word join the suggestion bar.</string>
     <string name="select_from_cursor_title">Select from the cursor</string>
     <string name="select_from_cursor_subtitle">Nav Mode on, and every move extends the selection</string>
     <string name="private_mode_title">Private mode</string>
