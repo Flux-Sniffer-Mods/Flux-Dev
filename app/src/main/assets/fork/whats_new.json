@@ -77,6 +77,10 @@
   ],
   "improvements": [
     {
+      "text": "Over a background picture, popups (accents, variations, skin tones) take the picture's colour, lightened or darkened to stay readable, instead of a flat grey.",
+      "after": "202609291620"
+    },
+    {
       "text": "Long-press an app in the quick launcher to add one of its shortcuts (a contact's direct dial, a bookmark) straight from there.",
       "after": "202609291542"
     },

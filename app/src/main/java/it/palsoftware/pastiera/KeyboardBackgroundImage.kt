@@ -119,7 +119,8 @@ object KeyboardBackgroundImage {
         theme: SettingsManager.KeyboardThemeSettings,
         luminance: Double,
         autoColours: Boolean,
-        keyOpacityPercent: Int
+        keyOpacityPercent: Int,
+        average: Int? = null
     ): SettingsManager.KeyboardThemeSettings {
         if (!autoColours) return theme.copy(background = Color.TRANSPARENT)
         val bright = luminance > 0.5
@@ -134,7 +135,7 @@ object KeyboardBackgroundImage {
         val text = if (ColorUtils.calculateContrast(Color.BLACK, seen) >= ColorUtils.calculateContrast(Color.WHITE, seen)) {
             Color.BLACK
         } else Color.WHITE
-        val popup = ColorUtils.blendARGB(if (bright) Color.WHITE else Color.BLACK, shade, 0.25f)
+        val popup = popupOver(average ?: greyOfLuminance(luminance), text)
         return theme.copy(
             background = Color.TRANSPARENT,
             divider = tint(alpha / 2),
@@ -145,6 +146,24 @@ object KeyboardBackgroundImage {
             suggestion = normal,
             statusBarButton = special
         )
+    }
+
+    /**
+     * Popups over the picture (accents, variations, skin tones) take its colour rather than a flat
+     * grey: lightened toward white under black text (as a screen blend would) or darkened toward
+     * black under white text (as a multiply would), only as far as the text needs to read well.
+     * Solid, so the keys under a popup don't show through it.
+     */
+    internal fun popupOver(pictureColour: Int, text: Int): Int {
+        val toward = if (text == Color.BLACK) Color.WHITE else Color.BLACK
+        val base = pictureColour or 0xFF000000.toInt()
+        var amount = 0.5f
+        var popup = ColorUtils.blendARGB(base, toward, amount)
+        while (ColorUtils.calculateContrast(text, popup) < 7.0 && amount < 0.95f) {
+            amount += 0.05f
+            popup = ColorUtils.blendARGB(base, toward, amount)
+        }
+        return popup or 0xFF000000.toInt()
     }
 
     private fun greyOfLuminance(luminance: Double): Int {

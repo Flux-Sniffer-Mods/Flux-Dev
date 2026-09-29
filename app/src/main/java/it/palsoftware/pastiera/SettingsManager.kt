@@ -1126,7 +1126,8 @@ object SettingsManager {
         // Flux Keyboard: a picture behind the keyboard, keys shaded against it
         val luminance = KeyboardBackgroundImage.luminance(context) ?: return coloured
         return KeyboardBackgroundImage.recolour(
-            coloured, luminance, getKeyboardBackgroundAutoColours(context), getKeyboardBackgroundKeyOpacity(context)
+            coloured, luminance, getKeyboardBackgroundAutoColours(context), getKeyboardBackgroundKeyOpacity(context),
+            KeyboardBackgroundImage.averageColour(context)
         )
     }
 
