@@ -3992,7 +3992,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
 
         updateInputContextState(info)
         it.palsoftware.pastiera.core.EmoticonSentences.enabled = SettingsManager.getAutoCapAfterEmoticon(this)
-        val incognitoField = SettingsManager.isIncognitoField(this, info?.imeOptions ?: 0)
+        // Private mode (a shortcut) makes every field incognito
+        val incognitoField = SettingsManager.isIncognitoField(this, info?.imeOptions ?: 0) ||
+            it.palsoftware.pastiera.core.PrivateMode.isOn(this)
         it.palsoftware.pastiera.core.IncognitoTyping.active = incognitoField
         if (::suggestionController.isInitialized) {
             // Words are never learned from passwords, email addresses or web addresses either

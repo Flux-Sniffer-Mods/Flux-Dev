@@ -44,6 +44,19 @@ class PastieraCommandSource : CommandSource {
                 capabilities = setOf(CommandCapability.AdjustsDeviceState),
                 defaultSurfaces = setOf(CommandSurface.AssignedKey, CommandSurface.QuickLauncher, CommandSurface.NavMode),
                 searchTokens = listOf("Keyboard", "Software", "Virtual", "Hardware", "Toggle")
+            ),
+            // Incognito typing and Offline mode together, from a key or here
+            CommandTarget(
+                id = COMMAND_TOGGLE_PRIVATE_MODE,
+                source = id,
+                kind = CommandKind.PastieraAction,
+                label = context.getString(R.string.private_mode_title),
+                subtitle = context.getString(R.string.private_mode_subtitle),
+                icon = CommandIcon.Settings,
+                launch = CommandLaunchSpec.InternalAction(ACTION_TOGGLE_PRIVATE_MODE),
+                capabilities = setOf(CommandCapability.AdjustsDeviceState),
+                defaultSurfaces = setOf(CommandSurface.AssignedKey, CommandSurface.QuickLauncher, CommandSurface.NavMode),
+                searchTokens = listOf("Private", "Incognito", "Offline", "Privacy")
             )
         )
     }
@@ -55,5 +68,7 @@ class PastieraCommandSource : CommandSource {
         const val ACTION_OPEN_QUICK_LAUNCHER = "open_quick_launcher"
         const val ACTION_OPEN_MAIN_ACTIVITY = "open_main_activity"
         const val ACTION_TOGGLE_SOFTWARE_KEYBOARD_MODE = "toggle_software_keyboard_mode"
+        const val COMMAND_TOGGLE_PRIVATE_MODE = "pastiera.toggle_private_mode"
+        const val ACTION_TOGGLE_PRIVATE_MODE = "toggle_private_mode"
     }
 }

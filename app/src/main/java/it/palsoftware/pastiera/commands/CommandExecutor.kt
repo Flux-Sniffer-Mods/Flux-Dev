@@ -150,6 +150,10 @@ class CommandExecutor(
                 }
             }
             PastieraCommandSource.ACTION_TOGGLE_SOFTWARE_KEYBOARD_MODE -> toggleSoftwareKeyboardMode()
+            PastieraCommandSource.ACTION_TOGGLE_PRIVATE_MODE -> {
+                it.palsoftware.pastiera.core.PrivateMode.toggle(context)
+                CommandExecutionResult.Success
+            }
             DeviceControlCommandSource.ACTION_HOME_SCREEN -> goHome()
             DeviceControlCommandSource.ACTION_PHONE_TRACKPAD_SETTINGS ->
                 if (it.palsoftware.pastiera.PhoneTrackpadSettings.open(context)) CommandExecutionResult.Success

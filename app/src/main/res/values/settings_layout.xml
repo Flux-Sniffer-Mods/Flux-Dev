@@ -241,6 +241,10 @@
     <string name="suggestion_swipe_idle_title">Swipes scroll after a pause</string>
     <string name="suggestion_swipe_idle_value">After %1$d s without typing, a swipe scrolls instead of picking</string>
     <string name="suggestion_swipe_idle_off">Swipes always pick</string>
+    <string name="private_mode_title">Private mode</string>
+    <string name="private_mode_subtitle">Incognito typing and Offline mode together</string>
+    <string name="private_mode_on">Private mode on: nothing is learned or remembered, and nothing goes online</string>
+    <string name="private_mode_off">Private mode off: typing and Offline mode are back as they were</string>
     <string name="speech_pause_timeout_title">Pause before voice input stops</string>
     <string name="speech_pause_timeout_value">%1$d s of silence</string>
     <string name="speech_keep_listening_description">Pauses don\'t end dictation: it carries on sentence by sentence until you tap the mic or stay silent</string>
