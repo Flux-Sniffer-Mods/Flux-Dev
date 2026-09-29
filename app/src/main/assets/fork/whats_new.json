@@ -4,6 +4,18 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "Learn words you use often: a word that isn't in the dictionary goes into it once you've typed it three times (Suggestions & auto-correction).",
+      "after": "202609291517"
+    },
+    {
+      "text": "Remember emails and phone numbers: ones you type yourself are kept in your dictionary and offered as chips in email and phone fields (Suggestions & auto-correction).",
+      "after": "202609291505"
+    },
+    {
+      "text": "Add a shortcut: put shortcuts from your apps, such as a contact's direct dial, a bookmark or a settings page, in the quick launcher's results (Apps › Quick Launcher).",
+      "after": "202609282105"
+    },
+    {
       "text": "Background picture: put your own picture behind the keyboard (Keyboard theme). With Auto colours on, the keys go see-through and are shaded against it, dark over a bright picture and light over a dark one, with text in whichever of black or white reads better; Key opacity sets how solid they are. The picture is kept in backups.",
       "after": "202609271714"
     },
@@ -56,6 +68,22 @@
     "Pick suggestions with Ctrl+Shift+Q, W or E (Right Shift too); Backspace undoes an auto-replace."
   ],
   "improvements": [
+    {
+      "text": "Clean copied links now works everywhere: a link you copy (YouTube's si and ab_channel included) is cleaned on the clipboard itself, so any app's Paste gets the clean link.",
+      "after": "202609291533"
+    },
+    {
+      "text": "Incognito typing now learns nothing at all: no new words, emails or numbers, word use, or recent emoji, symbols and GIFs. Words are never learned from password, email or web address fields.",
+      "after": "202609291517"
+    },
+    {
+      "text": "Translations updated.",
+      "after": "202609282201"
+    },
+    {
+      "text": "Emoticons keep their shape: punctuation typed straight into more, as in :-) ;( :D, gets no space after it (Typing › Punctuation). Double Space for a full stop is now off by default.",
+      "after": "202609282100"
+    },
     {
       "text": "Release notes link to Flux Keyboard's own changelog, and What's new never fetches Pastiera's website notes",
       "after": "202609281628"
@@ -329,6 +357,58 @@
   ],
   "bugFixes": [
     {
+      "text": "Shift, Ctrl and Alt turn on reliably with a slower press, and tapping Shift back on no longer gives Caps Lock",
+      "after": "202609291454"
+    },
+    {
+      "text": "Enter searches in search boxes and one-line fields, such as the Play Store's, instead of making a new line",
+      "after": "202609291450"
+    },
+    {
+      "text": "Spell check no longer marks won't, can't, shan't or elisions such as l'homme as mistakes",
+      "after": "202609291446"
+    },
+    {
+      "text": "An interrupted save can no longer lose your autocorrect words, SYM mappings, input styles or recent symbols",
+      "after": "202609291442"
+    },
+    {
+      "text": "On Android 12 and older, other apps can no longer type into your fields through the keyboard's voice typing",
+      "after": "202609291441"
+    },
+    {
+      "text": "Double space no longer adds a full stop after a comma, colon or bracket",
+      "after": "202609291441"
+    },
+    {
+      "text": "A GIF still downloading when you switch app or field is no longer sent there",
+      "after": "202609291417"
+    },
+    {
+      "text": "The quick launcher opens an app once when Enter is held, and says when something can't be opened",
+      "after": "202609291417"
+    },
+    {
+      "text": "Space after punctuation leaves numbers, times and decimals together (1,000  12:30  3.14)",
+      "after": "202609291413"
+    },
+    {
+      "text": "Checking the Clicks keyboard's firmware version no longer crashes without the Nearby devices permission",
+      "after": "202609282201"
+    },
+    {
+      "text": "The switches on the tutorial's Your choices page show what's really set, even right after applying the recommended settings.",
+      "after": "202609282100"
+    },
+    {
+      "text": "The quick launcher closes smoothly with the Back gesture too, as with the Back key",
+      "after": "202609281802"
+    },
+    {
+      "text": "Background pictures from the camera appear the right way up, instead of sideways",
+      "after": "202609281800"
+    },
+    {
       "text": "Straight corner buttons on the symbol and emoji pages reach the sides and bottom too, instead of being rounded off",
       "after": "202609281628"
     },
@@ -437,6 +517,7 @@
   "releases": {
     "0.91": "202609262020",
     "0.92": "202609262030",
-    "0.93": "202609281629"
+    "0.93": "202609281629",
+    "0.94": "202609291545"
   }
 }

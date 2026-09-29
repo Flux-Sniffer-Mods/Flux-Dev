@@ -16,6 +16,16 @@ class LinkCleanerTest {
     @Test
     fun siteShareIdsGoOnlyOnTheirSites() {
         assertEquals("https://youtu.be/dQw4w9WgXcQ", LinkCleaner.clean("https://youtu.be/dQw4w9WgXcQ?si=Ab12"))
+        // YouTube: share ids and channel labels go, the video, playlist and start time stay
+        assertEquals(
+            "https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=PL1&t=42",
+            LinkCleaner.clean("https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=PL1&t=42&ab_channel=Rick&pp=ygUE")
+        )
+        assertEquals("https://youtube.com/shorts/abc123", LinkCleaner.clean("https://youtube.com/shorts/abc123?si=xyz&feature=share"))
+        assertEquals("https://music.youtube.com/watch?v=abc", LinkCleaner.clean("https://music.youtube.com/watch?v=abc&si=Q1"))
+        // Cleaning twice changes nothing (the cleaned clipboard comes back to be checked again)
+        val once = LinkCleaner.clean("https://m.youtube.com/watch?v=abc&si=1")
+        assertEquals(once, LinkCleaner.clean(once))
         assertEquals(
             "https://open.spotify.com/track/1?go=1",
             LinkCleaner.clean("https://open.spotify.com/track/1?si=xyz&go=1")
