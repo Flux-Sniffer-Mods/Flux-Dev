@@ -68,7 +68,7 @@
     <string name="terminal_mode_add_app">Aggiungi un’app terminale</string>
     <string name="terminal_mode_add_app_description">Client SSH e altri terminali</string>
     <string name="incognito_always_title">Digitazione in incognito</string>
-    <string name="incognito_always_description">Non imparare nulla da ciò che scrivi: nessuna nuova previsione della parola successiva</string>
+    <string name="incognito_always_description">Non imparare nulla da ciò che digiti: niente parole nuove, previsioni, email o numeri, né emoji, simboli o GIF recenti</string>
     <string name="incognito_follow_apps_title">In incognito quando un’app lo chiede</string>
     <string name="incognito_follow_apps_description">Non imparare nulla nei campi che lo chiedono alle tastiere, come le schede private dei browser</string>
     <string name="paste_suggestion_title">Suggerisci di incollare ciò che hai copiato</string>
@@ -208,8 +208,8 @@
     <string name="menu_bar_reset">Ripristina la barra del menu</string>
     <string name="suggestions_bold_title">Suggerimenti in grassetto</string>
     <string name="suggestions_bold_description">Parole della barra dei suggerimenti in grassetto, più facili da vedere</string>
-    <string name="clean_links_title">Pulisci i link incollati</string>
-    <string name="clean_links_description">I link incollati dagli appunti perdono il tracciamento (utm_, fbclid, si…) e aprono il sito completo, non quello mobile</string>
+    <string name="clean_links_title">Pulisci i link copiati</string>
+    <string name="clean_links_description">I link che copi perdono il tracciamento (utm_, fbclid, il si di YouTube…) direttamente negli appunti, così sono puliti ovunque li incolli, e aprono il sito completo invece di quello mobile</string>
     <string name="suggestion_keys_title">Scegli i suggerimenti dalla tastiera</string>
     <string name="suggestion_keys_ctrl_shift_qwe">Ctrl+Maiusc+Q, W o E: il suggerimento a sinistra, al centro o a destra</string>
     <string name="suggestion_keys_ctrl_digits">Ctrl+1, 2 o 3: il suggerimento a sinistra, al centro o a destra (fila dei numeri)</string>
