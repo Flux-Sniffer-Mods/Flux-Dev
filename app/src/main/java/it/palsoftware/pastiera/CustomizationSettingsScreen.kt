@@ -889,6 +889,38 @@ private fun StarterLauncherBehaviorScreen(
                 android.content.Intent(quickLauncherContext, UserShortcutsActivity::class.java)
             )
         }
+        val termuxInstalled = remember {
+            runCatching {
+                quickLauncherContext.packageManager.getApplicationInfo(it.palsoftware.pastiera.shortcuts.UserShortcuts.TERMUX_PACKAGE, 0)
+            }.isSuccess
+        }
+        if (termuxInstalled) {
+            var termuxScripts by remember {
+                mutableStateOf(it.palsoftware.pastiera.shortcuts.TermuxScripts.enabled(quickLauncherContext))
+            }
+            val termuxPermission = androidx.activity.compose.rememberLauncherForActivityResult(
+                androidx.activity.result.contract.ActivityResultContracts.RequestPermission()
+            ) { granted ->
+                if (granted) it.palsoftware.pastiera.shortcuts.TermuxScripts.refresh(quickLauncherContext)
+            }
+            FluxSwitchRow(
+                linkId = "quick_launcher.termux_scripts",
+                title = stringResource(R.string.quick_launcher_termux_scripts_title),
+                description = stringResource(R.string.quick_launcher_termux_scripts_description),
+                checked = termuxScripts,
+                onCheckedChange = { on ->
+                    termuxScripts = on
+                    it.palsoftware.pastiera.shortcuts.TermuxScripts.setEnabled(quickLauncherContext, on)
+                    if (on) {
+                        if (it.palsoftware.pastiera.shortcuts.TermuxScripts.available(quickLauncherContext)) {
+                            it.palsoftware.pastiera.shortcuts.TermuxScripts.refresh(quickLauncherContext)
+                        } else {
+                            termuxPermission.launch(it.palsoftware.pastiera.shortcuts.UserShortcuts.TERMUX_RUN_COMMAND_PERMISSION)
+                        }
+                    }
+                }
+            )
+        }
         LauncherShortcutTriggerRow(
             icon = { SettingsRowKeyboardIcon() },
             linkId = "quick_launcher.auto_start_single",

@@ -249,6 +249,11 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="false"
             android:excludeFromRecents="true" />
+        <!-- Termux's answer when the quick launcher asks for Termux:Widget's scripts -->
+        <receiver
+            android:name=".shortcuts.TermuxScripts$Receiver"
+            android:exported="false" />
+
         <activity
             android:name=".inputmethod.QuickLauncherActivity"
             android:theme="@style/Theme.Pastiera.QuickLauncherOverlay"

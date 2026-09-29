@@ -945,6 +945,8 @@
     <string name="quick_launcher_action_search">Suchen</string>
     <string name="auto_cap_after_emoticon_title">Großbuchstabe nach einem Emoticon</string>
     <string name="auto_cap_after_emoticon_description">Ein Text-Emoticon wie :) ;D oder &lt;3 beendet einen Satz wie ein Punkt, das nächste Wort beginnt also groß.</string>
+    <string name="quick_launcher_termux_scripts_title">Termux-Skripte</string>
+    <string name="quick_launcher_termux_scripts_description">Deine Termux:Widget-Skripte und -Aufgaben (~/.shortcuts) im Schnellstarter, immer aktuell. Braucht allow-external-apps = true in ~/.termux/termux.properties und die Berechtigung, Befehle in Termux auszuführen.</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d Kombination als eigenes Tastenkürzel der App gesendet</item>
         <item quantity="other">%d Kombinationen als eigene Tastenkürzel der App gesendet</item>

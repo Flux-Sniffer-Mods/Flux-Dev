@@ -58,6 +58,7 @@ class CommandRegistry(
                 AppActionCommandSource(),
                 AppShortcutCommandSource(),
                 ListedAppCommandSource(),
+                TermuxScriptCommandSource(),
                 UserShortcutCommandSource(),
                 DeviceControlCommandSource(),
                 NavCommandSource()

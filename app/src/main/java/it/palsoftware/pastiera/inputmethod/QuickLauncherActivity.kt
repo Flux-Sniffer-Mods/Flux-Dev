@@ -205,6 +205,8 @@ class QuickLauncherActivity : LocalizedComponentActivity() {
             }
         }
 
+        // Termux:Widget's scripts: asked for again, for the next time the launcher opens
+        it.palsoftware.pastiera.shortcuts.TermuxScripts.refresh(this)
         reloadCommandsFromRegistry()
     }
 

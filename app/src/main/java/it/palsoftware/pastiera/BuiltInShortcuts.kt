@@ -182,7 +182,9 @@ private fun TermuxTaskDialog(onPicked: (String) -> Unit, onDismiss: () -> Unit) 
                 val result = intent?.getBundleExtra("result")
                 val out = result?.getString("stdout").orEmpty()
                 failed = result == null || !result.getString("errmsg").isNullOrBlank()
-                scripts = out.lines().map { it.trim().removePrefix("./") }.filter { it.isNotEmpty() }.sorted()
+                scripts = it.palsoftware.pastiera.shortcuts.TermuxScripts.parse(out)
+                // Kept for the quick launcher's own Termux list too
+                if (!failed) it.palsoftware.pastiera.shortcuts.TermuxScripts.store(context, out)
             }
         }
         ContextCompat.registerReceiver(context, receiver, IntentFilter(action), ContextCompat.RECEIVER_NOT_EXPORTED)
@@ -190,10 +192,7 @@ private fun TermuxTaskDialog(onPicked: (String) -> Unit, onDismiss: () -> Unit) 
             context, 0, Intent(action).setPackage(context.packageName),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         )
-        val list = UserShortcuts.termuxCommand(
-            "/data/data/com.termux/files/usr/bin/sh", background = true,
-            arguments = arrayOf("-c", "cd ~/.shortcuts 2>/dev/null && find . -type f ! -name '.*'")
-        ).putExtra("com.termux.RUN_COMMAND_PENDING_INTENT", reply)
+        val list = it.palsoftware.pastiera.shortcuts.TermuxScripts.listCommand(reply)
         val started = runCatching { context.startForegroundService(list) }.isSuccess
         if (!started) {
             failed = true

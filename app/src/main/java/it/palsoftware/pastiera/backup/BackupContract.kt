@@ -304,6 +304,7 @@ internal object BackupPreferenceContract {
             "sym_sticky_tap" to PreferenceValueType.BOOLEAN,
             "fork_update_channel" to PreferenceValueType.STRING,
             "quick_launcher_app_shortcuts" to PreferenceValueType.BOOLEAN,
+            "quick_launcher_termux_scripts" to PreferenceValueType.BOOLEAN,
             "quick_launcher_user_shortcuts" to PreferenceValueType.STRING,
             "quick_launcher_unsupported_shortcut_screens" to PreferenceValueType.STRING_SET,
             "quick_launcher_niagara_back_returns" to PreferenceValueType.BOOLEAN,

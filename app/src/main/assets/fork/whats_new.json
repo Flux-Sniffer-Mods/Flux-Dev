@@ -4,6 +4,10 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "The quick launcher lists your Termux:Widget scripts and tasks (~/.shortcuts) by themselves and keeps them up to date (Apps > Quick Launcher, on by default).",
+      "after": "202609291636"
+    },
+    {
       "text": "The quick launcher has Flux Keyboard's own shortcuts for the apps in its shortcut and Enter lists: a new message, post or note, an email to write, and the app's search (type the app's name).",
       "after": "202609291608"
     },
