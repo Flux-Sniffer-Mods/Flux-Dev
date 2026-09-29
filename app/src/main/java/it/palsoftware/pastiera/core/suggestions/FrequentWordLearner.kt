@@ -18,6 +18,9 @@ class FrequentWordLearner(
     private data class Seen(val form: String, val count: Int, val lastSeen: Long)
 
     private var seen: MutableMap<String, Seen>? = null
+    // What was last read or written: stored counts changed by something else (a restored
+    // backup) are read again instead of being overwritten
+    private var seenRaw: String? = null
 
     /**
      * One more use of [word]. Returns the form to add to the dictionary once it has been used
@@ -53,23 +56,29 @@ class FrequentWordLearner(
         if (all.remove(word.lowercase(Locale.ROOT)) != null) save(all)
     }
 
-    private fun load(): MutableMap<String, Seen> = seen ?: run {
+    private fun load(): MutableMap<String, Seen> {
+        val raw = prefs.getString(KEY, "[]") ?: "[]"
+        seen?.let { if (raw == seenRaw) return it }
         val map = mutableMapOf<String, Seen>()
         runCatching {
-            val array = JSONArray(prefs.getString(KEY, "[]") ?: "[]")
+            val array = JSONArray(raw)
             for (i in 0 until array.length()) {
                 val o = array.getJSONObject(i)
                 val form = o.getString("w")
                 map[form.lowercase(Locale.ROOT)] = Seen(form, o.optInt("c", 1), o.optLong("t", 0L))
             }
         }
-        map
-    }.also { seen = it }
+        seen = map
+        seenRaw = raw
+        return map
+    }
 
     private fun save(all: Map<String, Seen>) {
         val array = JSONArray()
         all.values.forEach { array.put(JSONObject().put("w", it.form).put("c", it.count).put("t", it.lastSeen)) }
-        prefs.edit().putString(KEY, array.toString()).apply()
+        val raw = array.toString()
+        seenRaw = raw
+        prefs.edit().putString(KEY, raw).apply()
     }
 
     companion object {
