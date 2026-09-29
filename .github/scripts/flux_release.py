@@ -36,11 +36,11 @@ def load():
 
 
 def parse(version):
-    """0.92 -> (0, 92); 0.93-flux.202610011200 -> (0, 93)."""
-    m = re.fullmatch(r"(\d+)\.(\d+)(?:-flux\.(\d{12}))?", version)
+    """0.92 -> (0, 92, 0); 0.94.1 -> (0, 94, 1); 0.93-flux.202610011200 -> (0, 93, 0)."""
+    m = re.fullmatch(r"(\d+)\.(\d+)(?:\.(\d+))?(?:-flux\.(\d{12}))?", version)
     if not m:
         sys.exit(f"Not a Flux Keyboard version: {version}")
-    return int(m.group(1)), int(m.group(2))
+    return int(m.group(1)), int(m.group(2)), int(m.group(3) or 0)
 
 
 def is_dev(version):
@@ -48,8 +48,11 @@ def is_dev(version):
 
 
 def code(version):
-    major, minor = parse(version)
-    return major * 100 + minor
+    # 0.94 -> 94 (as before), 0.94.1 -> 9401, 0.95 -> 9500: every build is an upgrade of the last
+    major, minor, patch = parse(version)
+    if (major, minor) <= (0, 94) and patch == 0:
+        return major * 100 + minor
+    return major * 10000 + minor * 100 + patch
 
 
 def newest_release(data, below=None):
@@ -75,7 +78,7 @@ def version_cmd(branch, given):
             sys.exit(f"No releases in {WHATS_NEW}")
         name = release
     else:
-        major, minor = parse(release) if release else (0, 90)
+        major, minor, _ = parse(release) if release else (0, 90, 0)
         stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d%H%M")
         name = f"{major}.{minor + 1:02d}-flux.{stamp}"
     if not is_dev(name) and name not in data.get("releases", {}):
@@ -127,6 +130,27 @@ def notes_cmd(version, previous_tag, commit):
     if not any_entry:
         out.append("")
         out.append("Behind-the-scenes changes only.")
+    # A patch release (0.94.1): its own changes above, then what its release (0.94) brought
+    major, minor, patch = parse(version)
+    base = f"{major}.{minor}"
+    if not is_dev(version) and patch > 0 and base in data.get("releases", {}):
+        before = newest_release(data, below=base)
+        start = stamp_of(data, before) if before else None
+        end = stamp_of(data, base)
+        out.append("")
+        out.append(f"## What's new in {base}")
+        for key, title in SECTIONS:
+            entries = []
+            for entry in data.get(key, []):
+                if not isinstance(entry, dict):
+                    continue
+                after = int(entry.get("after", "0") or 0)
+                if entry.get("text") and (start is None or after >= start) and after < end:
+                    entries.append(entry["text"])
+            if entries:
+                out.append("")
+                out.append(f"### {title}")
+                out.extend(f"- {text}" for text in entries)
     print("\n".join(out))
 
 
