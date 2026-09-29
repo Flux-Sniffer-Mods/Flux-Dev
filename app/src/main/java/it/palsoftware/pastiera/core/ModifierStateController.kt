@@ -23,16 +23,23 @@ class ModifierStateController(
             private set
 
         private var lastTapTime: Long = 0
+        /** The one-shot Shift is an automatic capital, not the user's tap. */
+        private var oneShotIsAuto = false
+        /** The last tap turned off an automatic capital. */
+        private var lastTapClearedAuto = false
 
         fun tap(
             now: Long = System.currentTimeMillis(),
             isConsecutiveTap: Boolean,
             singleTapLatches: Boolean = false
         ): ShiftState {
-            // A quick second tap locks Shift only if the first turned it on: tapping it on, off,
-            // then on again gives Shift, not Caps Lock
+            // Two quick taps are Caps Lock when the first turned Shift on, or turned off an
+            // automatic capital (a sentence start): the same double tap everywhere. Tapping your
+            // own Shift on, off, then on again still gives Shift.
             val doubleTap = isConsecutiveTap && now - lastTapTime < doubleTapThreshold &&
-                state == ShiftState.ONE_SHOT
+                (state == ShiftState.ONE_SHOT || (state == ShiftState.OFF && lastTapClearedAuto))
+            lastTapClearedAuto = state == ShiftState.ONE_SHOT && oneShotIsAuto && !doubleTap && !singleTapLatches
+            oneShotIsAuto = false
             lastTapTime = now
             state = when {
                 doubleTap -> if (state == ShiftState.CAPS) ShiftState.OFF else ShiftState.CAPS
@@ -49,6 +56,7 @@ class ModifierStateController(
             }
             if (state != ShiftState.ONE_SHOT) {
                 state = ShiftState.ONE_SHOT
+                oneShotIsAuto = true
                 return true
             }
             return false
@@ -74,6 +82,8 @@ class ModifierStateController(
         fun reset() {
             state = ShiftState.OFF
             lastTapTime = 0
+            oneShotIsAuto = false
+            lastTapClearedAuto = false
         }
     }
 

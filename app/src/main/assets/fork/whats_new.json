@@ -413,6 +413,10 @@
   ],
   "bugFixes": [
     {
+      "text": "Double-tapping Shift gives Caps Lock at the start of a sentence too, where an automatic capital was already on",
+      "after": "202609291919"
+    },
+    {
       "text": "Ctrl switches off after an app shortcut such as Ctrl+F, and doesn't carry into the search it opens, so typing there isn't taken for more shortcuts",
       "after": "202609291917"
     },
