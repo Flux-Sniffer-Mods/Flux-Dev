@@ -109,6 +109,7 @@ class UserDictionaryStore {
         private const val KEY_WORD = "w"
         private const val KEY_FREQ = "f"
         private const val KEY_LAST_USED = "u"
-        private val cache: MutableMap<String, UserEntry> = mutableMapOf()
+        // Shared by the keyboard (main thread) and dictionary loading (background): safe to use from both
+        private val cache: MutableMap<String, UserEntry> = java.util.concurrent.ConcurrentHashMap()
     }
 }
