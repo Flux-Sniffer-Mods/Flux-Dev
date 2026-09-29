@@ -44,7 +44,20 @@ object AutoCapitalizeHelper {
      * Reads the cursor context, ignoring any selected text (treated as removed/replaced).
      * Prefers ExtractedText; falls back to surrounding text APIs.
      */
-    private fun readContext(inputConnection: InputConnection): CursorContext? {
+    /**
+     * Invisible characters some apps keep in an empty field (Instagram's and Keep's zero-width
+     * spaces, an embedded object's placeholder): they aren't text, so the field still counts as
+     * empty and gets its capital.
+     */
+    private val INVISIBLE = Regex("[\\u200B\\u200C\\u200D\\u2060\\uFEFF\\uFFFC]")
+
+    internal fun visible(text: CharSequence): CharSequence =
+        if (INVISIBLE.containsMatchIn(text)) INVISIBLE.replace(text, "") else text
+
+    private fun readContext(inputConnection: InputConnection): CursorContext? =
+        readRawContext(inputConnection)?.let { CursorContext(visible(it.before), visible(it.after)) }
+
+    private fun readRawContext(inputConnection: InputConnection): CursorContext? {
         val extracted = inputConnection.getExtractedText(ExtractedTextRequest(), 0)
         if (extracted != null && extracted.text != null) {
             val text = extracted.text
