@@ -69,6 +69,10 @@
   ],
   "improvements": [
     {
+      "text": "Long-press an app in the quick launcher to add one of its shortcuts (a contact's direct dial, a bookmark) straight from there.",
+      "after": "202609291542"
+    },
+    {
       "text": "Clean copied links now works everywhere: a link you copy (YouTube's si and ab_channel included) is cleaned on the clipboard itself, so any app's Paste gets the clean link.",
       "after": "202609291533"
     },
@@ -357,6 +361,10 @@
   ],
   "bugFixes": [
     {
+      "text": "The Add a shortcut page is laid out like the other settings pages, with readable names and each shortcut's app",
+      "after": "202609291544"
+    },
+    {
       "text": "Shift, Ctrl and Alt turn on reliably with a slower press, and tapping Shift back on no longer gives Caps Lock",
       "after": "202609291454"
     },
@@ -518,6 +526,7 @@
     "0.91": "202609262020",
     "0.92": "202609262030",
     "0.93": "202609281629",
-    "0.94": "202609291545"
+    "0.94": "202609291535",
+    "0.94.1": "202609291550"
   }
 }

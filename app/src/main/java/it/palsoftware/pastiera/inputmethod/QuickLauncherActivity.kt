@@ -47,6 +47,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Search
@@ -1037,6 +1039,35 @@ private fun QuickLauncherEntryContextMenu(
                     )
                 },
                 onClick = { onMoveFavorite(1) }
+            )
+        }
+        // Add a shortcut: the home screen shortcuts this app offers (a contact's direct dial…)
+        val menuContext = LocalContext.current
+        val appPackage = (command.launch as? it.palsoftware.pastiera.commands.CommandLaunchSpec.AppPackage)?.packageName
+        val shortcutProviders = remember(appPackage, expanded) {
+            if (appPackage == null || !expanded) emptyList()
+            else it.palsoftware.pastiera.UserShortcutsActivity.providersOf(menuContext, appPackage)
+        }
+        shortcutProviders.forEach { (component, label) ->
+            DropdownMenuItem(
+                text = {
+                    Column {
+                        Text(stringResource(R.string.user_shortcuts_title))
+                        Text(label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                },
+                leadingIcon = { Icon(imageVector = Icons.Filled.Add, contentDescription = null) },
+                onClick = {
+                    onDismiss()
+                    runCatching {
+                        menuContext.startActivity(
+                            android.content.Intent(menuContext, it.palsoftware.pastiera.UserShortcutsActivity::class.java)
+                                .putExtra(it.palsoftware.pastiera.UserShortcutsActivity.EXTRA_PROVIDER, component.flattenToString())
+                                .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                        )
+                    }
+                    (menuContext as? android.app.Activity)?.finish()
+                }
             )
         }
         DropdownMenuItem(
