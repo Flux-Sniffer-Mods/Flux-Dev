@@ -258,3 +258,23 @@ jobs:
             app/build/test-results/
             app/build/reports/tests/
           if-no-files-found: ignore
+
+  # A successful build replaces the runs before it: earlier runs (and their artifacts) are
+  # deleted, so only the latest build's run is kept. Releases keep their APKs.
+  cleanup:
+    name: cleanup
+    needs: [apk, tests]
+    if: ${{ !cancelled() && needs.apk.result == 'success' && needs.tests.result != 'failure' }}
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Delete earlier runs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --paginate "repos/$GITHUB_REPOSITORY/actions/workflows/fork-build.yml/runs?per_page=100" \
+            --jq ".workflow_runs[] | select(.id != $GITHUB_RUN_ID and .status == \"completed\") | .id" |
+            while read -r id; do
+              gh api -X DELETE "repos/$GITHUB_REPOSITORY/actions/runs/$id" >/dev/null 2>&1 || true
+            done
