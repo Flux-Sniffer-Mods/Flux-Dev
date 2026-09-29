@@ -39,6 +39,17 @@ internal fun systemSettingEntries(): List<SettingEntry> = listOf(
         route = SettingRoute(SettingsDestination.Accessibility)
     ),
     SettingEntry(
+        id = "trackpad.swipe_learning",
+        titleRes = R.string.suggestion_swipe_learning_title,
+        summaryRes = R.string.suggestion_swipe_learning_description,
+        route = SettingRoute(SettingsDestination.TrackpadGestures)
+    ),
+    SettingEntry(
+        id = "trackpad.swipe_idle",
+        titleRes = R.string.suggestion_swipe_idle_title,
+        route = SettingRoute(SettingsDestination.TrackpadGestures)
+    ),
+    SettingEntry(
         id = "trackpad.add_word",
         titleRes = R.string.trackpad_gesture_add_word_title,
         summaryRes = R.string.trackpad_gesture_add_word_description,

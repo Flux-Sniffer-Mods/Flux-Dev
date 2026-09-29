@@ -4,6 +4,10 @@
   "sectionTitle": "Added by Flux Keyboard",
   "highlights": [
     {
+      "text": "Suggestion swipes learn from you: a pick you undo straight away makes them need a little more, a swipe that falls short before a pick a little less. After a pause in typing (10 s by default) a swipe scrolls instead of picking (Trackpad gestures).",
+      "after": "202609292151"
+    },
+    {
       "text": "Recent emoji first on the emoji layer (option): the emoji you used last take its first keys and its own move along. Emoji typed from the layer count too, so a favourite already on it moves to the front instead of showing twice.",
       "after": "202609292148"
     },

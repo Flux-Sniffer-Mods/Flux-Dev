@@ -359,6 +359,8 @@ internal object BackupPreferenceContract {
             "suggestion_keys" to PreferenceValueType.STRING,
             "speech_keep_listening" to PreferenceValueType.BOOLEAN,
             "emoji_layer_recents_first" to PreferenceValueType.BOOLEAN,
+            "suggestion_swipe_learning" to PreferenceValueType.BOOLEAN,
+            "suggestion_swipe_idle_seconds" to PreferenceValueType.INT,
             "emoji_layer_recents_count" to PreferenceValueType.INT,
             "speech_pause_timeout_seconds" to PreferenceValueType.INT,
             "inline_autofill_enabled" to PreferenceValueType.BOOLEAN,

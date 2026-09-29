@@ -2987,7 +2987,12 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         )
         return TrackpadGestureDetector(
             isEnabled = { shouldStartShizukuTrackpadDetector() },
-            onSwipeUp = { third -> acceptSuggestionAtIndex(third) },
+            onSwipeUp = { third ->
+                if (it.palsoftware.pastiera.core.SuggestionSwipeLearning.swipesPick(this)) {
+                    it.palsoftware.pastiera.core.SuggestionSwipeLearning.onPicked(this)
+                    acceptSuggestionAtIndex(third)
+                }
+            },
             scope = trackpadScope,
             swipeUpThreshold = swipeThreshold,
             eventDeviceSelection = eventDeviceSelection,
@@ -5493,6 +5498,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     private var niagaraBackReturnTo: String? = null
 
     override fun onKeyDown(keyCode_: Int, event_: KeyEvent?): Boolean {
+        // Suggestion swipes: typing keeps them picking; Backspace right after one undoes it
+        if ((event_?.repeatCount ?: 0) == 0 && !KeyEvent.isModifierKey(keyCode_)) {
+            if (keyCode_ == KeyEvent.KEYCODE_DEL) it.palsoftware.pastiera.core.SuggestionSwipeLearning.onDeleted(this)
+            else it.palsoftware.pastiera.core.SuggestionSwipeLearning.onTyped()
+        }
         if (keyCode_ == KEYCODE_SYM && (event_?.repeatCount ?: 0) == 0) {
             symKeyHeld = true
             hiddenAppSymChordUsed = false
@@ -7015,7 +7025,9 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         val pickDistance = TrackpadCoordinateMapper.pickDistance(
             suggestionThreshold * 0.6f, start.xRange)
         val sideDistance = TrackpadCoordinateMapper.pickDistance(
-            SettingsManager.getTrackpadSideSwipeThreshold(this), start.xRange)
+            SettingsManager.getTrackpadSideSwipeThreshold(this) * it.palsoftware.pastiera.core.SuggestionSwipeLearning.scale(this), start.xRange)
+        // After a pause in typing a swipe is a scroll: it picks nothing
+        val picksAllowed = it.palsoftware.pastiera.core.SuggestionSwipeLearning.swipesPick(this)
         val horizontalDominant = kotlin.math.abs(deltaX) > kotlin.math.abs(deltaY)
         val pickFastEnough = TrackpadCoordinateMapper.pickQuickEnough(
             maxOf(kotlin.math.abs(deltaX), kotlin.math.abs(deltaY)),
@@ -7027,10 +7039,10 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         val downEnough = !horizontalDominant && downwardDistance >= deleteThreshold * 0.6f &&
             downwardDistance / durationMs >= NATIVE_TRACKPAD_MIN_SWIPE_VELOCITY_PX_PER_MS
         val direction = when {
-            verticalEnough && mostlyVertical && verticalFastEnough -> NativeTrackpadSwipeDirection.UP
-            directional && upPicks -> NativeTrackpadSwipeDirection.UP
-            directional && rightEnough -> NativeTrackpadSwipeDirection.RIGHT
-            directional && leftPicks -> NativeTrackpadSwipeDirection.LEFT
+            picksAllowed && verticalEnough && mostlyVertical && verticalFastEnough -> NativeTrackpadSwipeDirection.UP
+            picksAllowed && directional && upPicks -> NativeTrackpadSwipeDirection.UP
+            picksAllowed && directional && rightEnough -> NativeTrackpadSwipeDirection.RIGHT
+            picksAllowed && directional && leftPicks -> NativeTrackpadSwipeDirection.LEFT
             !directional &&
                 leftEnough &&
                 mostlyHorizontal &&
@@ -7039,6 +7051,11 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 SettingsManager.getSwipeToDeleteProvider(this) == SettingsManager.SWIPE_TO_DELETE_PROVIDER_NATIVE_IME -> NativeTrackpadSwipeDirection.LEFT
             downEnough && SettingsManager.getTrackpadSwipeDownDeletesWord(this) -> NativeTrackpadSwipeDirection.DOWN
             else -> {
+                // A swipe that nearly picked: if a pick follows soon, swipes need a little less
+                if (picksAllowed) it.palsoftware.pastiera.core.SuggestionSwipeLearning.onMissed(
+                    reached = maxOf(upwardDistance, kotlin.math.abs(deltaX)),
+                    needed = if (horizontalDominant) sideDistance else pickDistance
+                )
                 DebugCaptureStore.recordRawTrackpadEvent(
                     provider = SettingsManager.TRACKPAD_PROVIDER_NATIVE_IME,
                     origin = start.origin,
@@ -7096,6 +7113,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                 else -> 1
             }
             Log.d(TRACKPAD_DEBUG_TAG, "Native swipe accepted[$phase]: direction=$direction picks suggestion $index")
+            it.palsoftware.pastiera.core.SuggestionSwipeLearning.onPicked(this)
             acceptSuggestionAtIndex(index)
             return true
         }
@@ -7130,6 +7148,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
                     source = start.source,
                     eventTimeUptimeMs = eventTimeUptimeMs
                 )
+                it.palsoftware.pastiera.core.SuggestionSwipeLearning.onPicked(this)
                 acceptSuggestionAtIndex(third)
             }
             NativeTrackpadSwipeDirection.LEFT -> {
@@ -7162,7 +7181,8 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     private fun nativeImeTrackpadSuggestionSwipeThreshold(): Float {
-        return SettingsManager.getTrackpadSuggestionSwipeThreshold(this)
+        // Your setting, scaled by what suggestion swipes learned from your picks and undos
+        return SettingsManager.getTrackpadSuggestionSwipeThreshold(this) * it.palsoftware.pastiera.core.SuggestionSwipeLearning.scale(this)
     }
 
     private fun nativeImeTrackpadDeleteSwipeThreshold(): Float {
@@ -7200,6 +7220,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     private fun deleteWordFromNativeTrackpadSwipe() {
+        it.palsoftware.pastiera.core.SuggestionSwipeLearning.onDeleted(this)
         val ic = currentInputConnection
         if (ic == null) {
             Log.w(TRACKPAD_DEBUG_TAG, "Native swipe-to-delete ignored: no InputConnection")

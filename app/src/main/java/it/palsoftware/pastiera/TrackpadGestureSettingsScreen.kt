@@ -803,6 +803,47 @@ private fun TrackpadSensitivitySettings(
             linkId = SettingLinkIds.TRACKPAD_DELETE_SWIPE_THRESHOLD,
             onValueChange = onDeleteSwipeThresholdChange
         )
+        SuggestionSwipeLearningSettings()
+    }
+}
+
+/** Suggestion swipes that learn from your picks and undos, and a pause after which they scroll. */
+@Composable
+private fun SuggestionSwipeLearningSettings() {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val learning = it.palsoftware.pastiera.core.SuggestionSwipeLearning
+    var learn by remember { mutableStateOf(learning.enabled(context)) }
+    var idle by remember { mutableStateOf(learning.idleSeconds(context)) }
+    FluxSwitchRow(
+        linkId = "trackpad.swipe_learning",
+        title = stringResource(R.string.suggestion_swipe_learning_title),
+        description = stringResource(R.string.suggestion_swipe_learning_description),
+        checked = learn,
+        onCheckedChange = { enabled -> learn = enabled; learning.setEnabled(context, enabled) }
+    )
+    if (learn) {
+        androidx.compose.material3.TextButton(
+            onClick = {
+                learning.resetLearned(context)
+                android.widget.Toast.makeText(context, R.string.suggestion_swipe_learning_reset_done, android.widget.Toast.LENGTH_SHORT).show()
+            },
+            modifier = Modifier.padding(horizontal = 8.dp)
+        ) { Text(stringResource(R.string.suggestion_swipe_learning_reset)) }
+    }
+    Column(modifier = Modifier.fillMaxWidth().settingRow("trackpad.swipe_idle").padding(horizontal = 16.dp, vertical = 8.dp)) {
+        Text(stringResource(R.string.suggestion_swipe_idle_title), style = MaterialTheme.typography.titleMedium)
+        Text(
+            if (idle == 0) stringResource(R.string.suggestion_swipe_idle_off)
+            else stringResource(R.string.suggestion_swipe_idle_value, idle),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        androidx.compose.material3.Slider(
+            value = idle.toFloat(),
+            onValueChange = { value -> idle = value.toInt(); learning.setIdleSeconds(context, idle) },
+            valueRange = 0f..30f,
+            steps = 29
+        )
     }
 }
 
