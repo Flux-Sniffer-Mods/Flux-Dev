@@ -77,6 +77,10 @@
   ],
   "improvements": [
     {
+      "text": "Capital after an emoticon: a text emoticon such as :) ;D or <3 ends a sentence like a full stop, so the next word gets a capital (Typing, on by default).",
+      "after": "202609291627"
+    },
+    {
       "text": "Over a background picture, popups (accents, variations, skin tones) take the picture's colour, lightened or darkened to stay readable, instead of a flat grey.",
       "after": "202609291620"
     },

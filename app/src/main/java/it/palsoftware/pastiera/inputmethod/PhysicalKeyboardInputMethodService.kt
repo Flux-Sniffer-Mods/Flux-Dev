@@ -3975,6 +3975,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
         // Reset clipboard overlay when starting new input
 
         updateInputContextState(info)
+        it.palsoftware.pastiera.core.EmoticonSentences.enabled = SettingsManager.getAutoCapAfterEmoticon(this)
         val incognitoField = SettingsManager.isIncognitoField(this, info?.imeOptions ?: 0)
         it.palsoftware.pastiera.core.IncognitoTyping.active = incognitoField
         if (::suggestionController.isInitialized) {

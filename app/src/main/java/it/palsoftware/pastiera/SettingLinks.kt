@@ -64,6 +64,7 @@ object SettingLinkIds {
     const val TEXT_INPUT_DOUBLE_SPACE_TO_PERIOD = "text_input.double_space_to_period"
     const val TEXT_INPUT_AUTO_SPACE_PUNCTUATION = "text_input.auto_space_punctuation"
     const val TEXT_INPUT_EMOTICON_PUNCTUATION = "text_input.emoticon_punctuation"
+    const val TEXT_INPUT_AUTO_CAP_AFTER_EMOTICON = "text_input.auto_cap_after_emoticon"
     const val TEXT_INPUT_COMMA_SPACE = "text_input.comma_space"
     const val TEXT_INPUT_FRENCH_PUNCTUATION_SPACING = "text_input.french_punctuation_spacing"
     const val TEXT_INPUT_FRENCH_PUNCTUATION_ONLY_FRENCH = "text_input.french_punctuation_only_french"
@@ -416,6 +417,12 @@ object SettingLinkRegistry {
             SettingLinkIds.TEXT_INPUT_AUTO_CAPITALIZE_AFTER_PERIOD,
             R.string.auto_capitalize_after_period_title,
             R.string.auto_capitalize_after_period_description,
+            destination = SettingsDestination.TextInput
+        ),
+        entry(
+            SettingLinkIds.TEXT_INPUT_AUTO_CAP_AFTER_EMOTICON,
+            R.string.auto_cap_after_emoticon_title,
+            R.string.auto_cap_after_emoticon_description,
             destination = SettingsDestination.TextInput
         ),
         entry(

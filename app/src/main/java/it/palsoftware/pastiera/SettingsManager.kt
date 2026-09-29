@@ -2117,6 +2117,15 @@ object SettingsManager {
     /**
      * Returns the state of auto-capitalization after period.
      */
+    /** A text emoticon (:) ;D <3) ends a sentence, so the next word gets a capital (on by default). */
+    fun getAutoCapAfterEmoticon(context: Context): Boolean =
+        getPreferences(context).getBoolean("auto_cap_after_emoticon", true)
+
+    fun setAutoCapAfterEmoticon(context: Context, enabled: Boolean) {
+        getPreferences(context).edit().putBoolean("auto_cap_after_emoticon", enabled).apply()
+        it.palsoftware.pastiera.core.EmoticonSentences.enabled = enabled
+    }
+
     fun getAutoCapitalizeAfterPeriod(context: Context): Boolean {
         return getPreferences(context).getBoolean(KEY_AUTO_CAPITALIZE_AFTER_PERIOD, DEFAULT_AUTO_CAPITALIZE_AFTER_PERIOD)
     }

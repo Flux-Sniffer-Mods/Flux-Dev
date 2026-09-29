@@ -1572,6 +1572,8 @@
     <string name="quick_launcher_action_new_note">Նոր նշում</string>
     <string name="quick_launcher_action_compose">Գրել նամակ</string>
     <string name="quick_launcher_action_search">Որոնում</string>
+    <string name="auto_cap_after_emoticon_title">Մեծատառ էմոտիկոնից հետո</string>
+    <string name="auto_cap_after_emoticon_description">Տեքստային էմոտիկոնը, օրինակ՝ :) ;D կամ &lt;3, ավարտում է նախադասությունը վերջակետի պես, ուստի հաջորդ բառը սկսվում է մեծատառով։</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d համակցություն ուղարկվում է որպես հավելվածի դյուրանցում</item>
         <item quantity="other">%d համակցություն ուղարկվում է որպես հավելվածի դյուրանցումներ</item>

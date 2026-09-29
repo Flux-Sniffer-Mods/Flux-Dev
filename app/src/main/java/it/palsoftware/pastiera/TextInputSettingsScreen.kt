@@ -364,6 +364,17 @@ fun TextInputSettingsScreen(
                     SettingsManager.setAutoCapitalizeAfterPeriod(context, enabled)
                 }
             )
+            var autoCapAfterEmoticon by remember { mutableStateOf(SettingsManager.getAutoCapAfterEmoticon(context)) }
+            SettingsSwitchRow(
+                title = stringResource(R.string.auto_cap_after_emoticon_title),
+                description = stringResource(R.string.auto_cap_after_emoticon_description),
+                checked = autoCapAfterEmoticon,
+                linkId = SettingLinkIds.TEXT_INPUT_AUTO_CAP_AFTER_EMOTICON,
+                onCheckedChange = { enabled ->
+                    autoCapAfterEmoticon = enabled
+                    SettingsManager.setAutoCapAfterEmoticon(context, enabled)
+                }
+            )
 
             SettingsSectionHeader(text = stringResource(R.string.text_input_section_spacing_punctuation))
             SettingsSwitchRow(

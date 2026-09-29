@@ -95,6 +95,11 @@ object AutoCapitalizeHelper {
         val lastNonWhitespaceIndex = textBeforeCursor.indexOfLast { !it.isWhitespace() }
         if (lastNonWhitespaceIndex < 0) return false
         
+        // A text emoticon (:) ;D <3) ends a sentence too ("Capital after an emoticon")
+        if (it.palsoftware.pastiera.core.EmoticonSentences.endsWithEmoticon(textBeforeCursor.subSequence(0, lastNonWhitespaceIndex + 1))) {
+            return !requireWhitespaceAfter || lastNonWhitespaceIndex < textBeforeCursor.length - 1
+        }
+
         val lastNonWhitespaceChar = textBeforeCursor[lastNonWhitespaceIndex]
         val isSentencePunctuation = when (lastNonWhitespaceChar) {
             '.' -> {

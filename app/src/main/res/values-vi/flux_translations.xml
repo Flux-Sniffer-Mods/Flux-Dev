@@ -1572,6 +1572,8 @@
     <string name="quick_launcher_action_new_note">Ghi chú mới</string>
     <string name="quick_launcher_action_compose">Soạn email</string>
     <string name="quick_launcher_action_search">Tìm kiếm</string>
+    <string name="auto_cap_after_emoticon_title">Viết hoa sau biểu tượng cảm xúc</string>
+    <string name="auto_cap_after_emoticon_description">Biểu tượng cảm xúc dạng chữ như :) ;D hay &lt;3 kết thúc câu như dấu chấm, nên từ tiếp theo được viết hoa.</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="other">%d tổ hợp được gửi dưới dạng phím tắt riêng của ứng dụng</item>
     </plurals>

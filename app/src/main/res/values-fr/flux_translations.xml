@@ -1572,6 +1572,8 @@
     <string name="quick_launcher_action_new_note">Nouvelle note</string>
     <string name="quick_launcher_action_compose">Écrire un e-mail</string>
     <string name="quick_launcher_action_search">Rechercher</string>
+    <string name="auto_cap_after_emoticon_title">Majuscule après une émoticône</string>
+    <string name="auto_cap_after_emoticon_description">Une émoticône en texte comme :) ;D ou &lt;3 termine une phrase comme un point, donc le mot suivant prend une majuscule.</string>
     <plurals name="app_shortcuts_remapped_count">
         <item quantity="one">%d combinaison envoyée comme raccourci propre à l’appli</item>
         <item quantity="many">%d combinaisons envoyées comme raccourcis propres à l’appli</item>
