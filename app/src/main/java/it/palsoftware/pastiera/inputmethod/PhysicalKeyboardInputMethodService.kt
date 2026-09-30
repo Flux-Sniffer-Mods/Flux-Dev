@@ -3913,6 +3913,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
     }
 
     override fun onStartInput(info: EditorInfo?, restarting: Boolean) {
+        AutoCapitalizeHelper.cursorAtStart = info != null && info.initialSelStart == 0 && info.initialSelEnd == 0
         // Back out of Niagara's search (opened by the quick launcher): back to the app
         if (!restarting) {
             val editable = info != null && info.inputType != EditorInfo.TYPE_NULL
@@ -4832,6 +4833,7 @@ class PhysicalKeyboardInputMethodService : InputMethodService(), ClicksAccessibi
             )
         }
         
+        AutoCapitalizeHelper.cursorAtStart = newSelStart == 0 && newSelEnd == 0
         // Auto-cap reads editor context through InputConnection. For simple typing feedback,
         // debounce it so remote editors like Telegram don't pay that cost for every character.
         if (cursorPositionChanged && collapsedSelection && forwardByOne) {

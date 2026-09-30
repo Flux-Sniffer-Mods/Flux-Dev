@@ -54,8 +54,16 @@ object AutoCapitalizeHelper {
     internal fun visible(text: CharSequence): CharSequence =
         if (INVISIBLE.containsMatchIn(text)) INVISIBLE.replace(text, "") else text
 
+    /**
+     * The cursor sits at the very start of the field, as the app last reported it. Some apps
+     * (Instagram) don't let the keyboard read their field; at its start, it still gets its capital.
+     */
+    @Volatile var cursorAtStart = false
+
     private fun readContext(inputConnection: InputConnection): CursorContext? =
-        readRawContext(inputConnection)?.let { CursorContext(visible(it.before), visible(it.after)) }
+        (runCatching { readRawContext(inputConnection) }.getOrNull()
+            ?: if (cursorAtStart) CursorContext("", "") else null)
+            ?.let { CursorContext(visible(it.before), visible(it.after)) }
 
     private fun readRawContext(inputConnection: InputConnection): CursorContext? {
         val extracted = inputConnection.getExtractedText(ExtractedTextRequest(), 0)
