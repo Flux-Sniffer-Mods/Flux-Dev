@@ -60,6 +60,34 @@ internal fun systemSettingEntries(): List<SettingEntry> = listOf(
         availabilityCheck = { _ -> it.palsoftware.pastiera.root.RootShell.probablyRooted() }
     ),
     SettingEntry(
+        id = "root.scroll_module_release",
+        titleRes = R.string.root_scroll_module_release_title,
+        summaryRes = R.string.root_scroll_module_release_off,
+        route = SettingRoute(SettingsDestination.Root),
+        availabilityCheck = { _ -> it.palsoftware.pastiera.root.RootShell.probablyRooted() }
+    ),
+    SettingEntry(
+        id = "root.scroll_module_link",
+        titleRes = R.string.root_scroll_module_link_title,
+        summaryRes = R.string.root_scroll_module_link_description,
+        route = SettingRoute(SettingsDestination.Root),
+        availabilityCheck = { _ -> it.palsoftware.pastiera.root.RootShell.probablyRooted() }
+    ),
+    SettingEntry(
+        id = "root.backlight_level",
+        titleRes = R.string.root_backlight_level_title,
+        summaryRes = R.string.root_backlight_brightness_description,
+        route = SettingRoute(SettingsDestination.Root),
+        availabilityCheck = { _ -> it.palsoftware.pastiera.root.RootShell.probablyRooted() }
+    ),
+    SettingEntry(
+        id = "root.backlight_timeout",
+        titleRes = R.string.root_backlight_timeout_title,
+        summaryRes = R.string.root_backlight_screen_description,
+        route = SettingRoute(SettingsDestination.Root),
+        availabilityCheck = { _ -> it.palsoftware.pastiera.root.RootShell.probablyRooted() }
+    ),
+    SettingEntry(
         id = "root.backlight_flash",
         titleRes = R.string.root_backlight_flash_title,
         summaryRes = R.string.root_backlight_flash_description,

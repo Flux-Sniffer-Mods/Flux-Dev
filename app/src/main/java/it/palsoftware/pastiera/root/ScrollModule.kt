@@ -30,6 +30,38 @@ object ScrollModule {
         return found
     }
 
+    const val MODULE_URL = "https://github.com/vhqtvn/titan2-better-keyboard-scroll-module"
+
+    /** The module's service.sh, where its options (ARGS) are (null when not found). */
+    fun serviceScript(): String? =
+        RootShell.run("grep -l tpscroll /data/adb/modules/*/service.sh")?.lines()?.firstOrNull { it.isNotBlank() }?.trim()
+
+    /** Whether the module lets go of the pad while paused (its -R option). */
+    fun hasReleaseOption(): Boolean {
+        val script = serviceScript() ?: return false
+        return RootShell.run("grep '^ARGS=' $script")?.let { Regex("""(^|["' =])-R(["' ]|$)""").containsMatchIn(it) } == true
+    }
+
+    /**
+     * Adds -R to the module's options and restarts it, so it lets go of the pad while paused.
+     * Returns whether the option is there now.
+     */
+    fun addReleaseOption(): Boolean {
+        val script = serviceScript() ?: return false
+        if (hasReleaseOption()) return true
+        // No options line: it can't be added safely (it has to come before the module starts)
+        val line = RootShell.run("grep '^ARGS=' $script")?.lines()?.firstOrNull()?.trim() ?: return false
+        val edit = when {
+            line.startsWith("ARGS=\"") -> "sed -i 's/^ARGS=\"/ARGS=\"-R /' $script"
+            line.startsWith("ARGS='") -> "sed -i \"s/^ARGS='/ARGS='-R /\" $script"
+            else -> "sed -i 's/^ARGS=/ARGS=-R\\ /' $script"
+        }
+        RootShell.run(edit)
+        // Restart it with the new options
+        RootShell.run("pkill -f tpscroll; pkill -f tpinject; (setsid sh $script >/dev/null 2>&1 &)")
+        return hasReleaseOption()
+    }
+
     /** A text field opened: scrolling pauses so swipes pick suggestions. */
     fun onTypingStarted(context: Context) {
         if (!pauseWhileTyping(context) || pausedFrom != null) return
